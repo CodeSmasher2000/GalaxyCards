@@ -1,0 +1,85 @@
+package cards;
+
+/**
+ * This class represents the player's hero and is responsible for a visual
+ * representation of the hero and his attributes. This class is also responsible
+ * for altering the hero's attributes aswell as determinating if the player has
+ * lost the match. 
+ * 
+ * @author 13120dde
+ *
+ */
+public class Hero {
+
+	private int life;
+	private int energyShield;
+
+	public Hero() {
+		life = 20;
+		energyShield = 10;
+	}
+
+	/**
+	 * Deal damage to this hero. The damage is dealt first to the hero's energy
+	 * shield. If the shield is depleted the damage is dealt to the heroe's
+	 * life. If the damage is higher than the amount of energy shield, any
+	 * excessive damage won't go trough to the hero's life.
+	 * 
+	 * @param damage
+	 */
+	public void dealDamage(int damage) {
+		if (energyShield > 0) {
+			energyShield -= damage;
+		} else {
+			if (energyShield < 0) {
+				energyShield = 0;
+			}
+			life -= damage;
+		}
+
+		// TODO update gui
+		if (life <= 0) {
+			youLoose();
+		}
+	}
+
+	/**
+	 * Add x amount of energy shield to this hero. The shield's max amount is
+	 * 10.
+	 * 
+	 * @param amount
+	 */
+	public void addShield(int amount) {
+		energyShield += amount;
+		if (energyShield > 10) {
+			energyShield = 10;
+		}
+		// TODO update gui
+	}
+
+	/**
+	 * Attempts to remove x amount of energy shield from the hero. If x is
+	 * higher than the amount of shield then nothing will be removed and false
+	 * is returned. Else removes x from shield and returns true.
+	 * 
+	 * @param amount
+	 * @return
+	 */
+	public boolean removeShield(int amount) {
+		if (energyShield == 0 || energyShield < amount) {
+			return false;
+		} else {
+			energyShield -= amount;
+			// TODO update gui
+			return true;
+		}
+
+	}
+
+	private void youLoose() {
+		// TODO Auto-generated method stub
+		// TODO Update gui
+		// TODO send info to the otherplayer
+	}
+
+}
