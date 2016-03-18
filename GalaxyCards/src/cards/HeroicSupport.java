@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 
 public class HeroicSupport extends Card{
 	
+	private int defense; 
+	
 	public HeroicSupport(){
 		setName("Star Destroyer");
 		setType(this);

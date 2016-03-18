@@ -60,19 +60,4 @@ public class Unit extends Card {
 	public int getPrice(){
 		return price;
 	}
-
-	public static void main(String[] args) {
-		Unit card = new Unit();
-		Unit card2 = new Unit("Banshee", 4, 2, 3);
-		JFrame frame = new JFrame();
-		JFrame frame2 = new JFrame();
-		frame2.setVisible(true);
-		frame2.add(card2);
-		frame2.pack();
-
-		frame.setVisible(true);
-		frame.add(card);
-		frame.pack();
-
-	}
 }

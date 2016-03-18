@@ -21,7 +21,7 @@ public class Hero {
 
 	/**
 	 * Deal damage to this hero. The damage is dealt first to the hero's energy
-	 * shield. If the shield is depleted the damage is dealt to the heroe's
+	 * shield. If the shield is depleted the damage is dealt to the hero's
 	 * life. If the damage is higher than the amount of energy shield, any
 	 * excessive damage won't go trough to the hero's life.
 	 * 
