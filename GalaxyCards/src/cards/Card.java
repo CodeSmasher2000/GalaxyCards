@@ -1,8 +1,11 @@
 package cards;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,10 +14,12 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 /**
@@ -26,25 +31,30 @@ import javax.swing.border.Border;
  * @author 13120dde
  *
  */
-// TODO *organize the picture directory and update the path string in
-// setRarity() setBackground() setImage() methods.
-//TODO * create a abilitypanel and add it to the card between type and attributes panels.
+// TODO Change the font to look more appealing and perhaps smaller.
+//TODO make the abilitybutton toggle enabled/disabled depending if on hand or board.
 
 public abstract class Card extends JPanel {
 
 	private Image cardBG;
-	private JPanel topPanel, imgPanel, typePanel, abilityPanel, attributesPanel;
+	private JPanel topPanel, imgPanel, typePanel, attributesPanel;
 	private JLabel lbName, lbPrice, lbImage, lbType, lbRarity, lbAttack, lbDefense;
 	private Color frameColor;
 	private Border border;
+	private JButton abilityButton;
+	private JTextArea abilityArea;
+	
+	private final String PICTURE_DIRECTORY = "files/pictures/";
 
 	public Card() {
 		frameColor = Color.BLACK;
-		border = BorderFactory.createMatteBorder(1, 1, 5, 1, frameColor);
+		border = BorderFactory.createMatteBorder(1, 1, 3, 1, frameColor);
 
 		setBackground();
 		initiateLabels();
+		initiateButtons();
 		initiatePanels();
+		setToolTips();
 
 		this.setBorder(BorderFactory.createLineBorder(frameColor, 3, true));
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -52,9 +62,22 @@ public abstract class Card extends JPanel {
 		this.add(topPanel);
 		this.add(imgPanel);
 		this.add(typePanel);
-		// TODO need to add a panel that shows attributes of the card, probably
-		// need a custom class for that.
+		this.add(abilityArea);
 		this.add(attributesPanel);
+	}
+
+	private void setToolTips() {
+		lbAttack.setToolTipText("The amount of damage this unit deals.");
+		lbDefense.setToolTipText("The amount of defense this unit has.");
+		lbPrice.setToolTipText("The cost to play this card.");
+	}
+
+	private void initiateButtons() {
+		abilityButton = new JButton();
+		abilityButton.setIcon(new ImageIcon("files/pictures/ability.jpg"));
+		abilityButton.setOpaque(true);
+		abilityButton.setPreferredSize(new Dimension(15, 15));
+		abilityButton.addActionListener(new AbilityButtonListener());
 	}
 
 	private void initiateLabels() {
@@ -74,7 +97,7 @@ public abstract class Card extends JPanel {
 		// Icon
 		lbImage = new JLabel();
 		lbImage.setAlignmentX(SwingConstants.CENTER);
-		lbImage.setBorder(border);
+		lbImage.setBorder(BorderFactory.createLoweredBevelBorder());
 		lbImage.setIcon(new ImageIcon("files/pictures/test.jpg"));
 
 		// Card type
@@ -94,11 +117,19 @@ public abstract class Card extends JPanel {
 		lbDefense.setOpaque(true);
 		lbDefense.setBorder(border);
 
-		// TODO create a set of three icons representing the rarity of the card.
-		// Set the rarity icon to this label.
-		lbRarity = new JLabel("x");
+		lbRarity = new JLabel();
 		lbRarity.setAlignmentX(SwingConstants.RIGHT);
-		lbRarity.setOpaque(false);
+		lbRarity.setOpaque(true);
+		lbRarity.setBorder(border);
+
+		abilityArea = new JTextArea();
+		abilityArea.setOpaque(true);
+		// abilityArea.setAlignmentX(SwingConstants.LEFT);
+
+		abilityArea.setEditable(false);
+		// abilityArea.setWrapStyleWord(true);
+		abilityArea.setLineWrap(true);
+		abilityArea.setRows(2);
 	}
 
 	private void initiatePanels() {
@@ -106,7 +137,7 @@ public abstract class Card extends JPanel {
 		// Top panel contains the name of the card and the price of the card
 		topPanel = new JPanel();
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-		topPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		topPanel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
 		topPanel.setOpaque(false);
 		topPanel.add(lbName);
 		topPanel.add(Box.createHorizontalGlue());
@@ -114,7 +145,6 @@ public abstract class Card extends JPanel {
 
 		// Image in for the card
 		imgPanel = new JPanel();
-		imgPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 		imgPanel.setOpaque(false);
 		imgPanel.add(lbImage);
 
@@ -122,17 +152,19 @@ public abstract class Card extends JPanel {
 		// rarity icon
 		typePanel = new JPanel();
 		typePanel.setLayout(new BoxLayout(typePanel, BoxLayout.X_AXIS));
-		typePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
+		typePanel.setBorder(BorderFactory.createEmptyBorder(0, 2, 2, 2));
 		typePanel.setOpaque(false);
 		typePanel.add(lbType);
+		typePanel.add(Box.createHorizontalGlue());
+		typePanel.add(lbRarity);
 
 		attributesPanel = new JPanel();
 		attributesPanel.setLayout(new BoxLayout(attributesPanel, BoxLayout.X_AXIS));
-		attributesPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
+		attributesPanel.setBorder(BorderFactory.createEmptyBorder(0, 2, 2, 2));
 		attributesPanel.setOpaque(false);
 		attributesPanel.add(lbAttack);
 		attributesPanel.add(Box.createHorizontalGlue());
-		attributesPanel.add(lbRarity);
+		attributesPanel.add(abilityButton);
 		attributesPanel.add(Box.createHorizontalGlue());
 		attributesPanel.add(lbDefense);
 
@@ -147,8 +179,7 @@ public abstract class Card extends JPanel {
 	 * @param imageName
 	 */
 	public void setImage(String imageName) {
-		String path = "files/pictures/cardImages/" + imageName + ".jpg";
-		lbImage.setIcon(new ImageIcon(path));
+		lbImage.setIcon(new ImageIcon(PICTURE_DIRECTORY+imageName+".jpg"));
 	}
 
 	/**
@@ -163,13 +194,13 @@ public abstract class Card extends JPanel {
 	 */
 	public String setRarity(String rarity) {
 		if (rarity.equalsIgnoreCase("common")) {
-			lbRarity.setIcon(new ImageIcon("files/pictures/common.jpg"));
+			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY+"rarityCommon.jpg"));
 		} else if (rarity.equalsIgnoreCase("rare")) {
-			lbRarity.setIcon(new ImageIcon("files/pictures/rare.jpg"));
+			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY+"rarityRare.jpg"));
 		} else if (rarity.equalsIgnoreCase("legendary")) {
-			lbRarity.setIcon(new ImageIcon("files/pictures/legendary.jpg"));
+			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY+"rarityLegendary.jpg"));
 		} else {
-			rarity="unknown rarity, check spelling & whitespace";
+			rarity = "unknown rarity, check spelling & whitespace";
 		}
 		return "Rarity set to: " + rarity;
 	}
@@ -181,6 +212,10 @@ public abstract class Card extends JPanel {
 	 */
 	public void setName(String name) {
 		lbName.setText("  " + name + "  ");
+	}
+
+	public void hasAbility(boolean hasAbility) {
+		abilityButton.setVisible(hasAbility);
 	}
 
 	/**
@@ -214,6 +249,17 @@ public abstract class Card extends JPanel {
 	}
 
 	/**
+	 * Sets the description of the ability in the ability panel. Since space is
+	 * an issue the String length can be max 55 chars.
+	 * 
+	 * @param text
+	 */
+	public void setAbilityText(String text) {
+		abilityArea.setText(text);
+		abilityButton.setToolTipText(abilityArea.getText());
+	}
+
+	/**
 	 * Whenever a new card object is instantiated this method is called upon.
 	 * This method checks what type of card the object is and hides irrelevant
 	 * elements. For instance if the object is a instance of ResourceCard then
@@ -225,16 +271,19 @@ public abstract class Card extends JPanel {
 	public void setType(Card card) {
 		if (card instanceof ResourceCard) {
 			lbType.setText("Resource");
-			lbAttack.setVisible(false);
-			lbDefense.setVisible(false);
+			attributesPanel.setVisible(false);
 			lbPrice.setVisible(false);
 		}
 		if (card instanceof HeroicSupport) {
 			lbType.setText("Heroic support");
 			lbAttack.setVisible(false);
 		}
-		if (card instanceof Unit){
+		if (card instanceof Unit) {
 			lbType.setText("Unit");
+		}
+		if(card instanceof Tech){
+			lbType.setText("Tech");
+			
 		}
 
 		// TODO complete with rest of different cardtypes
@@ -252,7 +301,7 @@ public abstract class Card extends JPanel {
 	// Loads a image from a directory and sets it as background for the main
 	// containter Card klass.
 	private void setBackground() {
-		File directory = new File("files/pictures/CardFrontBG2.jpg");
+		File directory = new File(PICTURE_DIRECTORY+"CardFrontBG.jpg");
 		try {
 			cardBG = ImageIO.read(directory);
 		} catch (IOException e) {
@@ -270,10 +319,9 @@ public abstract class Card extends JPanel {
 	public void enlarge() {
 		topPanel.setVisible(true);
 		typePanel.setVisible(true);
-		// TODO create a algortim that checks if the abilityPanel is hidden and
-		// setVisible if true.
-		
-		//FUKAR EJ när objektet ligger i en JFRame, får se om det funkar i en annan container, måste kollas upp!
+
+		// FUKAR EJ när objektet ligger i en JFRame, får se om det funkar i en
+		// annan container, måste kollas upp!
 	}
 
 	/**
@@ -283,8 +331,18 @@ public abstract class Card extends JPanel {
 	public void shrink() {
 		topPanel.setVisible(false);
 		typePanel.setVisible(false);
-		// TODO create a algortim that checks the rarity of the card. If the
-		// card doesn't contain a special ability then that panel can be hidden
-		// too. Else it needs to stay visible.
+		abilityArea.setVisible(false);
+	}
+
+	private class AbilityButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			if (event.getSource() == abilityButton) {
+				JOptionPane.showMessageDialog(null, "WIP! Abilities funktionalitet implementeras vid sprint 2.");
+			}
+
+		}
+
 	}
 }

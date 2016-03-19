@@ -22,6 +22,7 @@ public class HeroicSupport extends Card{
 		setName(name);
 		setPrice(price);
 		setDefense(defense);
+		setRarity("legendary");
 	}
 
 	public static void main(String[] args) {

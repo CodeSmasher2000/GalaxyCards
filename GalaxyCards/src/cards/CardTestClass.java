@@ -1,8 +1,8 @@
 package cards;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,9 +35,11 @@ public class CardTestClass extends JPanel {
 		JFrame frame1 = new JFrame();
 		JFrame frame2 = new JFrame();
 		JFrame frame3 = new JFrame();
+		JFrame frame4 = new JFrame();
 		Card card1 = new Unit("Battlecruiser", 6,6,7);
 		Card card2 = new HeroicSupport("Star commander",5,8);
 		Card card3 = new ResourceCard();
+		Card card4 = new Unit();
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -48,6 +50,7 @@ public class CardTestClass extends JPanel {
 				frame1.setLocation(200, 200);
 				frame1.pack();
 				frame1.setVisible(true);
+				frame1.setMaximumSize(new Dimension(200,355));
 				
 				frame2.add(card2);
 				frame2.setLocation(500, 200);
@@ -58,12 +61,19 @@ public class CardTestClass extends JPanel {
 				frame3.setLocation(800, 200);
 				frame3.pack();
 				frame3.setVisible(true);
+				
+				frame4.add(card4);
+				frame4.setLocation(1000, 200);
+				frame4.pack();
+				frame4.setVisible(true);
 			}
 			if (e.getSource() == btnShrink) {
 					card1.shrink();
 					frame1.pack();
 					card2.shrink();
 					frame2.pack();
+					card4.shrink();
+					frame4.pack();
 			}
 			if(e.getSource()==btnEnlarge){
 				card1.enlarge();

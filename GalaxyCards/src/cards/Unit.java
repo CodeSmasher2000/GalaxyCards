@@ -9,6 +9,8 @@ public class Unit extends Card {
 	public Unit() {
 		setType(this);
 		setName("Battle cuiser");
+		setRarity("rare");
+		setAbilityText("Ability: Deal 3 damage to target. if it diediedies gain");
 		setAttack(5);
 		setDefense(8);
 		setPrice(6);
@@ -31,6 +33,7 @@ public class Unit extends Card {
 		this.attack = attack;
 		this.defense = defense;
 		this.price = price;
+		setRarity("legendary");
 		setType(this);
 		setName(name);
 		setAttack(attack);

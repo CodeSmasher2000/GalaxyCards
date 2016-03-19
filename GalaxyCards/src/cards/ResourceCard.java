@@ -4,17 +4,19 @@ import javax.swing.JFrame;
 
 public class ResourceCard extends Card {
 	
+	private final int RESOURCE = 1;
+	
 	public ResourceCard(){
-		setName("Stardust");
+		setName("Star power");
+		setImage("resource");
+		setRarity("common");
+		hasAbility(false);
+		setAbilityText("Gain 1 resource");
 		setType(this);
 	}
-
-	public static void main(String[] args) {
-		ResourceCard card = new ResourceCard();
-		JFrame frame = new JFrame();
-		frame.setVisible(true);
-		frame.add(card);
-		frame.pack();
-		
+	
+	public int getResource(){
+		return RESOURCE;
 	}
+
 }
