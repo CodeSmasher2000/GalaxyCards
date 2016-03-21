@@ -43,6 +43,8 @@ public class CardPane extends JPanel {
 	 * @param card
 	 */
 	public void setCard(Card card) {
+		cardPanel.removeAll();
+		initCardPanel();
 		cardPanel.add(card);
 		this.cardPanel.revalidate();
 	}
