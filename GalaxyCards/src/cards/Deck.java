@@ -12,7 +12,8 @@ public class Deck {
 	private LinkedList<Card> deck = new LinkedList<Card>();
 	private int damage=1;
 	private Hero hero;
-	private int amtOfCards;
+	private int amtOfCards = 0;
+	private int nbrOfResourceCards = 0;
 
 	public void shuffle(){
 		Collections.shuffle(deck);
@@ -31,17 +32,52 @@ public class Deck {
 		return damage++;
 	}
 	
+	public void addResoruceCard(ResourceCard card) {
+		if (nbrOfResourceCards < 20) {
+			addCard(card);
+		} else {
+			// TODO: Throw Exception
+		}
+	}
+	
 	public void addCard(Card card) {
+		if (amtOfCards < 60) {
+			this.deck.add(card);
+		} else {
+			// TODO: Throw Exception
+		}
+	}
+	
+	public void addUnitCard(Unit card) {
 		deck.add(card);
+	}
+	
+	public void addTechCard(Tech cardToAdd) {
+		deck.add(cardToAdd);
+		
+	}
+	
+	public void addHeroicSupportCard(HeroicSupport cardToAdd) {
+		deck.add(cardToAdd);
 	}
 	
 	public int getAmtOfCards() {
 		return amtOfCards;
 	}
+	
+	public Card getCard(int index) {
+		return deck.get(index);
+	}
 
 	public void setAmtOfCards(int amtOfCards) {
 		this.amtOfCards = amtOfCards;
 	}
+	
+	public int getNbrOfResourceCards() {
+		return nbrOfResourceCards;
+	}
 
-
+	public void setNbrOfResourceCards(int nbrOfResourceCards) {
+		this.nbrOfResourceCards = nbrOfResourceCards;
+	}
 }
