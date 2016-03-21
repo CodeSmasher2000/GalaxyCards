@@ -58,9 +58,35 @@ public class CreateUnit extends JPanel {
 		gridUnit.add(lblNbrOfCards);
 		gridUnit.add(tfNbrOfCards);
 		add(gridUnit);
-		
-		
-
+	}
+	
+	public int getPrice() {
+		// TODO: Error Handling
+		return Integer.parseInt(tfPrice.getText());
+	}
+	
+	public int getAttack() {
+		// TODO: Error Handling
+		return Integer.parseInt(tfAttack.getText());
+	}
+	
+	public int getDefense() {
+		// TODO: Error Handling
+		return Integer.parseInt(tfDefense.getText());
+	}
+	
+	public String getRarity() {
+		// TODO: Error Handling
+		return tfRarity.getText();
+	}
+	
+	public String getName() {
+		// TODO: Error Handling
+		return tfCardName.getText();
+	}
+	
+	public String getDescription() {
+		return taDescription.getText();
 	}
 
 }

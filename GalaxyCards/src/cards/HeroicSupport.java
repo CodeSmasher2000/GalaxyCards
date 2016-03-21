@@ -44,5 +44,10 @@ public class HeroicSupport extends Card {
 		setPrice(this.price);
 		setDefense(this.defense);
 	}
+	
+	@Override
+	public String toString() {
+		return NAME + ", " + "HeroicSupport" + ", " + RARITY;
+	}
 
 }

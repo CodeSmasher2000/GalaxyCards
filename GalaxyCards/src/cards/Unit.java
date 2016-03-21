@@ -63,4 +63,9 @@ public class Unit extends Card {
 	public int getPrice(){
 		return price;
 	}
+	
+	@Override
+	public String toString() {
+		return getName() + ", " + "Unit";
+	}
 }
