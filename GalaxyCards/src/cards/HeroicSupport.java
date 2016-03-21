@@ -122,14 +122,14 @@ public class HeroicSupport extends Card implements Serializable {
 		this.defense += amount;
 	}
 
-	/**
-	 * Returns a String with the description of this card.
-	 * 
-	 * @return : String
-	 */
-	public String toString() {
-		return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + ", Defense: " + defense
-				+ ", Price: " + price + ", Has ability:" + hasAbility;
-	}
+//	/**
+//	 * Returns a String with the description of this card.
+//	 * 
+//	 * @return : String
+//	 */
+//	public String toString() {
+//		return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + ", Defense: " + defense
+//				+ ", Price: " + price + ", Has ability:" + hasAbility;
+//	}
 
 }

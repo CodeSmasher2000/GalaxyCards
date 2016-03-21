@@ -103,7 +103,7 @@ public class CreateController {
 	}
 	
 	public void previewCard() {
-		
+		gui.updateCardPreview();
 	}
 	
 	public Deck getActiveDeck() {

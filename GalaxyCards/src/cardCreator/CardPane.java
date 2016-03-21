@@ -44,6 +44,7 @@ public class CardPane extends JPanel {
 	 */
 	public void setCard(Card card) {
 		cardPanel.add(card);
+		this.cardPanel.revalidate();
 	}
 	
 	private void initCardPanel() {
