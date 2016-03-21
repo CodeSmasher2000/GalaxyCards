@@ -25,8 +25,13 @@ public class Deck {
 			return null;
 		}
 	}
+	
 	public int incrementalDamage(){
 		return damage++;
+	}
+	
+	public void addCard(Card card) {
+		deck.add(card);
 	}
 
 
