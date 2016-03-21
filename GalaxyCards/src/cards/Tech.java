@@ -2,7 +2,7 @@ package cards;
 
 import java.io.Serializable;
 
-public class Tech extends Card implements Serializable {
+public class Tech extends Card implements PlayCardsInterface, Serializable {
 
 	/**
 	 * 
@@ -23,6 +23,36 @@ public class Tech extends Card implements Serializable {
 		hasAbility(false);
 		setPrice(PRICE);
 		
+	}
+
+	@Override
+	public String getImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getRarity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasAbility() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int getPrice() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getDefense() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

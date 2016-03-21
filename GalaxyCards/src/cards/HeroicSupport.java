@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author 13120dde
  *
  */
-public class HeroicSupport extends Card implements Serializable {
+public class HeroicSupport extends Card implements PlayCardsInterface, Serializable {
 
 	/**
 	 * 

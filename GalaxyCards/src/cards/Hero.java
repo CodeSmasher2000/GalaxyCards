@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author 13120dde
  *
  */
-public class Hero implements Serializable{
+public class Hero extends HeroGUI implements Serializable{
 
 	/**
 	 * 

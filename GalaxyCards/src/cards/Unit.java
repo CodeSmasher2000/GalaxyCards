@@ -56,6 +56,7 @@ public class Unit extends Card implements Serializable{
 		setPrice(PRICE);
 		super.setAttack(this.attack);
 		super.setDefense(this.defense);
+		this.setAbilityText("Haste");
 
 	}
 
@@ -93,6 +94,9 @@ public class Unit extends Card implements Serializable{
 	 */
 	public boolean hasAbility() {
 		return hasAbility;
+	}
+	public void setAbilityText(String abilityDescription){
+		super.setAbilityText(abilityDescription);
 	}
 
 	public int getPrice() {
