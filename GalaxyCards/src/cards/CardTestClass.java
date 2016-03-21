@@ -13,6 +13,16 @@ public class CardTestClass extends JPanel {
 	private JButton btnEnlarge = new JButton("Enlarge");
 	private JButton btnSpawnCard = new JButton("Spawn card");
 	private Card card;
+	
+	JFrame frame1 = new JFrame();
+	JFrame frame2 = new JFrame();
+	JFrame frame3 = new JFrame();
+	JFrame frame4 = new JFrame();
+	Card resourceCard = new ResourceCard();
+	Card heroicSupport1 = new HeroicSupport("Commander", "common", "test", false, 5, 3);
+	Card heroicSupport2 = new HeroicSupport("Overlord", "rare", "test", true, 7, 5);
+	Card heroicSupport3 = new HeroicSupport("Legend", "legendary", "test", true, 7, 5);
+
 
 	public CardTestClass() {
 		ButtonListener listener = new ButtonListener();
@@ -21,6 +31,36 @@ public class CardTestClass extends JPanel {
 		add(btnSpawnCard);
 		add(btnShrink);
 		add(btnEnlarge);
+	}
+	
+	public void testSpawnResource(){
+		frame1.add(resourceCard);
+		frame1.setLocation(100, 200);
+		frame1.pack();
+		frame1.setVisible(true);
+	}
+	
+	public void testSpawnHeroicSupport(){
+		frame2.add(heroicSupport1);
+		frame2.setLocation(250, 200);
+		frame2.pack();
+		frame2.setVisible(true);
+		frame3.add(heroicSupport2);
+		frame3.setLocation(250, 500);
+		frame3.pack();
+		frame3.setVisible(true);
+		frame4.add(heroicSupport3);
+		frame4.setLocation(250, 800);
+		frame4.pack();
+		frame4.setVisible(true);
+	}
+	
+	public void testShrink(){
+		
+	}
+	
+	public void testEnlarge(){
+		
 	}
 
 	public static void main(String[] args) {
@@ -32,54 +72,20 @@ public class CardTestClass extends JPanel {
 	}
 
 	private class ButtonListener implements ActionListener {
-		JFrame frame1 = new JFrame();
-		JFrame frame2 = new JFrame();
-		JFrame frame3 = new JFrame();
-		JFrame frame4 = new JFrame();
-		Card card1 = new Unit("Battlecruiser", 6,6,7);
-		Card card2 = new HeroicSupport("Star commander",5,8);
-		Card card3 = new ResourceCard();
-		Card card4 = new Unit();
+		
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			if (e.getSource() == btnSpawnCard) {
-				
-				frame1.add(card1);
-				frame1.setLocation(200, 200);
-				frame1.pack();
-				frame1.setVisible(true);
-				frame1.setMaximumSize(new Dimension(200,355));
-				
-				frame2.add(card2);
-				frame2.setLocation(500, 200);
-				frame2.pack();
-				frame2.setVisible(true);
-				
-				frame3.add(card3);
-				frame3.setLocation(800, 200);
-				frame3.pack();
-				frame3.setVisible(true);
-				
-				frame4.add(card4);
-				frame4.setLocation(1000, 200);
-				frame4.pack();
-				frame4.setVisible(true);
+				testSpawnResource();
+				testSpawnHeroicSupport();
 			}
 			if (e.getSource() == btnShrink) {
-					card1.shrink();
-					frame1.pack();
-					card2.shrink();
-					frame2.pack();
-					card4.shrink();
-					frame4.pack();
+				testShrink();
 			}
 			if(e.getSource()==btnEnlarge){
-				card1.enlarge();
-				card2.enlarge();
-				frame1.pack();
-				frame2.pack();
+				testEnlarge();
 			}
 		}
 	}

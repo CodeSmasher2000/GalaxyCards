@@ -32,7 +32,10 @@ import javax.swing.border.Border;
  *
  */
 // TODO Change the font to look more appealing and perhaps smaller.
-//TODO make the abilitybutton toggle enabled/disabled depending if on hand or board.
+// TODO make the abilitybutton toggle enabled/disabled depending if on hand or
+// board.
+// TODO enlarge() does not work.
+// TODO use ability when button is pressed
 
 public abstract class Card extends JPanel {
 
@@ -43,7 +46,7 @@ public abstract class Card extends JPanel {
 	private Border border;
 	private JButton abilityButton;
 	private JTextArea abilityArea;
-	
+
 	private final String PICTURE_DIRECTORY = "files/pictures/";
 
 	public Card() {
@@ -179,7 +182,7 @@ public abstract class Card extends JPanel {
 	 * @param imageName
 	 */
 	public void setImage(String imageName) {
-		lbImage.setIcon(new ImageIcon(PICTURE_DIRECTORY+imageName+".jpg"));
+		lbImage.setIcon(new ImageIcon(PICTURE_DIRECTORY + imageName + ".jpg"));
 	}
 
 	/**
@@ -194,11 +197,11 @@ public abstract class Card extends JPanel {
 	 */
 	public String setRarity(String rarity) {
 		if (rarity.equalsIgnoreCase("common")) {
-			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY+"rarityCommon.jpg"));
+			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY + "rarityCommon.jpg"));
 		} else if (rarity.equalsIgnoreCase("rare")) {
-			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY+"rarityRare.jpg"));
+			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY + "rarityRare.jpg"));
 		} else if (rarity.equalsIgnoreCase("legendary")) {
-			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY+"rarityLegendary.jpg"));
+			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY + "rarityLegendary.jpg"));
 		} else {
 			rarity = "unknown rarity, check spelling & whitespace";
 		}
@@ -214,6 +217,12 @@ public abstract class Card extends JPanel {
 		lbName.setText("  " + name + "  ");
 	}
 
+	/**
+	 * If true is passed in as argument then the ability button is displayed on
+	 * card, else it wont show.
+	 * 
+	 * @param hasAbility
+	 */
 	public void hasAbility(boolean hasAbility) {
 		abilityButton.setVisible(hasAbility);
 	}
@@ -281,9 +290,9 @@ public abstract class Card extends JPanel {
 		if (card instanceof Unit) {
 			lbType.setText("Unit");
 		}
-		if(card instanceof Tech){
+		if (card instanceof Tech) {
 			lbType.setText("Tech");
-			
+
 		}
 
 		// TODO complete with rest of different cardtypes
@@ -301,7 +310,7 @@ public abstract class Card extends JPanel {
 	// Loads a image from a directory and sets it as background for the main
 	// containter Card klass.
 	private void setBackground() {
-		File directory = new File(PICTURE_DIRECTORY+"CardFrontBG.jpg");
+		File directory = new File(PICTURE_DIRECTORY + "CardFrontBG.jpg");
 		try {
 			cardBG = ImageIO.read(directory);
 		} catch (IOException e) {
@@ -340,6 +349,7 @@ public abstract class Card extends JPanel {
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == abilityButton) {
 				JOptionPane.showMessageDialog(null, "WIP! Abilities funktionalitet implementeras vid sprint 2.");
+
 			}
 
 		}
