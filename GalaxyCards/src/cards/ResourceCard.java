@@ -1,17 +1,21 @@
 package cards;
 
-import javax.swing.JFrame;
+import java.io.Serializable;
 
 /**
- * This class's responsibility is soley to generate 1 additional resource to the
+ * This class's responsibility is to generate 1 additional resource to the
  * player when this card is played from hand. Only 1 card of this type can be
  * played each round.
  * 
  * @author 13120dde
  *
  */
-public class ResourceCard extends Card {
+public class ResourceCard extends Card implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7660228645501222930L;
 	private final int RESOURCE = 1;
 	private final String NAME = "Star power";
 
@@ -35,7 +39,7 @@ public class ResourceCard extends Card {
 	}
 
 	public String toString() {
-		return NAME + " is a resource card. When played adds " + RESOURCE;
+		return NAME + "- [ResourceCard] When played adds " + RESOURCE;
 	}
 
 }
