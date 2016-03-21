@@ -18,11 +18,22 @@ public class CardTestClass extends JPanel {
 	JFrame frame2 = new JFrame();
 	JFrame frame3 = new JFrame();
 	JFrame frame4 = new JFrame();
+	JFrame frame5 = new JFrame();
+	JFrame frame6 = new JFrame();
+	JFrame frame7 = new JFrame();
+	JFrame frame8 = new JFrame();
+	JFrame frame9 = new JFrame();
+	JFrame frame10 = new JFrame();
 	Card resourceCard = new ResourceCard();
 	Card heroicSupport1 = new HeroicSupport("Commander", "common", "test", false, 5, 3);
 	Card heroicSupport2 = new HeroicSupport("Overlord", "rare", "test", true, 7, 5);
 	Card heroicSupport3 = new HeroicSupport("Legend", "legendary", "test", true, 7, 5);
-
+	Card unit1 = new Unit("Banshee","common","Spaceship1",true,5,5,5);
+	Card unit2 = new Unit("Rouge","rare","Spaceship1",false,2,4,2);
+	Card unit3 = new Unit("Destroyer","legendary","Spaceship1",true,7,9,7);
+	Card tech1 = new Tech("Bolt","common","Tech1", 3);
+	Card tech2 = new Tech("Destroy","rare","Tech1", 6);
+	Card tech3 = new Tech("Phase shift","legendary","Tech1", 9);
 
 	public CardTestClass() {
 		ButtonListener listener = new ButtonListener();
@@ -55,8 +66,41 @@ public class CardTestClass extends JPanel {
 		frame4.setVisible(true);
 	}
 	
+	public void testSpawnUnit(){
+		frame5.add(unit1);
+		frame5.setLocation(440, 100);
+		frame5.pack();
+		frame5.setVisible(true);
+		frame6.add(unit2);
+		frame6.setLocation(440, 350);
+		frame6.pack();
+		frame6.setVisible(true);
+		frame7.add(unit3);
+		frame7.setLocation(440, 600);
+		frame7.pack();
+		frame7.setVisible(true);
+	}
+	
+	public void testSpawnTech(){
+		frame8.add(tech1);
+		frame8.setLocation(610, 100);
+		frame8.pack();
+		frame8.setVisible(true);
+		frame9.add(tech2);
+		frame9.setLocation(610, 350);
+		frame9.pack();
+		frame9.setVisible(true);
+		frame10.add(tech3);
+		frame10.setLocation(610, 600);
+		frame10.pack();
+		frame10.setVisible(true);
+	}
+	
 	public void testShrink(){
-		
+		unit1.shrink();
+		heroicSupport1.shrink();
+		frame5.pack();
+		frame2.pack();
 	}
 	
 	public void testEnlarge(){
@@ -80,6 +124,8 @@ public class CardTestClass extends JPanel {
 			if (e.getSource() == btnSpawnCard) {
 				testSpawnResource();
 				testSpawnHeroicSupport();
+				testSpawnUnit();
+				testSpawnTech();
 			}
 			if (e.getSource() == btnShrink) {
 				testShrink();

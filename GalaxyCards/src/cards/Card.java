@@ -292,6 +292,7 @@ public abstract class Card extends JPanel {
 		}
 		if (card instanceof Tech) {
 			lbType.setText("Tech");
+			attributesPanel.setVisible(false);
 
 		}
 
