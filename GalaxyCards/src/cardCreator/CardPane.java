@@ -36,6 +36,7 @@ public class CardPane extends JPanel {
 		setPreferredSize(new Dimension(200, 240));
 		initCardPanel();
 		initButtons();
+		setCard(new HeroicSupport("Overlord", "rare", "test", true, 7, 5));
 	}
 	
 	private void initCardPanel() {

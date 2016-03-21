@@ -7,7 +7,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
+/**
+ * Creates a panel that lets you customize a Resource card.
+ * @author Jonte
+ *
+ */
 public class CreateResource extends JPanel {
 	private JPanel gridResource = new JPanel();
 	
@@ -21,6 +25,9 @@ public class CreateResource extends JPanel {
 	private JLabel lblNbrOfCards = new JLabel("Number of Cards: ");
 	private JLabel lblDescription = new JLabel("Description");
 	
+	/**
+	 * adds the components in a GridLayout panel and adds that panel to the main panel
+	 */
 	public CreateResource(){
 		gridResource.setLayout(new GridLayout(4,2));
 		gridResource.setPreferredSize(new Dimension(400,600));

@@ -9,6 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+/**
+ * Creates a panel that lets you customize a Heroic card.
+ * @author Jonte
+ *
+ */
 public class CreateHeroic extends JPanel {
 	private JPanel gridHeroic = new JPanel();
 	
@@ -28,6 +33,10 @@ public class CreateHeroic extends JPanel {
 	private JLabel lblNbrOfCards = new JLabel("Number of Cards: ");
 	private JLabel lblDescription = new JLabel("Description");
 	
+	
+	/**
+	 * adds the components in a GridLayout panel and adds that panel to the main panel
+	 */
 	public CreateHeroic(){
 		gridHeroic.setLayout(new GridLayout(7,2));
 		gridHeroic.setPreferredSize(new Dimension(400,600));

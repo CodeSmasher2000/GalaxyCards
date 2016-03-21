@@ -36,7 +36,7 @@ public class CreateUnit extends JPanel {
 	
 	
 	/**
-	 * adds the components in a GridLayout panel and 
+	 * adds the components in a GridLayout panel and adds that panel to the main panel
 	 */
 	public CreateUnit(){
 		gridUnit.setLayout(new GridLayout(8,2));

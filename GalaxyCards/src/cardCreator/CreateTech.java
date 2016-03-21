@@ -8,6 +8,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+/**
+ * Creates a panel that lets you customize a Tech card.
+ * @author Jonte
+ *
+ */
 public class CreateTech extends JPanel {
 	private JPanel gridTech = new JPanel();
 
@@ -21,6 +26,9 @@ public class CreateTech extends JPanel {
 	private JLabel lblNbrOfCards = new JLabel("Number of Cards: ");
 	private JLabel lblDescription = new JLabel("Description");
 	
+	/**
+	 * adds the components in a GridLayout panel and adds that panel to the main panel
+	 */
 	public CreateTech(){
 		gridTech.setLayout(new GridLayout(4,2));
 		gridTech.setPreferredSize(new Dimension(400,600));
