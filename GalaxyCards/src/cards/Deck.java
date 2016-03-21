@@ -12,7 +12,8 @@ public class Deck {
 	private LinkedList<Card> deck = new LinkedList<Card>();
 	private int damage=1;
 	private Hero hero;
-	
+	private int amtOfCards;
+
 	public void shuffle(){
 		Collections.shuffle(deck);
 	}
@@ -32,6 +33,14 @@ public class Deck {
 	
 	public void addCard(Card card) {
 		deck.add(card);
+	}
+	
+	public int getAmtOfCards() {
+		return amtOfCards;
+	}
+
+	public void setAmtOfCards(int amtOfCards) {
+		this.amtOfCards = amtOfCards;
 	}
 
 
