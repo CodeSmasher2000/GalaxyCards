@@ -1,5 +1,9 @@
 package cardCreator;
-
+/**
+ * This class is used to start the card creator
+ * @author patriklarsson
+ *
+ */
 public class Start {
 
 	
