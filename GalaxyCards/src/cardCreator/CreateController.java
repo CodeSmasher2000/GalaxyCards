@@ -27,7 +27,12 @@ import cards.Unit;
  *
  */
 public class CreateController {
-	private Deck activeDeck;
+	private Deck activeDeck = new Deck();
+	private CreateGui gui;
+	
+	public void setGui(CreateGui gui) {
+		this.gui = gui;
+	}
 	
 	public Hero createHero() {
 		return null;
@@ -37,20 +42,18 @@ public class CreateController {
 		return new Deck();
 	}
 	
-	/**
-	 * 
-	 * @param nbrOfResoruceCards
-	 * @return
-	 */
 	public void addResoruceCard(int nbrOfResoruceCards) {
 		for (int i = 0; i < nbrOfResoruceCards; i++) {
 			activeDeck.addResoruceCard(new ResourceCard());
+			
 		}
 	}
 	
 	public void addUnitCard(String name, int attack, int defense, int price ) {
 		Unit cardToAdd = new Unit(name, attack, defense, price);
 		activeDeck.addUnitCard(cardToAdd);
+		gui.addCardToList(cardToAdd);
+		
 	}
 	
 	public void addTechCard() {
@@ -74,7 +77,7 @@ public class CreateController {
 	 * Writes the activeDeck to a dat file with the name of the deck in the decks folder.
 	 */
 	public void saveDeckToFile() {
-		String filename = "files/decks/" + activeDeck.getName();
+		String filename = "files/decks/" + "test"; //+ activeDeck.getName();
 		File file = new File(filename);
 		try(FileOutputStream fout = new FileOutputStream(file);
 				ObjectOutputStream oos = new ObjectOutputStream(fout)) {
@@ -94,16 +97,12 @@ public class CreateController {
 			FileInputStream fin = new FileInputStream(file);
 			ObjectInputStream ois = new ObjectInputStream(fin);
 			this.activeDeck = (Deck)ois.readObject();
-		} catch(ClassNotFoundException | ObjectStreamException e) {
+		} catch(ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void previewCard)() {
-		createGui.updateCardPane();
-	}
-	
-	public void setEnabledFunctions() {
+	public void previewCard() {
 		
 	}
 	
@@ -116,7 +115,5 @@ public class CreateController {
 	}
 	
 	public static void main(String[] args) {
-		CreateController controller = new CreateController();
-		controller.saveDeckToFile();
 	}
 }

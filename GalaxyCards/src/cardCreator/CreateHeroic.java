@@ -55,8 +55,29 @@ public class CreateHeroic extends JPanel {
 		gridHeroic.add(lblNbrOfCards);
 		gridHeroic.add(tfNbrOfCards);
 		add(gridHeroic);
-		
-		
-
+	}
+	
+	public int getPrice() {
+		// TODO: Error Handling
+		return Integer.parseInt(tfPrice.getText());
+	}
+	
+	public int getDefense() {
+		// TODO: Error Handling
+		return Integer.parseInt(tfDefense.getText());
+	}
+	
+	public String getRarity() {
+		// TODO: Error Handling
+		return tfRarity.getText();
+	}
+	
+	public String getName() {
+		// TODO: Error Handling
+		return tfCardName.getText();
+	}
+	
+	public String getDescription() {
+		return taDescription.getText();
 	}
 }

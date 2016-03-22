@@ -42,4 +42,18 @@ public class CreateTech extends JPanel {
 		gridTech.add(tfNbrOfCards);
 		add(gridTech);
 	}
+	
+	public int getPrice() {
+		// TODO: Error Handling
+		return Integer.parseInt(tfPrice.getText());
+	}
+	
+	public String getName() {
+		// TODO: Error Handling
+		return tfCardName.getText();
+	}
+	
+	public String getDescription() {
+		return tfDescription.getText();
+	}
 }

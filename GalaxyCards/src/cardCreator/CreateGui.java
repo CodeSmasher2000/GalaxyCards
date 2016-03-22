@@ -1,43 +1,38 @@
 package cardCreator;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 
-import cards.CardTestClass;
+import cards.Card;
 
 public class CreateGui extends JPanel {
-	
 	private JTabbedPane tabs = new JTabbedPane();
 	private JPanel mainPanel = new JPanel();
-	private JPanel deckPanel = new JPanel();
-	private JPanel previewPanel = new JPanel();
-
+	
+	// Specilized Panels 
 	private CreateUnit createUnit = new CreateUnit();
 	private CreateResource createResource = new CreateResource();
 	private CreateTech createTech = new CreateTech();
 	private CreateHeroic createHeroic = new CreateHeroic();
-	private CardPane cardPane = new CardPane();
+
+	private CardPane previewPanel;
+	private DeckPanel deckPanel;
+
 	
+	private CreateController controller;
 	
-	
-	
-	public CreateGui(){
+	public CreateGui(CreateController controller){
+		this.controller = controller;
 		JFrame frame1 = new JFrame("Card Creator");
 		frame1.setLayout(new GridLayout(1,3));
-//		setPreferredSize(new Dimension(1240,860));
-//		setMinimumSize(new Dimension(800,600));
 		frame1.setVisible(true);
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		
+		previewPanel = new CardPane(controller, this);
+		deckPanel = new DeckPanel();
 		tabs.addTab("Unit", createUnit);
 		tabs.addTab("Resource", createResource);
 		tabs.addTab("Tech", createTech);
@@ -49,10 +44,32 @@ public class CreateGui extends JPanel {
 		
 	}
 	
-
+	public CreateController getController() {
+		return this.controller;
+	}
+	
+	public void addCard() {
+		if (tabs.getSelectedComponent().equals(createUnit)) {
+			System.out.println("Create Unit");
+			controller.addUnitCard(createUnit.getName(), createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice());
+		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
+			System.out.println("Create Heroic");
+		} else if (tabs.getSelectedComponent().equals(createResource)) {
+			System.out.println("Create Resource");
+		} else if(tabs.getSelectedComponent().equals(createTech)) {
+			System.out.println("Create Tech");
+		}
+	}
+	
+	public void removeCardFromList() {
+	}
+	
+	public void addCardToList(Card cardToAdd) {
+		deckPanel.addToListModel(cardToAdd);
+	}
 	
 	public static void main(String[] args) {
-	new CreateGui();
+		new CreateGui(new CreateController());
 	}
 
 }
