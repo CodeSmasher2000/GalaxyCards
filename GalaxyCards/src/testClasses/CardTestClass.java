@@ -114,6 +114,12 @@ public class CardTestClass extends JPanel {
 	public void testSetAbilityText(){
 		tech1.setAbilityText("Generate 2 shield to hero");
 		tech2.setAbilityText("Deal 3 damage to all units in a lane");
+		tech3.setAbilityText("Defensive units may attack until end of turn");
+		heroicSupport1.setAbilityText("Tap enemy card");
+		heroicSupport2.setAbilityText("Defensive units regenerate 2 life");
+		heroicSupport3.setAbilityText("Offensive unit gains Cloack until end of turn");
+		unit2.setAbilityText("Spawn two 1/1 planes in lane");
+		unit3.setAbilityText("");
 	}
 	
 	public void testEnlarge(){
