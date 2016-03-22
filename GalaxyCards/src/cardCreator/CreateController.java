@@ -57,9 +57,11 @@ public class CreateController {
 		
 	}
 	
-	public void addTechCard() {
-//		Tech cardToAdd = new Tech();
-//		activeDeck.addTechCard(cardToAdd);
+	public void addTechCard(String name, String rarity, String imageName, int price) {
+		Tech cardToAdd = new Tech(name, rarity, imageName, price);
+		activeDeck.addTechCard(cardToAdd);
+		gui.addCardToList(cardToAdd);
+		
 	}
 	
 	public void addHeroicSupportCard(String name, String rarity, String imageName, boolean hasAbility, int price, int defense) {

@@ -57,10 +57,14 @@ public class CreateGui extends JPanel {
 					createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice());
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Create Heroic");
+			controller.addHeroicSupportCard(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
+					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense());
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
 			System.out.println("Create Resource");
+			controller.addResoruceCard(createResource.getAmtOfCards());
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Create Tech");
+			controller.addTechCard(createTech.getName(), createTech.getRarity(), createTech.getName(), createTech.getPrice());
 		}
 	}
 	

@@ -68,24 +68,7 @@ public class CardPane extends JPanel {
 		btnAdd.addActionListener(btnListner);
 		btnPreview.addActionListener(btnListner);
 	}
-	
-//	public static void main(String[] args) {
-//		CardPane pane = new CardPane(new CreateController(),);
-//		SwingUtilities.invokeLater(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				JFrame frame = new JFrame();
-//				frame.add(pane);
-//				frame.pack();
-//				frame.setVisible(true);
-//				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//			}
-//		});
-//		Card heroicSupport2 = new HeroicSupport("Overlord", "rare", "test", true, 7, 5);
-//		pane.setCard(heroicSupport2);
-//	}
-	
+
 	private class ButtonListener implements ActionListener {
 
 		@Override

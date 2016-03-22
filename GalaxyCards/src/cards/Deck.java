@@ -38,8 +38,10 @@ public class Deck implements Serializable{
 	}
 	
 	public void addResoruceCard(ResourceCard card) {
+		System.out.println("Add resoruce card");
 		if (nbrOfResourceCards < 20) {
 			addCard(card);
+			nbrOfResourceCards++;
 		} else {
 			// TODO: Throw Exception
 		}
