@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 public class Unit extends Card {
 
 	private int attack, defense, price;
-
+	
 	public Unit() {
 		setType(this);
 		setName("Battle cuiser");
@@ -19,7 +19,7 @@ public class Unit extends Card {
 	/**
 	 * Instantiates the card with given arguments String name, int attack, int
 	 * defense, int price
-	 *
+	 * 
 	 * @param name
 	 *            : String
 	 * @param attack
@@ -35,38 +35,35 @@ public class Unit extends Card {
 		this.price = price;
 		setRarity("legendary");
 		setType(this);
-		setName(NAME);
-		setRarity(RARITY);
-		setImage(IMAGE_NAME);
-		hasAbility(this.hasAbility);
-		setPrice(PRICE);
-		super.setAttack(this.attack);
-		super.setDefense(this.defense);
+		setName(name);
+		setAttack(attack);
+		setDefense(defense);
+		setPrice(price);
 	}
-
+	
 	public void setAttack(int attack){
 		this.attack=attack;
 	}
-
+	
 	public void setDefense(int defense){
 		this.defense=defense;
 	}
 	public void setPrice(int price){
 		this.price=price;
 	}
-
+	
 	public int getAttack(){
 		return attack;
 	}
-
+	
 	public int getDefense(){
 		return defense;
 	}
-
+	
 	public int getPrice(){
 		return price;
 	}
-
+	
 	@Override
 	public String toString() {
 		return getName() + ", " + "Unit";
