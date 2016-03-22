@@ -50,8 +50,8 @@ public class CreateController {
 	}
 	
 	public void addUnitCard(String name, int attack, int defense, int price ) {
-		Unit cardToAdd = new Unit(name, attack, defense, price);
-		activeDeck.addUnitCard(cardToAdd);
+		Card cardToAdd = new Unit(name, attack, defense, price);
+		activeDeck.addUnitCard((Unit)cardToAdd);
 		gui.addCardToList(cardToAdd);
 		
 	}
