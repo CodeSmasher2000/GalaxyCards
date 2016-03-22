@@ -40,7 +40,7 @@ public class CreateGui extends JPanel {
 		tabs.addTab("Heroic", createHeroic);
 		frame1.add(deckPanel);
 		frame1.add(tabs);
-		frame1.add(cardPane);
+		frame1.add(previewPanel);
 		frame1.pack();
 		
 	}
