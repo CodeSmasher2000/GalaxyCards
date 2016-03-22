@@ -44,7 +44,7 @@ import cards.Unit;
 
 public abstract class Card extends JPanel {
 
-	private Image cardBG;
+	private transient Image cardBG;
 	private JPanel topPanel, imgPanel, typePanel, attributesPanel;
 	private JLabel lbName, lbPrice, lbImage, lbType, lbRarity, lbAttack, lbDefense;
 	private Color frameColor;
@@ -335,8 +335,8 @@ public abstract class Card extends JPanel {
 		topPanel.setVisible(true);
 		typePanel.setVisible(true);
 
-		// FUKAR EJ när objektet ligger i en JFRame, får se om det funkar i en
-		// annan container, måste kollas upp!
+		// FUKAR EJ nï¿½r objektet ligger i en JFRame, fï¿½r se om det funkar i en
+		// annan container, mï¿½ste kollas upp!
 	}
 
 	/**

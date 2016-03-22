@@ -21,6 +21,8 @@ public class DeckPanel extends JPanel {
 	private JList<Card> list;
 	private JButton btnSelect;
 	private JButton btnRemove;
+	private JButton btnLoadDeck;
+	private JButton btnSaveDeck;
 	private CreateController controller;
 	
 	public DeckPanel(CreateController controller) {
@@ -37,8 +39,14 @@ public class DeckPanel extends JPanel {
 		btnSelect.addActionListener(listener);
 		btnRemove = new JButton("Remove Card");
 		btnRemove.addActionListener(listener);
+		btnSaveDeck = new JButton("Save Deck");
+		btnSaveDeck.addActionListener(listener);
+		btnLoadDeck = new JButton("Load Deck");
+		btnLoadDeck.addActionListener(listener);
 		btnPanel.add(btnSelect);
 		btnPanel.add(btnRemove);
+		btnPanel.add(btnSaveDeck);
+		btnPanel.add(btnLoadDeck);
 		add(btnPanel, BorderLayout.SOUTH);
 	}
 	
@@ -68,6 +76,10 @@ public class DeckPanel extends JPanel {
 				controller.removeCardFromList(list.getSelectedValue());
 			} else if (e.getSource() == btnSelect) {
 				controller.listItemSelected(list.getSelectedValue());
+			} else if(e.getSource() == btnSaveDeck) {
+				controller.saveDeckToFile();
+			} else if(e.getSource() == btnLoadDeck) {
+				controller.readDeckFromFile();
 			}
 			
 		}

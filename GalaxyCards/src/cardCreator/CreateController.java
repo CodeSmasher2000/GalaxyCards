@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectStreamException;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 import cards.Deck;
 import cards.Hero;
@@ -29,6 +30,7 @@ import guiPacket.Card;
 public class CreateController {
 	private Deck activeDeck = new Deck();
 	private CreateGui gui;
+	private final String DECKPATH = "files/decks/";
 	
 	public void setGui(CreateGui gui) {
 		this.gui = gui;
@@ -70,14 +72,12 @@ public class CreateController {
 		gui.addCardToList(cardToAdd);
 	}
 	
-	public void saveHeroToFile() {
-	}
 	
 	/**
 	 * Writes the activeDeck to a dat file with the name of the deck in the decks folder.
 	 */
 	public void saveDeckToFile() {
-		String filename = "files/decks/" + "test"; //+ activeDeck.getName();
+		String filename = DECKPATH + "test.dat"; //+ activeDeck.getName();
 		File file = new File(filename);
 		try(FileOutputStream fout = new FileOutputStream(file);
 				ObjectOutputStream oos = new ObjectOutputStream(fout)) {
@@ -96,16 +96,27 @@ public class CreateController {
 	 * Reads a deck from a dat file and sets the activeDeck to the read deck
 	 * @param filename The name of the file with the deck
 	 */
-	public void readDeckFromFile(String filename) {
-		File file = new File(filename);
-		try{
+	public void readDeckFromFile() {
+		// TODO Ersätt denna kod
+		String fileName = JOptionPane.showInputDialog("Ange namn på deck");
+		File file = new File(DECKPATH + fileName);
+		try(
 			FileInputStream fin = new FileInputStream(file);
-			ObjectInputStream ois = new ObjectInputStream(fin);
+			ObjectInputStream ois = new ObjectInputStream(fin)) {
 			this.activeDeck = (Deck)ois.readObject();
 		} catch(ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
+		printDeck();
 	}
+	
+	private void printDeck() {
+		for (int i = 0; i < activeDeck.getAmtOfCards(); i++) {
+			Card card = activeDeck.getCard(i);
+			gui.addCardToList(card);	
+		}
+	}
+	
 	
 	public void previewCard() {
 		gui.updateCardPreview();

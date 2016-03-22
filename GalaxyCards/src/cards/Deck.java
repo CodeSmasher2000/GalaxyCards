@@ -69,7 +69,7 @@ public class Deck implements Serializable{
 	}
 	
 	public int getAmtOfCards() {
-		return amtOfCards;
+		return deck.size();
 	}
 	
 	public Card getCard(int index) {
