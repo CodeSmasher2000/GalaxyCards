@@ -23,7 +23,7 @@ public class ResourceCard extends Card implements Serializable{
 
 	public ResourceCard() {
 		setName(NAME);
-		setImage("resource");
+		setImage("Resource1");
 		setRarity("common");
 		hasAbility(false);
 		setAbilityText("Gain 1 resource");

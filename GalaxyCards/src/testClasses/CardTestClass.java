@@ -30,9 +30,9 @@ public class CardTestClass extends JPanel {
 	JFrame frame9 = new JFrame();
 	JFrame frame10 = new JFrame();
 	Card resourceCard = new ResourceCard();
-	Card heroicSupport1 = new HeroicSupport("Commander", "common", "test", false, 5, 3);
-	Card heroicSupport2 = new HeroicSupport("Overlord", "rare", "test", true, 7, 5);
-	Card heroicSupport3 = new HeroicSupport("Legend", "legendary", "test", true, 7, 5);
+	Card heroicSupport1 = new HeroicSupport("Commander", "common", "heroicSupport2", false, 5, 3);
+	Card heroicSupport2 = new HeroicSupport("Overlord", "rare", "heroicSupport3", true, 7, 5);
+	Card heroicSupport3 = new HeroicSupport("Legend", "legendary", "heroicSupport1", true, 7, 5);
 	Card unit1 = new Unit("Banshee","common","Spaceship1",true,5,5,5);
 	Card unit2 = new Unit("Rouge","rare","Spaceship1",false,2,4,2);
 	Card unit3 = new Unit("Destroyer","legendary","Spaceship1",true,7,9,7);
