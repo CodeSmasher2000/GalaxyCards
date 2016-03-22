@@ -12,7 +12,6 @@ import java.io.ObjectStreamException;
 
 import javax.swing.DefaultListModel;
 
-import cards.Card;
 import cards.Deck;
 import cards.Hero;
 import cards.HeroicSupport;
@@ -49,16 +48,16 @@ public class CreateController {
 		}
 	}
 	
-	public void addUnitCard(String name, int attack, int defense, int price ) {
-		Unit cardToAdd = new Unit(name, attack, defense, price);
+	public void addUnitCard(String name, String rarity, String imageName, boolean hasAbility, int attack, int defense, int price ) {
+		Unit cardToAdd = new Unit(name, rarity, imageName, hasAbility, attack, defense, price);
 		activeDeck.addUnitCard(cardToAdd);
 		gui.addCardToList(cardToAdd);
 		
 	}
 	
 	public void addTechCard() {
-		Tech cardToAdd = new Tech();
-		activeDeck.addTechCard(cardToAdd);
+//		Tech cardToAdd = new Tech();
+//		activeDeck.addTechCard(cardToAdd);
 	}
 	
 	public void addHeroicSupportCard(String name, String rarity, String imageName, boolean hasAbility, int price, int defense) {

@@ -59,6 +59,9 @@ public class CreateUnit extends JPanel {
 		gridUnit.add(tfNbrOfCards);
 		add(gridUnit);
 	}
+	public boolean getAbility() {
+		return btnAbility.isSelected();
+	}
 	
 	public int getPrice() {
 		// TODO: Error Handling
@@ -87,6 +90,9 @@ public class CreateUnit extends JPanel {
 	
 	public String getDescription() {
 		return taDescription.getText();
+	}
+	public String getImageName() {
+		return "files/pictures/source pictures/test.jpg";
 	}
 
 }

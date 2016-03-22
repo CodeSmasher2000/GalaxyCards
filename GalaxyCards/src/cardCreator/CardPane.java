@@ -10,8 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import cards.Card;
+import guiPacket.*;
 import cards.HeroicSupport;
 
 /**

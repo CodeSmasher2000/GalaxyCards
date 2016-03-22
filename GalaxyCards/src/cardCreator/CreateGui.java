@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import cards.Card;
+import guiPacket.Card;
 import cards.Unit;
 
 public class CreateGui extends JPanel {
@@ -50,7 +50,8 @@ public class CreateGui extends JPanel {
 	public void addCard() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Create Unit");
-			controller.addUnitCard(createUnit.getName(), createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice());
+			controller.addUnitCard(createUnit.getName(), createUnit.getRarity(), createUnit.getImageName(), createUnit.getAbility(),
+					createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice());
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Create Heroic");
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
@@ -66,7 +67,8 @@ public class CreateGui extends JPanel {
 	public void updateCardPreview() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Hit commer jag");
-			previewPanel.setCard(new Unit(createUnit.getName(), createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice()));
+			previewPanel.setCard(new Unit(createUnit.getName(), createUnit.getRarity(),createUnit.getImageName(),createUnit.getAbility(),
+					createUnit.getAttack(), createUnit.getDefense(),createUnit.getPrice()));
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Create Heroic");
 		} else if (tabs.getSelectedComponent().equals(createResource)) {

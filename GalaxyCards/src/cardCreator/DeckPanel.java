@@ -7,8 +7,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-
-import cards.Card;
+import guiPacket.*;
 import cards.HeroicSupport;
 //TODO: Add Margins to the list
 
