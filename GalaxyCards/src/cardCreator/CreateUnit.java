@@ -2,12 +2,21 @@ package cardCreator;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+
 /**
  * Creates a panel that lets you customize a unit card.
  * @author Jonte
@@ -24,6 +33,8 @@ public class CreateUnit extends JPanel {
 	private JTextField tfNbrOfCards = new JTextField();
 	private JCheckBox btnAbility = new JCheckBox();
 	private JTextArea taDescription = new JTextArea();
+	private JFileChooser jFileChooser = new JFileChooser();
+	private JButton btnChoosePic = new JButton("Choose Picture");
 
 	private JLabel lblCardName = new JLabel("Card Name: ");
 	private JLabel lblPrice = new JLabel("Price: ");
@@ -34,12 +45,14 @@ public class CreateUnit extends JPanel {
 	private JLabel lblAbility = new JLabel("Ability: Yes/No");
 	private JLabel lblDescription = new JLabel("Description");
 	
+	private String imageName = null;
+	
 	
 	/**
 	 * adds the components in a GridLayout panel and 
 	 */
 	public CreateUnit(){
-		gridUnit.setLayout(new GridLayout(8,2));
+		gridUnit.setLayout(new GridLayout(9,2));
 		gridUnit.setPreferredSize(new Dimension(400,600));
 		gridUnit.add(lblCardName);
 		gridUnit.add(tfCardName);
@@ -57,7 +70,13 @@ public class CreateUnit extends JPanel {
 		gridUnit.add(taDescription);
 		gridUnit.add(lblNbrOfCards);
 		gridUnit.add(tfNbrOfCards);
+		
+		ButtonListener btnListener = new ButtonListener();
+		btnChoosePic.addActionListener(btnListener);
+		gridUnit.add(btnChoosePic);
 		add(gridUnit);
+		
+		
 	}
 	public boolean getAbility() {
 		return btnAbility.isSelected();
@@ -92,7 +111,26 @@ public class CreateUnit extends JPanel {
 		return taDescription.getText();
 	}
 	public String getImageName() {
-		return "files/pictures/source pictures/test.jpg";
+		return imageName;
+	}
+	
+	private class ButtonListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource() == btnChoosePic){
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png");
+				jFileChooser.addChoosableFileFilter(filter);
+				int returnValue = jFileChooser.showOpenDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = jFileChooser.getSelectedFile();
+					String picName = selectedFile.getName();
+					String[] parts = picName.split("\\.");
+					imageName = parts[0];
+			}
+			
+		}
+		
 	}
 
+}
 }
