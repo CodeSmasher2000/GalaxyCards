@@ -2,6 +2,8 @@ package cards;
 
 import java.io.Serializable;
 
+import guiPacket.Card;
+
 /**
  * This class's responsibility is to generate 1 additional resource to the
  * player when this card is played from hand. Only 1 card of this type can be
@@ -21,7 +23,7 @@ public class ResourceCard extends Card implements Serializable{
 
 	public ResourceCard() {
 		setName(NAME);
-		setImage("resource");
+		setImage("Resource1");
 		setRarity("common");
 		hasAbility(false);
 		setAbilityText("Gain 1 resource");

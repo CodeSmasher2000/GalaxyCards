@@ -1,4 +1,4 @@
-package cards;
+package guiPacket;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,6 +21,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+
+import cards.HeroicSupport;
+import cards.ResourceCard;
+import cards.Tech;
+import cards.Unit;
 
 /**
  * The abstract Superclass Card is responsible for representing a card visually
@@ -292,6 +297,7 @@ public abstract class Card extends JPanel {
 		}
 		if (card instanceof Tech) {
 			lbType.setText("Tech");
+			attributesPanel.setVisible(false);
 
 		}
 
