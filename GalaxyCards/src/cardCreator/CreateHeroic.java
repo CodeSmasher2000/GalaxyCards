@@ -2,12 +2,24 @@ package cardCreator;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+/**
+ * Creates a panel that lets you customize a Heroic card.
+ * @author Jonte
+ *
+ */
 
 public class CreateHeroic extends JPanel {
 	private JPanel gridHeroic = new JPanel();
@@ -17,8 +29,12 @@ public class CreateHeroic extends JPanel {
 	private JTextField tfDefense = new JTextField();
 	private JTextField tfRarity = new JTextField("Common/Rare/Legendary");
 	private JTextField tfNbrOfCards = new JTextField();
+	
 	private JCheckBox btnAbility = new JCheckBox();
 	private JTextArea taDescription = new JTextArea();
+	
+	private JFileChooser jFileChooser = new JFileChooser();
+	private JButton btnChoosePic = new JButton("Choose Picture");
 
 	private JLabel lblCardName = new JLabel("Card Name: ");
 	private JLabel lblPrice = new JLabel("Price: ");
@@ -28,8 +44,13 @@ public class CreateHeroic extends JPanel {
 	private JLabel lblNbrOfCards = new JLabel("Number of Cards: ");
 	private JLabel lblDescription = new JLabel("Description");
 	
+	private String imageName = null;
+	
+	/**
+	 * adds all the components to the panel and then to the main panel.
+	 */
 	public CreateHeroic(){
-		gridHeroic.setLayout(new GridLayout(7,2));
+		gridHeroic.setLayout(new GridLayout(8,2));
 		gridHeroic.setPreferredSize(new Dimension(400,600));
 		gridHeroic.add(lblCardName);
 		gridHeroic.add(tfCardName);
@@ -45,6 +66,11 @@ public class CreateHeroic extends JPanel {
 		gridHeroic.add(taDescription);
 		gridHeroic.add(lblNbrOfCards);
 		gridHeroic.add(tfNbrOfCards);
+		
+		ButtonListener btnListener = new ButtonListener();
+		btnChoosePic.addActionListener(btnListener);
+		gridHeroic.add(btnChoosePic);
+		
 		add(gridHeroic);
 	}
 	
@@ -73,12 +99,32 @@ public class CreateHeroic extends JPanel {
 	}
 
 	public String getImageName() {
-		// TODO Hämta från Jonatans kod
-		return null;
+		
+		return imageName;
 	}
 
 	public boolean getAbility() {
 		btnAbility.isSelected();
 		return false;
+	}
+	
+	private class ButtonListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource() == btnChoosePic){
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png");
+				jFileChooser.addChoosableFileFilter(filter);
+				int returnValue = jFileChooser.showOpenDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = jFileChooser.getSelectedFile();
+					String picName = selectedFile.getName(); // man får bara filnamnet.
+					String[] parts = picName.split("\\."); // tar bort .jpg från namnet.
+					imageName = parts[0];
+			}
+			
+		}
+		
+
+	}
 	}
 }

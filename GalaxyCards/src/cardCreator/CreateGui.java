@@ -86,7 +86,7 @@ public class CreateGui extends JPanel {
 			previewPanel.setCard(card);
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Preview Tech");
-			Tech card = new Tech(createTech.getName(), createTech.gerRarity(), createTech.getImageName(), createTech.getPrice());
+			Tech card = new Tech(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice());
 			previewPanel.setCard(card);
 		}
 	}
