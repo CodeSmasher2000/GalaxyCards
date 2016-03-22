@@ -2,21 +2,18 @@ package cards;
 
 import java.io.Serializable;
 
-import guiPacket.Card;
-
 /**
  * 
  * @author 13120dde
  *
  */
-public class HeroicSupport extends Card implements PlayCardsInterface, Serializable {
+public class HeroicSupport extends Card implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8195967465017595877L;
-	private int defense;
-	private final int PRICE;
+	private int defense, price;
 	private final String NAME, RARITY, IMAGE_NAME;
 	private boolean hasAbility;
 
@@ -39,7 +36,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 * 
 	 * @param defense
 	 *            : int
-	 * @param PRICE
+	 * @param price
 	 *            : int
 	 */
 	public HeroicSupport(String name, String rarity, String imageName, boolean hasAbility, int price, int defense) {
@@ -47,15 +44,15 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		RARITY = rarity;
 		IMAGE_NAME = imageName;
 		this.hasAbility = hasAbility;
-		this.PRICE = price;
+		this.price = price;
 		this.defense = defense;
 		setType(this);
 		setName(NAME);
-		setRarity(RARITY);
 		setImage(IMAGE_NAME);
-		hasAbility(this.hasAbility);
-		setPrice(this.PRICE);
-		super.setDefense(this.defense);
+		hasAbility(hasAbility);
+		setRarity(RARITY);
+		setPrice(this.price);
+		setDefense(this.defense);
 	}
 	
 	@Override
@@ -102,10 +99,10 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	/**
 	 * Retruns the cost to play this card.
 	 * 
-	 * @return PRICE : int
+	 * @return price : int
 	 */
 	public int getPrice() {
-		return PRICE;
+		return price;
 	}
 
 	/**
@@ -125,7 +122,6 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		this.defense += amount;
 	}
 
-
 //	/**
 //	 * Returns a String with the description of this card.
 //	 * 
@@ -135,16 +131,5 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 //		return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + ", Defense: " + defense
 //				+ ", Price: " + price + ", Has ability:" + hasAbility;
 //	}
-
-	/**
-	 * Returns a String with the description of this card.
-	 * 
-	 * @return : String
-	 */
-	public String toString() {
-		return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + "\nHas ability: "
-				+ hasAbility + ", Price: " + PRICE + ", Defense: " + defense;
-	}
-
 
 }

@@ -2,10 +2,6 @@ package cards;
 
 import java.io.Serializable;
 
-import javax.swing.JOptionPane;
-
-import guiPacket.HeroGUI;
-
 /**
  * This class represents the player's hero and is responsible for a visual
  * representation of the hero and his attributes. This class is also responsible
@@ -15,7 +11,7 @@ import guiPacket.HeroGUI;
  * @author 13120dde
  *
  */
-public class Hero extends HeroGUI implements Serializable{
+public class Hero implements Serializable{
 
 	/**
 	 * 
@@ -24,8 +20,7 @@ public class Hero extends HeroGUI implements Serializable{
 	private int life;
 	private int energyShield;
 
-	public Hero(String heroName) {
-		super(heroName);
+	public Hero() {
 		life = 20;
 		energyShield = 10;
 	}
@@ -41,18 +36,16 @@ public class Hero extends HeroGUI implements Serializable{
 	public void dealDamage(int damage) {
 		if (energyShield > 0) {
 			energyShield -= damage;
-			updateShiledBar(energyShield);
 		} else {
-			energyShield=0;
+			if (energyShield < 0) {
+				energyShield = 0;
+			}
 			life -= damage;
-			updateLifeBar(life);
-			updateShiledBar(energyShield);
 		}
 
 		// TODO update gui
 		if (life <= 0) {
 			youLoose();
-			JOptionPane.showMessageDialog(null, "YOU LOOSE!");
 		}
 	}
 
@@ -63,11 +56,11 @@ public class Hero extends HeroGUI implements Serializable{
 	 * @param amount
 	 */
 	public void addShield(int amount) {
-		energyShield = energyShield + amount;
+		energyShield += amount;
 		if (energyShield > 10) {
 			energyShield = 10;
 		}
-		updateShiledBar(energyShield);
+		// TODO update gui
 	}
 
 	/**
@@ -83,14 +76,10 @@ public class Hero extends HeroGUI implements Serializable{
 			return false;
 		} else {
 			energyShield -= amount;
-			updateShiledBar(energyShield);
+			// TODO update gui
 			return true;
 		}
 
-	}
-	
-	public String toString(){
-		return "life: "+life+"\nShield: "+energyShield;
 	}
 
 	private void youLoose() {
