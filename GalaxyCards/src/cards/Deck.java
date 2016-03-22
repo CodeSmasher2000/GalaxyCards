@@ -15,7 +15,10 @@ public class Deck implements Serializable{
 	private int damage=1;
 	private Hero hero;
 	private int amtOfCards = 0;
+	private int nbrOfUnitCards = 0;
 	private int nbrOfResourceCards = 0;
+	private int nbrOfHeroicSupport = 0;
+	private int nbrOfTech = 0;
 
 	public void shuffle(){
 		Collections.shuffle(deck);
@@ -77,6 +80,22 @@ public class Deck implements Serializable{
 	
 	public int getNbrOfResourceCards() {
 		return nbrOfResourceCards;
+	}
+	
+	public void removeCard(Card toRemove) {
+		if (toRemove instanceof Unit)  {
+			deck.remove(toRemove);
+			nbrOfUnitCards--;
+		} else if(toRemove instanceof HeroicSupport) {
+			deck.remove(toRemove);
+			nbrOfHeroicSupport--;
+		} else if(toRemove instanceof Tech) {
+			deck.remove(toRemove);
+			nbrOfTech--;
+		} else if (toRemove instanceof ResourceCard) {
+			deck.remove(toRemove);
+			nbrOfResourceCards--;
+		}
 	}
 
 	public void setNbrOfResourceCards(int nbrOfResourceCards) {

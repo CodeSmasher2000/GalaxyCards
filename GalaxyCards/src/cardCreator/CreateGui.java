@@ -34,7 +34,7 @@ public class CreateGui extends JPanel {
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		previewPanel = new CardPane(controller, this);
-		deckPanel = new DeckPanel();
+		deckPanel = new DeckPanel(controller);
 		tabs.addTab("Unit", createUnit);
 		tabs.addTab("Resource", createResource);
 		tabs.addTab("Tech", createTech);
@@ -64,7 +64,8 @@ public class CreateGui extends JPanel {
 		}
 	}
 	
-	public void removeCardFromList() {
+	public void removeCardFromList(Card card) {
+		deckPanel.removeFromList(card);
 	}
 	
 	public void updateCardPreview() {

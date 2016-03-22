@@ -18,6 +18,7 @@ import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
+import guiPacket.Card;
 
 /**
  * Contatins the logic needed for creating a new <code>Hero</code>. A Hero contatins a <code>Deck</code>
@@ -43,8 +44,9 @@ public class CreateController {
 	
 	public void addResoruceCard(int nbrOfResoruceCards) {
 		for (int i = 0; i < nbrOfResoruceCards; i++) {
-			activeDeck.addResoruceCard(new ResourceCard());
-			
+			ResourceCard card = new ResourceCard();
+			activeDeck.addResoruceCard(card);
+			gui.addCardToList(card);
 		}
 	}
 	
@@ -63,10 +65,7 @@ public class CreateController {
 	public void addHeroicSupportCard(String name, String rarity, String imageName, boolean hasAbility, int price, int defense) {
 		HeroicSupport cardToAdd = new HeroicSupport(name, rarity, imageName, hasAbility, price, defense);
 		activeDeck.addHeroicSupportCard(cardToAdd);
-	}
-	
-	public HeroicSupport createHeroicSupportCard() {
-		return null;
+		gui.addCardToList(cardToAdd);
 	}
 	
 	public void saveHeroToFile() {
@@ -84,6 +83,11 @@ public class CreateController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void removeCardFromList(Card card) {
+		gui.removeCardFromList(card);
+		activeDeck.removeCard(card);
 	}
 	
 	/**
@@ -114,5 +118,10 @@ public class CreateController {
 	}
 	
 	public static void main(String[] args) {
+	}
+
+	public void listItemSelected(Card selectedValue) {
+		// TODO Auto-generated method stub
+		
 	}
 }
