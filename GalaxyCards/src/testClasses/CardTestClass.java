@@ -17,6 +17,7 @@ public class CardTestClass extends JPanel {
 	private JButton btnShrink = new JButton("Shrink");
 	private JButton btnEnlarge = new JButton("Enlarge");
 	private JButton btnSpawnCard = new JButton("Spawn card");
+	private JButton btnAbilityText= new JButton("Set ability text");
 	private Card card;
 	
 	JFrame frame1 = new JFrame();
@@ -32,10 +33,10 @@ public class CardTestClass extends JPanel {
 	Card resourceCard = new ResourceCard();
 	Card heroicSupport1 = new HeroicSupport("Commander", "common", "heroicSupport2", false, 5, 3);
 	Card heroicSupport2 = new HeroicSupport("Overlord", "rare", "heroicSupport3", true, 7, 5);
-	Card heroicSupport3 = new HeroicSupport("Legend", "legendary", "heroicSupport1", true, 7, 5);
-	Card unit1 = new Unit("Banshee","common","Spaceship1",true,5,5,5);
-	Card unit2 = new Unit("Rouge","rare","Spaceship1",false,2,4,2);
-	Card unit3 = new Unit("Destroyer","legendary","Spaceship1",true,7,9,7);
+	Card heroicSupport3 = new HeroicSupport("Legend", "legendary", "hs1", true, 7, 5);
+	Card unit1 = new Unit("Banshee","common","Spaceship6",false,2,3,2);
+	Card unit2 = new Unit("Commander","rare","Spaceship4",true,6,5,5);
+	Card unit3 = new Unit("Destroyer","legendary","Spaceship5",true,7,9,7);
 	Card tech1 = new Tech("Bolt","common","Tech1", 3);
 	Card tech2 = new Tech("Destroy","rare","Tech1", 6);
 	Card tech3 = new Tech("Phase shift","legendary","Tech1", 9);
@@ -108,6 +109,10 @@ public class CardTestClass extends JPanel {
 		frame2.pack();
 	}
 	
+	public void testSetAbilityText(){
+		
+	}
+	
 	public void testEnlarge(){
 		
 	}
@@ -138,6 +143,9 @@ public class CardTestClass extends JPanel {
 			}
 			if(e.getSource()==btnEnlarge){
 				testEnlarge();
+			}
+			if(e.getSource()==btnAbilityText){
+				testSetAbilityText();
 			}
 		}
 	}

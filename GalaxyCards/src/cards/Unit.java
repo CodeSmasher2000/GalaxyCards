@@ -58,7 +58,6 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 		setPrice(PRICE);
 		super.setAttack(this.attack);
 		super.setDefense(this.defense);
-		this.setAbilityText("Haste");
 
 	}
 
@@ -147,5 +146,6 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 		return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + "\nHas ability: "
 				+ hasAbility + ", Price: " + PRICE + ", Defense: " + defense;
 	}
+
 
 }

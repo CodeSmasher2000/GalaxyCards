@@ -57,4 +57,5 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 		return 0;
 	}
 
+
 }

@@ -29,6 +29,12 @@ public interface PlayCardsInterface {
 	 */
 	public boolean hasAbility();
 
+	/**Display the ability description in the card's abilityPanel. MAX chars == 50!
+	 * 
+	 */
+	public void setAbilityText(String description);
+
+	
 	/**
 	 * Retruns the cost to play this card.
 	 * 
