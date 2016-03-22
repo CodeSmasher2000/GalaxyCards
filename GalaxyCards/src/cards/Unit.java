@@ -96,8 +96,8 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 	public boolean hasAbility() {
 		return hasAbility;
 	}
-	public void setAbilityText(String abilityDescription){
-		super.setAbilityText(abilityDescription);
+	public void setAbilityText(String description){
+		super.setAbilityText(description);
 	}
 
 	public int getPrice() {

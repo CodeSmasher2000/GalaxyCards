@@ -45,9 +45,11 @@ public class CardTestClass extends JPanel {
 		ButtonListener listener = new ButtonListener();
 		btnSpawnCard.addActionListener(listener);
 		btnShrink.addActionListener(listener);
+		btnAbilityText.addActionListener(listener);
 		add(btnSpawnCard);
 		add(btnShrink);
 		add(btnEnlarge);
+		add(btnAbilityText);
 	}
 	
 	public void testSpawnResource(){
@@ -110,7 +112,8 @@ public class CardTestClass extends JPanel {
 	}
 	
 	public void testSetAbilityText(){
-		
+		tech1.setAbilityText("Generate 2 shield to hero");
+		tech2.setAbilityText("Deal 3 damage to all units in a lane");
 	}
 	
 	public void testEnlarge(){

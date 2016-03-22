@@ -93,6 +93,10 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	public boolean hasAbility() {
 		return hasAbility;
 	}
+	
+	public void setAbilityText(String description){
+		super.setAbilityText(description);
+	}
 
 	/**
 	 * Retruns the cost to play this card.

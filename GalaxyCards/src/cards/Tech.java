@@ -57,5 +57,7 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 		return 0;
 	}
 
-
+	public void setAbilityText(String description){
+		super.setAbilityText(description);
+	}
 }
