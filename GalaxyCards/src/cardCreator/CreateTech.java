@@ -48,4 +48,19 @@ public class CreateTech extends JPanel {
 	public String getDescription() {
 		return tfDescription.getText();
 	}
+
+	public String getRarity() {
+		// TODO Hämta från Jonatans kod
+		return null;
+	}
+
+	public String getImageName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String gerRarity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

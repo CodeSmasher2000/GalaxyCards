@@ -71,4 +71,14 @@ public class CreateHeroic extends JPanel {
 	public String getDescription() {
 		return taDescription.getText();
 	}
+
+	public String getImageName() {
+		// TODO Hämta från Jonatans kod
+		return null;
+	}
+
+	public boolean getAbility() {
+		btnAbility.isSelected();
+		return false;
+	}
 }

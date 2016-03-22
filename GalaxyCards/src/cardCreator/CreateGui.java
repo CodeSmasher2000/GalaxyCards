@@ -7,6 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import guiPacket.Card;
+import cards.HeroicSupport;
+import cards.ResourceCard;
+import cards.Tech;
 import cards.Unit;
 
 public class CreateGui extends JPanel {
@@ -66,15 +69,25 @@ public class CreateGui extends JPanel {
 	
 	public void updateCardPreview() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
-			System.out.println("Hit commer jag");
-			previewPanel.setCard(new Unit(createUnit.getName(), createUnit.getRarity(),createUnit.getImageName(),createUnit.getAbility(),
-					createUnit.getAttack(), createUnit.getDefense(),createUnit.getPrice()));
+			System.out.println("Preview Unit");
+			Unit card = new Unit(createUnit.getName(), createUnit.getRarity(),createUnit.getImageName(),createUnit.getAbility(),
+					createUnit.getAttack(), createUnit.getDefense(),createUnit.getPrice());
+			card.setAbilityText(createUnit.getDescription());
+			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
-			System.out.println("Create Heroic");
+			System.out.println("Preview Heroic");
+			HeroicSupport card = new HeroicSupport(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
+					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense());
+			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
-			System.out.println("Create Resource");
+			System.out.println("Preview Resource");
+			ResourceCard card = new ResourceCard();
+			card.setAbilityText(createResource.getDescription());
+			previewPanel.setCard(card);
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
-			System.out.println("Create Tech");
+			System.out.println("Preview Tech");
+			Tech card = new Tech(createTech.getName(), createTech.gerRarity(), createTech.getImageName(), createTech.getPrice());
+			previewPanel.setCard(card);
 		}
 	}
 	

@@ -111,6 +111,7 @@ public class CreateUnit extends JPanel {
 		return taDescription.getText();
 	}
 	public String getImageName() {
+
 		return imageName;
 	}
 	
@@ -130,6 +131,7 @@ public class CreateUnit extends JPanel {
 			
 		}
 		
+
 	}
 
 }
