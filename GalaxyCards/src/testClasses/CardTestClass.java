@@ -30,6 +30,11 @@ public class CardTestClass extends JPanel {
 	JFrame frame8 = new JFrame();
 	JFrame frame9 = new JFrame();
 	JFrame frame10 = new JFrame();
+	JFrame frame11 = new JFrame();
+	JFrame frame12 = new JFrame();
+	JFrame frame13 = new JFrame();
+	JFrame frame14 = new JFrame();
+	JFrame frame15 = new JFrame();
 	Card resourceCard = new ResourceCard();
 	Card heroicSupport1 = new HeroicSupport("Commander", "common", "heroicSupport2", false, 5, 3);
 	Card heroicSupport2 = new HeroicSupport("Overlord", "rare", "heroicSupport3", true, 7, 5);
@@ -37,6 +42,11 @@ public class CardTestClass extends JPanel {
 	Card unit1 = new Unit("Banshee","common","Spaceship6",false,2,3,2);
 	Card unit2 = new Unit("Commander","rare","Spaceship4",true,6,5,5);
 	Card unit3 = new Unit("Destroyer","legendary","Spaceship5",true,7,9,7);
+	Card unit4 = new Unit("Banshee","common","Spaceship6",false,2,3,2);
+	Card unit5 = new Unit("Commander","rare","Spaceship4",true,6,5,5);
+	Card unit6 = new Unit("Destroyer","legendary","Spaceship5",true,7,9,7);
+	Card unit7 = new Unit("Medivac","rare","SpaceShip8", true, 5,3,4);
+	Card unit8 = new Unit("Carrier","rare","SpaceShip7", true, 10,9,9);
 	Card tech1 = new Tech("Bolt","common","Tech1", 3);
 	Card tech2 = new Tech("Destroy","rare","Tech1", 6);
 	Card tech3 = new Tech("Phase shift","legendary","Tech1", 9);
@@ -87,6 +97,31 @@ public class CardTestClass extends JPanel {
 		frame7.setLocation(440, 600);
 		frame7.pack();
 		frame7.setVisible(true);
+		
+		frame11.add(unit4);
+//		frame11.setLocation(440, 850);
+		frame11.pack();
+		frame11.setVisible(true);
+		
+		frame12.add(unit5);
+//		frame12.setLocation(440, 850);
+		frame12.pack();
+		frame12.setVisible(true);
+		
+		frame13.add(unit6);
+//		frame13.setLocation(440, 850);
+		frame13.pack();
+		frame13.setVisible(true);
+		
+		frame14.add(unit7);
+//		frame14.setLocation(440, 850);
+		frame14.pack();
+		frame14.setVisible(true);
+		
+		frame15.add(unit8);
+//		frame14.setLocation(440, 850);
+		frame15.pack();
+		frame15.setVisible(true);
 	}
 	
 	public void testSpawnTech(){
@@ -106,9 +141,19 @@ public class CardTestClass extends JPanel {
 	
 	public void testShrink(){
 		unit1.shrink();
-		heroicSupport1.shrink();
+		unit4.shrink();
+		unit5.shrink();
+		unit6.shrink();
+		unit7.shrink();
+		unit8.shrink();
+		
 		frame5.pack();
 		frame2.pack();
+		frame11.pack();
+		frame12.pack();
+		frame13.pack();
+		frame14.pack();
+		frame15.pack();
 	}
 	
 	public void testSetAbilityText(){
@@ -118,8 +163,8 @@ public class CardTestClass extends JPanel {
 		heroicSupport1.setAbilityText("Tap enemy card");
 		heroicSupport2.setAbilityText("Defensive units regenerate 2 life");
 		heroicSupport3.setAbilityText("Offensive unit gains Cloack until end of turn");
-		unit2.setAbilityText("Spawn two 1/1 planes in lane");
-		unit3.setAbilityText("");
+		unit2.setAbilityText("Spawn two 1/1 planes in   lane");
+		unit3.setAbilityText("Target unit gains +2/+1");
 	}
 	
 	public void testEnlarge(){
