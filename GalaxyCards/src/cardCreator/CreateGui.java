@@ -70,18 +70,24 @@ public class CreateGui extends JPanel {
 	public void updateCardPreview() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Preview Unit");
-			previewPanel.setCard(new Unit(createUnit.getName(), createUnit.getRarity(),createUnit.getImageName(),createUnit.getAbility(),
-					createUnit.getAttack(), createUnit.getDefense(),createUnit.getPrice()));
+			Unit card = new Unit(createUnit.getName(), createUnit.getRarity(),createUnit.getImageName(),createUnit.getAbility(),
+					createUnit.getAttack(), createUnit.getDefense(),createUnit.getPrice());
+			card.setAbilityText(createUnit.getDescription());
+			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Preview Heroic");
-			previewPanel.setCard(new HeroicSupport(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
-					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense()));
+			HeroicSupport card = new HeroicSupport(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
+					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense());
+			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
 			System.out.println("Preview Resource");
-			previewPanel.setCard(new ResourceCard());
+			ResourceCard card = new ResourceCard();
+			card.setAbilityText(createResource.getDescription());
+			previewPanel.setCard(card);
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Preview Tech");
-			previewPanel.setCard(new Tech(createTech.getName(), createTech.gerRarity(), createTech.getImageName(), createTech.getPrice()));
+			Tech card = new Tech(createTech.getName(), createTech.gerRarity(), createTech.getImageName(), createTech.getPrice());
+			previewPanel.setCard(card);
 		}
 	}
 	
