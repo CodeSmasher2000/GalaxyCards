@@ -2,12 +2,14 @@ package cards;
 
 import java.io.Serializable;
 
+import guiPacket.Card;
+
 /**
  * 
  * @author 13120dde
  *
  */
-public class Unit extends Card implements Serializable{
+public class Unit extends Card implements PlayCardsInterface, Serializable{
 
 	/**
 	 * 

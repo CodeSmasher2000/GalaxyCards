@@ -2,6 +2,8 @@ package cards;
 
 import java.io.Serializable;
 
+import guiPacket.Card;
+
 /**
  * 
  * @author 13120dde

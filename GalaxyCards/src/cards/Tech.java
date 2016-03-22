@@ -2,6 +2,8 @@ package cards;
 
 import java.io.Serializable;
 
+import guiPacket.Card;
+
 public class Tech extends Card implements PlayCardsInterface, Serializable {
 
 	/**

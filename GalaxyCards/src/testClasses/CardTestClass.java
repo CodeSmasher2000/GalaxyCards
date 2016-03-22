@@ -1,12 +1,17 @@
-package cards;
+package testClasses;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import cards.HeroicSupport;
+import cards.ResourceCard;
+import cards.Tech;
+import cards.Unit;
+import guiPacket.Card;
 
 public class CardTestClass extends JPanel {
 	private JButton btnShrink = new JButton("Shrink");
@@ -111,6 +116,7 @@ public class CardTestClass extends JPanel {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(new CardTestClass());
+		frame.setLocation(200, 20);
 		frame.pack();
 		frame.setVisible(true);
 	}

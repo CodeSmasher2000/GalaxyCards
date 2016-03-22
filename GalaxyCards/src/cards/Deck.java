@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import guiPacket.Card;
+
 public class Deck implements Serializable{
 	/**
 	 * 
