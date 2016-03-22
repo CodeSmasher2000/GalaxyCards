@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import cards.Card;
+import cards.Unit;
 
 public class CreateGui extends JPanel {
 	private JTabbedPane tabs = new JTabbedPane();
@@ -62,6 +63,19 @@ public class CreateGui extends JPanel {
 	}
 	
 	public void removeCardFromList() {
+	}
+	
+	public void updateCardPreview() {
+		if (tabs.getSelectedComponent().equals(createUnit)) {
+			System.out.println("Hit commer jag");
+			previewPanel.setCard(new Unit(createUnit.getName(), createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice()));
+		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
+			System.out.println("Create Heroic");
+		} else if (tabs.getSelectedComponent().equals(createResource)) {
+			System.out.println("Create Resource");
+		} else if(tabs.getSelectedComponent().equals(createTech)) {
+			System.out.println("Create Tech");
+		}
 	}
 	
 	public void addCardToList(Card cardToAdd) {

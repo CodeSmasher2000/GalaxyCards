@@ -1,14 +1,14 @@
 package cards;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class Deck {
+public class Deck implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4951209232481964562L;
 	private LinkedList<Card> deck = new LinkedList<Card>();
 	private int damage=1;
 	private Hero hero;

@@ -1,5 +1,7 @@
 package cards;
 
+import java.io.Serializable;
+
 /**
  * This class represents the player's hero and is responsible for a visual
  * representation of the hero and his attributes. This class is also responsible
@@ -9,8 +11,12 @@ package cards;
  * @author 13120dde
  *
  */
-public class Hero {
+public class Hero implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -704227521994333558L;
 	private int life;
 	private int energyShield;
 

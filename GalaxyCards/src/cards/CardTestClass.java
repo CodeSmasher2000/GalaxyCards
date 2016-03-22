@@ -35,22 +35,22 @@ public class CardTestClass extends JPanel {
 	
 	public void testSpawnResource(){
 		frame1.add(resourceCard);
-		frame1.setLocation(100, 200);
+		frame1.setLocation(100, 100);
 		frame1.pack();
 		frame1.setVisible(true);
 	}
 	
 	public void testSpawnHeroicSupport(){
 		frame2.add(heroicSupport1);
-		frame2.setLocation(250, 200);
+		frame2.setLocation(270, 100);
 		frame2.pack();
 		frame2.setVisible(true);
 		frame3.add(heroicSupport2);
-		frame3.setLocation(250, 500);
+		frame3.setLocation(270, 350);
 		frame3.pack();
 		frame3.setVisible(true);
 		frame4.add(heroicSupport3);
-		frame4.setLocation(250, 800);
+		frame4.setLocation(270, 600);
 		frame4.pack();
 		frame4.setVisible(true);
 	}
