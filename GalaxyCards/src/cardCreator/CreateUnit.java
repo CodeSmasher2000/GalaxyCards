@@ -92,7 +92,7 @@ public class CreateUnit extends JPanel {
 		return taDescription.getText();
 	}
 	public String getImageName() {
-		return "files/pictures/source pictures/test.jpg";
+		return "heroicSupport2";
 	}
 
 }
