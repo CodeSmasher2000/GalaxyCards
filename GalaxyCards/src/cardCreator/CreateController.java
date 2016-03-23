@@ -1,16 +1,12 @@
 package cardCreator;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import cards.Deck;
@@ -22,8 +18,7 @@ import cards.Unit;
 import guiPacket.Card;
 
 /**
- * Contatins the logic needed for creating a new <code>Hero</code>. A Hero contatins a <code>Deck</code>
- * of <code>Card</code>
+ * The class methods for creating and loading decks.
  * @author patriklarsson
  *
  */

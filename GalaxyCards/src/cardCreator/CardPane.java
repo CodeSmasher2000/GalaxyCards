@@ -27,7 +27,14 @@ public class CardPane extends JPanel {
 	// Variables needed to communicate with the rest of the gui
 	private CreateController controller;
 	private CreateGui createGui;
-		
+	
+	/**
+	 * Sets up the panel
+	 * @param controller
+	 * 		:CreateController
+	 * @param createGui
+	 * 		:CreateGui
+	 */
 	public CardPane(CreateController controller, CreateGui createGui) {
 		this.controller = controller;
 		this.createGui = createGui;
