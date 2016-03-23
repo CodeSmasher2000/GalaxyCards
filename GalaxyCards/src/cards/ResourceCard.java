@@ -40,8 +40,13 @@ public class ResourceCard extends Card implements Serializable{
 		return RESOURCE;
 	}
 
+//	public String toString() {
+//		return NAME + " is a resource card. When played adds " + RESOURCE;
+//	}
+	
+	@Override
 	public String toString() {
-		return NAME + "- [ResourceCard] When played adds " + RESOURCE;
+		return NAME + ", " + "HeroicSupport";
 	}
 
 }

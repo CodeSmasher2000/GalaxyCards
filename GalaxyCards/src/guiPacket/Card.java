@@ -274,6 +274,10 @@ public abstract class Card extends JPanel {
 		abilityArea.setText(text);
 		abilityButton.setToolTipText(abilityArea.getText());
 	}
+	
+	public String getAbilityText(){
+		return abilityArea.getText();
+	}
 
 	/**
 	 * Whenever a new card object is instantiated this method is called upon.
@@ -338,8 +342,8 @@ public abstract class Card extends JPanel {
 		topPanel.setVisible(true);
 		typePanel.setVisible(true);
 
-		// FUKAR EJ när objektet ligger i en JFRame, får se om det funkar i en
-		// annan container, måste kollas upp!
+		// FUKAR EJ nï¿½r objektet ligger i en JFRame, fï¿½r se om det funkar i en
+		// annan container, mï¿½ste kollas upp!
 	}
 
 	/**

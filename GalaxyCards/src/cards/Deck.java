@@ -14,7 +14,12 @@ public class Deck implements Serializable{
 	private LinkedList<Card> deck = new LinkedList<Card>();
 	private int damage=1;
 	private Hero hero;
-	
+	private int amtOfCards = 0;
+	private int nbrOfUnitCards = 0;
+	private int nbrOfResourceCards = 0;
+	private int nbrOfHeroicSupport = 0;
+	private int nbrOfTech = 0;
+
 	public void shuffle(){
 		Collections.shuffle(deck);
 	}
@@ -32,9 +37,73 @@ public class Deck implements Serializable{
 		return damage++;
 	}
 	
+	public void addResoruceCard(ResourceCard card) {
+		System.out.println("Add resoruce card");
+		if (nbrOfResourceCards < 20) {
+			addCard(card);
+			nbrOfResourceCards++;
+		} else {
+			// TODO: Throw Exception
+		}
+	}
+	
 	public void addCard(Card card) {
+		if (amtOfCards < 60) {
+			this.deck.add(card);
+		} else {
+			// TODO: Throw Exception
+		}
+	}
+	
+	public void addUnitCard(Unit card) {
 		deck.add(card);
+		nbrOfUnitCards++;
+	}
+	
+	public void addTechCard(Tech cardToAdd) {
+		deck.add(cardToAdd);
+		nbrOfTech++;
+		
+	}
+	
+	public void addHeroicSupportCard(HeroicSupport cardToAdd) {
+		deck.add(cardToAdd);
+		nbrOfHeroicSupport++;
+	}
+	
+	public int getAmtOfCards() {
+		return deck.size();
+	}
+	
+	public Card getCard(int index) {
+		return deck.get(index);
 	}
 
+	public void setAmtOfCards(int amtOfCards) {
+		this.amtOfCards = amtOfCards;
+	}
+	
+	public int getNbrOfResourceCards() {
+		return nbrOfResourceCards;
+	}
+	
+	public void removeCard(Card toRemove) {
+		if (toRemove instanceof Unit)  {
+			deck.remove(toRemove);
+			nbrOfUnitCards--;
+		} else if(toRemove instanceof HeroicSupport) {
+			deck.remove(toRemove);
+			nbrOfHeroicSupport--;
+		} else if(toRemove instanceof Tech) {
+			deck.remove(toRemove);
+			nbrOfTech--;
+		} else if (toRemove instanceof ResourceCard) {
+			deck.remove(toRemove);
+			nbrOfResourceCards--;
+		}
+	}
 
+	public void setNbrOfResourceCards(int nbrOfResourceCards) {
+		this.nbrOfResourceCards = nbrOfResourceCards;
+	}
 }

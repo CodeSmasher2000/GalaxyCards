@@ -30,13 +30,13 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 	@Override
 	public String getImage() {
 		// TODO Auto-generated method stub
-		return null;
+		return IMAGE_NAME;
 	}
 
 	@Override
 	public String getRarity() {
 		// TODO Auto-generated method stub
-		return null;
+		return RARITY;
 	}
 
 	@Override

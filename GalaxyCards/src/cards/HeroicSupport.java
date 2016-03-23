@@ -57,6 +57,11 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		setPrice(this.PRICE);
 		super.setDefense(this.defense);
 	}
+	
+//	@Override
+//	public String toString() {
+//		return NAME + ", " + "HeroicSupport" + ", " + RARITY;
+//	}
 
 	/**
 	 * Returns the name of the image used by this card. Image's are located in
@@ -124,6 +129,17 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		this.defense += amount;
 	}
 
+
+//	/**
+//	 * Returns a String with the description of this card.
+//	 * 
+//	 * @return : String
+//	 */
+//	public String toString() {
+//		return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + ", Defense: " + defense
+//				+ ", Price: " + price + ", Has ability:" + hasAbility;
+//	}
+
 	/**
 	 * Returns a String with the description of this card.
 	 * 
@@ -132,6 +148,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	public String toString() {
 		return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + "\nHas ability: "
 				+ hasAbility + ", Price: " + PRICE + ", Defense: " + defense;
+	
 	}
 
 }
