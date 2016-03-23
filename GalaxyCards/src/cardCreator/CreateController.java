@@ -96,7 +96,7 @@ public class CreateController {
 	public void readDeckFromFile() {
 		// TODO Ersätt denna kod
 		String fileName = JOptionPane.showInputDialog("Ange namn på deck");
-		File file = new File(DECKPATH + fileName);
+		File file = new File(DECKPATH + fileName + ".dat");
 		try(
 			FileInputStream fin = new FileInputStream(file);
 			ObjectInputStream ois = new ObjectInputStream(fin)) {
@@ -127,8 +127,6 @@ public class CreateController {
 		this.activeDeck = deck;
 	}
 	
-	public static void main(String[] args) {
-	}
 
 	public void listItemSelected(Card selectedCard) {
 		if(selectedCard instanceof Unit){
