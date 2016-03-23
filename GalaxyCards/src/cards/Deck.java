@@ -57,15 +57,18 @@ public class Deck implements Serializable{
 	
 	public void addUnitCard(Unit card) {
 		deck.add(card);
+		nbrOfUnitCards++;
 	}
 	
 	public void addTechCard(Tech cardToAdd) {
 		deck.add(cardToAdd);
+		nbrOfTech++;
 		
 	}
 	
 	public void addHeroicSupportCard(HeroicSupport cardToAdd) {
 		deck.add(cardToAdd);
+		nbrOfHeroicSupport++;
 	}
 	
 	public int getAmtOfCards() {

@@ -140,7 +140,6 @@ public class DeckPanel extends JPanel {
 	}
 	
 	private class ButtonListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnRemove) {
