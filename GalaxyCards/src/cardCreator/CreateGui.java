@@ -12,6 +12,7 @@ import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
 
+
 public class CreateGui extends JPanel {
 	private JTabbedPane tabs = new JTabbedPane();
 	private JPanel mainPanel = new JPanel();

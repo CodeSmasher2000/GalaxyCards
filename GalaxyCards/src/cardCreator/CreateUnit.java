@@ -165,4 +165,7 @@ public class CreateUnit extends JPanel {
 	}
 
 }
+	public int getAmtOfCards() {
+		return Integer.parseInt(tfNbrOfCards.getText());
+	}
 }
