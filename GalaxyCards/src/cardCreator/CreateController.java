@@ -74,8 +74,8 @@ public class CreateController {
 	 * Writes the activeDeck to a dat file with the name of the deck in the decks folder.
 	 */
 	public void saveDeckToFile() {
-		String filename = DECKPATH + "test.dat"; //+ activeDeck.getName();
-		File file = new File(filename);
+		String filename = JOptionPane.showInputDialog("Ange Namnet på decket");
+		File file = new File(DECKPATH + filename + ".dat");
 		try(FileOutputStream fout = new FileOutputStream(file);
 				ObjectOutputStream oos = new ObjectOutputStream(fout)) {
 				oos.writeObject(activeDeck);
