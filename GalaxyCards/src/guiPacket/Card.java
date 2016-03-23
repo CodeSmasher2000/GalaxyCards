@@ -44,7 +44,8 @@ import cards.Unit;
 
 public abstract class Card extends JPanel {
 
-	private transient Image cardBG;
+	private ImageIcon cardBG1;
+//	private Image cardBG;
 	private JPanel topPanel, imgPanel, typePanel, attributesPanel;
 	private JLabel lbName, lbPrice, lbImage, lbType, lbRarity, lbAttack, lbDefense;
 	private Color frameColor;
@@ -58,7 +59,8 @@ public abstract class Card extends JPanel {
 		frameColor = Color.BLACK;
 		border = BorderFactory.createMatteBorder(1, 1, 3, 1, frameColor);
 
-		setBackground();
+		cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
+//		setBackground();
 		initiateLabels();
 		initiateButtons();
 		initiatePanels();
@@ -310,20 +312,21 @@ public abstract class Card extends JPanel {
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-		g.drawImage(cardBG, 0, 0, null);
+		g.drawImage(cardBG1.getImage(), 0, 0, null);
 	}
 
 	// Loads a image from a directory and sets it as background for the main
 	// containter Card klass.
-	private void setBackground() {
-		File directory = new File(PICTURE_DIRECTORY + "CardFrontBG.jpg");
-		try {
-			cardBG = ImageIO.read(directory);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	private void setBackground() {
+//		File directory = new File(PICTURE_DIRECTORY + "CardFrontBG.jpg");
+//		cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
+//		try {
+//			cardBG1.setImage(ImageIO.read(directory));
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Shows all the card's attributes by setting its various panels visible.
