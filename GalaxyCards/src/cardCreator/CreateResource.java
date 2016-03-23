@@ -23,18 +23,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class CreateResource extends JPanel {
 	private JPanel gridResource = new JPanel();
 	
-	private JTextField tfCardName = new JTextField();
-	private JTextField tfPrice = new JTextField();
+	
 	private JTextField tfNbrOfCards = new JTextField();
-	private JTextArea tfDescription = new JTextArea();
+
 	
 	private JFileChooser jFileChooser = new JFileChooser();
 	private JButton btnChoosePic = new JButton("Choose Picture");
 
-	private JLabel lblCardName = new JLabel("Card Name: ");
-	private JLabel lblPrice = new JLabel("Price: ");
+
 	private JLabel lblNbrOfCards = new JLabel("Number of Cards: ");
-	private JLabel lblDescription = new JLabel("Description");
+	
 	
 	private String imageName = null;
 	
@@ -44,12 +42,6 @@ public class CreateResource extends JPanel {
 	public CreateResource(){
 		gridResource.setLayout(new GridLayout(5,2));
 		gridResource.setPreferredSize(new Dimension(400,600));
-		gridResource.add(lblCardName);
-		gridResource.add(tfCardName);
-		gridResource.add(lblPrice);
-		gridResource.add(tfPrice);
-		gridResource.add(lblDescription);
-		gridResource.add(tfDescription);
 		gridResource.add(lblNbrOfCards);
 		gridResource.add(tfNbrOfCards);
 		
@@ -60,23 +52,9 @@ public class CreateResource extends JPanel {
 		add(gridResource);
 	}
 	
-	public int getPrice() {
-		// TODO: Error Handling
-		return Integer.parseInt(tfPrice.getText());
-	}
 	
-	public String getName() {
-		// TODO: Error Handling
-		return tfCardName.getText();
-	}
 	
-	public String getDescription() {
-		return tfDescription.getText();
-	}
-	
-	public String getImageName(){
-		return imageName;
-	}
+
 	
 	private class ButtonListener implements ActionListener{
 		@Override

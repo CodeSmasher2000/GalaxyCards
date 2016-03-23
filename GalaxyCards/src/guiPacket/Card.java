@@ -274,6 +274,10 @@ public abstract class Card extends JPanel {
 		abilityArea.setText(text);
 		abilityButton.setToolTipText(abilityArea.getText());
 	}
+	
+	public String getAbilityText(){
+		return abilityArea.getText();
+	}
 
 	/**
 	 * Whenever a new card object is instantiated this method is called upon.

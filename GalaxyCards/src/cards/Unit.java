@@ -19,6 +19,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 	private final int PRICE;
 	private final String NAME, RARITY, IMAGE_NAME;
 	private boolean hasAbility;
+	private String abilityText;
 
 	/**
 	 * Constructor instantiates this card with given arguments to configure its

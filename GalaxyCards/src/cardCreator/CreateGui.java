@@ -54,7 +54,7 @@ public class CreateGui extends JPanel {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Create Unit");
 			controller.addUnitCard(createUnit.getName(), createUnit.getRarity(), createUnit.getImageName(), createUnit.getAbility(),
-					createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice());
+					createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice(), createUnit.getDescription());
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Create Heroic");
 			controller.addHeroicSupportCard(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
@@ -64,7 +64,7 @@ public class CreateGui extends JPanel {
 			controller.addResoruceCard(createResource.getAmtOfCards());
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Create Tech");
-			controller.addTechCard(createTech.getName(), createTech.getRarity(), createTech.getName(), createTech.getPrice());
+			controller.addTechCard(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice());
 		}
 	}
 	
@@ -87,13 +87,47 @@ public class CreateGui extends JPanel {
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
 			System.out.println("Preview Resource");
 			ResourceCard card = new ResourceCard();
-			card.setAbilityText(createResource.getDescription());
 			previewPanel.setCard(card);
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Preview Tech");
 			Tech card = new Tech(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice());
 			previewPanel.setCard(card);
 		}
+	}
+	
+	public void updateUnitFields(Unit card){
+		tabs.setSelectedComponent(createUnit);
+		createUnit.setName(card.getName());
+		createUnit.setPrice(card.getPrice());
+		createUnit.setDefense(card.getDefense());
+		createUnit.setAttack(card.getAttack());
+		createUnit.setAbility(card.hasAbility());
+		createUnit.setRarity(card.getRarity());
+		createUnit.setDescription(card.getAbilityText());
+		createUnit.setImageName(card.getImage());
+	}
+	
+	public void updateTechFields(Tech card){
+		tabs.setSelectedComponent(createTech);
+		createTech.setName(card.getName());
+		createTech.setPrice(card.getPrice());
+		createTech.setRarity(card.getRarity());
+		createTech.setDescription(card.getAbilityText());
+		createTech.setImageName(card.getImage());
+	}
+	
+	public void updateResourceFields(ResourceCard card){
+		tabs.setSelectedComponent(createResource);
+	}
+	public void updateHeroicFields(HeroicSupport card){
+		tabs.setSelectedComponent(createHeroic);
+		createHeroic.setName(card.getName());
+		createHeroic.setPrice(card.getPrice());
+		createHeroic.setDefense(card.getDefense());
+		createHeroic.setAbility(card.hasAbility());
+		createHeroic.setRarity(card.getRarity());
+		createHeroic.setDescription(card.getAbilityText());
+		createHeroic.setImageName(card.getImage());
 	}
 	
 	public void addCardToList(Card cardToAdd) {

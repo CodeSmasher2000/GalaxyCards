@@ -52,8 +52,10 @@ public class CreateController {
 		}
 	}
 	
-	public void addUnitCard(String name, String rarity, String imageName, boolean hasAbility, int attack, int defense, int price ) {
+	public void addUnitCard(String name, String rarity, String imageName, boolean hasAbility, int attack, int defense, int price, 
+			String description) {
 		Unit cardToAdd = new Unit(name, rarity, imageName, hasAbility, attack, defense, price);
+		cardToAdd.setAbilityText(description);
 		activeDeck.addUnitCard(cardToAdd);
 		gui.addCardToList(cardToAdd);
 		
@@ -133,8 +135,23 @@ public class CreateController {
 	public static void main(String[] args) {
 	}
 
-	public void listItemSelected(Card selectedValue) {
-		// TODO Auto-generated method stub
+	public void listItemSelected(Card selectedCard) {
+		if(selectedCard instanceof Unit){
+			Unit card = (Unit)selectedCard;
+			gui.updateUnitFields(card);
+		}
+		else if( selectedCard instanceof Tech){
+			Tech card = (Tech)selectedCard;
+			gui.updateTechFields(card);
+		}
+		else if( selectedCard instanceof ResourceCard){
+			ResourceCard card = (ResourceCard)selectedCard;
+			gui.updateResourceFields(card);
+		}
+		else if( selectedCard instanceof HeroicSupport){
+			HeroicSupport card = (HeroicSupport)selectedCard;
+			gui.updateHeroicFields(card);
+		}
 		
 	}
 }

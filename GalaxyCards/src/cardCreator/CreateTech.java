@@ -85,6 +85,25 @@ public class CreateTech extends JPanel {
 		// TODO Auto-generated method stub
 		return imageName;
 	}
+	public void setImageName(String name){
+		this.imageName=name;
+	}
+	public void setName(String name){
+		tfCardName.setText(name);
+	}
+	
+	
+	public void setRarity(String rarity){
+		tfRarity.setText(rarity);
+	}
+	
+	public void setPrice(int price){
+		tfPrice.setText(Integer.toString(price));
+	}
+	
+	public void setDescription(String description){
+		tfDescription.setText(description);
+	}
 	
 	private class ButtonListener implements ActionListener{
 		@Override

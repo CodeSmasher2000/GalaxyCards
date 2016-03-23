@@ -108,6 +108,34 @@ public class CreateHeroic extends JPanel {
 		return false;
 	}
 	
+	public void setImageName(String name){
+		this.imageName=name;
+	}
+	public void setName(String name){
+		tfCardName.setText(name);
+	}
+	
+	
+	public void setDefense(int defense){
+		tfDefense.setText(Integer.toString(defense));
+	}
+	
+	public void setRarity(String rarity){
+		tfRarity.setText(rarity);
+	}
+	
+	public void setPrice(int price){
+		tfPrice.setText(Integer.toString(price));
+	}
+	
+	public void setAbility(boolean ability){
+		btnAbility.setSelected(ability);
+	}
+	
+	public void setDescription(String description){
+		taDescription.setText(description);
+	}
+	
 	private class ButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
