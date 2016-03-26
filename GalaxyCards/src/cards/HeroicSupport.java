@@ -146,8 +146,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 * @return : String
 	 */
 	public String toString() {
-		return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + "\nHas ability: "
-				+ hasAbility + ", Price: " + PRICE + ", Defense: " + defense;
+		return NAME + " - [Heroic Support]: "  + "0/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
 	
 	}
 

@@ -46,7 +46,7 @@ public class ResourceCard extends Card implements Serializable{
 	
 	@Override
 	public String toString() {
-		return NAME + ", " + "HeroicSupport";
+		return NAME + ", " + "[Resource card]: Adds 1 resource to resource pool";
 	}
 
 }

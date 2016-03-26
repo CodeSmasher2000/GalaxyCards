@@ -145,8 +145,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 	}
 	
 	public String toString() {
-		return NAME + " - [Unit] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + "\nHas ability: "
-				+ hasAbility + ", Price: " + PRICE + ", Defense: " + defense;
+		return NAME + " - [Unit]: " + attack + "/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
 	}
 
 }

@@ -60,4 +60,8 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 	public void setAbilityText(String description){
 		super.setAbilityText(description);
 	}
+	
+	public String toString(){
+		return NAME + " - [Tech]: Rarity: "+RARITY+ ". Price: "+PRICE+". Tech description: ";
+	}
 }
