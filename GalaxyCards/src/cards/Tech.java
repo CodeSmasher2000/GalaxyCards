@@ -29,32 +29,27 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 
 	@Override
 	public String getImage() {
-		// TODO Auto-generated method stub
 		return IMAGE_NAME;
 	}
 
 	@Override
 	public String getRarity() {
-		// TODO Auto-generated method stub
 		return RARITY;
 	}
 
 	@Override
 	public boolean hasAbility() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public int getPrice() {
-		// TODO Auto-generated method stub
-		return 0;
+		return PRICE;
 	}
 
 	@Override
 	public int getDefense() {
-		// TODO Auto-generated method stub
-		return 0;
+		return -1;
 	}
 
 	public void setAbilityText(String description){

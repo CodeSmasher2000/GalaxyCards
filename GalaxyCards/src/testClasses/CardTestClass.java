@@ -48,8 +48,8 @@ public class CardTestClass extends JPanel {
 	Card unit7 = new Unit("Medivac","rare","SpaceShip8", true, 5,3,4);
 	Card unit8 = new Unit("Carrier","rare","SpaceShip7", true, 10,9,9);
 	Card tech1 = new Tech("Bolt","common","Tech1", 3);
-	Card tech2 = new Tech("Destroy","rare","Tech1", 6);
-	Card tech3 = new Tech("Phase shift","legendary","Tech1", 9);
+	Card tech2 = new Tech("Destroy","rare","Tech2", 6);
+	Card tech3 = new Tech("Phase shift","legendary","Tech3", 9);
 
 	public CardTestClass() {
 		ButtonListener listener = new ButtonListener();
