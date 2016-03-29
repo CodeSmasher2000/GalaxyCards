@@ -67,6 +67,7 @@ public class CardTestClass extends JPanel {
 		frame1.setLocation(100, 100);
 		frame1.pack();
 		frame1.setVisible(true);
+		
 	}
 	
 	public void testSpawnHeroicSupport(){
@@ -85,6 +86,7 @@ public class CardTestClass extends JPanel {
 	}
 	
 	public void testSpawnUnit(){
+		System.out.println("Bredd: " +frame5.getSize()+" Höjd: "+unit1.getHeight());
 		frame5.add(unit1);
 		frame5.setLocation(440, 100);
 		frame5.pack();
