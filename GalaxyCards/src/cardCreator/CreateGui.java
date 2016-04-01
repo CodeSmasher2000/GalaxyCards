@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import guiPacket.Card;
+import guiPacket.CardGUI;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
@@ -69,7 +69,7 @@ public class CreateGui extends JPanel {
 		}
 	}
 	
-	public void removeCardFromList(Card card) {
+	public void removeCardFromList(CardGUI card) {
 		deckPanel.removeFromList(card);
 	}
 	
@@ -131,7 +131,7 @@ public class CreateGui extends JPanel {
 		createHeroic.setImageName(card.getImage());
 	}
 	
-	public void addCardToList(Card cardToAdd) {
+	public void addCardToList(CardGUI cardToAdd) {
 		deckPanel.addToListModel(cardToAdd);
 	}
 	

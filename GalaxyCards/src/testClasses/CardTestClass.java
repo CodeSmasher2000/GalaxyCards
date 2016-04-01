@@ -11,14 +11,14 @@ import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
-import guiPacket.Card;
+import guiPacket.CardGUI;
 
 public class CardTestClass extends JPanel {
 	private JButton btnShrink = new JButton("Shrink");
 	private JButton btnEnlarge = new JButton("Enlarge");
 	private JButton btnSpawnCard = new JButton("Spawn card");
 	private JButton btnAbilityText= new JButton("Set ability text");
-	private Card card;
+	private CardGUI card;
 	
 	JFrame frame1 = new JFrame();
 	JFrame frame2 = new JFrame();
@@ -35,21 +35,21 @@ public class CardTestClass extends JPanel {
 	JFrame frame13 = new JFrame();
 	JFrame frame14 = new JFrame();
 	JFrame frame15 = new JFrame();
-	Card resourceCard = new ResourceCard();
-	Card heroicSupport1 = new HeroicSupport("Commander", "common", "heroicSupport2", false, 5, 3);
-	Card heroicSupport2 = new HeroicSupport("Overlord", "rare", "heroicSupport3", true, 7, 5);
-	Card heroicSupport3 = new HeroicSupport("Legend", "legendary", "hs1", true, 7, 5);
-	Card unit1 = new Unit("Banshee","common","Spaceship6",false,2,3,2);
-	Card unit2 = new Unit("Commander","rare","Spaceship4",true,6,5,5);
-	Card unit3 = new Unit("Destroyer","legendary","Spaceship5",true,7,9,7);
-	Card unit4 = new Unit("Banshee","common","Spaceship6",false,2,3,2);
-	Card unit5 = new Unit("Commander","rare","Spaceship4",true,6,5,5);
-	Card unit6 = new Unit("Destroyer","legendary","Spaceship5",true,7,9,7);
-	Card unit7 = new Unit("Medivac","rare","SpaceShip8", true, 5,3,4);
-	Card unit8 = new Unit("Carrier","rare","SpaceShip7", true, 10,9,9);
-	Card tech1 = new Tech("Bolt","common","Tech1", 3);
-	Card tech2 = new Tech("Destroy","rare","Tech2", 6);
-	Card tech3 = new Tech("Phase shift","legendary","Tech3", 9);
+	CardGUI resourceCard = new ResourceCard();
+	CardGUI heroicSupport1 = new HeroicSupport("Commander", "common", "heroicSupport2", false, 5, 3);
+	CardGUI heroicSupport2 = new HeroicSupport("Overlord", "rare", "heroicSupport3", true, 7, 5);
+	CardGUI heroicSupport3 = new HeroicSupport("Legend", "legendary", "hs1", true, 7, 5);
+	CardGUI unit1 = new Unit("Banshee","common","Spaceship6",false,2,3,2);
+	CardGUI unit2 = new Unit("Commander","rare","Spaceship4",true,6,5,5);
+	CardGUI unit3 = new Unit("Destroyer","legendary","Spaceship5",true,7,9,7);
+	CardGUI unit4 = new Unit("Banshee","common","Spaceship6",false,2,3,2);
+	CardGUI unit5 = new Unit("Commander","rare","Spaceship4",true,6,5,5);
+	CardGUI unit6 = new Unit("Destroyer","legendary","Spaceship5",true,7,9,7);
+	CardGUI unit7 = new Unit("Medivac","rare","SpaceShip8", true, 5,3,4);
+	CardGUI unit8 = new Unit("Carrier","rare","SpaceShip7", true, 10,9,9);
+	CardGUI tech1 = new Tech("Bolt","common","Tech1", 3);
+	CardGUI tech2 = new Tech("Destroy","rare","Tech2", 6);
+	CardGUI tech3 = new Tech("Phase shift","legendary","Tech3", 9);
 
 	public CardTestClass() {
 		ButtonListener listener = new ButtonListener();

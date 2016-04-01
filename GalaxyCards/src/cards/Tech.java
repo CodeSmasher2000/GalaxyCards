@@ -2,9 +2,9 @@ package cards;
 
 import java.io.Serializable;
 
-import guiPacket.Card;
+import guiPacket.CardGUI;
 
-public class Tech extends Card implements PlayCardsInterface, Serializable {
+public class Tech extends CardGUI implements PlayCardsInterface, Serializable {
 
 	/**
 	 * 

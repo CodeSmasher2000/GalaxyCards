@@ -2,14 +2,17 @@ package cards;
 
 import java.io.Serializable;
 
-import guiPacket.Card;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import guiPacket.CardGUI;
 
 /**
  * 
  * @author 13120dde
  *
  */
-public class HeroicSupport extends Card implements PlayCardsInterface, Serializable {
+public class HeroicSupport extends CardGUI implements PlayCardsInterface, Serializable {
 
 	/**
 	 * 
@@ -149,5 +152,5 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		return NAME + " - [Heroic Support]: "  + "0/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
 	
 	}
-
+	
 }

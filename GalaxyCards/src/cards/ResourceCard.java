@@ -2,7 +2,7 @@ package cards;
 
 import java.io.Serializable;
 
-import guiPacket.Card;
+import guiPacket.CardGUI;
 
 /**
  * This class's responsibility is to generate 1 additional resource to the
@@ -12,7 +12,7 @@ import guiPacket.Card;
  * @author 13120dde
  *
  */
-public class ResourceCard extends Card implements Serializable{
+public class ResourceCard extends CardGUI implements Serializable{
 
 	/**
 	 * 

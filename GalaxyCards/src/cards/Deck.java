@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import guiPacket.Card;
+import guiPacket.CardGUI;
 
 public class Deck implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4951209232481964562L;
-	private LinkedList<Card> deck = new LinkedList<Card>();
+	private LinkedList<CardGUI> deck = new LinkedList<CardGUI>();
 	private int damage=1;
 	private Hero hero;
 	private int amtOfCards = 0;
@@ -24,7 +24,7 @@ public class Deck implements Serializable{
 		Collections.shuffle(deck);
 	}
 	
-	public Card drawCard(){
+	public CardGUI drawCard(){
 		if(!deck.isEmpty()){
 			return deck.getFirst();
 		}else{
@@ -47,7 +47,7 @@ public class Deck implements Serializable{
 		}
 	}
 	
-	public void addCard(Card card) {
+	public void addCard(CardGUI card) {
 		if (amtOfCards < 60) {
 			this.deck.add(card);
 		} else {
@@ -75,7 +75,7 @@ public class Deck implements Serializable{
 		return deck.size();
 	}
 	
-	public Card getCard(int index) {
+	public CardGUI getCard(int index) {
 		return deck.get(index);
 	}
 
@@ -87,7 +87,7 @@ public class Deck implements Serializable{
 		return nbrOfResourceCards;
 	}
 	
-	public void removeCard(Card toRemove) {
+	public void removeCard(CardGUI toRemove) {
 		if (toRemove instanceof Unit)  {
 			deck.remove(toRemove);
 			nbrOfUnitCards--;
