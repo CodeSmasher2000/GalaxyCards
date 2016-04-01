@@ -24,7 +24,7 @@ public class HeroGUI extends JPanel {
 	private JLabel imageLabel;
 	private JPanel imagePanel;
 	private JProgressBar lifeBar, shieldBar, resourceBar;
-	private ImageIcon heroBg = new ImageIcon(PICTURE_DIRECTORY+"HeroBG.jpg");
+	private ImageIcon heroImage;
 
 	private Border b1;
 	private Border b2;
@@ -33,6 +33,7 @@ public class HeroGUI extends JPanel {
 		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
 		b2 = BorderFactory.createTitledBorder(heroName);
 
+		
 		initiateBars();
 		initiateImage();
 		setTooltips();
@@ -51,9 +52,9 @@ public class HeroGUI extends JPanel {
 	}
 	
 	private void initiateImage() {
-
+		heroImage = new ImageIcon(PICTURE_DIRECTORY + "Hero1" + ".jpg");
 		imageLabel = new JLabel();
-		imageLabel.setIcon(new ImageIcon(PICTURE_DIRECTORY + "Hero1" + ".jpg"));
+		imageLabel.setIcon(heroImage);
 		imageLabel.setBorder(BorderFactory.createCompoundBorder(b1, b2));
 
 		imagePanel = new JPanel();
@@ -125,6 +126,7 @@ public class HeroGUI extends JPanel {
 	public void addResources(int amount) {
 		resourceBar.setMaximum(resourceBar.getMaximum() + amount);
 		resourceBar.setValue(resourceBar.getValue() + amount);
+		resourceBar.setString(resourceBar.getValue()+" / "+resourceBar.getMaximum());
 	}
 
 	/**
@@ -141,13 +143,6 @@ public class HeroGUI extends JPanel {
 		shieldBar.setString(newValue + " / " + "10");
 	}
 	
-	@Override
-	protected void paintComponent(Graphics g) {
-
-		super.paintComponent(g);
-		g.drawImage(heroBg.getImage(), 0, 0, null);
-	}
-
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.add(new HeroGUI("Fleet command"));

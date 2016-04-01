@@ -20,8 +20,12 @@ public class HeroTestClass extends JPanel {
 		ButtonListener list = new ButtonListener();
 		damageButton.addActionListener(list);
 		shieldButton.addActionListener(list);
+		addResource.addActionListener(list);
+		useResource.addActionListener(list);
 		add(damageButton);
 		add(shieldButton);
+		add(addResource);
+		add(useResource);
 	}
 
 	public static void main(String[] args) {
@@ -56,6 +60,12 @@ public class HeroTestClass extends JPanel {
 			if(event.getSource()==shieldButton){
 				hero1.addShield(2);
 				System.out.println(hero1.toString());
+			}
+			if(event.getSource()==addResource){
+				hero1.addResources(1);
+			}
+			if(event.getSource()==useResource){
+				hero1.updateResourceBar(0);
 			}
 		}
 		

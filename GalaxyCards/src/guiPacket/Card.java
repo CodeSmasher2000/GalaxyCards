@@ -307,7 +307,6 @@ public abstract class Card extends JPanel {
 
 		}
 
-		// TODO complete with rest of different cardtypes
 	}
 
 	// Overridden method that needs to be here to set the background of this
