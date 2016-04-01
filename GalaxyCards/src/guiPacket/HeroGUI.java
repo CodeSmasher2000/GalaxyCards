@@ -1,6 +1,7 @@
 package guiPacket;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -23,6 +24,7 @@ public class HeroGUI extends JPanel {
 	private JLabel imageLabel;
 	private JPanel imagePanel;
 	private JProgressBar lifeBar, shieldBar, resourceBar;
+	private ImageIcon heroBg = new ImageIcon(PICTURE_DIRECTORY+"HeroBG.jpg");
 
 	private Border b1;
 	private Border b2;
@@ -137,6 +139,13 @@ public class HeroGUI extends JPanel {
 		}
 		shieldBar.setValue(newValue);
 		shieldBar.setString(newValue + " / " + "10");
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+
+		super.paintComponent(g);
+		g.drawImage(heroBg.getImage(), 0, 0, null);
 	}
 
 	public static void main(String[] args) {
