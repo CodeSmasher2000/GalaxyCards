@@ -11,7 +11,9 @@ import cards.Hero;
 
 public class HeroTestClass extends JPanel {
 	private JButton damageButton = new JButton("skada: 3");
-	private JButton shieldButton = new JButton("generera sköld: 2");
+	private JButton shieldButton = new JButton("generera skï¿½ld: 2");
+	private JButton addResource = new JButton("LÃ¤gg till resurs");
+	private JButton useResource = new JButton("spendera resurs");
 	private Hero hero1 = new Hero("Fleet command");
 
 	public HeroTestClass() {
