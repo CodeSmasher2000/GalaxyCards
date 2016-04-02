@@ -42,7 +42,7 @@ import cards.Unit;
 // TODO enlarge() does not work.
 // TODO use ability when button is pressed
 
-public abstract class CardGUI extends JPanel {
+public abstract class Card extends JPanel {
 
 	private ImageIcon cardBG1;
 //	private Image cardBG;
@@ -55,7 +55,7 @@ public abstract class CardGUI extends JPanel {
 
 	private final String PICTURE_DIRECTORY = "files/pictures/";
 
-	public CardGUI() {
+	public Card() {
 		frameColor = Color.BLACK;
 		border = BorderFactory.createMatteBorder(1, 1, 3, 1, frameColor);
 
@@ -288,7 +288,7 @@ public abstract class CardGUI extends JPanel {
 	 * 
 	 * @param card
 	 */
-	public void setType(CardGUI card) {
+	public void setType(Card card) {
 		if (card instanceof ResourceCard) {
 			lbType.setText("Resource");
 			attributesPanel.setVisible(false);

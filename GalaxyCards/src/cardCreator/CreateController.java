@@ -15,7 +15,7 @@ import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
-import guiPacket.CardGUI;
+import guiPacket.Card;
 
 /**
  * The class methods for creating and loading decks.
@@ -84,7 +84,7 @@ public class CreateController {
 		}
 	}
 	
-	public void removeCardFromList(CardGUI card) {
+	public void removeCardFromList(Card card) {
 		gui.removeCardFromList(card);
 		activeDeck.removeCard(card);
 	}
@@ -109,7 +109,7 @@ public class CreateController {
 	
 	private void printDeck() {
 		for (int i = 0; i < activeDeck.getAmtOfCards(); i++) {
-			CardGUI card = activeDeck.getCard(i);
+			Card card = activeDeck.getCard(i);
 			gui.addCardToList(card);	
 		}
 	}
@@ -128,7 +128,7 @@ public class CreateController {
 	}
 	
 
-	public void listItemSelected(CardGUI selectedCard) {
+	public void listItemSelected(Card selectedCard) {
 		if(selectedCard instanceof Unit){
 			Unit card = (Unit)selectedCard;
 			gui.updateUnitFields(card);

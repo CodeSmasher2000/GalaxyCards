@@ -48,7 +48,7 @@ public class CardPane extends JPanel {
 	 * Sets the card to display
 	 * @param card
 	 */
-	public void setCard(CardGUI card) {
+	public void setCard(Card card) {
 		cardPanel.removeAll();
 		initCardPanel();
 		cardPanel.add(card);

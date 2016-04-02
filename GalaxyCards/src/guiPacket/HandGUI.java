@@ -4,125 +4,128 @@ import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import cards.Unit;
+
+/**
+ * 
+ * @author 13120dde
+ *
+ */
 public class HandGUI extends JPanel {
 
 	private JLayeredPane layeredPane;
-	// private CardGUI[] cards = new CardGUI[7];
 	private int cardsOnHand = 0, horizontalPosition = 10;
-	private MouseList listener = new MouseList();
+	private int cardOriginalLayer;
+	private MouseListenerHand listener = new MouseListenerHand();
+	private JLabel label = new JLabel("Empty hand");
 
 	public HandGUI() {
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		// cards[0] = new Unit("Banshee", "common", "Spaceship6", false, 2, 3,
-		// 2);
-		// cards[1] = new Unit("Commander", "rare", "Spaceship4", true, 6, 5,
-		// 5);
-		// cards[2] = new Unit("Destroyer", "legendary", "Spaceship5", true, 7,
-		// 9, 7);
-		// cards[3] = new Unit("Banshee", "common", "Spaceship6", false, 2, 3,
-		// 2);
-		// cards[4] = new Unit("Commander", "rare", "Spaceship4", true, 6, 5,
-		// 5);
-		// cards[5] = new Unit("Destroyer", "legendary", "Spaceship5", true, 7,
-		// 9, 7);
-		// cards[6] = new Unit("Medivac", "rare", "SpaceShip8", true, 5, 3, 4);
+
+		label.setBounds(50, 50, label.getPreferredSize().width, label.getPreferredSize().height);
 
 		layeredPane = new JLayeredPane();
 		layeredPane.setOpaque(true);
 		layeredPane.setLayout(null);
-		layeredPane.addMouseListener(listener);
-		layeredPane.setPreferredSize(new Dimension(510, 250));
-		// Dimension size = cards[0].getPreferredSize();
-		// int x = 5;
-		// for (int i = 0; i < 7; i++) {
-		// JPanel panel = cards[i];
-		// panel.setBounds(x, 0, size.width, size.height + 5);
-		// // TODO remove when all is fine
-		// layeredPane.add(panel, new Integer(i));
-		// x += 50;
-		// }
-
-		// while(cardsOnHand<7){
-		// cards[cardsOnHand].setBounds(x, 0, size.width, size.height + 5);
-		// cards[i].addMouseListener(listener);
-		// // TODO remove when all is fine
-		// layeredPane.add(cards[cardsOnHand], new Integer(cardsOnHand));
-		// x += 50;
-		// cardsOnHand++;
-		// }
+		layeredPane.setPreferredSize(new Dimension(600, 250));
+		layeredPane.setBorder(BorderFactory.createTitledBorder("Hand"));
+		layeredPane.add(label, new Integer(0));
 
 		this.add(layeredPane);
 	}
 
 	/**
 	 * Adds a Card object to the hand by passing in a Card (or its subclasses)
-	 * objects as argument. Maximum amount of held cards is 8.
+	 * objects as argument. Each card object is added to a new layer higher than
+	 * the previous card's layer. Maximum amount of held cards is 8.
 	 * 
 	 * @param card
 	 */
-	public void addCard(CardGUI card) {
-		if (cardsOnHand < 7) {
-			card.setBounds(horizontalPosition, 0, card.getPreferredSize().width, card.getPreferredSize().height);
-			layeredPane.add(card, new Integer(cardsOnHand));
-			horizontalPosition += 50;
+	public void addCard(Card card) {
+		if (cardsOnHand < 8) {
+			card.setBounds(horizontalPosition, 20, card.getPreferredSize().width, card.getPreferredSize().height);
+			card.addMouseListener(listener);
+			layeredPane.add(card, new Integer(cardsOnHand + 1));
 			cardsOnHand++;
-			repaint();
-
+			horizontalPosition += 80;
 			// Debbugging purpose
-			System.out.println(layeredPane.getLayer(card) + " cards on hand: " + cardsOnHand);
+			System.out.println("Layer no: " + layeredPane.getLayer(card) + " // cards on hand: " + cardsOnHand);
 			System.out.println(layeredPane.getComponent(0));
-
-
 		} else {
-			JOptionPane.showMessageDialog(null, "För många kort på handen");
+			System.err.println("Too many cards on hand");
 		}
+
 	}
 
-	public CardGUI playCard() {
-		CardGUI card = null;
-		if (cardsOnHand > 0) {
-			card = (CardGUI) layeredPane.getComponent(0);
-			layeredPane.remove(0);
-			repaint();
-			cardsOnHand--;
-			horizontalPosition -= 50;
-			System.err.println(layeredPane.getLayer(card) + " cards on hand: " + cardsOnHand);
-			System.err.println(layeredPane.getComponent(0));
-		}else{
-			horizontalPosition=10;
-		}
+	public Card playCard(Card card) {
+
+		layeredPane.remove(card);
+//		int layersAbove = cardOriginalLayer;
+//		int lastLayer = layeredPane.highestLayer();
+//		while(layersAbove<=lastLayer-1){
+//			Card c = (Card)layeredPane.getComponent(layersAbove);
+//			layeredPane.remove(c);
+//			layeredPane.add(c, new Integer(cardOriginalLayer));
+//			
+//			c.setBounds(card.getX(), card.getY(), c.getPreferredSize().width, c.getPreferredSize().height);
+//			layersAbove++;
+//		}
+		horizontalPosition=card.getX();
+		repaint();
+		cardsOnHand--;
+
+		System.out.println("highest layer: "+layeredPane.highestLayer());
+		System.err.println("Layer of card played: " + cardOriginalLayer + " cards on hand: " + cardsOnHand);
+		System.err.println(card.toString());
 		return card;
 	}
 	// TODO mouselistener
 
-	private class MouseList implements MouseListener {
+	private class MouseListenerHand implements MouseListener {
+
+		private Card temp;
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			layeredPane.setLayer(layeredPane.getComponent(0), layeredPane.getComponentCount());
-			System.out.println("KLICK");
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent arg0) {
+		public void mouseEntered(MouseEvent event) {
+			System.out.println(event.getSource().toString());
+			temp = (Card) event.getSource();
+			cardOriginalLayer = layeredPane.getLayer(temp);
+			layeredPane.setLayer(temp, 10);
+			temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
+			layeredPane.setLayer(temp, cardOriginalLayer);
+			temp.setBounds(temp.getX(), 20, temp.getPreferredSize().width, temp.getPreferredSize().height);
 		}
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 
+			// send the object to controller or w/e where it is determined where
+			// the card should be put based on instanceof
+			// playCard(temp);
+
+			// Debugg remove when rest of gui is complete
+			JFrame frame = new JFrame();
+			frame.add(playCard(temp));
+			frame.setVisible(true);
+			frame.pack();
+
+			temp.removeMouseListener(listener);
 		}
 
 		@Override
