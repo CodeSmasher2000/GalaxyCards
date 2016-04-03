@@ -14,7 +14,6 @@ import guiPacket.HandGUI;
 public class HandTestClass {
 	private HandGUI hand = new HandGUI();
 	private JButton addCard = new JButton("draw card");
-	private JButton playCard = new JButton("play card");
 	private Card[] cards = new Card[60];
 	private ButtonListener list = new ButtonListener();
 	private JPanel panel = new JPanel();
@@ -32,12 +31,10 @@ public class HandTestClass {
 			x++;
 		}
 		addCard.addActionListener(list);
-		playCard.addActionListener(list);
 	}
 
 	private void showUI() {
 		panel.add(addCard);
-		panel.add(playCard);
 		JFrame frame = new JFrame();
 		frame.add(panel);
 		frame.pack();
@@ -45,6 +42,7 @@ public class HandTestClass {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JFrame frame2 = new JFrame();
+		frame2.setLocation(200, 0);
 		frame2.add(hand);
 		frame2.pack();
 		frame2.setVisible(true);
@@ -57,18 +55,7 @@ public class HandTestClass {
 			if (event.getSource() == addCard) {
 				hand.addCard(cards[i]);
 				i++;
-
 			}
-//			if (event.getSource() == playCard) {
-//
-//				Card card = hand.playCard();
-//				if (card != null) {
-//					JFrame frame3 = new JFrame();
-//					frame3.add(card);
-//					frame3.setVisible(true);
-//					frame3.pack();
-//				}
-//			}
 		}
 
 	}

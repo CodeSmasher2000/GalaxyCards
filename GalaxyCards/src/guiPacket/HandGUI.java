@@ -3,15 +3,13 @@ package guiPacket;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-
-import cards.Unit;
 
 /**
  * 
@@ -24,22 +22,24 @@ public class HandGUI extends JPanel {
 	private int cardsOnHand = 0, horizontalPosition = 10;
 	private int cardOriginalLayer;
 	private MouseListenerHand listener = new MouseListenerHand();
-	private JLabel label = new JLabel("Empty hand");
+
+	// The data should be stored in board class
+	private Card[] cards;
 
 	public HandGUI() {
-
+		cards = new Card[8];
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-		label.setBounds(50, 50, label.getPreferredSize().width, label.getPreferredSize().height);
+		initiateLayeredPane();
+		this.add(layeredPane);
+	}
 
+	private void initiateLayeredPane() {
 		layeredPane = new JLayeredPane();
 		layeredPane.setOpaque(true);
 		layeredPane.setLayout(null);
-		layeredPane.setPreferredSize(new Dimension(600, 250));
+		layeredPane.setPreferredSize(new Dimension(740, 250));
 		layeredPane.setBorder(BorderFactory.createTitledBorder("Hand"));
-		layeredPane.add(label, new Integer(0));
-
-		this.add(layeredPane);
 	}
 
 	/**
@@ -51,43 +51,56 @@ public class HandGUI extends JPanel {
 	 */
 	public void addCard(Card card) {
 		if (cardsOnHand < 8) {
+			cards[cardsOnHand] = card;
 			card.setBounds(horizontalPosition, 20, card.getPreferredSize().width, card.getPreferredSize().height);
 			card.addMouseListener(listener);
-			layeredPane.add(card, new Integer(cardsOnHand + 1));
-			cardsOnHand++;
+			layeredPane.add(card, new Integer(cardsOnHand));
 			horizontalPosition += 80;
 			// Debbugging purpose
 			System.out.println("Layer no: " + layeredPane.getLayer(card) + " // cards on hand: " + cardsOnHand);
 			System.out.println(layeredPane.getComponent(0));
+
+			cardsOnHand++;
 		} else {
 			System.err.println("Too many cards on hand");
 		}
 
 	}
 
+	/**
+	 * Removes the card object from the hand and returns is to the method
+	 * caller. Rearranges the remaining card objects in the LayeredPane.
+	 * 
+	 * @param card
+	 * @return : card
+	 */
 	public Card playCard(Card card) {
 
-		layeredPane.remove(card);
-//		int layersAbove = cardOriginalLayer;
-//		int lastLayer = layeredPane.highestLayer();
-//		while(layersAbove<=lastLayer-1){
-//			Card c = (Card)layeredPane.getComponent(layersAbove);
-//			layeredPane.remove(c);
-//			layeredPane.add(c, new Integer(cardOriginalLayer));
-//			
-//			c.setBounds(card.getX(), card.getY(), c.getPreferredSize().width, c.getPreferredSize().height);
-//			layersAbove++;
-//		}
-		horizontalPosition=card.getX();
+		Card[] tempCards = new Card[8];
+		tempCards = cards;
+		cards = null;
+		cards = new Card[8];
+		layeredPane.removeAll();
+		horizontalPosition = 10;
+		cardsOnHand = 0;
 		repaint();
-		cardsOnHand--;
 
-		System.out.println("highest layer: "+layeredPane.highestLayer());
+		for (int i = 0; i < tempCards.length; i++) {
+			if (tempCards[i] != null) {
+				tempCards[i].removeMouseListener(listener);
+				if (tempCards[i] != card) {
+					Card card1 = tempCards[i];
+					addCard(card1);
+				}
+			}
+		}
+		
+		//DEBUGG
+		System.out.println("highest layer: " + layeredPane.highestLayer());
 		System.err.println("Layer of card played: " + cardOriginalLayer + " cards on hand: " + cardsOnHand);
 		System.err.println(card.toString());
 		return card;
 	}
-	// TODO mouselistener
 
 	private class MouseListenerHand implements MouseListener {
 
@@ -102,7 +115,7 @@ public class HandGUI extends JPanel {
 			System.out.println(event.getSource().toString());
 			temp = (Card) event.getSource();
 			cardOriginalLayer = layeredPane.getLayer(temp);
-			layeredPane.setLayer(temp, 10);
+			layeredPane.setLayer(temp, 100);
 			temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
 		}
 
@@ -113,7 +126,7 @@ public class HandGUI extends JPanel {
 		}
 
 		@Override
-		public void mousePressed(MouseEvent arg0) {
+		public void mousePressed(MouseEvent event) {
 
 			// send the object to controller or w/e where it is determined where
 			// the card should be put based on instanceof
@@ -121,6 +134,7 @@ public class HandGUI extends JPanel {
 
 			// Debugg remove when rest of gui is complete
 			JFrame frame = new JFrame();
+			frame.setLocation(0, 80);
 			frame.add(playCard(temp));
 			frame.setVisible(true);
 			frame.pack();
