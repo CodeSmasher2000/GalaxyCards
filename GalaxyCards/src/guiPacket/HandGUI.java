@@ -12,6 +12,14 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 /**
+ * GUI klass that represents a hand with held cards. Initially the panel is
+ * empty and when a card is added it will be added to this panel in a new layer,
+ * overlapping the card beneath it. Maximum number of cards to be added to the
+ * panel is 8. Each card added to this panel will get a mouselistener that
+ * responds on mouseEntered, mouseExited and mousePressed methods. When a card
+ * is played from hand it will loose its mouse listener. Since null layout is
+ * being used consider how various virtual machines handle the setBounds method
+ * on different platforms.
  * 
  * @author 13120dde
  *
@@ -21,7 +29,7 @@ public class HandGUI extends JPanel {
 	private JLayeredPane layeredPane;
 	private int cardsOnHand = 0, horizontalPosition = 10;
 	private int cardOriginalLayer;
-	private MouseListenerHand listener = new MouseListenerHand();
+	private HandMouseListener listener = new HandMouseListener();
 
 	// The data should be stored in board class
 	private Card[] cards;
@@ -45,7 +53,8 @@ public class HandGUI extends JPanel {
 	/**
 	 * Adds a Card object to the hand by passing in a Card (or its subclasses)
 	 * objects as argument. Each card object is added to a new layer higher than
-	 * the previous card's layer. Maximum amount of held cards is 8.
+	 * the previous card's layer, overlapping the object beneath it. Maximum
+	 * amount of held cards is 8.
 	 * 
 	 * @param card
 	 */
@@ -56,12 +65,9 @@ public class HandGUI extends JPanel {
 			card.addMouseListener(listener);
 			layeredPane.add(card, new Integer(cardsOnHand));
 			horizontalPosition += 80;
-			// Debbugging purpose
-			System.out.println("Layer no: " + layeredPane.getLayer(card) + " // cards on hand: " + cardsOnHand);
-			System.out.println(layeredPane.getComponent(0));
-
 			cardsOnHand++;
 		} else {
+			// TODO throw exception?
 			System.err.println("Too many cards on hand");
 		}
 
@@ -70,16 +76,19 @@ public class HandGUI extends JPanel {
 	/**
 	 * Removes the card object from the hand and returns is to the method
 	 * caller. Rearranges the remaining card objects in the LayeredPane.
+	 * Visibility set to private, should be accessed only by the
+	 * HandMouseListener inner class.
 	 * 
 	 * @param card
 	 * @return : card
 	 */
-	public Card playCard(Card card) {
+	private Card playCard(Card card) {
 
 		Card[] tempCards = new Card[8];
 		tempCards = cards;
 		cards = null;
 		cards = new Card[8];
+
 		layeredPane.removeAll();
 		horizontalPosition = 10;
 		cardsOnHand = 0;
@@ -94,15 +103,11 @@ public class HandGUI extends JPanel {
 				}
 			}
 		}
-		
-		//DEBUGG
-		System.out.println("highest layer: " + layeredPane.highestLayer());
-		System.err.println("Layer of card played: " + cardOriginalLayer + " cards on hand: " + cardsOnHand);
-		System.err.println(card.toString());
+
 		return card;
 	}
 
-	private class MouseListenerHand implements MouseListener {
+	private class HandMouseListener implements MouseListener {
 
 		private Card temp;
 
@@ -144,8 +149,7 @@ public class HandGUI extends JPanel {
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
+			//Do nothing
 		}
 
 	}
