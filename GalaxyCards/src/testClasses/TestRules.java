@@ -1,8 +1,5 @@
 package testClasses;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
 import board.Board;
 import cards.Deck;
 import cards.Unit;
