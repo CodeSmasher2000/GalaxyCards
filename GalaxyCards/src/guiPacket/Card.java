@@ -339,10 +339,16 @@ public abstract class Card extends JPanel {
 	 */
 	public void enlarge() {
 		topPanel.setVisible(true);
+		topPanel.repaint();
 		typePanel.setVisible(true);
+		typePanel.repaint();
+		abilityArea.setVisible(true);
+		abilityArea.repaint();
+		validate();
+		repaint();
 
 		// FUKAR EJ n�r objektet ligger i en JFRame, f�r se om det funkar i en
-		// annan container, m�ste kollas upp!
+		// annan container, när mer av brädans gui är klar.
 	}
 
 	/**

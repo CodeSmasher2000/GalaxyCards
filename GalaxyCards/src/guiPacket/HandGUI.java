@@ -19,11 +19,16 @@ import javax.swing.JPanel;
  * responds on mouseEntered, mouseExited and mousePressed methods. When a card
  * is played from hand it will loose its mouse listener. Since null layout is
  * being used consider how various virtual machines handle the setBounds method
- * on different platforms.
+ * on different platforms and how card objects will be drawn on different
+ * resolutions than 1920*1080.
  * 
  * @author 13120dde
  *
  */
+
+// TODO when a card object is added to hand with addCard(Card card) method, if
+// the card has ability, disable the button. When the card is played from hand
+// and is on board - enable the button.
 public class HandGUI extends JPanel {
 
 	private JLayeredPane layeredPane;
@@ -41,12 +46,20 @@ public class HandGUI extends JPanel {
 		initiateLayeredPane();
 		this.add(layeredPane);
 	}
+	
+	/**Returns the number of Card objects held in this panel.
+	 * 
+	 * @return cardsOnHand : int
+	 */
+	public int getCardsOnHand(){
+		return cardsOnHand;
+	}
 
 	private void initiateLayeredPane() {
 		layeredPane = new JLayeredPane();
 		layeredPane.setOpaque(true);
 		layeredPane.setLayout(null);
-		layeredPane.setPreferredSize(new Dimension(740, 250));
+		layeredPane.setPreferredSize(new Dimension(730, 240));
 		layeredPane.setBorder(BorderFactory.createTitledBorder("Hand"));
 	}
 
@@ -117,10 +130,9 @@ public class HandGUI extends JPanel {
 
 		@Override
 		public void mouseEntered(MouseEvent event) {
-			System.out.println(event.getSource().toString());
 			temp = (Card) event.getSource();
 			cardOriginalLayer = layeredPane.getLayer(temp);
-			layeredPane.setLayer(temp, 100);
+			layeredPane.setLayer(temp, Integer.MAX_VALUE);
 			temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
 		}
 
@@ -136,11 +148,13 @@ public class HandGUI extends JPanel {
 			// send the object to controller or w/e where it is determined where
 			// the card should be put based on instanceof
 			// playCard(temp);
+			//if the Card object is instanceOf Unit then use shrink() method before putting in a container.
 
 			// Debugg remove when rest of gui is complete
 			JFrame frame = new JFrame();
 			frame.setLocation(0, 80);
-			frame.add(playCard(temp));
+			Card c = playCard(temp);
+			frame.add(c);
 			frame.setVisible(true);
 			frame.pack();
 
@@ -149,7 +163,7 @@ public class HandGUI extends JPanel {
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			//Do nothing
+			// Do nothing
 		}
 
 	}
