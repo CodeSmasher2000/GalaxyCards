@@ -1,15 +1,18 @@
 package guiPacket;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Paint;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -123,6 +126,8 @@ public class HandGUI extends JPanel {
 	private class HandMouseListener implements MouseListener {
 
 		private Card temp;
+		private Border defaultBorder;
+		private Border highlightB = BorderFactory.createLineBorder(new Color(0,190,255), 3, true);
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -134,12 +139,15 @@ public class HandGUI extends JPanel {
 			cardOriginalLayer = layeredPane.getLayer(temp);
 			layeredPane.setLayer(temp, Integer.MAX_VALUE);
 			temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
+			defaultBorder = temp.getBorder();
+			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
 			layeredPane.setLayer(temp, cardOriginalLayer);
 			temp.setBounds(temp.getX(), 20, temp.getPreferredSize().width, temp.getPreferredSize().height);
+			temp.setBorder(defaultBorder);
 		}
 
 		@Override

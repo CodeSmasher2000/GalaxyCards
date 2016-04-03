@@ -66,7 +66,7 @@ public abstract class Card extends JPanel {
 		initiatePanels();
 		setToolTips();
 
-		this.setBorder(BorderFactory.createLineBorder(frameColor, 3, true));
+		this.setBorder(BorderFactory.createLineBorder(frameColor, 3, false));
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		this.add(topPanel);
