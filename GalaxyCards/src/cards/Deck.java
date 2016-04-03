@@ -14,7 +14,6 @@ public class Deck implements Serializable{
 	private LinkedList<CardGUI> deck = new LinkedList<CardGUI>();
 	private int damage=1;
 	private Hero hero;
-	private int amtOfCards = 0;
 	private int nbrOfUnitCards = 0;
 	private int nbrOfResourceCards = 0;
 	private int nbrOfHeroicSupport = 0;
@@ -26,9 +25,10 @@ public class Deck implements Serializable{
 	
 	public CardGUI drawCard(){
 		if(!deck.isEmpty()){
-			return deck.getFirst();
+			return deck.removeFirst();
 		}else{
 			hero.dealDamage(incrementalDamage());
+			System.out.println("Empty deck");
 			return null;
 		}
 	}
@@ -48,7 +48,7 @@ public class Deck implements Serializable{
 	}
 	
 	public void addCard(CardGUI card) {
-		if (amtOfCards < 60) {
+		if (deck.size() < 60) {
 			this.deck.add(card);
 		} else {
 			// TODO: Throw Exception
@@ -77,10 +77,6 @@ public class Deck implements Serializable{
 	
 	public CardGUI getCard(int index) {
 		return deck.get(index);
-	}
-
-	public void setAmtOfCards(int amtOfCards) {
-		this.amtOfCards = amtOfCards;
 	}
 	
 	public int getNbrOfResourceCards() {

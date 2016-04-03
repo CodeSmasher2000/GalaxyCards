@@ -2,6 +2,7 @@ package cards;
 
 import java.io.Serializable;
 
+import abilities.Ability;
 import guiPacket.CardGUI;
 
 /**
@@ -143,7 +144,7 @@ public class Unit extends CardGUI implements PlayCardsInterface, Serializable{
 	public int getAttack() {
 		return attack;
 	}
-	
+
 	public String toString() {
 		return NAME + " - [Unit]: " + attack + "/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
 	}
