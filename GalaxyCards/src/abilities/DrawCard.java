@@ -16,7 +16,9 @@ public class DrawCard implements Ability {
 
     @Override
     public void useAbility() {
-        Rules.getInstance().drawCard();
+        for (int i = 0; i < cardsToDraw; i++) {
+        	Rules.getInstance().drawCard();
+		}
     }
 
     @Override

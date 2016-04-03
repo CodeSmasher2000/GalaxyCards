@@ -98,6 +98,19 @@ public class Deck implements Serializable{
 			nbrOfResourceCards--;
 		}
 	}
+	
+	public void removeCard() {
+		CardGUI toRemove = deck.remove();
+		if (toRemove instanceof Unit)  {
+			nbrOfUnitCards--;
+		} else if(toRemove instanceof HeroicSupport) {
+			nbrOfHeroicSupport--;
+		} else if(toRemove instanceof Tech) {
+			nbrOfTech--;
+		} else if (toRemove instanceof ResourceCard) {
+			nbrOfResourceCards--;
+		}
+	}
 
 	public void setNbrOfResourceCards(int nbrOfResourceCards) {
 		this.nbrOfResourceCards = nbrOfResourceCards;

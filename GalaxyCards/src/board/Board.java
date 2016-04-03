@@ -21,17 +21,31 @@ public class Board {
         playerHand.add(cardToAdd);
         printNbrOfCards();
     }
+    
+    public synchronized void clearHand() {
+    	while (!playerHand.isEmpty()) {
+    		playerHand.removeFirst();
+		}
+    }
 
     public synchronized void removeCardFromHand(int index) {
         playerHand.remove(index);
         printNbrOfCards();
     }
 
-    public void printNbrOfCards() {
-        System.out.println("Cards in hand: " + playerHand.size());
-    }
-
     public Deck getPlayerDeck() {
         return playerDeck;
     }
+	
+	public void printNbrOfCards() {
+        System.out.println("Cards in hand: " + playerHand.size());
+    }
+	
+	public void printHand() {
+		System.out.println("------------ The Hand --------------");
+		for (int i = 0; i < playerHand.size(); i++) {
+			System.out.println(playerHand.get(i).toString());
+		}
+		System.out.println("------------------------------------");
+	}
 }
