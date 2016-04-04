@@ -15,19 +15,21 @@ import guiPacket.HeroGUI;
  * @author 13120dde
  *
  */
+//TODO make algoritm for resourcemanagment.
 public class Hero extends HeroGUI implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -704227521994333558L;
-	private int life;
-	private int energyShield;
+	private int life, energyShield, maxResource, currentResource;
 
 	public Hero(String heroName) {
 		super(heroName);
 		life = 20;
 		energyShield = 10;
+		maxResource=0;
+		currentResource=0;
 	}
 
 	/**

@@ -170,6 +170,23 @@ public class CardTestClass extends JPanel {
 	}
 	
 	public void testEnlarge(){
+		unit1.enlarge();
+		unit4.enlarge();
+		unit5.enlarge();
+		unit6.enlarge();
+		unit7.enlarge();
+		unit8.enlarge();
+		
+		frame5.repaint();
+		frame5.validate();
+		
+		frame5.pack();
+		frame2.pack();
+		frame11.pack();
+		frame12.pack();
+		frame13.pack();
+		frame14.pack();
+		frame15.pack();
 		
 	}
 
