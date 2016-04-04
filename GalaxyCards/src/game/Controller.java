@@ -2,7 +2,7 @@ package game;
 
 import board.Board;
 import cards.Deck;
-import guiPacket.CardGUI;
+import guiPacket.*;
 
 public class Controller {
     private Board board;
@@ -15,7 +15,7 @@ public class Controller {
         return board.getPlayerDeck();
     }
 
-    public void addCardToHand(CardGUI card) {
+    public void addCardToHand(Card card) {
         board.addCardToHand(card);
     }
 }

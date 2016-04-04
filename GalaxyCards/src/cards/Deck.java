@@ -48,7 +48,7 @@ public class Deck implements Serializable{
 	}
 	
 
-	public void addCard(CardGUI card) {
+	public void addCard(Card card) {
 		if (deck.size() < 60) {
 			this.deck.add(card);
 		} else {
@@ -101,7 +101,7 @@ public class Deck implements Serializable{
 	}
 	
 	public void removeCard() {
-		CardGUI toRemove = deck.remove();
+		Card toRemove = deck.remove();
 		if (toRemove instanceof Unit)  {
 			nbrOfUnitCards--;
 		} else if(toRemove instanceof HeroicSupport) {

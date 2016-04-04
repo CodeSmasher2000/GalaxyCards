@@ -9,7 +9,7 @@ import cards.Tech;
 import cards.Unit;
 import game.Controller;
 import game.Rules;
-import guiPacket.CardGUI;
+import guiPacket.Card;
 
 import javax.swing.*;
 

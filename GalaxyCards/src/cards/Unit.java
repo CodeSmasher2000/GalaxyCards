@@ -3,7 +3,7 @@ package cards;
 import java.io.Serializable;
 
 import abilities.Ability;
-import guiPacket.CardGUI;
+import guiPacket.Card;
 
 /**
  * 

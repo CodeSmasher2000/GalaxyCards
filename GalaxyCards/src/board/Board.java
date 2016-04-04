@@ -1,7 +1,7 @@
 package board;
 
 import cards.Deck;
-import guiPacket.CardGUI;
+import guiPacket.Card;
 
 import java.util.LinkedList;
 
@@ -9,7 +9,7 @@ import java.util.LinkedList;
  * Created by patriklarsson on 03/04/16.
  */
 public class Board {
-    private LinkedList<CardGUI> playerHand = new LinkedList<CardGUI>();
+    private LinkedList<Card> playerHand = new LinkedList<Card>();
     private Deck playerDeck;
 
     public Board(Deck playerDeck) {
@@ -17,7 +17,7 @@ public class Board {
         printNbrOfCards();
     }
 
-    public synchronized void addCardToHand(CardGUI cardToAdd) {
+    public synchronized void addCardToHand(Card cardToAdd) {
         playerHand.add(cardToAdd);
         printNbrOfCards();
     }

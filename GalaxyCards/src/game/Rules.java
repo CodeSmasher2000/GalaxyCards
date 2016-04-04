@@ -2,7 +2,7 @@ package game;
 
 
 import cards.Deck;
-import guiPacket.CardGUI;
+import guiPacket.Card;
 
 /**
  * This class is a implementation of the Singelton design pattern. It contains
@@ -44,7 +44,7 @@ public class Rules {
      */
     public void drawCard() {
         Deck deck = controller.getPlayerDeck();
-        CardGUI card = deck.drawCard();
+        Card card = deck.drawCard();
         if (card != null) {
            controller.addCardToHand(card);
         } else {
