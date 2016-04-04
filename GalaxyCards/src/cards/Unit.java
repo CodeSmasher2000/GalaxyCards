@@ -10,7 +10,7 @@ import guiPacket.Card;
  * @author 13120dde
  *
  */
-public class Unit extends Card implements PlayCardsInterface, Serializable, Healable{
+public class Unit extends Card implements PlayCardsInterface, Serializable, Target{
 
 	/**
 	 * 
@@ -173,6 +173,14 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Heal
 				break;
 			}
 		}
+	}
+
+
+
+	@Override
+	public void damage(int amt) {
+		setDefense(amt);
+		
 	}
 	
 

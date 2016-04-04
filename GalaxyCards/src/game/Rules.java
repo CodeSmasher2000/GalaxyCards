@@ -2,7 +2,7 @@ package game;
 
 
 import cards.Deck;
-import cards.Healable;
+import cards.Target;
 import guiPacket.Card;
 
 /**
@@ -54,8 +54,21 @@ public class Rules {
 
     }
 
-
-	public void heal(Healable card, int amt) {
-		card.heal(amt);
+    /**
+     * Heals a target for a specific amount
+     * @param target A Card that implements the target interface
+     * @param amt A Integer with the amount to heal
+     */
+	public void heal(Target target, int amt) {
+		target.heal(amt);
+	}
+	
+	/**
+	 * Damages a target for a specific amount
+	 * @param target A Card that implements the target interface
+	 * @param amt A Integer with the amount to damage
+	 */
+	public void damage(Target target, int amt) {
+		target.damage(-amt);
 	}
 }

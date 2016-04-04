@@ -50,8 +50,8 @@ public class TestRules {
 		test.reset();
 	}
 	
-	public void testHeal() {
-		Heal test = new Heal();
+	public void testTarget() {
+		TestTarget test = new TestTarget();
 		test.setup();
 		test.runTest();
 		test.reset();
@@ -97,7 +97,7 @@ public class TestRules {
 		}
 	}
 	
-	private class Heal implements TestCase, ActionListener {
+	private class TestTarget implements TestCase, ActionListener {
 		private JButton btnHeal;
 		private JButton btnDamage;
 		private Unit unit;
@@ -155,7 +155,7 @@ public class TestRules {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnDamage) {
-				unit.setDefense(-1);
+				Rules.getInstance().damage(unit, 1);
 			} else if(e.getSource() == btnHeal) {
 				Rules.getInstance().heal(unit,amtToHeal);
 			}
@@ -167,7 +167,7 @@ public class TestRules {
 		// Test for The Rule Draw Card
 		TestRules prog = new TestRules();
 //		prog.testDrawCard();
-		prog.testHeal();
+		prog.testTarget();
 	}
 	
 }
