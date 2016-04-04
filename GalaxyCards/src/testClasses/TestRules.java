@@ -31,15 +31,17 @@ public class TestRules {
 		// Removes All The cards in the playerHand
 		board.clearHand();
 	}
-	
+	/**
+	 * This class contains methods for setting up a test for Draw Card rule
+	 */
 	public void testDrawCard() {
 		DrawCard test = new DrawCard();
 		test.setup();
-		test.test();
+		test.runTest();
 		test.reset();
 	}
 	
-	private class DrawCard {
+	private class DrawCard implements TestCase {
 		private Unit unit1 = new Unit("1", "Common", "starship1", false,
 				3, 3, 3);
 		private Unit unit2 = new Unit("2", "Common", "starship1", false,
@@ -60,7 +62,7 @@ public class TestRules {
 			board.getPlayerDeck().addCard(unit5);
 		}
 		
-		public void test() {
+		public void runTest() {
 			board.printHand();
 			
 			// Tries to draw a card from the deck unit it´s empty
@@ -77,6 +79,28 @@ public class TestRules {
 		public void reset() {
 			TestRules.this.reset();
 		}
+	}
+	
+	private class Heal implements TestCase {
+
+		@Override
+		public void setup() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void runTest() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void reset() {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 	
 	public static void main(String[] args) {
