@@ -12,7 +12,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import cards.Deck;
+import exceptionsPacket.EmptyDeckException;
+import exceptionsPacket.NoPlaceOnBoardException;
 import guiPacket.BoardGuiController;
+import guiPacket.Card;
 import guiPacket.HandGUI;
 import guiPacket.HeroGUI;
 import guiPacket.HeroicPanelGUI;
@@ -29,7 +32,7 @@ public class BoardTestClass {
 	private JPanel panelGUI = new JPanel();
 	private JPanel panelBTN = new JPanel();
 	private JButton draw = new JButton("Dra kort");
-	
+	private Card temp;	
 	
 	public BoardTestClass(){
 		hand = new HandGUI(board);
@@ -48,11 +51,15 @@ public class BoardTestClass {
 			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("files/decks/padde.dat")));
 			deck = (Deck)ois.readObject();
 			deck.shuffle();
-			System.out.println(deck.getAmtOfCards());
+			System.out.println(deck.toString());
+			temp = deck.drawCard();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EmptyDeckException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -76,9 +83,15 @@ public class BoardTestClass {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource()==draw){
-				board.drawCard(deck.drawCard());
-				panelGUI.repaint();
-				panelGUI.validate();
+				try {
+					System.out.println("Deck size: "+deck.getAmtOfCards());
+					board.drawCard(temp);
+					temp=deck.drawCard();
+				} catch (NoPlaceOnBoardException e) {
+					System.err.println(e.getMessage());
+				} catch (EmptyDeckException e) {
+					System.err.println(e.getMessage());
+				}
 			}
 		}
 		

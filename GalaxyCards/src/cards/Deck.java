@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import exceptionsPacket.EmptyDeckException;
 import game.Hero;
 import guiPacket.Card;
 
@@ -13,7 +14,6 @@ public class Deck implements Serializable{
 	 */
 	private static final long serialVersionUID = -4951209232481964562L;
 	private LinkedList<Card> deck = new LinkedList<Card>();
-	private int damage=1;
 	private Hero hero;
 	private int nbrOfUnitCards = 0;
 	private int nbrOfResourceCards = 0;
@@ -24,19 +24,14 @@ public class Deck implements Serializable{
 		Collections.shuffle(deck);
 	}
 	
-	public Card drawCard(){
+	public Card drawCard() throws EmptyDeckException{
 		if(!deck.isEmpty()){
 			return deck.removeFirst();
 		}else{
-			hero.dealDamage(incrementalDamage());
-			System.out.println("Empty deck");
-			return null;
+			throw new EmptyDeckException("Empty deck, can't draw more cards.");
 		}
 	}
 	
-	public int incrementalDamage(){
-		return damage++;
-	}
 	
 	public void addResoruceCard(ResourceCard card) {
 		System.out.println("Add resoruce card");
@@ -116,5 +111,9 @@ public class Deck implements Serializable{
 
 	public void setNbrOfResourceCards(int nbrOfResourceCards) {
 		this.nbrOfResourceCards = nbrOfResourceCards;
+	}
+	
+	public String toString(){
+		return "Deck: "+super.toString()+ "\nResources: "+nbrOfResourceCards+"\nUnits: "+nbrOfUnitCards+"\nHeroic Support: "+nbrOfHeroicSupport+"\nTech: "+nbrOfTech;
 	}
 }

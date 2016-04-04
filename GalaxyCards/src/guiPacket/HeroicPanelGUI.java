@@ -14,6 +14,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import cards.HeroicSupport;
+import exceptionsPacket.NoPlaceOnBoardException;
 
 /**
  * GUI class that represents the field on which HeroicSupport objects are
@@ -76,8 +77,9 @@ public class HeroicPanelGUI extends JPanel {
 	 * @param heroicSupport
 	 *            : HeroicSupport
 	 * @return boolean
+	 * @throws NoPlaceOnBoardException 
 	 */
-	public boolean addHeroicSupport(HeroicSupport heroicSupport) {
+	public void addHeroicSupport(HeroicSupport heroicSupport) throws NoPlaceOnBoardException {
 
 		boolean okToPlace = false;
 
@@ -102,7 +104,10 @@ public class HeroicPanelGUI extends JPanel {
 				break;
 			}
 		}
-		return okToPlace;
+		
+		if(!okToPlace){
+			throw new NoPlaceOnBoardException("You can only have 2 Heroic Support cards in play");
+		}
 	}
 
 	/**

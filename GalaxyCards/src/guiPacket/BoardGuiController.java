@@ -4,10 +4,13 @@ import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
+import exceptionsPacket.NoPlaceOnBoardException;
 import game.Controller;
 import game.Rules;
 
 /**
+ * This class is responsible for message-passing between the gui elements and
+ * the Controller object.
  * 
  * @author 13120dde
  *
@@ -51,22 +54,33 @@ public class BoardGuiController {
 	// ********************************************************************
 
 	/**
-	 * Updates the Hand GUI with the Card object passed in as argument and
-	 * return true if the object could be placed in the container, otherwise
-	 * returns false.
+	 * Attempts to place the Card object passed in as argument to the handGui
+	 * container. Throws exception if there is no more space for cards. Maximum
+	 * amount of cards on hand = 8.
 	 * 
 	 * @param card
-	 *            : Card
-	 * @return boolean
+	 * @throws NoPlaceOnBoardException
 	 */
-	public void drawCard(Card card) {
+	public void drawCard(Card card) throws NoPlaceOnBoardException {
 		handGui.addCard(card);
 	}
 
-	private boolean playHeroicSupport(HeroicSupport cardToPlay) {
-		boolean ok = heroicGui.addHeroicSupport(cardToPlay);
-		System.out.println(ok);
-		return ok;
+	/**
+	 * Attempts to play the Heroic Support object passed in as argument and
+	 * place it on the corresponding Gui container. Throws exception if there is
+	 * no more space. Maximum amount of Heroic Support objects on board = 2.
+	 * 
+	 * @param cardToPlay
+	 * @throws NoPlaceOnBoardException
+	 */
+	private void playHeroicSupport(HeroicSupport cardToPlay) throws NoPlaceOnBoardException {
+
+		// For some reason the same instance of a Card cant be placed in
+		// different containers, the object will not be drawn. Need to clone.
+		HeroicSupport clonedCard = new HeroicSupport(cardToPlay.getName(), cardToPlay.getRarity(),
+				cardToPlay.getImage(), cardToPlay.hasAbility(), cardToPlay.getPrice(), cardToPlay.getDefense());
+		cardToPlay = null;
+		heroicGui.addHeroicSupport(clonedCard);
 	}
 
 	// ***MESSAGES SENT TO THE SYSTEM**************************************
@@ -93,23 +107,21 @@ public class BoardGuiController {
 		return null;
 	}
 
-	
-	
 	// ***MESSAGES SENT BETWEEN GUIELEMENTS************************************
-	// *** Methods in this section are called upon from the GUI elements	***
-	// *** to update various gui elements. 									***
+	// *** Methods in this section are called upon from the GUI elements ***
+	// *** to update various gui elements. ***
 	// ************************************************************************
-	
-	
+
 	/**
 	 * Method that checks the type of card played and places it in the suggested
 	 * container on BoardGUI. This method is called upon when the user selects
 	 * the card Object from HandGUI panel and attempts to play it.
 	 * 
 	 * @param card
+	 * @throws NoPlaceOnBoardException
 	 */
 
-	public void playCard(Card card) {
+	public void playCard(Card card) throws NoPlaceOnBoardException {
 		if (card instanceof ResourceCard) {
 
 		}

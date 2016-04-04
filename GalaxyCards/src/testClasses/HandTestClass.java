@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import cards.Deck;
 import cards.HeroicSupport;
 import cards.Unit;
+import exceptionsPacket.EmptyDeckException;
+import exceptionsPacket.NoPlaceOnBoardException;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.HandGUI;
@@ -97,10 +99,23 @@ public class HandTestClass {
 //				boardController.drawCard(cards[i]);
 //				i++;
 				
-				boardController.drawCard(deck.drawCard());
+				try {
+					boardController.drawCard(deck.drawCard());
+				} catch (NoPlaceOnBoardException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (EmptyDeckException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if(event.getSource()==playHS){
-				boardController.playCard(heroicSupports[x]);
+				try {
+					boardController.playCard(heroicSupports[x]);
+				} catch (NoPlaceOnBoardException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				x++;
 				
 			}
