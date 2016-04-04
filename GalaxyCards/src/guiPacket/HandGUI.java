@@ -2,7 +2,6 @@ package guiPacket;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Paint;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -12,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -38,15 +36,17 @@ public class HandGUI extends JPanel {
 	private int cardsOnHand = 0, horizontalPosition = 10;
 	private int cardOriginalLayer;
 	private HandMouseListener listener = new HandMouseListener();
+	private BoardGuiController boardController;
 
 	// The data should be stored in board class
-	private Card[] cards;
+	private Card[] cards = new Card[8];
 
-	public HandGUI() {
-		cards = new Card[8];
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
+	public HandGUI(BoardGuiController boardController) {
+		this.boardController=boardController;
+		boardController.addHandPanelListener(this);
+		
 		initiateLayeredPane();
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.add(layeredPane);
 	}
 	
@@ -77,6 +77,7 @@ public class HandGUI extends JPanel {
 	public void addCard(Card card) {
 		if (cardsOnHand < 8) {
 			cards[cardsOnHand] = card;
+			boardController.addCardToHand(card);
 			card.setBounds(horizontalPosition, 20, card.getPreferredSize().width, card.getPreferredSize().height);
 			card.addMouseListener(listener);
 			layeredPane.add(card, new Integer(cardsOnHand));
@@ -104,12 +105,14 @@ public class HandGUI extends JPanel {
 		tempCards = cards;
 		cards = null;
 		cards = new Card[8];
+		
 
 		layeredPane.removeAll();
 		horizontalPosition = 10;
 		cardsOnHand = 0;
 		repaint();
 
+		boardController.clearHand();
 		for (int i = 0; i < tempCards.length; i++) {
 			if (tempCards[i] != null) {
 				tempCards[i].removeMouseListener(listener);
@@ -119,7 +122,6 @@ public class HandGUI extends JPanel {
 				}
 			}
 		}
-
 		return card;
 	}
 
@@ -162,6 +164,7 @@ public class HandGUI extends JPanel {
 			JFrame frame = new JFrame();
 			frame.setLocation(0, 80);
 			Card c = playCard(temp);
+			boardController.playCard(c);
 			c.setBorder(defaultBorder);
 			c.shrink();
 			frame.add(c);

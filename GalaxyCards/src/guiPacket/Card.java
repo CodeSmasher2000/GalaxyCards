@@ -371,8 +371,8 @@ public abstract class Card extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == abilityButton) {
-//				JOptionPane.showMessageDialog(null, "WIP! abilities funktionalitet implementeras vid sprint 2.");
-				ability.useAbility();
+				JOptionPane.showMessageDialog(null, "WIP! abilities funktionalitet implementeras vid sprint 2.");
+//				ability.useAbility();
 			}
 
 		}

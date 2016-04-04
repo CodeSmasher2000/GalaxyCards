@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 /**
  * Class responsible for visual representation of the hero. The hero has life,
@@ -31,7 +32,7 @@ public class HeroGUI extends JPanel {
 
 	public HeroGUI(String heroName) {
 		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
-		b2 = BorderFactory.createTitledBorder(heroName);
+		b2 = BorderFactory.createTitledBorder(null, heroName, TitledBorder.CENTER , TitledBorder.DEFAULT_POSITION );
 
 		
 		initiateBars();
