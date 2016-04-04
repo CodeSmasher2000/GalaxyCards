@@ -1,5 +1,7 @@
 package testClasses;
 
+import javax.swing.JOptionPane;
+
 import board.Board;
 import cards.Deck;
 import cards.Unit;
@@ -82,10 +84,11 @@ public class TestRules {
 	}
 	
 	private class Heal implements TestCase {
-
+		
 		@Override
 		public void setup() {
-			// TODO Auto-generated method stub
+			int amtToHeal = 
+					Integer.parseInt()
 			
 		}
 
