@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import game.Hero;
 import guiPacket.Card;
 
 public class Deck implements Serializable{
@@ -49,7 +50,7 @@ public class Deck implements Serializable{
 	
 
 	public void addCard(Card card) {
-		if (deck.size() < 60) {
+		if (deck.size() <= 60) {
 			this.deck.add(card);
 		} else {
 			// TODO: Throw Exception

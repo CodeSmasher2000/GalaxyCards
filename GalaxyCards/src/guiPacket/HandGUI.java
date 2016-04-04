@@ -74,7 +74,7 @@ public class HandGUI extends JPanel {
 	 * 
 	 * @param card
 	 */
-	public void addCard(Card card) {
+	public boolean addCard(Card card) {
 		if (cardsOnHand < 8) {
 			cards[cardsOnHand] = card;
 			boardController.addCardToHand(card);
@@ -83,9 +83,10 @@ public class HandGUI extends JPanel {
 			layeredPane.add(card, new Integer(cardsOnHand));
 			horizontalPosition += 80;
 			cardsOnHand++;
+			return true;
 		} else {
-			// TODO throw exception?
 			System.err.println("Too many cards on hand");
+			return false;
 		}
 
 	}

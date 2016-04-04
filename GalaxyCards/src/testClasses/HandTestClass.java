@@ -2,11 +2,16 @@ package testClasses;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import cards.Deck;
 import cards.HeroicSupport;
 import cards.Unit;
 import guiPacket.BoardGuiController;
@@ -25,6 +30,8 @@ public class HandTestClass {
 	private ButtonListener list = new ButtonListener();
 	private JPanel panel = new JPanel();
 	private int i = 0, x =0;
+	private ObjectInputStream ois;
+	private Deck deck;
 
 	public HandTestClass() {
 		int x = 1;
@@ -45,6 +52,19 @@ public class HandTestClass {
 		}
 		addCard.addActionListener(list);
 		playHS.addActionListener(list);
+		
+		try {
+			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("files/decks/padde.dat")));
+			deck = (Deck)ois.readObject();
+			deck.shuffle();
+			System.out.println(deck.getAmtOfCards());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void showUI() {
@@ -74,8 +94,10 @@ public class HandTestClass {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == addCard) {
-				boardController.drawCard(cards[i]);
-				i++;
+//				boardController.drawCard(cards[i]);
+//				i++;
+				
+				boardController.drawCard(deck.drawCard());
 			}
 			if(event.getSource()==playHS){
 				boardController.playCard(heroicSupports[x]);

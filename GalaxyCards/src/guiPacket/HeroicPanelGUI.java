@@ -91,9 +91,12 @@ public class HeroicPanelGUI extends JPanel {
 				if (i == 0) {
 					heroicPane1.add(heroicUnits[i], new Integer(0));
 					heroicPane1.setBorder(null);
+					heroicPane1.repaint();
+					
 				} else {
 					heroicPane2.add(heroicUnits[i], new Integer(0));
 					heroicPane2.setBorder(null);
+					heroicPane2.repaint();
 				}
 
 				break;

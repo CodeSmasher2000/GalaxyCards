@@ -20,21 +20,30 @@ import javax.swing.border.TitledBorder;
  * @author 13120dde
  *
  */
+
+// TODO Refactor: Break all comminication with Hero class and add a
+// BoadGuiController to constructor. All communication should be managed with
+// BoardGuiContorller.
+
 public class HeroGUI extends JPanel {
 	private final String PICTURE_DIRECTORY = "files/pictures/";
 	private JLabel imageLabel;
 	private JPanel imagePanel;
 	private JProgressBar lifeBar, shieldBar, resourceBar;
 	private ImageIcon heroImage;
+	private BoardGuiController boardController;
 
 	private Border b1;
 	private Border b2;
 
-	public HeroGUI(String heroName) {
-		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
-		b2 = BorderFactory.createTitledBorder(null, heroName, TitledBorder.CENTER , TitledBorder.DEFAULT_POSITION );
-
+	public HeroGUI(BoardGuiController boardController) {
+		this.boardController=boardController;
+		boardController.addHeroListener(this);
 		
+		String heroName = boardController.getHeroName();
+		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
+		b2 = BorderFactory.createTitledBorder(null, heroName, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
+
 		initiateBars();
 		initiateImage();
 		setTooltips();
@@ -45,13 +54,15 @@ public class HeroGUI extends JPanel {
 		add(lifeBar);
 		add(shieldBar);
 	}
-	
-	private void setTooltips(){
+
+	private void setTooltips() {
 		lifeBar.setToolTipText("Your hero's life. When it reaches 0 you loose.");
-		shieldBar.setToolTipText("Amount of shield left. The shield absorb one instance of damage and the resulting damage will not go trough to the hero's life.");
-		resourceBar.setToolTipText("Amount of resources avaible to the hero. Maximum resources increment when playing resource cards and current resources restore upon new round.");
+		shieldBar.setToolTipText(
+				"Amount of shield left. The shield absorb one instance of damage and the resulting damage will not go trough to the hero's life.");
+		resourceBar.setToolTipText(
+				"Amount of resources avaible to the hero. Maximum resources increment when playing resource cards and current resources restore upon new round.");
 	}
-	
+
 	private void initiateImage() {
 		heroImage = new ImageIcon(PICTURE_DIRECTORY + "Hero1" + ".jpg");
 		imageLabel = new JLabel();
@@ -127,14 +138,15 @@ public class HeroGUI extends JPanel {
 	public void addResources(int amount) {
 		resourceBar.setMaximum(resourceBar.getMaximum() + amount);
 		resourceBar.setValue(resourceBar.getValue() + amount);
-		resourceBar.setString(resourceBar.getValue()+" / "+resourceBar.getMaximum());
+		resourceBar.setString(resourceBar.getValue() + " / " + resourceBar.getMaximum());
 	}
 
 	/**
 	 * Updates the shield progressbar with a int passed in as argument. The
 	 * minimum amount of shield represented visually is 0.
 	 * 
-	 * @param newValue : int
+	 * @param newValue
+	 *            : int
 	 */
 	public void updateShiledBar(int newValue) {
 		if (newValue < 0) {
@@ -143,13 +155,4 @@ public class HeroGUI extends JPanel {
 		shieldBar.setValue(newValue);
 		shieldBar.setString(newValue + " / " + "10");
 	}
-	
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.add(new HeroGUI("Fleet command"));
-		frame.pack();
-		frame.setVisible(true);
-
-	}
-
 }
