@@ -10,7 +10,7 @@ import guiPacket.Card;
  * @author 13120dde
  *
  */
-public class Unit extends Card implements PlayCardsInterface, Serializable{
+public class Unit extends Card implements PlayCardsInterface, Serializable, Healable{
 
 	/**
 	 * 
@@ -125,6 +125,8 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 	 */
 	public void setDefense(int amount) {
 		this.defense += amount;
+		
+		super.setDefense(this.defense);
 	}
 
 	/**
@@ -158,6 +160,19 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 
 	public String toString() {
 		return NAME + " - [Unit]: " + attack + "/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
+	}
+
+
+
+	@Override
+	public void heal(int amt) {
+		for (int i = 0; i < amt; i++) {
+			if (getDefense() < maxHp) {
+				setDefense(+1);
+			} else {
+				break;
+			}
+		}
 	}
 	
 

@@ -1,6 +1,13 @@
 package testClasses;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import board.Board;
 import cards.Deck;
@@ -38,6 +45,13 @@ public class TestRules {
 	 */
 	public void testDrawCard() {
 		DrawCard test = new DrawCard();
+		test.setup();
+		test.runTest();
+		test.reset();
+	}
+	
+	public void testHeal() {
+		Heal test = new Heal();
 		test.setup();
 		test.runTest();
 		test.reset();
@@ -83,25 +97,68 @@ public class TestRules {
 		}
 	}
 	
-	private class Heal implements TestCase {
+	private class Heal implements TestCase, ActionListener {
+		private JButton btnHeal;
+		private JButton btnDamage;
+		private Unit unit;
+		private JPanel pnlButtons;
+		private JFrame cardFrame;
+		private int amtToHeal;
+		
+		public void initGui() {
+			btnHeal = new JButton("Heal");
+			btnHeal.addActionListener(this);
+			btnDamage = new JButton("Damage (1)");
+			btnDamage.addActionListener(this);
+			pnlButtons = new JPanel();
+			pnlButtons.add(btnHeal);
+			pnlButtons.add(btnDamage);
+			
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					JFrame btnframe = new JFrame();
+					btnframe.add(pnlButtons);
+					btnframe.pack();
+					btnframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					btnframe.setVisible(true);
+					
+					
+					cardFrame = new JFrame();
+					cardFrame.add(unit);
+					cardFrame.pack();
+					cardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					cardFrame.setVisible(true);
+				}
+			});
+		}
 		
 		@Override
 		public void setup() {
-			int amtToHeal = 
-					Integer.parseInt()
-			
+			amtToHeal = 
+					Integer.parseInt(JOptionPane.showInputDialog("Enter the ammount to heal"));
+			unit = new Unit("Test", "Common", "Spaceship1", false, 3, 3, 3);
+			initGui();
 		}
 
 		@Override
 		public void runTest() {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
 		public void reset() {
-			// TODO Auto-generated method stub
 			
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == btnDamage) {
+				unit.setDefense(-1);
+			} else if(e.getSource() == btnHeal) {
+				Rules.getInstance().heal(unit,amtToHeal);
+			}
 		}
 		
 	}
@@ -109,7 +166,8 @@ public class TestRules {
 	public static void main(String[] args) {
 		// Test for The Rule Draw Card
 		TestRules prog = new TestRules();
-		prog.testDrawCard();
+//		prog.testDrawCard();
+		prog.testHeal();
 	}
 	
 }

@@ -2,6 +2,7 @@ package game;
 
 
 import cards.Deck;
+import cards.Healable;
 import guiPacket.Card;
 
 /**
@@ -52,4 +53,9 @@ public class Rules {
         }
 
     }
+
+
+	public void heal(Healable card, int amt) {
+		card.heal(amt);
+	}
 }

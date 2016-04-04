@@ -315,7 +315,6 @@ public abstract class Card extends JPanel {
 	// JPanel.
 	@Override
 	protected void paintComponent(Graphics g) {
-
 		super.paintComponent(g);
 		g.drawImage(cardBG1.getImage(), 0, 0, null);
 	}
