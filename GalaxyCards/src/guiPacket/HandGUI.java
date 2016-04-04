@@ -162,6 +162,8 @@ public class HandGUI extends JPanel {
 			JFrame frame = new JFrame();
 			frame.setLocation(0, 80);
 			Card c = playCard(temp);
+			c.setBorder(defaultBorder);
+			c.shrink();
 			frame.add(c);
 			frame.setVisible(true);
 			frame.pack();

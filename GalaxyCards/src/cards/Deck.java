@@ -14,7 +14,6 @@ public class Deck implements Serializable{
 	private LinkedList<Card> deck = new LinkedList<Card>();
 	private int damage=1;
 	private Hero hero;
-	private int amtOfCards = 0;
 	private int nbrOfUnitCards = 0;
 	private int nbrOfResourceCards = 0;
 	private int nbrOfHeroicSupport = 0;
@@ -26,9 +25,10 @@ public class Deck implements Serializable{
 	
 	public Card drawCard(){
 		if(!deck.isEmpty()){
-			return deck.getFirst();
+			return deck.removeFirst();
 		}else{
 			hero.dealDamage(incrementalDamage());
+			System.out.println("Empty deck");
 			return null;
 		}
 	}
@@ -47,8 +47,9 @@ public class Deck implements Serializable{
 		}
 	}
 	
+
 	public void addCard(Card card) {
-		if (amtOfCards < 60) {
+		if (deck.size() < 60) {
 			this.deck.add(card);
 		} else {
 			// TODO: Throw Exception
@@ -78,10 +79,6 @@ public class Deck implements Serializable{
 	public Card getCard(int index) {
 		return deck.get(index);
 	}
-
-	public void setAmtOfCards(int amtOfCards) {
-		this.amtOfCards = amtOfCards;
-	}
 	
 	public int getNbrOfResourceCards() {
 		return nbrOfResourceCards;
@@ -99,6 +96,19 @@ public class Deck implements Serializable{
 			nbrOfTech--;
 		} else if (toRemove instanceof ResourceCard) {
 			deck.remove(toRemove);
+			nbrOfResourceCards--;
+		}
+	}
+	
+	public void removeCard() {
+		Card toRemove = deck.remove();
+		if (toRemove instanceof Unit)  {
+			nbrOfUnitCards--;
+		} else if(toRemove instanceof HeroicSupport) {
+			nbrOfHeroicSupport--;
+		} else if(toRemove instanceof Tech) {
+			nbrOfTech--;
+		} else if (toRemove instanceof ResourceCard) {
 			nbrOfResourceCards--;
 		}
 	}

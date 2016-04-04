@@ -2,6 +2,7 @@ package cards;
 
 import java.io.Serializable;
 
+import abilities.Ability;
 import guiPacket.Card;
 
 /**
@@ -20,6 +21,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 	private final String NAME, RARITY, IMAGE_NAME;
 	private boolean hasAbility;
 	private String abilityText;
+	private int maxHp;
 
 	/**
 	 * Constructor instantiates this card with given arguments to configure its
@@ -59,8 +61,10 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 		setPrice(PRICE);
 		super.setAttack(this.attack);
 		super.setDefense(this.defense);
-
+		this.maxHp = defense;
 	}
+
+	
 
 	/**
 	 * Returns the name of the image used by this card. Image's are located in
@@ -144,8 +148,17 @@ public class Unit extends Card implements PlayCardsInterface, Serializable{
 		return attack;
 	}
 	
+	public int getMaxHp() {
+		return maxHp;
+	}
+
+	public void setMaxHp(int maxHp) {
+		this.maxHp = maxHp;
+	}
+
 	public String toString() {
 		return NAME + " - [Unit]: " + attack + "/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
 	}
+	
 
 }

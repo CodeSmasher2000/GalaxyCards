@@ -22,6 +22,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	private final int PRICE;
 	private final String NAME, RARITY, IMAGE_NAME;
 	private boolean hasAbility;
+	private int maxHp;
 
 	/**
 	 * Constructor instantiates this card with given arguments to configure its
@@ -59,12 +60,14 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		hasAbility(this.hasAbility);
 		setPrice(this.PRICE);
 		super.setDefense(this.defense);
+		this.maxHp = defense;
 	}
 	
 //	@Override
 //	public String toString() {
 //		return NAME + ", " + "HeroicSupport" + ", " + RARITY;
 //	}
+
 
 	/**
 	 * Returns the name of the image used by this card. Image's are located in
@@ -151,6 +154,14 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	public String toString() {
 		return NAME + " - [Heroic Support]: "  + "0/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
 	
+	}
+	
+	public int getMaxHp() {
+		return maxHp;
+	}
+
+	public void setMaxHp(int maxHp) {
+		this.maxHp = maxHp;
 	}
 	
 }

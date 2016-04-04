@@ -22,6 +22,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import abilities.Ability;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
@@ -52,6 +53,7 @@ public abstract class Card extends JPanel {
 	private Border border;
 	private JButton abilityButton;
 	private JTextArea abilityArea;
+	private Ability ability = null;
 
 	private final String PICTURE_DIRECTORY = "files/pictures/";
 
@@ -361,13 +363,17 @@ public abstract class Card extends JPanel {
 		abilityArea.setVisible(false);
 	}
 
+	public void setAbility(Ability ability) {
+		this.ability = ability;
+	}
+
 	private class AbilityButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == abilityButton) {
-				JOptionPane.showMessageDialog(null, "WIP! Abilities funktionalitet implementeras vid sprint 2.");
-
+//				JOptionPane.showMessageDialog(null, "WIP! abilities funktionalitet implementeras vid sprint 2.");
+				ability.useAbility();
 			}
 
 		}
