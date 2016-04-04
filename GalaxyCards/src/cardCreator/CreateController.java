@@ -56,15 +56,17 @@ public class CreateController {
 		
 	}
 	
-	public void addTechCard(String name, String rarity, String imageName, int price) {
+	public void addTechCard(String name, String rarity, String imageName, int price, String description) {
 		Tech cardToAdd = new Tech(name, rarity, imageName, price);
+		cardToAdd.setAbilityText(description);
 		activeDeck.addTechCard(cardToAdd);
 		gui.addCardToList(cardToAdd);
 		
 	}
 	
-	public void addHeroicSupportCard(String name, String rarity, String imageName, boolean hasAbility, int price, int defense) {
+	public void addHeroicSupportCard(String name, String rarity, String imageName, boolean hasAbility, int price, int defense, String description) {
 		HeroicSupport cardToAdd = new HeroicSupport(name, rarity, imageName, hasAbility, price, defense);
+		cardToAdd.setAbilityText(description);
 		activeDeck.addHeroicSupportCard(cardToAdd);
 		gui.addCardToList(cardToAdd);
 	}
