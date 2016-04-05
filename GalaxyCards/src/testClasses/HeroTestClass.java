@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import cards.Hero;
+import game.Hero;
 
 public class HeroTestClass extends JPanel {
 	private JButton damageButton = new JButton("skada: 3");
@@ -42,7 +42,7 @@ public class HeroTestClass extends JPanel {
 		frame.setLocation(850, 20);
 		
 		JFrame frame2 = new JFrame();
-		frame2.add(hero1);
+//		frame2.add(hero1);
 		frame2.setLocation(850,100);
 		frame2.pack();
 		frame2.setVisible(true);
@@ -62,10 +62,12 @@ public class HeroTestClass extends JPanel {
 				System.out.println(hero1.toString());
 			}
 			if(event.getSource()==addResource){
-				hero1.addResources(1);
+				hero1.setMaxResource(1);
+				System.out.println(hero1.toString());
 			}
 			if(event.getSource()==useResource){
-				hero1.updateResourceBar(0);
+				hero1.setCurrentResource(2);
+				System.out.println(hero1.toString());
 			}
 		}
 		

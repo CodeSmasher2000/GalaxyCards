@@ -2,7 +2,6 @@ package guiPacket;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Paint;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -12,7 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
+
+import exceptionsPacket.NoPlaceOnBoardException;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -38,15 +38,17 @@ public class HandGUI extends JPanel {
 	private int cardsOnHand = 0, horizontalPosition = 10;
 	private int cardOriginalLayer;
 	private HandMouseListener listener = new HandMouseListener();
+	private BoardGuiController boardController;
 
 	// The data should be stored in board class
-	private Card[] cards;
+	private Card[] cards = new Card[8];
 
-	public HandGUI() {
-		cards = new Card[8];
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
+	public HandGUI(BoardGuiController boardController) {
+		this.boardController=boardController;
+		boardController.addHandPanelListener(this);
+		
 		initiateLayeredPane();
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.add(layeredPane);
 	}
 	
@@ -73,18 +75,19 @@ public class HandGUI extends JPanel {
 	 * amount of held cards is 8.
 	 * 
 	 * @param card
+	 * @throws NoPlaceOnBoardException 
 	 */
-	public void addCard(Card card) {
+	public void addCard(Card card) throws NoPlaceOnBoardException {
 		if (cardsOnHand < 8) {
 			cards[cardsOnHand] = card;
+			boardController.addCardToHand(card);
 			card.setBounds(horizontalPosition, 20, card.getPreferredSize().width, card.getPreferredSize().height);
 			card.addMouseListener(listener);
 			layeredPane.add(card, new Integer(cardsOnHand));
 			horizontalPosition += 80;
 			cardsOnHand++;
 		} else {
-			// TODO throw exception?
-			System.err.println("Too many cards on hand");
+			throw new NoPlaceOnBoardException("You can only have 8 cards on hand");
 		}
 
 	}
@@ -104,22 +107,27 @@ public class HandGUI extends JPanel {
 		tempCards = cards;
 		cards = null;
 		cards = new Card[8];
+		
 
 		layeredPane.removeAll();
 		horizontalPosition = 10;
 		cardsOnHand = 0;
 		repaint();
 
+		boardController.clearHand();
 		for (int i = 0; i < tempCards.length; i++) {
 			if (tempCards[i] != null) {
 				tempCards[i].removeMouseListener(listener);
 				if (tempCards[i] != card) {
 					Card card1 = tempCards[i];
-					addCard(card1);
+					try {
+						addCard(card1);
+					} catch (NoPlaceOnBoardException e) {
+						System.err.println(e.getMessage()+ " Error caused by the rearranging of cards on hand");
+					}
 				}
 			}
 		}
-
 		return card;
 	}
 
@@ -161,14 +169,24 @@ public class HandGUI extends JPanel {
 			// Debugg remove when rest of gui is complete
 			JFrame frame = new JFrame();
 			frame.setLocation(0, 80);
-			Card c = playCard(temp);
-			c.setBorder(defaultBorder);
-			c.shrink();
-			frame.add(c);
-			frame.setVisible(true);
-			frame.pack();
+		
+			
+			try {
+				boardController.playCard(temp);
+				temp = playCard(temp);
+				temp.setBorder(defaultBorder);
+				temp.shrink();
+				temp.removeMouseListener(listener);
+				frame.add(temp);
+				frame.setVisible(true);
+				frame.pack();
+			} catch (NoPlaceOnBoardException e) {
+				// TODO Auto-generated catch block
+				System.err.println(e.getMessage());
+			}finally{
+				repaint();
+			}
 
-			temp.removeMouseListener(listener);
 		}
 
 		@Override

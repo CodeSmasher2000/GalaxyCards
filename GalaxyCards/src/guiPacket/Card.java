@@ -80,6 +80,7 @@ public abstract class Card extends JPanel {
 		this.add(imgPanel);
 		this.add(typePanel);
 		this.add(abilityArea);
+		this.add(Box.createVerticalStrut(2));
 		this.add(attributesPanel);
 	}
 
@@ -298,7 +299,9 @@ public abstract class Card extends JPanel {
 	public void setType(Card card) {
 		if (card instanceof ResourceCard) {
 			lbType.setText("Resource");
-			attributesPanel.setVisible(false);
+//			attributesPanel.setVisible(false);
+			lbDefense.setText("Can play 1 / round");
+			lbAttack.setVisible(false);
 			lbPrice.setVisible(false);
 		}
 		if (card instanceof HeroicSupport) {
@@ -310,7 +313,9 @@ public abstract class Card extends JPanel {
 		}
 		if (card instanceof Tech) {
 			lbType.setText("Tech");
-			attributesPanel.setVisible(false);
+//			attributesPanel.setVisible(false);
+			lbAttack.setVisible(false);
+			lbDefense.setText("Target / AOE");
 
 		}
 
@@ -376,8 +381,8 @@ public abstract class Card extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == abilityButton) {
-//				JOptionPane.showMessageDialog(null, "WIP! abilities funktionalitet implementeras vid sprint 2.");
-				ability.useAbility();
+				JOptionPane.showMessageDialog(null, "WIP! abilities funktionalitet implementeras vid sprint 2.");
+//				ability.useAbility();
 			}
 
 		}

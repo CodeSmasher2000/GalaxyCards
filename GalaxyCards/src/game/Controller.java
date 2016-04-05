@@ -6,9 +6,11 @@ import guiPacket.*;
 
 public class Controller {
     private Board board;
+    private BoardGuiController boardController;
 
-    public Controller(Board board) {
+    public Controller(Board board, BoardGuiController boardController) {
         this.board = board;
+        this.boardController=boardController;
     }
 
     public Deck getPlayerDeck() {
@@ -19,5 +21,7 @@ public class Controller {
         board.addCardToHand(card);
     }
     
-    
+    public void clearHand(){
+    	board.clearHand();
+    }
 }
