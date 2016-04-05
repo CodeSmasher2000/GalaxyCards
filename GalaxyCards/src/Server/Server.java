@@ -5,6 +5,6 @@ public class Server {
 	private ClientHandler clientHandler;
 	
 	public static void main(String[] args) {
-		new Connection(3550);
+		new Connection(3550).start();;
 	}
 }
