@@ -14,7 +14,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import cards.HeroicSupport;
-import exceptionsPacket.NoPlaceOnBoardException;
+import exceptionsPacket.NoEmptySpaceInContainer;
 
 /**
  * GUI class that represents the field on which HeroicSupport objects are
@@ -71,15 +71,18 @@ public class HeroicPanelGUI extends JPanel {
 
 	/**
 	 * Attempts to place the object passed as argument in the container on
-	 * board. If there is no more room false will be returned and the object
-	 * wont be placed.
+	 * board. If there is no more room in container exception will be thrown
+	 * that is catched in the handGui class to prevent loosing the card from
+	 * hand if it cant be placed. The boolean value returned by this method
+	 * should be used to refund the player the resource cost of attempting to
+	 * play this card. placed.
 	 * 
 	 * @param heroicSupport
 	 *            : HeroicSupport
 	 * @return boolean
-	 * @throws NoPlaceOnBoardException 
+	 * @throws NoEmptySpaceInContainer
 	 */
-	public void addHeroicSupport(HeroicSupport heroicSupport) throws NoPlaceOnBoardException {
+	public boolean addHeroicSupport(HeroicSupport heroicSupport) throws NoEmptySpaceInContainer {
 
 		boolean okToPlace = false;
 
@@ -94,7 +97,7 @@ public class HeroicPanelGUI extends JPanel {
 					heroicPane1.add(heroicUnits[i], new Integer(0));
 					heroicPane1.setBorder(null);
 					heroicPane1.repaint();
-					
+
 				} else {
 					heroicPane2.add(heroicUnits[i], new Integer(0));
 					heroicPane2.setBorder(null);
@@ -104,17 +107,19 @@ public class HeroicPanelGUI extends JPanel {
 				break;
 			}
 		}
-		
-		if(!okToPlace){
-			throw new NoPlaceOnBoardException("You can only have 2 Heroic Support cards in play");
+
+		if (!okToPlace) {
+			throw new NoEmptySpaceInContainer("You can only have 2 Heroic Support cards in play");
 		}
+		return okToPlace;
 	}
 
 	/**
 	 * If the object passed in as argument is displayed in this panel then the
 	 * object will be removed from the panel and returned to the method caller.
 	 * 
-	 * @param target : HeroicSupport
+	 * @param target
+	 *            : HeroicSupport
 	 * @return target : HeroicSupport
 	 */
 	public HeroicSupport removeHeroicSupport(HeroicSupport target) {

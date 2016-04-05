@@ -12,7 +12,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import exceptionsPacket.NoPlaceOnBoardException;
+import exceptionsPacket.NoEmptySpaceInContainer;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -75,9 +75,9 @@ public class HandGUI extends JPanel {
 	 * amount of held cards is 8.
 	 * 
 	 * @param card
-	 * @throws NoPlaceOnBoardException 
+	 * @throws NoEmptySpaceInContainer 
 	 */
-	public void addCard(Card card) throws NoPlaceOnBoardException {
+	public void addCard(Card card) throws NoEmptySpaceInContainer {
 		if (cardsOnHand < 8) {
 			cards[cardsOnHand] = card;
 			boardController.addCardToHand(card);
@@ -87,7 +87,7 @@ public class HandGUI extends JPanel {
 			horizontalPosition += 80;
 			cardsOnHand++;
 		} else {
-			throw new NoPlaceOnBoardException("You can only have 8 cards on hand");
+			throw new NoEmptySpaceInContainer("You can only have 8 cards on hand");
 		}
 
 	}
@@ -122,7 +122,7 @@ public class HandGUI extends JPanel {
 					Card card1 = tempCards[i];
 					try {
 						addCard(card1);
-					} catch (NoPlaceOnBoardException e) {
+					} catch (NoEmptySpaceInContainer e) {
 						System.err.println(e.getMessage()+ " Error caused by the rearranging of cards on hand");
 					}
 				}
@@ -167,20 +167,14 @@ public class HandGUI extends JPanel {
 			//if the Card object is instanceOf Unit then use shrink() method before putting in a container.
 
 			// Debugg remove when rest of gui is complete
-			JFrame frame = new JFrame();
-			frame.setLocation(0, 80);
-		
 			
 			try {
 				boardController.playCard(temp);
 				temp = playCard(temp);
 				temp.setBorder(defaultBorder);
-				temp.shrink();
+//				temp.shrink();
 				temp.removeMouseListener(listener);
-				frame.add(temp);
-				frame.setVisible(true);
-				frame.pack();
-			} catch (NoPlaceOnBoardException e) {
+			} catch (NoEmptySpaceInContainer e) {
 				// TODO Auto-generated catch block
 				System.err.println(e.getMessage());
 			}finally{

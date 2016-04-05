@@ -11,8 +11,9 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import EnumMessage.Lanes;
 import cards.Unit;
-import exceptionsPacket.NoPlaceOnBoardException;
+import exceptionsPacket.NoEmptySpaceInContainer;
 
 public class ArrayLayeredPane extends JPanel {
 
@@ -20,6 +21,8 @@ public class ArrayLayeredPane extends JPanel {
 	private JLayeredPane[] layerArray;
 	private Unit[] units;
 	private MouseListener listener = null;
+	private BoardGuiController boardController;
+	private Lanes LANE; 
 
 	/**
 	 * Instantiate this object with a int passed in as argument which tells how
@@ -27,11 +30,14 @@ public class ArrayLayeredPane extends JPanel {
 	 * 
 	 * @param nbrOfElements
 	 */
-	public ArrayLayeredPane(int nbrOfElements) {
+	public ArrayLayeredPane(BoardGuiController boardController, Lanes ENUM, int nbrOfElements) {
 
+		this.boardController=boardController;
+		
 		this.nbrOfElements = nbrOfElements;
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
+		boardController.addLaneListener(this, ENUM);
 		units = new Unit[nbrOfElements];
 		layerArray = new JLayeredPane[nbrOfElements];
 
@@ -60,8 +66,8 @@ public class ArrayLayeredPane extends JPanel {
 	 * @param nbrOfElements
 	 * @param listener
 	 */
-	public ArrayLayeredPane(int nbrOfElements, MouseListener listener) {
-		this(nbrOfElements);
+	public ArrayLayeredPane(BoardGuiController boardController, Lanes ENUM, int nbrOfElements, MouseListener listener) {
+		this(boardController, ENUM, nbrOfElements);
 		this.listener = listener;
 	}
 
@@ -102,40 +108,34 @@ public class ArrayLayeredPane extends JPanel {
 		this.setBorder(BorderFactory.createTitledBorder(name));
 	}
 	
-	public void addUnit(Unit unit) throws NoPlaceOnBoardException {
+	public boolean addUnit(Unit unit) throws NoEmptySpaceInContainer {
 
 		boolean okToPlace = false;
-
-		for (int i = 0; i < units.length; i++) {
-			if (units[i] == null) {
-				units[i] = unit;
-				units[i].setBounds(0, 10, units[i].getPreferredSize().width,
-						units[i].getPreferredSize().height);
+		
+		int endIndex = units.length-1;
+		int startIndex = 0;
+		
+		int steps = (endIndex+1-startIndex);
+		int index = (startIndex+endIndex)>>1;
+		int stepdir = 1;
+		for(int q=0; q<steps; q++, index+=stepdir*q, stepdir=-stepdir)
+		{
+			if(units[index]==null){
+				units[index]=unit;
+				units[index].setBounds(0, 0, units[index].getPreferredSize().width,
+						units[index].getPreferredSize().height);
 				if(listener!=null){
-					units[i].addMouseListener(listener);
+					units[index].addMouseListener(listener);
 				}
 				okToPlace = true;
-				// 0 1 2 3 4 5 
-				int index = 3;
-				int x = 1;
-				while(index>=0 && index<=5){
-					if(layerArray[index].getComponent(0)==null){
-						layerArray[index].add(units[i], new Integer(0));
-						index=10;
-					}
-					else{
-						index-=x;
-						x=-x;
-						x++;
-					}
-				}
+				layerArray[index].add(units[index], new Integer(0));
 				break;
 			}
 		}
-		
 		if(!okToPlace){
-			throw new NoPlaceOnBoardException("You can only have 2 Heroic Support cards in play");
+			throw new NoEmptySpaceInContainer("You can only have 6 units per lane");
 		}
+		return okToPlace;
 	}
 
 }

@@ -1,12 +1,11 @@
 package guiPacket;
 
+import EnumMessage.Lanes;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
-import exceptionsPacket.NoPlaceOnBoardException;
-import game.Controller;
-import game.Rules;
+import exceptionsPacket.NoEmptySpaceInContainer;
 
 /**
  * This class is responsible for message-passing between the gui elements and
@@ -20,6 +19,10 @@ public class BoardGuiController {
 	private HandGUI handGui;
 	private HeroicPanelGUI heroicGui;
 	private HeroGUI heroGui;
+	private ArrayLayeredPane playerDefLane;
+	private ArrayLayeredPane playerOffLane;
+	private ArrayLayeredPane enemyDefLane;
+	private ArrayLayeredPane enemyOffLane;
 
 	// skapa association med controller
 
@@ -48,6 +51,22 @@ public class BoardGuiController {
 		this.heroGui = heroGui;
 	}
 
+	public void addLaneListener(ArrayLayeredPane arrayLayeredPane, Lanes ENUM) {
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			playerDefLane = arrayLayeredPane;
+		}
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			playerOffLane = arrayLayeredPane;
+		}
+		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
+			enemyDefLane=arrayLayeredPane;
+		}
+		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
+			enemyOffLane = arrayLayeredPane;
+		}
+
+	}
+
 	// ***MESSAGES SENT TO GUI ELEMENTS************************************
 	// *** Methods in this section are called upon from the system to ***
 	// *** update various gui elements. ***
@@ -59,9 +78,9 @@ public class BoardGuiController {
 	 * amount of cards on hand = 8.
 	 * 
 	 * @param card
-	 * @throws NoPlaceOnBoardException
+	 * @throws NoEmptySpaceInContainer
 	 */
-	public void drawCard(Card card) throws NoPlaceOnBoardException {
+	public void drawCard(Card card) throws NoEmptySpaceInContainer {
 		handGui.addCard(card);
 	}
 
@@ -71,9 +90,9 @@ public class BoardGuiController {
 	 * no more space. Maximum amount of Heroic Support objects on board = 2.
 	 * 
 	 * @param cardToPlay
-	 * @throws NoPlaceOnBoardException
+	 * @throws NoEmptySpaceInContainer
 	 */
-	private void playHeroicSupport(HeroicSupport cardToPlay) throws NoPlaceOnBoardException {
+	private void playHeroicSupport(HeroicSupport cardToPlay) throws NoEmptySpaceInContainer {
 
 		// For some reason the same instance of a Card cant be placed in
 		// different containers, the object will not be drawn. Need to clone.
@@ -81,6 +100,16 @@ public class BoardGuiController {
 				cardToPlay.getImage(), cardToPlay.hasAbility(), cardToPlay.getPrice(), cardToPlay.getDefense());
 		cardToPlay = null;
 		heroicGui.addHeroicSupport(clonedCard);
+	}
+
+	private void playUnitCard(Unit cardToPlay) throws NoEmptySpaceInContainer {
+		Unit clonedCard = new Unit(cardToPlay.getName(), cardToPlay.getRarity(), cardToPlay.getImage(),
+				cardToPlay.hasAbility(), cardToPlay.getAttack(), cardToPlay.getDefense(), cardToPlay.getPrice());
+		cardToPlay = null;
+		
+		clonedCard.shrink();
+		playerDefLane.addUnit(clonedCard);
+
 	}
 
 	// ***MESSAGES SENT TO THE SYSTEM**************************************
@@ -118,14 +147,17 @@ public class BoardGuiController {
 	 * the card Object from HandGUI panel and attempts to play it.
 	 * 
 	 * @param card
-	 * @throws NoPlaceOnBoardException
+	 * @throws NoEmptySpaceInContainer
 	 */
 
-	public void playCard(Card card) throws NoPlaceOnBoardException {
+	public void playCard(Card card) throws NoEmptySpaceInContainer {
 		if (card instanceof ResourceCard) {
 
 		}
 		if (card instanceof Unit) {
+			Unit cardToPlay = (Unit) card;
+
+			playUnitCard(cardToPlay);
 
 		}
 		if (card instanceof HeroicSupport) {

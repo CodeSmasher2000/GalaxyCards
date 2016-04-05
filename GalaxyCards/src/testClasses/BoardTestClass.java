@@ -1,5 +1,8 @@
 package testClasses;
 
+import java.awt.BorderLayout;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -12,10 +15,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
+import EnumMessage.Lanes;
 import cards.Deck;
 import exceptionsPacket.EmptyDeckException;
-import exceptionsPacket.NoPlaceOnBoardException;
+import exceptionsPacket.NoEmptySpaceInContainer;
 import guiPacket.ArrayLayeredPane;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
@@ -32,15 +37,16 @@ public class BoardTestClass {
 	private HeroGUI hero, hero2;
 	private Deck deck;
 	private ObjectInputStream ois;
-	private ArrayLayeredPane playerDefensiveLane = new ArrayLayeredPane(6);
-	private ArrayLayeredPane playerOffensive = new ArrayLayeredPane(6);
-	private ArrayLayeredPane enemyDefensiveLane = new ArrayLayeredPane(6);
-	private ArrayLayeredPane enemyOffensiveLane = new ArrayLayeredPane(6);
+	private ArrayLayeredPane playerDefensiveLane;
+	private ArrayLayeredPane playerOffensive;
+	private ArrayLayeredPane enemyDefensiveLane;
+	private ArrayLayeredPane enemyOffensiveLane;
 	
 	private JPanel panelGUI = new JPanel();
 	private JPanel enemyGui = new JPanel();
 	private JPanel panelBTN = new JPanel();
 	private JPanel mainPanel = new JPanel();
+	private JPanel fullScreen = new JPanel();
 	
 	private JButton draw = new JButton("Dra kort");
 	private Card temp;	
@@ -52,6 +58,11 @@ public class BoardTestClass {
 		hand2 = new HandGUI(board2);
 		hp2 = new HeroicPanelGUI(board2);
 		hero2 = new HeroGUI(board2);
+		
+		playerDefensiveLane = new ArrayLayeredPane(board, Lanes.PLAYER_DEFENSIVE,6);
+		playerOffensive = new ArrayLayeredPane(board, Lanes.PLAYER_OFFENSIVE, 6);
+		enemyDefensiveLane = new ArrayLayeredPane(board, Lanes.ENEMY_DEFENSIVE, 6);
+		enemyOffensiveLane = new ArrayLayeredPane(board, Lanes.PLAYER_OFFENSIVE, 6);
 		
 		draw.addActionListener(new ButtonListener());
 //		playerDefensiveLane.setContainerName("Defensive Lane");
@@ -67,7 +78,6 @@ public class BoardTestClass {
 		panelGUI.add(hp);
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(enemyGui);
 		mainPanel.add(enemyDefensiveLane);
 		mainPanel.add(Box.createVerticalStrut(2));
 		mainPanel.add(enemyOffensiveLane);
@@ -75,8 +85,14 @@ public class BoardTestClass {
 		mainPanel.add(playerOffensive);
 		mainPanel.add(Box.createVerticalStrut(2));
 		mainPanel.add(playerDefensiveLane);
-		mainPanel.add(panelGUI);
+		
 		panelBTN.add(draw);
+		
+		fullScreen.setLayout(new BorderLayout());
+		fullScreen.add(enemyGui, BorderLayout.NORTH);
+		fullScreen.add(mainPanel, BorderLayout.CENTER);
+		fullScreen.add(panelGUI, BorderLayout.SOUTH);
+		fullScreen.add(panelBTN, BorderLayout.EAST);
 		
 		try {
 			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("files/decks/padde.dat")));
@@ -97,15 +113,16 @@ public class BoardTestClass {
 	}
 	
 	public void showUI(){
+		
 		JFrame frame = new JFrame();
-		frame.add(mainPanel);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		frame.setUndecorated(true);
+		
+		
+		frame.add(fullScreen);
 		frame.setVisible(true);
 		frame.pack();
-		
-		JFrame frame2= new JFrame();
-		frame2.add(panelBTN);
-		frame2.setVisible(true);
-		frame2.pack();
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 	}
 	
@@ -118,7 +135,7 @@ public class BoardTestClass {
 					System.out.println("Deck size: "+deck.getAmtOfCards());
 					board.drawCard(temp);
 					temp=deck.drawCard();
-				} catch (NoPlaceOnBoardException e) {
+				} catch (NoEmptySpaceInContainer e) {
 					System.err.println(e.getMessage());
 				} catch (EmptyDeckException e) {
 					System.err.println(e.getMessage());
