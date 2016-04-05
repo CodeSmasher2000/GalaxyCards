@@ -13,6 +13,7 @@ import java.net.Socket;
 public class Connection extends Thread {
 	private int port;
 	private ClientHandler clientHandler;
+	private Thread thread ;
 	/**
 	 * Konstruktor 
 	 * @param port
@@ -21,6 +22,8 @@ public class Connection extends Thread {
 	public Connection(int port) {
 		this.port = port;
 	}
+	
+
 	
 	public void disconnect(){
 		

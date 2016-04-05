@@ -5,7 +5,18 @@ package EnumMessage;
 	 *
 	 */
 public enum Commands {
-	USERCONNCETED,USERDISCONNECT,LOGIN
+	LOGIN(0),
+	OK (1),
+	NOTOK (2);
 	
+	private int value;
+	
+	 Commands(int value){
+		this.value = value;
+	}
+	 
+	 public int getValue(){
+		 return value;
+	 }
 	
 }

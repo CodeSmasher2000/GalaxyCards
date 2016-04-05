@@ -83,6 +83,7 @@ public class CardTestClass extends JPanel {
 		frame4.setLocation(270, 600);
 		frame4.pack();
 		frame4.setVisible(true);
+		System.out.println(frame2.getSize());
 	}
 	
 	public void testSpawnUnit(){
