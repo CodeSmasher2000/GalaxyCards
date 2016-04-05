@@ -10,8 +10,8 @@ import guiPacket.Card;
  * the rules for the game. To use this class you need to set a reference to a 
  * controller object for the object to use.
  * @author patriklarsson
- *
  */
+
 public class Rules {
     private static Rules instance = new Rules();
     private Controller controller;
@@ -26,7 +26,7 @@ public class Rules {
     
    
     /**
-     * Sets the controller object that the instansiation should use.
+     * Sets the controller object to use.
      * @param controller
      */
     public void setController(Controller controller) {
@@ -34,7 +34,7 @@ public class Rules {
     }
     
     /**
-     * This method only exists to defeat the possiblity of creating a instance
+     * This method only exists to defeat the possibility of creating a instance
      * of this class
      */
     private Rules() {

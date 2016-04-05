@@ -18,4 +18,6 @@ public class Controller {
     public void addCardToHand(Card card) {
         board.addCardToHand(card);
     }
+    
+    
 }

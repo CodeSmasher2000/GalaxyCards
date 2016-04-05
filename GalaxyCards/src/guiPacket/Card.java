@@ -45,6 +45,11 @@ import cards.Unit;
 
 public abstract class Card extends JPanel {
 
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5712067590060939366L;
 	private ImageIcon cardBG1;
 //	private Image cardBG;
 	private JPanel topPanel, imgPanel, typePanel, attributesPanel;
