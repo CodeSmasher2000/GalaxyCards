@@ -3,13 +3,11 @@ package guiPacket;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -240,6 +238,7 @@ public abstract class Card extends JPanel {
 	 */
 	public void hasAbility(boolean hasAbility) {
 		abilityButton.setVisible(hasAbility);
+		abilityButton.addMouseListener(new MouseOverButtonListener());
 	}
 
 	/**
@@ -387,5 +386,39 @@ public abstract class Card extends JPanel {
 
 		}
 
+	}
+	
+	private class MouseOverButtonListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			abilityButton.setBorder(BorderFactory.createLineBorder(new Color(0, 190, 255), 2));
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			abilityButton.setBorder(null);
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }
