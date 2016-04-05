@@ -10,11 +10,11 @@ import java.io.ObjectOutputStream;
 import javax.swing.JOptionPane;
 
 import cards.Deck;
-import cards.Hero;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
+import game.Hero;
 import guiPacket.Card;
 
 /**

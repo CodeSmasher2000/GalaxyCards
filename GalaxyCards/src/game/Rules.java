@@ -2,6 +2,7 @@ package game;
 
 
 import cards.Deck;
+import cards.Target;
 import guiPacket.Card;
 
 /**
@@ -9,8 +10,8 @@ import guiPacket.Card;
  * the rules for the game. To use this class you need to set a reference to a 
  * controller object for the object to use.
  * @author patriklarsson
- *
  */
+
 public class Rules {
     private static Rules instance = new Rules();
     private Controller controller;
@@ -25,7 +26,7 @@ public class Rules {
     
    
     /**
-     * Sets the controller object that the instansiation should use.
+     * Sets the controller object to use.
      * @param controller
      */
     public void setController(Controller controller) {
@@ -33,7 +34,7 @@ public class Rules {
     }
     
     /**
-     * This method only exists to defeat the possiblity of creating a instance
+     * This method only exists to defeat the possibility of creating a instance
      * of this class
      */
     private Rules() {
@@ -52,4 +53,22 @@ public class Rules {
         }
 
     }
+
+    /**
+     * Heals a target for a specific amount
+     * @param target A Card that implements the target interface
+     * @param amt A Integer with the amount to heal
+     */
+	public void heal(Target target, int amt) {
+		target.heal(amt);
+	}
+	
+	/**
+	 * Damages a target for a specific amount
+	 * @param target A Card that implements the target interface
+	 * @param amt A Integer with the amount to damage
+	 */
+	public void damage(Target target, int amt) {
+		target.damage(-amt);
+	}
 }
