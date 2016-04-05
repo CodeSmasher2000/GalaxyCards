@@ -1,5 +1,6 @@
 package guiPacket;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
@@ -15,9 +16,13 @@ public class PlayerPanel extends JPanel {
 		this.heroicGui=heroicGui;
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		this.add(Box.createHorizontalStrut(5));
 		this.add(handGui);
+		this.add(Box.createHorizontalGlue());
 		this.add(heroGui);
+		this.add(Box.createHorizontalGlue());
 		this.add(heroicGui);
+		this.add(Box.createHorizontalStrut(5));
 		
 	}
 

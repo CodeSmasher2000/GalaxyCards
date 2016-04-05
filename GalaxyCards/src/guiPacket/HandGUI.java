@@ -7,12 +7,11 @@ import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import exceptionsPacket.NoEmptySpaceInContainer;
+import exceptionsPacket.GuiContainerException;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -44,19 +43,20 @@ public class HandGUI extends JPanel {
 	private Card[] cards = new Card[8];
 
 	public HandGUI(BoardGuiController boardController) {
-		this.boardController=boardController;
+		this.boardController = boardController;
 		boardController.addHandPanelListener(this);
-		
+
 		initiateLayeredPane();
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.add(layeredPane);
 	}
-	
-	/**Returns the number of Card objects held in this panel.
+
+	/**
+	 * Returns the number of Card objects held in this panel.
 	 * 
 	 * @return cardsOnHand : int
 	 */
-	public int getCardsOnHand(){
+	public int getCardsOnHand() {
 		return cardsOnHand;
 	}
 
@@ -75,9 +75,9 @@ public class HandGUI extends JPanel {
 	 * amount of held cards is 8.
 	 * 
 	 * @param card
-	 * @throws NoEmptySpaceInContainer 
+	 * @throws GuiContainerException
 	 */
-	public void addCard(Card card) throws NoEmptySpaceInContainer {
+	public void addCard(Card card) throws GuiContainerException {
 		if (cardsOnHand < 8) {
 			cards[cardsOnHand] = card;
 			boardController.addCardToHand(card);
@@ -87,7 +87,7 @@ public class HandGUI extends JPanel {
 			horizontalPosition += 80;
 			cardsOnHand++;
 		} else {
-			throw new NoEmptySpaceInContainer("You can only have 8 cards on hand");
+			throw new GuiContainerException("You can only have 8 cards on hand");
 		}
 
 	}
@@ -101,29 +101,30 @@ public class HandGUI extends JPanel {
 	 * @param card
 	 * @return : card
 	 */
-	private Card playCard(Card card) {
+	public Card playCard(Card card) {
 
 		Card[] tempCards = new Card[8];
 		tempCards = cards;
 		cards = null;
 		cards = new Card[8];
-		
 
 		layeredPane.removeAll();
 		horizontalPosition = 10;
 		cardsOnHand = 0;
-		repaint();
+		layeredPane.repaint();
+		layeredPane.validate();
 
 		boardController.clearHand();
+
 		for (int i = 0; i < tempCards.length; i++) {
 			if (tempCards[i] != null) {
-				tempCards[i].removeMouseListener(listener);
+					tempCards[i].removeMouseListener(listener);
 				if (tempCards[i] != card) {
 					Card card1 = tempCards[i];
 					try {
 						addCard(card1);
-					} catch (NoEmptySpaceInContainer e) {
-						System.err.println(e.getMessage()+ " Error caused by the rearranging of cards on hand");
+					} catch (GuiContainerException e) {
+						System.err.println(e.getMessage() + " Error caused by the rearranging of cards on hand");
 					}
 				}
 			}
@@ -135,7 +136,7 @@ public class HandGUI extends JPanel {
 
 		private Card temp;
 		private Border defaultBorder;
-		private Border highlightB = BorderFactory.createLineBorder(new Color(0,190,255), 3, true);
+		private Border highlightB = BorderFactory.createLineBorder(new Color(0, 190, 255), 3, true);
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -164,20 +165,21 @@ public class HandGUI extends JPanel {
 			// send the object to controller or w/e where it is determined where
 			// the card should be put based on instanceof
 			// playCard(temp);
-			//if the Card object is instanceOf Unit then use shrink() method before putting in a container.
+			// if the Card object is instanceOf Unit then use shrink() method
+			// before putting in a container.
 
 			// Debugg remove when rest of gui is complete
-			
+
 			try {
 				boardController.playCard(temp);
 				temp = playCard(temp);
 				temp.setBorder(defaultBorder);
-//				temp.shrink();
+				// temp.shrink();
 				temp.removeMouseListener(listener);
-			} catch (NoEmptySpaceInContainer e) {
+			} catch (GuiContainerException e) {
 				// TODO Auto-generated catch block
 				System.err.println(e.getMessage());
-			}finally{
+			} finally {
 				repaint();
 			}
 

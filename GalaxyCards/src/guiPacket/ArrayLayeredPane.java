@@ -2,6 +2,7 @@ package guiPacket;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
@@ -12,17 +13,18 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import EnumMessage.Lanes;
+import cards.HeroicSupport;
 import cards.Unit;
-import exceptionsPacket.NoEmptySpaceInContainer;
+import exceptionsPacket.GuiContainerException;
 
 public class ArrayLayeredPane extends JPanel {
 
 	private int nbrOfElements;
 	private JLayeredPane[] layerArray;
 	private Unit[] units;
-	private MouseListener listener = null;
+	private MouseListener listener = new UnitMouseListener();
 	private BoardGuiController boardController;
-	private Lanes LANE; 
+	private Lanes LANE;
 
 	/**
 	 * Instantiate this object with a int passed in as argument which tells how
@@ -32,11 +34,11 @@ public class ArrayLayeredPane extends JPanel {
 	 */
 	public ArrayLayeredPane(BoardGuiController boardController, Lanes ENUM, int nbrOfElements) {
 
-		this.boardController=boardController;
-		
+		this.boardController = boardController;
+		LANE = ENUM;
 		this.nbrOfElements = nbrOfElements;
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		
+
 		boardController.addLaneListener(this, ENUM);
 		units = new Unit[nbrOfElements];
 		layerArray = new JLayeredPane[nbrOfElements];
@@ -86,6 +88,19 @@ public class ArrayLayeredPane extends JPanel {
 	}
 
 	/**
+	 * Return a enum value for this specific object. Lanes should have different
+	 * mouse interaction depending if they belong to the player or to the
+	 * opponent.
+	 * 
+	 * @return Lanes : PLAYER_OFFENSIVE, PLAYER_DEFENSIVE, ENEMY_OFFENSIVE,
+	 *         ENEMY_DEFENSIVE
+	 */
+	public Lanes getLaneType() {
+		return LANE;
+	}
+
+	
+	/**
 	 * Set border for every layeredPane in this container.
 	 * 
 	 * @param border
@@ -107,35 +122,92 @@ public class ArrayLayeredPane extends JPanel {
 	public void setContainerName(String name) {
 		this.setBorder(BorderFactory.createTitledBorder(name));
 	}
-	
-	public boolean addUnit(Unit unit) throws NoEmptySpaceInContainer {
+
+	public boolean addUnit(Unit unit) throws GuiContainerException {
 
 		boolean okToPlace = false;
-		
-		int endIndex = units.length-1;
+
+		int endIndex = units.length - 1;
 		int startIndex = 0;
-		
-		int steps = (endIndex+1-startIndex);
-		int index = (startIndex+endIndex)>>1;
+
+		int steps = (endIndex + 1 - startIndex);
+		int index = (startIndex + endIndex) >> 1;
 		int stepdir = 1;
-		for(int q=0; q<steps; q++, index+=stepdir*q, stepdir=-stepdir)
-		{
-			if(units[index]==null){
-				units[index]=unit;
+		for (int q = 0; q < steps; q++, index += stepdir * q, stepdir = -stepdir) {
+			if (units[index] == null) {
+				units[index] = unit;
 				units[index].setBounds(0, 0, units[index].getPreferredSize().width,
 						units[index].getPreferredSize().height);
-				if(listener!=null){
+				if (listener != null) {
 					units[index].addMouseListener(listener);
 				}
 				okToPlace = true;
 				layerArray[index].add(units[index], new Integer(0));
+				layerArray[index].setBorder(null);
 				break;
 			}
 		}
-		if(!okToPlace){
-			throw new NoEmptySpaceInContainer("You can only have 6 units per lane");
+		if (!okToPlace) {
+			throw new GuiContainerException("You can only have 6 units per lane");
 		}
 		return okToPlace;
 	}
+	
+	public Unit removeUnit(Unit target) {
+		for (int i = 0; i < units.length; i++) {
+			if (units[i] == target) {
+				layerArray[i].remove(target);
+				layerArray[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+				units[i] = null;
+				repaint();
+			}
+		}
 
-}
+		return target;
+	}
+	
+	// DEBUGG. Listeners will be in seperate classes and the objects will be
+		// passed in to the constructor.
+		private class UnitMouseListener implements MouseListener {
+
+			private Unit temp;
+			private Border defaultBorder;
+			private Border highlightB = BorderFactory.createLineBorder(new Color(0, 190, 255), 3, true);
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent event) {
+				temp = (Unit) event.getSource();
+				defaultBorder = temp.getBorder();
+				temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				temp.setBorder(defaultBorder);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent event) {
+				temp = (Unit) event.getSource();
+
+				// Debugging. should send the object to controller or w/e to
+				// calculate the damages and remove if the objects defensive value
+				// is 0
+				removeUnit(temp);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+		}
+	}

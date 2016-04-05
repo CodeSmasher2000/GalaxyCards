@@ -14,7 +14,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import cards.HeroicSupport;
-import exceptionsPacket.NoEmptySpaceInContainer;
+import exceptionsPacket.GuiContainerException;
 
 /**
  * GUI class that represents the field on which HeroicSupport objects are
@@ -80,9 +80,9 @@ public class HeroicPanelGUI extends JPanel {
 	 * @param heroicSupport
 	 *            : HeroicSupport
 	 * @return boolean
-	 * @throws NoEmptySpaceInContainer
+	 * @throws GuiContainerException
 	 */
-	public boolean addHeroicSupport(HeroicSupport heroicSupport) throws NoEmptySpaceInContainer {
+	public boolean addHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
 
 		boolean okToPlace = false;
 
@@ -109,7 +109,7 @@ public class HeroicPanelGUI extends JPanel {
 		}
 
 		if (!okToPlace) {
-			throw new NoEmptySpaceInContainer("You can only have 2 Heroic Support cards in play");
+			throw new GuiContainerException("You can only have 2 Heroic Support cards in play");
 		}
 		return okToPlace;
 	}
@@ -141,6 +141,8 @@ public class HeroicPanelGUI extends JPanel {
 		return target;
 	}
 
+	// DEBUGG. Listeners will be in seperate classes and the objects will be
+	// passed in to the constructor.
 	private class HeroicMouseListener implements MouseListener {
 
 		private HeroicSupport temp;
