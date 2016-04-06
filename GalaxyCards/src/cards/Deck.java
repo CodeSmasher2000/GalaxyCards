@@ -4,15 +4,16 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import guiPacket.CardGUI;
+import exceptionsPacket.EmptyDeckException;
+import game.Hero;
+import guiPacket.Card;
 
 public class Deck implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4951209232481964562L;
-	private LinkedList<CardGUI> deck = new LinkedList<CardGUI>();
-	private int damage=1;
+	private LinkedList<Card> deck = new LinkedList<Card>();
 	private Hero hero;
 	private int nbrOfUnitCards = 0;
 	private int nbrOfResourceCards = 0;
@@ -23,19 +24,14 @@ public class Deck implements Serializable{
 		Collections.shuffle(deck);
 	}
 	
-	public CardGUI drawCard(){
+	public Card drawCard() throws EmptyDeckException{
 		if(!deck.isEmpty()){
 			return deck.removeFirst();
 		}else{
-			hero.dealDamage(incrementalDamage());
-			System.out.println("Empty deck");
-			return null;
+			throw new EmptyDeckException("Empty deck, can't draw more cards.");
 		}
 	}
 	
-	public int incrementalDamage(){
-		return damage++;
-	}
 	
 	public void addResoruceCard(ResourceCard card) {
 		System.out.println("Add resoruce card");
@@ -47,8 +43,9 @@ public class Deck implements Serializable{
 		}
 	}
 	
-	public void addCard(CardGUI card) {
-		if (deck.size() < 60) {
+
+	public void addCard(Card card) {
+		if (deck.size() <= 60) {
 			this.deck.add(card);
 		} else {
 			// TODO: Throw Exception
@@ -75,7 +72,7 @@ public class Deck implements Serializable{
 		return deck.size();
 	}
 	
-	public CardGUI getCard(int index) {
+	public Card getCard(int index) {
 		return deck.get(index);
 	}
 	
@@ -83,7 +80,7 @@ public class Deck implements Serializable{
 		return nbrOfResourceCards;
 	}
 	
-	public void removeCard(CardGUI toRemove) {
+	public void removeCard(Card toRemove) {
 		if (toRemove instanceof Unit)  {
 			deck.remove(toRemove);
 			nbrOfUnitCards--;
@@ -100,7 +97,7 @@ public class Deck implements Serializable{
 	}
 	
 	public void removeCard() {
-		CardGUI toRemove = deck.remove();
+		Card toRemove = deck.remove();
 		if (toRemove instanceof Unit)  {
 			nbrOfUnitCards--;
 		} else if(toRemove instanceof HeroicSupport) {
@@ -114,5 +111,9 @@ public class Deck implements Serializable{
 
 	public void setNbrOfResourceCards(int nbrOfResourceCards) {
 		this.nbrOfResourceCards = nbrOfResourceCards;
+	}
+	
+	public String toString(){
+		return "Deck: "+super.toString()+ "\nResources: "+nbrOfResourceCards+"\nUnits: "+nbrOfUnitCards+"\nHeroic Support: "+nbrOfHeroicSupport+"\nTech: "+nbrOfTech;
 	}
 }

@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import guiPacket.CardGUI;
+import guiPacket.Card;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
@@ -59,17 +59,17 @@ public class CreateGui extends JPanel {
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Create Heroic");
 			controller.addHeroicSupportCard(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
-					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense());
+					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense(), createHeroic.getDescription());
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
 			System.out.println("Create Resource");
 			controller.addResoruceCard(createResource.getAmtOfCards());
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Create Tech");
-			controller.addTechCard(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice());
+			controller.addTechCard(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice(),createTech.getDescription());
 		}
 	}
 	
-	public void removeCardFromList(CardGUI card) {
+	public void removeCardFromList(Card card) {
 		deckPanel.removeFromList(card);
 	}
 	
@@ -84,6 +84,7 @@ public class CreateGui extends JPanel {
 			System.out.println("Preview Heroic");
 			HeroicSupport card = new HeroicSupport(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
 					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense());
+			card.setAbilityText(createHeroic.getDescription());
 			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
 			System.out.println("Preview Resource");
@@ -92,6 +93,7 @@ public class CreateGui extends JPanel {
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Preview Tech");
 			Tech card = new Tech(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice());
+			card.setAbilityText(createTech.getDescription());
 			previewPanel.setCard(card);
 		}
 	}
@@ -131,7 +133,7 @@ public class CreateGui extends JPanel {
 		createHeroic.setImageName(card.getImage());
 	}
 	
-	public void addCardToList(CardGUI cardToAdd) {
+	public void addCardToList(Card cardToAdd) {
 		deckPanel.addToListModel(cardToAdd);
 	}
 	

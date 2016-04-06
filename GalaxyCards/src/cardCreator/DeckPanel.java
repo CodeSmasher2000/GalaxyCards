@@ -24,8 +24,8 @@ import cardCreator.CreateHeroic;
 //TODO: Add Margins to the list
 
 public class DeckPanel extends JPanel {
-	private DefaultListModel<CardGUI> listModel = new DefaultListModel<CardGUI>();
-	private JList<CardGUI> list;
+	private DefaultListModel<Card> listModel = new DefaultListModel<Card>();
+	private JList<Card> list;
 	private JButton btnSelect;
 	private JButton btnRemove;
 	private JButton btnLoadDeck;
@@ -67,7 +67,7 @@ public class DeckPanel extends JPanel {
 	}
 	
 	private void initList() {
-		list = new JList<CardGUI>();
+		list = new JList<Card>();
 		list.setModel(listModel);
 		list.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(list);
@@ -76,17 +76,17 @@ public class DeckPanel extends JPanel {
 		add(scrollPane, BorderLayout.CENTER);
 	}
 	
-	public void addToListModel(CardGUI cardToAdd) {
+	public void addToListModel(Card cardToAdd) {
 		listModel.addElement(cardToAdd);
 		increaseCard(cardToAdd);
 	}
 	
-	public void removeFromList(CardGUI toRemove) {
+	public void removeFromList(Card toRemove) {
 		listModel.removeElement(toRemove);
 		decreaseCard(toRemove);
 		}
 	
-	private void decreaseCard(CardGUI toRemove) {
+	private void decreaseCard(Card toRemove) {
 		if (toRemove instanceof HeroicSupport) {
 			heroicNbr--;
 			lblHeroic.setText("Heroic: " + heroicNbr);
@@ -119,7 +119,7 @@ public class DeckPanel extends JPanel {
 		showCardsPanel.add(lblUnit);
 	}
 	
-	public void increaseCard(CardGUI cardToIncrease) {
+	public void increaseCard(Card cardToIncrease) {
 		if (cardToIncrease instanceof HeroicSupport) {
 			heroicNbr++;
 			lblHeroic.setText("Heroic: " + heroicNbr);

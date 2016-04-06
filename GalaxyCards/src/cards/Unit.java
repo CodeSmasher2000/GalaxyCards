@@ -3,14 +3,14 @@ package cards;
 import java.io.Serializable;
 
 import abilities.Ability;
-import guiPacket.CardGUI;
+import guiPacket.Card;
 
 /**
  * 
  * @author 13120dde
  *
  */
-public class Unit extends CardGUI implements PlayCardsInterface, Serializable{
+public class Unit extends Card implements PlayCardsInterface, Serializable, Target{
 
 	/**
 	 * 
@@ -125,6 +125,8 @@ public class Unit extends CardGUI implements PlayCardsInterface, Serializable{
 	 */
 	public void setDefense(int amount) {
 		this.defense += amount;
+		
+		super.setDefense(this.defense);
 	}
 
 	/**
@@ -158,6 +160,27 @@ public class Unit extends CardGUI implements PlayCardsInterface, Serializable{
 
 	public String toString() {
 		return NAME + " - [Unit]: " + attack + "/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
+	}
+
+
+
+	@Override
+	public void heal(int amt) {
+		for (int i = 0; i < amt; i++) {
+			if (getDefense() < maxHp) {
+				setDefense(+1);
+			} else {
+				break;
+			}
+		}
+	}
+
+
+
+	@Override
+	public void damage(int amt) {
+		setDefense(amt);
+		
 	}
 	
 

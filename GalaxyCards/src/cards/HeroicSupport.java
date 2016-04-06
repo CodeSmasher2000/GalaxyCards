@@ -5,14 +5,14 @@ import java.io.Serializable;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import guiPacket.CardGUI;
+import guiPacket.Card;
 
 /**
  * 
  * @author 13120dde
  *
  */
-public class HeroicSupport extends CardGUI implements PlayCardsInterface, Serializable {
+public class HeroicSupport extends Card implements PlayCardsInterface, Serializable {
 
 	/**
 	 * 

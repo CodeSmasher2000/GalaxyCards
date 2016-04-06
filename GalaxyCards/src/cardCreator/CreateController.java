@@ -10,12 +10,12 @@ import java.io.ObjectOutputStream;
 import javax.swing.JOptionPane;
 
 import cards.Deck;
-import cards.Hero;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
-import guiPacket.CardGUI;
+import game.Hero;
+import guiPacket.Card;
 
 /**
  * The class methods for creating and loading decks.
@@ -56,15 +56,17 @@ public class CreateController {
 		
 	}
 	
-	public void addTechCard(String name, String rarity, String imageName, int price) {
+	public void addTechCard(String name, String rarity, String imageName, int price, String description) {
 		Tech cardToAdd = new Tech(name, rarity, imageName, price);
+		cardToAdd.setAbilityText(description);
 		activeDeck.addTechCard(cardToAdd);
 		gui.addCardToList(cardToAdd);
 		
 	}
 	
-	public void addHeroicSupportCard(String name, String rarity, String imageName, boolean hasAbility, int price, int defense) {
+	public void addHeroicSupportCard(String name, String rarity, String imageName, boolean hasAbility, int price, int defense, String description) {
 		HeroicSupport cardToAdd = new HeroicSupport(name, rarity, imageName, hasAbility, price, defense);
+		cardToAdd.setAbilityText(description);
 		activeDeck.addHeroicSupportCard(cardToAdd);
 		gui.addCardToList(cardToAdd);
 	}
@@ -84,7 +86,7 @@ public class CreateController {
 		}
 	}
 	
-	public void removeCardFromList(CardGUI card) {
+	public void removeCardFromList(Card card) {
 		gui.removeCardFromList(card);
 		activeDeck.removeCard(card);
 	}
@@ -109,7 +111,7 @@ public class CreateController {
 	
 	private void printDeck() {
 		for (int i = 0; i < activeDeck.getAmtOfCards(); i++) {
-			CardGUI card = activeDeck.getCard(i);
+			Card card = activeDeck.getCard(i);
 			gui.addCardToList(card);	
 		}
 	}
@@ -128,7 +130,7 @@ public class CreateController {
 	}
 	
 
-	public void listItemSelected(CardGUI selectedCard) {
+	public void listItemSelected(Card selectedCard) {
 		if(selectedCard instanceof Unit){
 			Unit card = (Unit)selectedCard;
 			gui.updateUnitFields(card);

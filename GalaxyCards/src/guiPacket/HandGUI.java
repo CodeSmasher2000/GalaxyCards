@@ -1,134 +1,193 @@
 package guiPacket;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
+import exceptionsPacket.GuiContainerException;
+
+/**
+ * GUI klass that represents a hand with held cards. Initially the panel is
+ * empty and when a card is added it will be added to this panel in a new layer,
+ * overlapping the card beneath it. Maximum number of cards to be added to the
+ * panel is 8. Each card added to this panel will get a mouselistener that
+ * responds on mouseEntered, mouseExited and mousePressed methods. When a card
+ * is played from hand it will loose its mouse listener. Since null layout is
+ * being used consider how various virtual machines handle the setBounds method
+ * on different platforms and how card objects will be drawn on different
+ * resolutions than 1920*1080.
+ * 
+ * @author 13120dde
+ *
+ */
+
+// TODO when a card object is added to hand with addCard(Card card) method, if
+// the card has ability, disable the button. When the card is played from hand
+// and is on board - enable the button.
 public class HandGUI extends JPanel {
 
 	private JLayeredPane layeredPane;
-	// private CardGUI[] cards = new CardGUI[7];
 	private int cardsOnHand = 0, horizontalPosition = 10;
-	private MouseList listener = new MouseList();
+	private int cardOriginalLayer;
+	private HandMouseListener listener = new HandMouseListener();
+	private BoardGuiController boardController;
 
-	public HandGUI() {
+	// The data should be stored in board class
+	private Card[] cards = new Card[8];
 
+	public HandGUI(BoardGuiController boardController) {
+		this.boardController = boardController;
+		boardController.addHandPanelListener(this);
+
+		initiateLayeredPane();
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		// cards[0] = new Unit("Banshee", "common", "Spaceship6", false, 2, 3,
-		// 2);
-		// cards[1] = new Unit("Commander", "rare", "Spaceship4", true, 6, 5,
-		// 5);
-		// cards[2] = new Unit("Destroyer", "legendary", "Spaceship5", true, 7,
-		// 9, 7);
-		// cards[3] = new Unit("Banshee", "common", "Spaceship6", false, 2, 3,
-		// 2);
-		// cards[4] = new Unit("Commander", "rare", "Spaceship4", true, 6, 5,
-		// 5);
-		// cards[5] = new Unit("Destroyer", "legendary", "Spaceship5", true, 7,
-		// 9, 7);
-		// cards[6] = new Unit("Medivac", "rare", "SpaceShip8", true, 5, 3, 4);
-
-		layeredPane = new JLayeredPane();
-		layeredPane.setOpaque(true);
-		layeredPane.setLayout(null);
-		layeredPane.addMouseListener(listener);
-		layeredPane.setPreferredSize(new Dimension(510, 250));
-		// Dimension size = cards[0].getPreferredSize();
-		// int x = 5;
-		// for (int i = 0; i < 7; i++) {
-		// JPanel panel = cards[i];
-		// panel.setBounds(x, 0, size.width, size.height + 5);
-		// // TODO remove when all is fine
-		// layeredPane.add(panel, new Integer(i));
-		// x += 50;
-		// }
-
-		// while(cardsOnHand<7){
-		// cards[cardsOnHand].setBounds(x, 0, size.width, size.height + 5);
-		// cards[i].addMouseListener(listener);
-		// // TODO remove when all is fine
-		// layeredPane.add(cards[cardsOnHand], new Integer(cardsOnHand));
-		// x += 50;
-		// cardsOnHand++;
-		// }
-
 		this.add(layeredPane);
 	}
 
 	/**
-	 * Adds a Card object to the hand by passing in a Card (or its subclasses)
-	 * objects as argument. Maximum amount of held cards is 8.
+	 * Returns the number of Card objects held in this panel.
 	 * 
-	 * @param card
+	 * @return cardsOnHand : int
 	 */
-	public void addCard(CardGUI card) {
-		if (cardsOnHand < 7) {
-			card.setBounds(horizontalPosition, 0, card.getPreferredSize().width, card.getPreferredSize().height);
-			layeredPane.add(card, new Integer(cardsOnHand));
-			horizontalPosition += 50;
-			cardsOnHand++;
-			repaint();
-
-			// Debbugging purpose
-			System.out.println(layeredPane.getLayer(card) + " cards on hand: " + cardsOnHand);
-			System.out.println(layeredPane.getComponent(0));
-
-
-		} else {
-			JOptionPane.showMessageDialog(null, "För många kort på handen");
-		}
+	public int getCardsOnHand() {
+		return cardsOnHand;
 	}
 
-	public CardGUI playCard() {
-		CardGUI card = null;
-		if (cardsOnHand > 0) {
-			card = (CardGUI) layeredPane.getComponent(0);
-			layeredPane.remove(0);
-			repaint();
-			cardsOnHand--;
-			horizontalPosition -= 50;
-			System.err.println(layeredPane.getLayer(card) + " cards on hand: " + cardsOnHand);
-			System.err.println(layeredPane.getComponent(0));
-		}else{
-			horizontalPosition=10;
+	private void initiateLayeredPane() {
+		layeredPane = new JLayeredPane();
+		layeredPane.setOpaque(true);
+		layeredPane.setLayout(null);
+		layeredPane.setPreferredSize(new Dimension(730, 240));
+		layeredPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+	}
+
+	/**
+	 * Adds a Card object to the hand by passing in a Card (or its subclasses)
+	 * objects as argument. Each card object is added to a new layer higher than
+	 * the previous card's layer, overlapping the object beneath it. Maximum
+	 * amount of held cards is 8.
+	 * 
+	 * @param card
+	 * @throws GuiContainerException
+	 */
+	public void addCard(Card card) throws GuiContainerException {
+		if (cardsOnHand < 8) {
+			cards[cardsOnHand] = card;
+			boardController.addCardToHand(card);
+			card.setBounds(horizontalPosition, 20, card.getPreferredSize().width, card.getPreferredSize().height);
+			card.addMouseListener(listener);
+			layeredPane.add(card, new Integer(cardsOnHand));
+			horizontalPosition += 80;
+			cardsOnHand++;
+		} else {
+			throw new GuiContainerException("You can only have 8 cards on hand");
+		}
+
+	}
+
+	/**
+	 * Removes the card object from the hand and returns is to the method
+	 * caller. Rearranges the remaining card objects in the LayeredPane.
+	 * Visibility set to private, should be accessed only by the
+	 * HandMouseListener inner class.
+	 * 
+	 * @param card
+	 * @return : card
+	 */
+	public Card playCard(Card card) {
+
+		Card[] tempCards = new Card[8];
+		tempCards = cards;
+		cards = null;
+		cards = new Card[8];
+
+		layeredPane.removeAll();
+		horizontalPosition = 10;
+		cardsOnHand = 0;
+		layeredPane.repaint();
+		layeredPane.validate();
+
+		boardController.clearHand();
+
+		for (int i = 0; i < tempCards.length; i++) {
+			if (tempCards[i] != null) {
+					tempCards[i].removeMouseListener(listener);
+				if (tempCards[i] != card) {
+					Card card1 = tempCards[i];
+					try {
+						addCard(card1);
+					} catch (GuiContainerException e) {
+						System.err.println(e.getMessage() + " Error caused by the rearranging of cards on hand");
+					}
+				}
+			}
 		}
 		return card;
 	}
-	// TODO mouselistener
 
-	private class MouseList implements MouseListener {
+	private class HandMouseListener implements MouseListener {
+
+		private Card temp;
+		private Border defaultBorder;
+		private Border highlightB = BorderFactory.createLineBorder(new Color(0, 190, 255), 3, true);
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			layeredPane.setLayer(layeredPane.getComponent(0), layeredPane.getComponentCount());
-			System.out.println("KLICK");
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent arg0) {
+		public void mouseEntered(MouseEvent event) {
+			temp = (Card) event.getSource();
+			cardOriginalLayer = layeredPane.getLayer(temp);
+			layeredPane.setLayer(temp, Integer.MAX_VALUE);
+			temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
+			defaultBorder = temp.getBorder();
+			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
+			layeredPane.setLayer(temp, cardOriginalLayer);
+			temp.setBounds(temp.getX(), 20, temp.getPreferredSize().width, temp.getPreferredSize().height);
+			temp.setBorder(defaultBorder);
 		}
 
 		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+		public void mousePressed(MouseEvent event) {
+
+			// send the object to controller or w/e where it is determined where
+			// the card should be put based on instanceof
+			// playCard(temp);
+			// if the Card object is instanceOf Unit then use shrink() method
+			// before putting in a container.
+
+			// Debugg remove when rest of gui is complete
+
+			try {
+				boardController.playCard(temp);
+				temp = playCard(temp);
+				temp.setBorder(defaultBorder);
+				// temp.shrink();
+				temp.removeMouseListener(listener);
+			} catch (GuiContainerException e) {
+				// TODO Auto-generated catch block
+				System.err.println(e.getMessage());
+			} finally {
+				repaint();
+			}
 
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
+			// Do nothing
 		}
 
 	}
