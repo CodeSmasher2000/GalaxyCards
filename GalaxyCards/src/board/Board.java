@@ -36,6 +36,10 @@ public class Board {
 		playerHand.add(cardToAdd);
 		printNbrOfCards();
 	}
+	
+	public synchronized Card getCardFromHand(int index) {
+		return playerHand.get(index);
+	}
 
 	public synchronized void removeCardFromHand(Card card) {
 		playerHand.remove(card);
@@ -62,7 +66,7 @@ public class Board {
 
 
 	// ******DECK METHODS*************************************
-
+	
 	public Deck getPlayerDeck() {
 		return playerDeck;
 	}

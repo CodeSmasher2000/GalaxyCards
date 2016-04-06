@@ -2,6 +2,6 @@ package testClasses;
 
 public interface TestCase {
 	public void setup();
-	public void runTest();
+	public void runTest() throws TestFailedException;
 	public void reset();
 }
