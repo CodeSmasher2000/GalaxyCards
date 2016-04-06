@@ -137,7 +137,7 @@ public class BoardGuiController {
 			playerDefLane.addUnit(clonedCard);
 		}
 		if(tempLane.getLaneType()==Lanes.PLAYER_OFFENSIVE){
-			playerOffLane.add(clonedCard);
+			playerOffLane.addUnit(clonedCard);
 			System.out.println(playerOffLane.length());
 		}
 
