@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -33,12 +32,13 @@ import exceptionsPacket.GuiContainerException;
 public class BoardGUI extends JPanel {
 
 	private BoardGuiController boardController = new BoardGuiController();
-	private JPanel playerPanel, opponentPanel, playFieldPanel, scrapYardPanel, infoPanel, middlePanel;
+	private JPanel playFieldPanel, playerPanel, opponentPanel, scrapYardPanel, infoPanel, middlePanel;
 	private ArrayLayeredPane playerDefensiveLane, playerOffensive, enemyDefensiveLane, enemyOffensiveLane;
 	private HandGUI hand;
 	private OpponentHandGUI opponentHand;
 	private HeroGUI hero, opponentHero;
 	private HeroicPanelGUI playerHeroicPanel, opponentHeroicPanel;
+	
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
 
 	// DEBUGG
@@ -110,6 +110,7 @@ public class BoardGUI extends JPanel {
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Info Panel"));
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 		infoPanel.setPreferredSize(new Dimension(400, 1080));
+		infoPanel.setBackground(new Color(255,255,255,125));
 	}
 
 	private void configureScrapPane() {
@@ -118,6 +119,8 @@ public class BoardGUI extends JPanel {
 		scrapYardPanel.setBorder(BorderFactory.createTitledBorder("Scrapyard"));
 		scrapYardPanel.setLayout(new BoxLayout(scrapYardPanel, BoxLayout.Y_AXIS));
 		scrapYardPanel.setPreferredSize(new Dimension(200, 1080));
+//		scrapYardPanel.setOpaque(false);
+		scrapYardPanel.setBackground(new Color(255,255,255,125));
 	}
 
 	private void configurePlayerPanel() {
@@ -125,6 +128,7 @@ public class BoardGUI extends JPanel {
 		playerPanel.add(hero);
 		playerPanel.add(playerHeroicPanel);
 		playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		playerPanel.setBackground(new Color(255,255,255,125));
 	}
 
 	private void configureOpponentPanel() {
@@ -132,6 +136,7 @@ public class BoardGUI extends JPanel {
 		opponentPanel.add(opponentHero);
 		opponentPanel.add(opponentHeroicPanel);
 		opponentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		opponentPanel.setBackground(new Color(255,255,255,125));
 	}
 
 	private void configurePlayfield() {
@@ -145,7 +150,7 @@ public class BoardGUI extends JPanel {
 		playFieldPanel.add(Box.createVerticalStrut(3));
 		playFieldPanel.add(playerDefensiveLane);
 		playFieldPanel.add(Box.createVerticalGlue());
-		playFieldPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		playFieldPanel.setBorder(BorderFactory.createMatteBorder(5, 2, 5, 2,Color.WHITE));
 		playFieldPanel.setOpaque(false);
 	}
 
@@ -153,8 +158,7 @@ public class BoardGUI extends JPanel {
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-		super.paintComponent(g);
-		g.drawImage(background.getImage(), 0, 0, null);
+		g.drawImage(background.getImage(), 0, 0,getWidth(),getHeight(), this);
 	}
 
 	// DEBUGG

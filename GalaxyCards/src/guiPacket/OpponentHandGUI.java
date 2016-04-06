@@ -1,5 +1,6 @@
 package guiPacket;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
@@ -28,6 +29,7 @@ public class OpponentHandGUI extends JPanel {
 		initiateLayeredPane();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.add(layeredPane);
+		this.setOpaque(false);
 
 	}
 
@@ -36,7 +38,8 @@ public class OpponentHandGUI extends JPanel {
 		layeredPane.setOpaque(true);
 		layeredPane.setLayout(null);
 		layeredPane.setPreferredSize(new Dimension(730, 240));
-		layeredPane.setBorder(BorderFactory.createTitledBorder("Hand"));
+//		layeredPane.setBorder(BorderFactory.createTitledBorder("Hand"));
+		layeredPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
 	public void drawCard() throws GuiContainerException {
@@ -57,6 +60,7 @@ public class OpponentHandGUI extends JPanel {
 	public void playCard() throws GuiContainerException {
 		if (cardsOnHand > 0) {
 			layeredPane.remove(0);
+			layeredPane.validate();
 			layeredPane.repaint();
 			horizontalPosition -= 80;
 			cardsOnHand--;

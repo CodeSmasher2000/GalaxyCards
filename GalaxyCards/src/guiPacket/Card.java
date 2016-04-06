@@ -47,7 +47,7 @@ public abstract class Card extends JPanel {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5712067590060939366L;
+	private static final long serialVersionUID = -1980215199928750709L;
 	private ImageIcon cardBG1;
 //	private Image cardBG;
 	private JPanel topPanel, imgPanel, typePanel, attributesPanel;
