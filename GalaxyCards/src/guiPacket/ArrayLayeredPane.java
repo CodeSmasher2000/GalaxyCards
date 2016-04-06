@@ -152,7 +152,7 @@ public class ArrayLayeredPane extends JPanel {
 		for (int i = 0; i < units.length; i++) {
 			if (units[i] == target) {
 				layerArray[i].remove(target);
-				layerArray[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+				layerArray[i].setBorder(null);
 				units[i] = null;
 				repaint();
 			}
