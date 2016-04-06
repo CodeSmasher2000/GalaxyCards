@@ -53,8 +53,7 @@ public class HeroicPanelGUI extends JPanel {
 		this.add(heroicPane2);
 		this.add(Box.createHorizontalGlue());
 		this.add(Box.createHorizontalStrut(5));
-		this.setBorder(BorderFactory.createTitledBorder(null, "Heroic Support Lane", TitledBorder.RIGHT,
-				TitledBorder.DEFAULT_POSITION));
+		this.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
 	private void initiateLayeredPanes() {

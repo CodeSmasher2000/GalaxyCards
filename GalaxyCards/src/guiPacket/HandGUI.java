@@ -65,7 +65,7 @@ public class HandGUI extends JPanel {
 		layeredPane.setOpaque(true);
 		layeredPane.setLayout(null);
 		layeredPane.setPreferredSize(new Dimension(730, 240));
-		layeredPane.setBorder(BorderFactory.createTitledBorder("Hand"));
+		layeredPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
 	/**
