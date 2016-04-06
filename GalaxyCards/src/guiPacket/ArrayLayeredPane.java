@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import EnumMessage.Lanes;
-import cards.HeroicSupport;
 import cards.Unit;
 import exceptionsPacket.GuiContainerException;
 
@@ -44,6 +43,7 @@ public class ArrayLayeredPane extends JPanel {
 		layerArray = new JLayeredPane[nbrOfElements];
 
 		this.add(Box.createHorizontalStrut(10));
+		this.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 
 		for (int i = 0; i < nbrOfElements; i++) {
 			layerArray[i] = new JLayeredPane();
@@ -99,7 +99,6 @@ public class ArrayLayeredPane extends JPanel {
 		return LANE;
 	}
 
-	
 	/**
 	 * Set border for every layeredPane in this container.
 	 * 
@@ -152,7 +151,7 @@ public class ArrayLayeredPane extends JPanel {
 		}
 		return okToPlace;
 	}
-	
+
 	public Unit removeUnit(Unit target) {
 		for (int i = 0; i < units.length; i++) {
 			if (units[i] == target) {
@@ -165,49 +164,50 @@ public class ArrayLayeredPane extends JPanel {
 
 		return target;
 	}
-	
+
 	// DEBUGG. Listeners will be in seperate classes and the objects will be
-		// passed in to the constructor.
-		private class UnitMouseListener implements MouseListener {
+	// passed in to the constructor.
+	private class UnitMouseListener implements MouseListener {
 
-			private Unit temp;
-			private Border defaultBorder;
-			private Border highlightB = BorderFactory.createLineBorder(new Color(0, 190, 255), 3, true);
+		private Unit temp;
+		private Border defaultBorder;
+		private Border highlightB = BorderFactory.createLineBorder(CustomColors.borderMarked, 3, false);
 
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent event) {
-				temp = (Unit) event.getSource();
-				defaultBorder = temp.getBorder();
-				temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				temp.setBorder(defaultBorder);
-			}
-
-			@Override
-			public void mousePressed(MouseEvent event) {
-				temp = (Unit) event.getSource();
-
-				// Debugging. should send the object to controller or w/e to
-				// calculate the damages and remove if the objects defensive value
-				// is 0
-				removeUnit(temp);
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
 
 		}
+
+		@Override
+		public void mouseEntered(MouseEvent event) {
+			temp = (Unit) event.getSource();
+			defaultBorder = temp.getBorder();
+			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			temp.setBorder(defaultBorder);
+		}
+
+		@Override
+		public void mousePressed(MouseEvent event) {
+			temp = (Unit) event.getSource();
+
+			// Debugging. should send the object to controller or w/e to
+			// calculate the damages and remove if the objects defensive value
+			// is 0
+			removeUnit(temp);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
+
+}

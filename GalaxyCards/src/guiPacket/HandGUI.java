@@ -1,6 +1,5 @@
 package guiPacket;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -11,7 +10,9 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import cards.Unit;
 import exceptionsPacket.GuiContainerException;
+import exceptionsPacket.NoLaneSelectedException;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -49,6 +50,7 @@ public class HandGUI extends JPanel {
 		initiateLayeredPane();
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.add(layeredPane);
+		this.setOpaque(true);
 	}
 
 	/**
@@ -62,7 +64,7 @@ public class HandGUI extends JPanel {
 
 	private void initiateLayeredPane() {
 		layeredPane = new JLayeredPane();
-		layeredPane.setOpaque(true);
+		layeredPane.setOpaque(false);
 		layeredPane.setLayout(null);
 		layeredPane.setPreferredSize(new Dimension(730, 240));
 		layeredPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
@@ -118,7 +120,7 @@ public class HandGUI extends JPanel {
 
 		for (int i = 0; i < tempCards.length; i++) {
 			if (tempCards[i] != null) {
-					tempCards[i].removeMouseListener(listener);
+				tempCards[i].removeMouseListener(listener);
 				if (tempCards[i] != card) {
 					Card card1 = tempCards[i];
 					try {
@@ -129,14 +131,16 @@ public class HandGUI extends JPanel {
 				}
 			}
 		}
+
 		return card;
 	}
 
 	private class HandMouseListener implements MouseListener {
 
+		private boolean mousePressed = false;
 		private Card temp;
 		private Border defaultBorder;
-		private Border highlightB = BorderFactory.createLineBorder(new Color(0, 190, 255), 3, true);
+		private Border highlightB = BorderFactory.createLineBorder(CustomColors.borderMarked, 3, true);
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -154,9 +158,11 @@ public class HandGUI extends JPanel {
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			layeredPane.setLayer(temp, cardOriginalLayer);
-			temp.setBounds(temp.getX(), 20, temp.getPreferredSize().width, temp.getPreferredSize().height);
-			temp.setBorder(defaultBorder);
+//			if (!mousePressed) {
+				layeredPane.setLayer(temp, cardOriginalLayer);
+				temp.setBounds(temp.getX(), 20, temp.getPreferredSize().width, temp.getPreferredSize().height);
+				temp.setBorder(defaultBorder);
+//			}
 		}
 
 		@Override
@@ -169,7 +175,7 @@ public class HandGUI extends JPanel {
 			// before putting in a container.
 
 			// Debugg remove when rest of gui is complete
-
+//			mousePressed = true;
 			try {
 				boardController.playCard(temp);
 				temp = playCard(temp);
@@ -178,6 +184,8 @@ public class HandGUI extends JPanel {
 				temp.removeMouseListener(listener);
 			} catch (GuiContainerException e) {
 				// TODO Auto-generated catch block
+				System.err.println(e.getMessage());
+			} catch (NoLaneSelectedException e) {
 				System.err.println(e.getMessage());
 			} finally {
 				repaint();

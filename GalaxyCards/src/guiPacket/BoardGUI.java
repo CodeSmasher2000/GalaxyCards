@@ -33,7 +33,7 @@ public class BoardGUI extends JPanel {
 
 	private BoardGuiController boardController = new BoardGuiController();
 	private JPanel playFieldPanel, playerPanel, opponentPanel, scrapYardPanel, infoPanel, middlePanel;
-	private ArrayLayeredPane playerDefensiveLane, playerOffensive, enemyDefensiveLane, enemyOffensiveLane;
+	private ArrayLayeredPane playerDefensiveLane, playerOffensiveLane, enemyDefensiveLane, enemyOffensiveLane;
 	private HandGUI hand;
 	private OpponentHandGUI opponentHand;
 	private HeroGUI hero, opponentHero;
@@ -87,12 +87,12 @@ public class BoardGUI extends JPanel {
 		hero = new HeroGUI(boardController);
 
 		playerDefensiveLane = new ArrayLayeredPane(boardController, Lanes.PLAYER_DEFENSIVE, 6);
-		playerOffensive = new ArrayLayeredPane(boardController, Lanes.PLAYER_OFFENSIVE, 6);
+		playerOffensiveLane = new ArrayLayeredPane(boardController, Lanes.PLAYER_OFFENSIVE, 6);
 		enemyDefensiveLane = new ArrayLayeredPane(boardController, Lanes.ENEMY_DEFENSIVE, 6);
-		enemyOffensiveLane = new ArrayLayeredPane(boardController, Lanes.PLAYER_OFFENSIVE, 6);
+		enemyOffensiveLane = new ArrayLayeredPane(boardController, Lanes.ENEMY_OFFENSIVE, 6);
 
 		playerDefensiveLane.setOpaque(false);
-		playerOffensive.setOpaque(false);
+		playerOffensiveLane.setOpaque(false);
 		enemyDefensiveLane.setOpaque(false);
 		enemyOffensiveLane.setOpaque(false);
 	}
@@ -148,7 +148,7 @@ public class BoardGUI extends JPanel {
 		playFieldPanel.add(Box.createVerticalStrut(3));
 		playFieldPanel.add(enemyOffensiveLane);
 		playFieldPanel.add(Box.createVerticalStrut(3));
-		playFieldPanel.add(playerOffensive);
+		playFieldPanel.add(playerOffensiveLane);
 		playFieldPanel.add(Box.createVerticalStrut(3));
 		playFieldPanel.add(playerDefensiveLane);
 		playFieldPanel.add(Box.createVerticalGlue());
@@ -204,6 +204,10 @@ public class BoardGUI extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(playerOffensiveLane.length());
+		System.out.println(playerDefensiveLane.length());
+		System.out.println(enemyOffensiveLane.length());
+		System.out.println(enemyDefensiveLane.length());
 	}
 
 	// DEBUGG remove when gui is functional

@@ -1,11 +1,17 @@
 package guiPacket;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.BorderFactory;
+
 import EnumMessage.Lanes;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
 import exceptionsPacket.GuiContainerException;
+import exceptionsPacket.NoLaneSelectedException;
 
 /**
  * This class is responsible for message-passing between the gui elements and
@@ -24,6 +30,13 @@ public class BoardGuiController {
 	private ArrayLayeredPane playerOffLane;
 	private ArrayLayeredPane enemyDefLane;
 	private ArrayLayeredPane enemyOffLane;
+	
+	private ArrayLayeredPane tempLane;
+	private LaneSelectListener selectLane;
+	private boolean laneSelected = false;
+	private LaneSelectThread laneselector;
+	
+	private Unit unitToPlay; 
 
 	// skapa association med controller
 
@@ -113,7 +126,13 @@ public class BoardGuiController {
 		cardToPlay = null;
 
 		clonedCard.shrink();
-		playerDefLane.addUnit(clonedCard);
+		if(tempLane.getLaneType()==Lanes.PLAYER_DEFENSIVE){
+			playerDefLane.addUnit(clonedCard);
+		}
+		if(tempLane.getLaneType()==Lanes.PLAYER_OFFENSIVE){
+			playerOffLane.add(clonedCard);
+			System.out.println(playerOffLane.length());
+		}
 
 	}
 
@@ -161,17 +180,28 @@ public class BoardGuiController {
 	 * 
 	 * @param card
 	 * @throws GuiContainerException
+	 * @throws NoLaneSelectedException 
 	 */
 
-	public void playCard(Card card) throws GuiContainerException {
+	public void selectLane() throws  NoLaneSelectedException{
+		// TODO Auto-generated method stub
+		if(laneselector==null){
+			laneselector = new LaneSelectThread();
+			laneselector.start();
+		}
+		
+		if(!laneSelected){
+			throw new NoLaneSelectedException("Thread for selecting lane started...waiting for input");
+		}
+		
+	}
+	public void playCard(Card card) throws GuiContainerException, NoLaneSelectedException {
 		if (card instanceof ResourceCard) {
 
 		}
 		if (card instanceof Unit) {
-			Unit cardToPlay = (Unit) card;
-
-			playUnitCard(cardToPlay);
-
+			unitToPlay = (Unit) card;
+			selectLane();
 		}
 		if (card instanceof HeroicSupport) {
 			HeroicSupport cardToPlay = (HeroicSupport) card;
@@ -182,6 +212,92 @@ public class BoardGuiController {
 			playHeroicSupport(cardToPlay);
 		}
 		if (card instanceof Tech) {
+
+		}
+
+	}
+	
+	public void setSelectedLane() throws GuiContainerException {
+		// TODO Auto-generated method stub
+		/*laneSelected = true
+		 * stoppa tråden
+		 * 
+		 * 
+		 */
+		playUnitCard(unitToPlay);
+		handGuiPlayer.playCard(unitToPlay);
+		laneSelected = true;
+	}
+	
+	private class LaneSelectThread extends Thread{
+		
+		
+		public LaneSelectThread(){
+			selectLane = new LaneSelectListener();
+			playerOffLane.addMouseListener(selectLane);
+			playerDefLane.addMouseListener(selectLane);
+			playerOffLane.setBorder(BorderFactory.createTitledBorder("OFFENSIVE LANE"));
+			playerDefLane.setBorder(BorderFactory.createTitledBorder("DEFENSIVE LANE"));
+		}
+		
+		public void run(){
+			while(!laneSelected){
+				System.err.println("Waiting for selection of lane");
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			playerOffLane.removeMouseListener(selectLane);
+			playerDefLane.removeMouseListener(selectLane);
+			playerOffLane.setBorder(null);
+			playerDefLane.setBorder(null);
+			selectLane = null;
+			laneSelected=false;
+			laneselector=null;
+			System.err.println("Lane select thread stopped");
+		}
+	}
+	
+	private class LaneSelectListener implements MouseListener {
+
+		
+		
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent event) {
+			// TODO Auto-generated method stub
+			tempLane = (ArrayLayeredPane) event.getSource();
+			tempLane.setBorder(BorderFactory.createLineBorder(CustomColors.borderMarked, 5, true));
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			tempLane.setBorder(BorderFactory.createTitledBorder("SELECT LANE"));
+		}
+
+		@Override
+		public void mousePressed(MouseEvent event) {
+			// TODO Auto-generated method stub
+			try {
+				setSelectedLane();
+			} catch (GuiContainerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
 
 		}
 
