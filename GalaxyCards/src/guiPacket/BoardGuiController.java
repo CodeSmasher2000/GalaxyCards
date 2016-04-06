@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 
 import EnumMessage.Lanes;
+import EnumMessage.Persons;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
@@ -23,7 +24,7 @@ import exceptionsPacket.NoLaneSelectedException;
 public class BoardGuiController {
 
 	private HandGUI handGuiPlayer;
-	private HeroicPanelGUI heroicGui;
+	private HeroicPanelGUI heroicGui, enemyHeroicGui;
 	private HeroGUI heroGui;
 	private OpponentHandGUI handGuiOpponent;
 	private ArrayLayeredPane playerDefLane;
@@ -37,6 +38,7 @@ public class BoardGuiController {
 	private LaneSelectThread laneselector;
 	
 	private Unit unitToPlay; 
+	
 
 	// skapa association med controller
 
@@ -61,8 +63,13 @@ public class BoardGuiController {
 	 * 
 	 * @param heroicPanelGUI
 	 */
-	public void addHeroicPanelListener(HeroicPanelGUI heroicPanelGUI) {
-		heroicGui = heroicPanelGUI;
+	public void addHeroicPanelListener(HeroicPanelGUI heroicPanelGUI, Persons ENUM) {
+		if(ENUM==Persons.PLAYER){
+			heroicGui = heroicPanelGUI;
+		}
+		if(ENUM==Persons.OPPONENT){
+			enemyHeroicGui = heroicPanelGUI;
+		}
 	}
 
 	public void addHeroListener(HeroGUI heroGui) {
@@ -140,7 +147,20 @@ public class BoardGuiController {
 		handGuiOpponent.drawCard();
 	}
 
-	public void opponentPlaysCard() throws GuiContainerException {
+	public void opponentPlaysUnit(Unit unit, Lanes ENUM) throws GuiContainerException {
+		if(ENUM==Lanes.PLAYER_DEFENSIVE){
+			enemyDefLane.addUnit(unit);
+			handGuiOpponent.playCard();
+		}
+		if(ENUM==Lanes.PLAYER_OFFENSIVE){
+			enemyOffLane.addUnit(unit);
+			handGuiOpponent.playCard();
+		}
+	}
+	
+	
+	public void opponentPlaysHeroicSupport(HeroicSupport hs) throws GuiContainerException {
+		enemyHeroicGui.addHeroicSupport(hs);
 		handGuiOpponent.playCard();
 	}
 
@@ -273,20 +293,28 @@ public class BoardGuiController {
 
 		@Override
 		public void mouseEntered(MouseEvent event) {
-			// TODO Auto-generated method stub
-			tempLane = (ArrayLayeredPane) event.getSource();
-			tempLane.setBorder(BorderFactory.createLineBorder(CustomColors.borderMarked, 5, true));
+			if(event.getSource()==playerDefLane){
+				playerDefLane.setBorder(BorderFactory.createLineBorder(CustomColors.borderMarked, 5, true));
+			}
+			if(event.getSource()==playerOffLane){
+				playerOffLane.setBorder(BorderFactory.createLineBorder(CustomColors.borderMarked, 5, true));
+			}
+			
 		}
 
 		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			tempLane.setBorder(BorderFactory.createTitledBorder("SELECT LANE"));
+		public void mouseExited(MouseEvent event) {
+			if(event.getSource()==playerDefLane){
+				playerDefLane.setBorder(BorderFactory.createTitledBorder("DEFENSIVE LANE"));
+			}
+			if(event.getSource()==playerOffLane){
+				playerOffLane.setBorder(BorderFactory.createTitledBorder("OFFENSIVE LANE"));
+			}
 		}
 
 		@Override
 		public void mousePressed(MouseEvent event) {
-			// TODO Auto-generated method stub
+			tempLane = (ArrayLayeredPane) event.getSource();
 			try {
 				setSelectedLane();
 			} catch (GuiContainerException e) {
@@ -302,5 +330,6 @@ public class BoardGuiController {
 		}
 
 	}
+
 
 }

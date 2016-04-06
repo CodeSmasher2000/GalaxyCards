@@ -11,8 +11,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 
+import EnumMessage.Persons;
 import cards.HeroicSupport;
 import exceptionsPacket.GuiContainerException;
 
@@ -37,11 +37,12 @@ public class HeroicPanelGUI extends JPanel {
 	private HeroicMouseListener listener = new HeroicMouseListener();
 	private BoardGuiController boardController;
 	private Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+	private Persons ENUM;
 
-	public HeroicPanelGUI(BoardGuiController boardController) {
+	public HeroicPanelGUI(BoardGuiController boardController, Persons ENUM) {
 
 		this.boardController = boardController;
-		boardController.addHeroicPanelListener(this);
+		boardController.addHeroicPanelListener(this, ENUM);
 
 		initiateLayeredPanes();
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));

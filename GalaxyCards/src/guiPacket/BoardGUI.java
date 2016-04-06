@@ -25,7 +25,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import EnumMessage.Lanes;
+import EnumMessage.Persons;
 import cards.Deck;
+import cards.HeroicSupport;
+import cards.Unit;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.GuiContainerException;
 
@@ -46,7 +49,7 @@ public class BoardGUI extends JPanel {
 	// DEBUGG
 	private Card temp;
 	private ButtonListener list = new ButtonListener();
-	private Deck deck;
+	private Deck deck, enemyDeck;
 	private ObjectInputStream ois;
 	private JButton testDraw, testOpponentDrawCard, testOpponentPlayCard;
 	private JPanel testPanel;
@@ -80,9 +83,8 @@ public class BoardGUI extends JPanel {
 	private void initiateGuiElements() {
 		hand = new HandGUI(boardController);
 		opponentHand = new OpponentHandGUI(boardController);
-		playerHeroicPanel = new HeroicPanelGUI(boardController);
-		// TODO pass boardController when the function complete
-		opponentHeroicPanel = new HeroicPanelGUI(new BoardGuiController());
+		playerHeroicPanel = new HeroicPanelGUI(boardController, Persons.PLAYER);
+		opponentHeroicPanel = new HeroicPanelGUI(boardController, Persons.OPPONENT);
 		opponentHero = new HeroGUI(boardController);
 		hero = new HeroGUI(boardController);
 
@@ -194,6 +196,9 @@ public class BoardGUI extends JPanel {
 			deck.shuffle();
 			System.out.println(deck.toString());
 			temp = deck.drawCard();
+			enemyDeck = deck;
+			System.out.println(enemyDeck.toString());
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -214,6 +219,7 @@ public class BoardGUI extends JPanel {
 	private class ButtonListener implements ActionListener {
 
 		private LinkedList<Card> enemyHand = new LinkedList<Card>();
+		private Lanes ENUM = Lanes.PLAYER_DEFENSIVE;
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -238,9 +244,27 @@ public class BoardGUI extends JPanel {
 			}
 			if (event.getSource() == testOpponentPlayCard) {
 				try {
-					boardController.opponentPlaysCard();
+					Card temp = enemyDeck.drawCard();
+					HeroicSupport hs;
+					if(temp instanceof Unit){
+						Unit  unit = (Unit) temp;
+						boardController.opponentPlaysUnit(unit, ENUM);
+						if(ENUM==Lanes.PLAYER_DEFENSIVE){
+							ENUM = Lanes.PLAYER_OFFENSIVE;
+						}else{
+							ENUM = Lanes.PLAYER_DEFENSIVE;
+						}
+					}
+					if(temp instanceof HeroicSupport){
+						hs = (HeroicSupport) temp;
+						boardController.opponentPlaysHeroicSupport(hs);
+					}
+					
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
+				} catch (EmptyDeckException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}

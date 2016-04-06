@@ -160,7 +160,7 @@ public class BoardTestClass {
 			}
 			if(event.getSource()==draw3){
 				try {
-					board.opponentPlaysCard();
+					board.opponentPlaysUnit();
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
 				}
