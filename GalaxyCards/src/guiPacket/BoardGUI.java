@@ -145,6 +145,7 @@ public class BoardGUI extends JPanel {
 
 	private void configurePlayfield() {
 		playFieldPanel.setLayout(new BoxLayout(playFieldPanel, BoxLayout.Y_AXIS));
+		playFieldPanel.add(Box.createVerticalStrut(3));
 		playFieldPanel.add(Box.createVerticalGlue());
 		playFieldPanel.add(enemyDefensiveLane);
 		playFieldPanel.add(Box.createVerticalStrut(3));
@@ -154,7 +155,7 @@ public class BoardGUI extends JPanel {
 		playFieldPanel.add(Box.createVerticalStrut(3));
 		playFieldPanel.add(playerDefensiveLane);
 		playFieldPanel.add(Box.createVerticalGlue());
-		playFieldPanel.setBorder(BorderFactory.createMatteBorder(5, 2, 5, 2,Color.WHITE));
+		playFieldPanel.add(Box.createVerticalStrut(3));
 		playFieldPanel.setOpaque(false);
 	}
 

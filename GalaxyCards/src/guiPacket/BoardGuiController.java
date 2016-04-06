@@ -1,5 +1,6 @@
 package guiPacket;
 
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -148,6 +149,7 @@ public class BoardGuiController {
 	}
 
 	public void opponentPlaysUnit(Unit unit, Lanes ENUM) throws GuiContainerException {
+		unit.shrink();
 		if(ENUM==Lanes.PLAYER_DEFENSIVE){
 			enemyDefLane.addUnit(unit);
 			handGuiOpponent.playCard();
@@ -256,8 +258,15 @@ public class BoardGuiController {
 			selectLane = new LaneSelectListener();
 			playerOffLane.addMouseListener(selectLane);
 			playerDefLane.addMouseListener(selectLane);
+			
 			playerOffLane.setBorder(BorderFactory.createTitledBorder("OFFENSIVE LANE"));
 			playerDefLane.setBorder(BorderFactory.createTitledBorder("DEFENSIVE LANE"));
+			
+			playerOffLane.setOpaque(true);
+			playerOffLane.setBackground(new Color(0,169,255,75));
+			
+			playerDefLane.setOpaque(true);
+			playerDefLane.setBackground(new Color(0,169,255,75));
 		}
 		
 		public void run(){
@@ -272,8 +281,13 @@ public class BoardGuiController {
 			}
 			playerOffLane.removeMouseListener(selectLane);
 			playerDefLane.removeMouseListener(selectLane);
+			
 			playerOffLane.setBorder(null);
 			playerDefLane.setBorder(null);
+			
+			playerOffLane.setOpaque(false);
+			playerDefLane.setOpaque(false);
+			
 			selectLane = null;
 			laneSelected=false;
 			laneselector=null;

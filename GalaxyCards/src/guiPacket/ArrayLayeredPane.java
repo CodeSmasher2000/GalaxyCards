@@ -43,7 +43,6 @@ public class ArrayLayeredPane extends JPanel {
 		layerArray = new JLayeredPane[nbrOfElements];
 
 		this.add(Box.createHorizontalStrut(10));
-		this.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 
 		for (int i = 0; i < nbrOfElements; i++) {
 			layerArray[i] = new JLayeredPane();
@@ -55,9 +54,6 @@ public class ArrayLayeredPane extends JPanel {
 			this.add(Box.createHorizontalGlue());
 			this.add(Box.createHorizontalStrut(10));
 		}
-
-		setElementBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-
 	}
 
 	/**
