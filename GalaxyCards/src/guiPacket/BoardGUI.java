@@ -42,7 +42,7 @@ public class BoardGUI extends JPanel {
 	private OpponentHandGUI opponentHand;
 	private HeroGUI hero, opponentHero;
 	private HeroicPanelGUI playerHeroicPanel, opponentHeroicPanel;
-	private HoveredCardGUI hoveredCard;
+	private InfoPanelGUI hoveredCard;
 
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
 
@@ -110,7 +110,7 @@ public class BoardGUI extends JPanel {
 		enemyDefensiveLane = new ArrayLayeredPane(boardController, Lanes.ENEMY_DEFENSIVE, 6);
 		enemyOffensiveLane = new ArrayLayeredPane(boardController, Lanes.ENEMY_OFFENSIVE, 6);
 
-		hoveredCard = new HoveredCardGUI(boardController);
+		hoveredCard = new InfoPanelGUI(boardController);
 	}
 
 	private void initiateContainers() {
@@ -137,9 +137,9 @@ public class BoardGUI extends JPanel {
 		
 		infoPanel2.add(Box.createVerticalStrut(10));
 		infoPanel2.add(hoveredCard);
-		infoPanel2.add(Box.createVerticalGlue());
+//		infoPanel2.add(Box.createVerticalGlue());
 		infoPanel2.add(Box.createVerticalStrut(20));
-		infoPanel2.add(Box.createVerticalGlue());
+//		infoPanel2.add(Box.createVerticalGlue());
 		
 		infoPanel.add(Box.createHorizontalStrut(10));
 		infoPanel.add(infoPanel2);
@@ -223,15 +223,17 @@ public class BoardGUI extends JPanel {
 			temp = deck.drawCard();
 			enemyDeck = deck;
 			System.out.println(enemyDeck.toString());
+			InfoPanelGUI.append(deck.toString()+"\n");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			InfoPanelGUI.append(e.getMessage());
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			InfoPanelGUI.append(e.getMessage());
 			e.printStackTrace();
 		} catch (EmptyDeckException e) {
-			// TODO Auto-generated catch block
+			InfoPanelGUI.append(e.getMessage());
 			e.printStackTrace();
 		}
 		System.out.println(playerOffensiveLane.length());
@@ -255,8 +257,10 @@ public class BoardGUI extends JPanel {
 					temp = deck.drawCard();
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
+					InfoPanelGUI.append(e.getMessage());
 				} catch (EmptyDeckException e) {
 					System.err.println(e.getMessage());
+					InfoPanelGUI.append(e.getMessage());
 				}
 			}
 			if (event.getSource() == testOpponentDrawCard) {
@@ -265,6 +269,7 @@ public class BoardGUI extends JPanel {
 				} catch (GuiContainerException e) {
 					// TODO Auto-generated catch block
 					System.err.println(e.getMessage());
+					InfoPanelGUI.append(e.getMessage());
 				}
 			}
 			if (event.getSource() == testOpponentPlayCard) {
@@ -287,9 +292,11 @@ public class BoardGUI extends JPanel {
 
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
+					InfoPanelGUI.append(e.getMessage());
 				} catch (EmptyDeckException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					InfoPanelGUI.append(e.getMessage());
 				}
 			}
 		}

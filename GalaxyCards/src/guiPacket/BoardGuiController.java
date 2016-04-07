@@ -33,7 +33,7 @@ public class BoardGuiController {
 	private ArrayLayeredPane enemyDefLane;
 	private ArrayLayeredPane enemyOffLane;
 	
-	private HoveredCardGUI hoveredCardPanel;
+	private InfoPanelGUI hoveredCardPanel;
 	private ArrayLayeredPane tempLane;
 	private LaneSelectListener selectLane;
 	private boolean laneSelected = false;
@@ -71,7 +71,7 @@ public class BoardGuiController {
 	 * Sets up a association between this object and the HoveredCardUI
 	 * @param hoveredCard
 	 */
-	public void addHoveredCardlListener(HoveredCardGUI hoveredCard) {
+	public void addHoveredCardlListener(InfoPanelGUI hoveredCard) {
 		hoveredCardPanel  = hoveredCard;
 	}
 	
@@ -331,6 +331,8 @@ public class BoardGuiController {
 	private class LaneSelectThread extends Thread {
 
 		public LaneSelectThread() {
+			InfoPanelGUI.append("Lane select thread started...waiting for unput");
+			
 			selectLane = new LaneSelectListener();
 			playerOffLane.addMouseListener(selectLane);
 			playerDefLane.addMouseListener(selectLane);
@@ -346,6 +348,7 @@ public class BoardGuiController {
 		public void run() {
 			while (!laneSelected) {
 				System.err.println("Waiting for selection of lane");
+				InfoPanelGUI.append("Waiting for selection of lane");
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
@@ -370,6 +373,9 @@ public class BoardGuiController {
 			laneSelected = false;
 			laneSelectThread = null;
 			System.err.println("Lane select thread stopped");
+			InfoPanelGUI.append("Lane select thread stopped");
+			
+			
 		}
 	}
 
@@ -416,8 +422,11 @@ public class BoardGuiController {
 			try {
 				setSelectedLane();
 			} catch (GuiContainerException e) {
-				// TODO Auto-generated catch block
+				if(laneSelectThread!=null){
+					laneSelected=true;
+				}
 				e.printStackTrace();
+				InfoPanelGUI.append(e.getMessage());
 			}
 		}
 

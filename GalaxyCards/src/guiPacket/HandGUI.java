@@ -127,6 +127,7 @@ public class HandGUI extends JPanel {
 						addCard(card1);
 					} catch (GuiContainerException e) {
 						System.err.println(e.getMessage() + " Error caused by the rearranging of cards on hand");
+						InfoPanelGUI.append(e.getMessage());
 					}
 				}
 			}
@@ -183,8 +184,8 @@ public class HandGUI extends JPanel {
 				// temp.shrink();
 				temp.removeMouseListener(listener);
 			} catch (GuiContainerException e) {
-				// TODO Auto-generated catch block
 				System.err.println(e.getMessage());
+				InfoPanelGUI.append(e.getMessage());
 			} catch (NoLaneSelectedException e) {
 				System.err.println(e.getMessage());
 			} finally {
