@@ -27,6 +27,8 @@ public class BoardGUI extends JPanel {
 	private InfoPanelGUI hoveredCard;
 
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
+	private ImageIcon infoPanelBg = new ImageIcon("files/pictures/infoPanelTexture.jpg");
+	private ImageIcon historyPanelBg = new ImageIcon("files/pictures/historyPanelTexture.jpg");
 
 	public BoardGUI(BoardGuiController boardController) {
 		this.boardController = boardController;
