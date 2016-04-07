@@ -2,11 +2,13 @@ package guiPacket;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -44,6 +46,8 @@ public class InfoPanelGUI extends JPanel {
 	
 	private Border b1 = BorderFactory.createEmptyBorder(0, 10, 0, 10);
 	
+	private ImageIcon background = new ImageIcon("files/pictures/infoPanelTexture.jpg");
+	
 //	private static JTextArea textArea = new JTextArea();
 	private static JScrollPane scrollPane = new JScrollPane( editorPane );
 	
@@ -59,18 +63,20 @@ public class InfoPanelGUI extends JPanel {
 		
 		//FOR DEBUGGING
 //		showPanelBorders();
+		midEmpty.setOpaque(false);
 		
 		this.setLayout(new GridLayout(3,1));
-		this.setOpaque(true);
+//		this.setOpaque(false);
 		this.add(cardPanel2);
 		this.add(midEmpty);
 		this.add(twPanel2);
+		
 
 	}
 
 	private void customizeEditorPane() {
 		editorPane.setContentType("text/html");
-		editorPane.setOpaque(true);
+		editorPane.setOpaque(false);
 		editorPane.setEditable(false);
 		scrollPane.setOpaque(false);
 		scrollPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
@@ -95,17 +101,19 @@ public class InfoPanelGUI extends JPanel {
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		twContainer.setLayout(new BorderLayout());
 		twContainer.add(scrollPane, BorderLayout.CENTER);
-		twContainer.setOpaque(true);
+		twContainer.setOpaque(false);
 		
 
 		twPanel1.setLayout(new BoxLayout(twPanel1, BoxLayout.X_AXIS));
 		twPanel1.add(Box.createHorizontalStrut(10));
 		twPanel1.add(twContainer);
 		twPanel1.add(Box.createHorizontalStrut(10));
+		twPanel1.setOpaque(false);
 		
 		twPanel2.setLayout(new BoxLayout(twPanel2, BoxLayout.Y_AXIS));
 		twPanel2.add(twPanel1);
 		twPanel2.add(Box.createVerticalStrut(10));
+		twPanel2.setOpaque(false);
 		
 	}
 
@@ -124,6 +132,10 @@ public class InfoPanelGUI extends JPanel {
 		cardPanel1.add(cardContainer);
 		cardPanel1.add(Box.createHorizontalStrut(100));
 		cardPanel1.add(Box.createHorizontalGlue());
+		
+		cardPanel1.setOpaque(false);
+		cardPanel2.setOpaque(false);
+		cardContainer.setOpaque(false);
 		
 	}
 
@@ -161,6 +173,13 @@ public class InfoPanelGUI extends JPanel {
 				editorPane.setText(stringBuilder.toString());
 //			}
 //		});
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+
+		super.paintComponent(g);
+		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 	}
 	
 }

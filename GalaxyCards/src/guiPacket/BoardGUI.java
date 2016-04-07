@@ -1,6 +1,7 @@
 package guiPacket;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -27,8 +28,9 @@ public class BoardGUI extends JPanel {
 	private InfoPanelGUI hoveredCard;
 
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
-	private ImageIcon infoPanelBg = new ImageIcon("files/pictures/infoPanelTexture.jpg");
 	private ImageIcon historyPanelBg = new ImageIcon("files/pictures/historyPanelTexture.jpg");
+	
+	private PaintedPanel scrapYardContainer2 = new PaintedPanel(historyPanelBg);
 
 	public BoardGUI(BoardGuiController boardController) {
 		this.boardController = boardController;
@@ -101,12 +103,11 @@ public class BoardGUI extends JPanel {
 		infoPanel.add(infoPanel2);
 		infoPanel.add(Box.createHorizontalStrut(10));
 
-		infoPanel.setBorder(BorderFactory.createLineBorder(CustomGui.blueHighlight));
-
+		infoPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 	}
 
 	private void configureScrapPane() {
-		scrapYardPanel2.setBorder(BorderFactory.createLineBorder(CustomGui.blueHighlight));
+		scrapYardPanel2.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		scrapYardPanel2.setLayout(new BoxLayout(scrapYardPanel2, BoxLayout.Y_AXIS));
 		scrapYardPanel2.setOpaque(true);
 		scrapYardPanel2.setBackground(CustomGui.guiTransparentColor);
@@ -118,7 +119,7 @@ public class BoardGUI extends JPanel {
 		scrapYardPanel.setOpaque(false);
 		scrapYardPanel.setBackground(CustomGui.guiTransparentColor);
 		scrapYardPanel.add(Box.createHorizontalStrut(10));
-		scrapYardPanel.add(scrapYardContainer);
+		scrapYardPanel.add(scrapYardContainer2);
 		scrapYardPanel.add(Box.createHorizontalStrut(10));
 		
 		
@@ -137,7 +138,7 @@ public class BoardGUI extends JPanel {
 		playerPanel.add(Box.createVerticalStrut(5));
 		playerPanel.setBackground(CustomGui.guiTransparentColor);
 
-		playerPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, CustomGui.blueHighlight));
+		playerPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.WHITE));
 	}
 
 	private void configureOpponentPanel() {
@@ -146,7 +147,7 @@ public class BoardGUI extends JPanel {
 		opponentPanel.add(opponentHeroicPanel);
 		opponentPanel.setBackground(CustomGui.guiTransparentColor);
 
-		opponentPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, CustomGui.blueHighlight));
+		opponentPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.WHITE));
 	}
 
 	private void configurePlayfield() {
@@ -183,6 +184,6 @@ public class BoardGUI extends JPanel {
 	 * @param panel
 	 */
 	public void addDebuggPanel(TestPanel testPanel) {
-		scrapYardContainer.add(testPanel);
+		scrapYardContainer2.add(testPanel);
 	}
 }

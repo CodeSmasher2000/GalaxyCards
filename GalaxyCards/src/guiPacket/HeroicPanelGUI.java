@@ -1,13 +1,14 @@
 package guiPacket;
 
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -36,11 +37,15 @@ public class HeroicPanelGUI extends JPanel {
 	private HeroicSupport[] heroicUnits = new HeroicSupport[2];
 	private HeroicMouseListener listener = new HeroicMouseListener();
 	private BoardGuiController boardController;
-	private Border border = BorderFactory.createLineBorder(CustomGui.blueHighlight);
 	private Persons ENUM;
+	
+	private ImageIcon background = new ImageIcon("files/pictures/heroicPanelTexture.jpg");
 
 	public HeroicPanelGUI(BoardGuiController boardController, Persons ENUM) {
 
+		if(ENUM==Persons.PLAYER){
+			background = new ImageIcon("files/pictures/heroicPanelTexture2.jpg");
+		}
 		this.boardController = boardController;
 		boardController.addHeroicPanelListener(this, ENUM);
 
@@ -54,18 +59,15 @@ public class HeroicPanelGUI extends JPanel {
 		this.add(heroicPane2);
 		this.add(Box.createHorizontalGlue());
 		this.add(Box.createHorizontalStrut(5));
-		this.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
 	private void initiateLayeredPanes() {
 		heroicPane1 = new JLayeredPane();
 		heroicPane1.setLayout(null);
-		heroicPane1.setBorder(border);
 		heroicPane1.setPreferredSize(new Dimension(156, 226));
 
 		heroicPane2 = new JLayeredPane();
 		heroicPane2.setLayout(null);
-		heroicPane2.setBorder(border);
 		heroicPane2.setPreferredSize(new Dimension(156, 226));
 	}
 
@@ -127,11 +129,9 @@ public class HeroicPanelGUI extends JPanel {
 			if (heroicUnits[i] == target) {
 				if (i == 0) {
 					heroicPane1.remove(heroicUnits[i]);
-					heroicPane1.setBorder(border);
 					heroicPane1.repaint();
 				} else {
 					heroicPane2.remove(heroicUnits[i]);
-					heroicPane2.setBorder(border);
 					repaint();
 				}
 				heroicUnits[i] = null;
@@ -139,6 +139,12 @@ public class HeroicPanelGUI extends JPanel {
 		}
 
 		return target;
+	}
+	
+	protected void paintComponent(Graphics g) {
+
+		super.paintComponent(g);
+		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 	}
 
 	// DEBUGG. Listeners will be in seperate classes and the objects will be
@@ -165,7 +171,7 @@ public class HeroicPanelGUI extends JPanel {
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			temp.setBorder(border);
+			temp.setBorder(null);
 		}
 
 		@Override

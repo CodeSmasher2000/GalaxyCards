@@ -1,11 +1,13 @@
 package guiPacket;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -39,8 +41,9 @@ public class HandGUI extends JPanel {
 	private int cardOriginalLayer;
 	private HandMouseListener listener = new HandMouseListener();
 	private BoardGuiController boardController;
+	
+	private ImageIcon background = new ImageIcon("files/pictures/handPanelTexture.jpg");
 
-	// The data should be stored in board class
 	private Card[] cards = new Card[8];
 
 	public HandGUI(BoardGuiController boardController) {
@@ -67,7 +70,7 @@ public class HandGUI extends JPanel {
 		layeredPane.setOpaque(false);
 		layeredPane.setLayout(null);
 		layeredPane.setPreferredSize(new Dimension(730, 230));
-		layeredPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+//		layeredPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
 	/**
@@ -134,6 +137,12 @@ public class HandGUI extends JPanel {
 		}
 
 		return card;
+	}
+	
+	protected void paintComponent(Graphics g) {
+
+		super.paintComponent(g);
+		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 	}
 
 	private class HandMouseListener implements MouseListener {

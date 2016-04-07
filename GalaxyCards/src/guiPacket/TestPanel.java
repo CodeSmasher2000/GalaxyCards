@@ -58,6 +58,9 @@ public class TestPanel extends JPanel{
 		testPanel.add(testDraw);
 		testPanel.add(testOpponentDrawCard);
 		testPanel.add(testOpponentPlayCard);
+		testPanel.setOpaque(false);
+		testDraw.setOpaque(false);
+		testOpponentDrawCard.setOpaque(false);
 	}
 	
 	private void loadDeck() {
