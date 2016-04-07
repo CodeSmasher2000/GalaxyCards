@@ -1,10 +1,10 @@
 package guiPacket;
 
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
 
 import EnumMessage.Lanes;
 import EnumMessage.Persons;
@@ -337,8 +337,8 @@ public class BoardGuiController {
 			playerOffLane.addMouseListener(selectLane);
 			playerDefLane.addMouseListener(selectLane);
 
-			playerOffLane.setBorder(BorderFactory.createTitledBorder("OFFENSIVE LANE"));
-			playerDefLane.setBorder(BorderFactory.createTitledBorder("DEFENSIVE LANE"));
+			playerOffLane.setBorder(CustomGui.offLaneBorder);
+			playerDefLane.setBorder(CustomGui.deffLaneBorder);
 			
 			playerDefLane.setBackground(CustomGui.guiTransparentColor);
 			playerOffLane.setBackground(CustomGui.guiTransparentColor);
@@ -348,7 +348,6 @@ public class BoardGuiController {
 		public void run() {
 			while (!laneSelected) {
 				System.err.println("Waiting for selection of lane");
-				InfoPanelGUI.append("Waiting for selection of lane");
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
@@ -391,13 +390,13 @@ public class BoardGuiController {
 		@Override
 		public void mouseEntered(MouseEvent event) {
 			if (event.getSource() == playerDefLane) {
-				playerDefLane.setBorder(BorderFactory.createLineBorder(CustomGui.borderMarked, 5, true));
+				playerDefLane.setBorder(CustomGui.defLaneMarkedBorder);
 				playerDefLane.setOpaque(true);
 				
 
 			}
 			if (event.getSource() == playerOffLane) {
-				playerOffLane.setBorder(BorderFactory.createLineBorder(CustomGui.borderMarked, 5, true));
+				playerOffLane.setBorder(CustomGui.offLaneMarkedBorder);
 				playerOffLane.setOpaque(true);
 				
 			}
@@ -407,11 +406,11 @@ public class BoardGuiController {
 		@Override
 		public void mouseExited(MouseEvent event) {
 			if (event.getSource() == playerDefLane) {
-				playerDefLane.setBorder(BorderFactory.createTitledBorder("DEFENSIVE LANE"));
+				playerDefLane.setBorder(CustomGui.deffLaneBorder);
 				playerDefLane.setOpaque(false);
 			}
 			if (event.getSource() == playerOffLane) {
-				playerOffLane.setBorder(BorderFactory.createTitledBorder("OFFENSIVE LANE"));
+				playerOffLane.setBorder(CustomGui.offLaneBorder);
 				playerOffLane.setOpaque(false);
 			}
 		}

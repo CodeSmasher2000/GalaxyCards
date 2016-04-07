@@ -66,7 +66,7 @@ public class HandGUI extends JPanel {
 		layeredPane = new JLayeredPane();
 		layeredPane.setOpaque(false);
 		layeredPane.setLayout(null);
-		layeredPane.setPreferredSize(new Dimension(730, 240));
+		layeredPane.setPreferredSize(new Dimension(730, 230));
 		layeredPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
@@ -83,7 +83,7 @@ public class HandGUI extends JPanel {
 		if (cardsOnHand < 8) {
 			cards[cardsOnHand] = card;
 			boardController.addCardToHand(card);
-			card.setBounds(horizontalPosition, 20, card.getPreferredSize().width, card.getPreferredSize().height);
+			card.setBounds(horizontalPosition, 10, card.getPreferredSize().width, card.getPreferredSize().height);
 			card.addMouseListener(listener);
 			layeredPane.add(card, new Integer(cardsOnHand));
 			horizontalPosition += 80;
@@ -138,7 +138,6 @@ public class HandGUI extends JPanel {
 
 	private class HandMouseListener implements MouseListener {
 
-		private boolean mousePressed = false;
 		private Card temp;
 		private Border defaultBorder;
 		private Border highlightB = BorderFactory.createLineBorder(CustomGui.borderMarked, 3, true);
@@ -152,7 +151,7 @@ public class HandGUI extends JPanel {
 			temp = (Card) event.getSource();
 			cardOriginalLayer = layeredPane.getLayer(temp);
 			layeredPane.setLayer(temp, Integer.MAX_VALUE);
-			temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
+			temp.setBounds(temp.getX(), 1, temp.getPreferredSize().width, temp.getPreferredSize().height);
 			defaultBorder = temp.getBorder();
 			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
 		}
@@ -161,7 +160,7 @@ public class HandGUI extends JPanel {
 		public void mouseExited(MouseEvent arg0) {
 //			if (!mousePressed) {
 				layeredPane.setLayer(temp, cardOriginalLayer);
-				temp.setBounds(temp.getX(), 20, temp.getPreferredSize().width, temp.getPreferredSize().height);
+				temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
 				temp.setBorder(defaultBorder);
 //			}
 		}

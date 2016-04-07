@@ -9,7 +9,6 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.peer.ScrollbarPeer;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -36,7 +35,7 @@ import exceptionsPacket.GuiContainerException;
 public class BoardGUI extends JPanel {
 
 	private BoardGuiController boardController = new BoardGuiController();
-	private JPanel playFieldPanel, playerPanel, opponentPanel, scrapYardPanel, infoPanel, infoPanel2, middlePanel;
+	private JPanel playFieldPanel, playerPanel, playerContainer, opponentPanel, scrapYardPanel, infoPanel, infoPanel2, middlePanel;
 	private ArrayLayeredPane playerDefensiveLane, playerOffensiveLane, enemyDefensiveLane, enemyOffensiveLane;
 	private HandGUI hand;
 	private OpponentHandGUI opponentHand;
@@ -65,9 +64,6 @@ public class BoardGUI extends JPanel {
 		configureScrapPane();
 		configureInfoPane();
 
-		// Debugg
-		testMethod();
-
 		middlePanel.setLayout(new BorderLayout());
 		middlePanel.add(playFieldPanel, BorderLayout.CENTER);
 		middlePanel.add(opponentPanel, BorderLayout.NORTH);
@@ -78,6 +74,9 @@ public class BoardGUI extends JPanel {
 		this.add(scrapYardPanel, BorderLayout.WEST);
 		this.add(infoPanel, BorderLayout.EAST);
 		this.setOpaque(false);
+
+		// Debugg
+		testMethod();
 
 	}
 
@@ -115,6 +114,7 @@ public class BoardGUI extends JPanel {
 
 	private void initiateContainers() {
 		playerPanel = new JPanel();
+		playerContainer = new JPanel();
 		opponentPanel = new JPanel();
 		playFieldPanel = new JPanel();
 		scrapYardPanel = new JPanel();
@@ -131,19 +131,21 @@ public class BoardGUI extends JPanel {
 		infoPanel.setBackground(CustomGui.guiTransparentColor);
 
 		infoPanel2.setLayout(new BoxLayout(infoPanel2, BoxLayout.Y_AXIS));
-		infoPanel2.setPreferredSize(new Dimension(360,1000));
+		infoPanel2.setPreferredSize(new Dimension(360, 1000));
 		infoPanel2.setOpaque(false);
 		infoPanel2.setBackground(CustomGui.guiTransparentColor);
-		
+
 		infoPanel2.add(Box.createVerticalStrut(10));
 		infoPanel2.add(hoveredCard);
-//		infoPanel2.add(Box.createVerticalGlue());
+		// infoPanel2.add(Box.createVerticalGlue());
 		infoPanel2.add(Box.createVerticalStrut(20));
-//		infoPanel2.add(Box.createVerticalGlue());
-		
+		// infoPanel2.add(Box.createVerticalGlue());
+
 		infoPanel.add(Box.createHorizontalStrut(10));
 		infoPanel.add(infoPanel2);
 		infoPanel.add(Box.createHorizontalStrut(10));
+		
+		infoPanel.setBorder(BorderFactory.createLineBorder(CustomGui.blueHighlight));
 
 		// infoPanel.setBackground(guiTransparentColor);
 	}
@@ -151,7 +153,7 @@ public class BoardGUI extends JPanel {
 	private void configureScrapPane() {
 		// TODO Auto-generated method stub
 		scrapYardPanel.add(new JLabel("PLACEHOLDER"));
-		scrapYardPanel.setBorder(BorderFactory.createTitledBorder("SCAPYARD"));
+		scrapYardPanel.setBorder(BorderFactory.createLineBorder(CustomGui.blueHighlight));
 		scrapYardPanel.setLayout(new BoxLayout(scrapYardPanel, BoxLayout.Y_AXIS));
 		scrapYardPanel.setPreferredSize(new Dimension(200, 1080));
 		scrapYardPanel.setOpaque(true);
@@ -163,11 +165,20 @@ public class BoardGUI extends JPanel {
 	}
 
 	private void configurePlayerPanel() {
-		playerPanel.add(hand);
-		playerPanel.add(hero);
-		playerPanel.add(playerHeroicPanel);
-		playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
+		
+		playerContainer.add(hand);
+		playerContainer.add(hero);
+		playerContainer.add(playerHeroicPanel);
+		playerContainer.setOpaque(false);
+		
+		
+		playerPanel.add(Box.createVerticalStrut(3));
+		playerPanel.add(playerContainer);
+		playerPanel.add(Box.createVerticalStrut(5));
 		playerPanel.setBackground(CustomGui.guiTransparentColor);
+		
+		playerPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, CustomGui.blueHighlight));
 	}
 
 	private void configureOpponentPanel() {
@@ -175,6 +186,8 @@ public class BoardGUI extends JPanel {
 		opponentPanel.add(opponentHero);
 		opponentPanel.add(opponentHeroicPanel);
 		opponentPanel.setBackground(CustomGui.guiTransparentColor);
+		
+		opponentPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, CustomGui.blueHighlight));
 	}
 
 	private void configurePlayfield() {
@@ -223,7 +236,7 @@ public class BoardGUI extends JPanel {
 			temp = deck.drawCard();
 			enemyDeck = deck;
 			System.out.println(enemyDeck.toString());
-			InfoPanelGUI.append(deck.toString()+"\n");
+			InfoPanelGUI.append(deck.toString() + "\n");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -247,6 +260,7 @@ public class BoardGUI extends JPanel {
 
 		private LinkedList<Card> enemyHand = new LinkedList<Card>();
 		private Lanes ENUM = Lanes.PLAYER_DEFENSIVE;
+		private boolean b = false;
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -278,12 +292,15 @@ public class BoardGUI extends JPanel {
 					HeroicSupport hs;
 					if (temp instanceof Unit) {
 						Unit unit = (Unit) temp;
-						boardController.opponentPlaysUnit(unit, ENUM);
-						if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+						
+						if (!b) {
 							ENUM = Lanes.PLAYER_OFFENSIVE;
+							b=true;
 						} else {
 							ENUM = Lanes.PLAYER_DEFENSIVE;
+							b=false;
 						}
+						boardController.opponentPlaysUnit(unit, ENUM);
 					}
 					if (temp instanceof HeroicSupport) {
 						hs = (HeroicSupport) temp;

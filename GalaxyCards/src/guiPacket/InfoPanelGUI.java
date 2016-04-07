@@ -7,10 +7,11 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
@@ -35,11 +36,17 @@ public class InfoPanelGUI extends JPanel {
 	private JPanel twPanel1= new JPanel();
 	private JPanel twPanel2= new JPanel();
 	
+	private static JEditorPane  editorPane = new JEditorPane();
+	private static String pre = "<html><body style='font-size: 12px;'><ul>";
+	private static StringBuilder stringBuilder = new StringBuilder();
+	private static String font = "BankGothic Md BT";
+	
 	
 	private Border b1 = BorderFactory.createEmptyBorder(0, 10, 0, 10);
 	
-	private static JTextArea textArea = new JTextArea();
-	private static JScrollPane sp = new JScrollPane( textArea );
+//	private static JTextArea textArea = new JTextArea();
+	private static JScrollPane scrollPane = new JScrollPane( editorPane );
+	
 
 
 	public InfoPanelGUI(BoardGuiController boardController) {
@@ -48,7 +55,7 @@ public class InfoPanelGUI extends JPanel {
 		
 		customizeCardPanel();
 		customizeTWPanel();
-		customizeTextArea();
+		customizeEditorPane();
 		
 		//FOR DEBUGGING
 //		showPanelBorders();
@@ -61,15 +68,12 @@ public class InfoPanelGUI extends JPanel {
 
 	}
 
-	private void customizeTextArea() {
-		// TODO Auto-generated method stub
-		textArea.setOpaque(true);
-		textArea.setLineWrap( true );
-		textArea.setWrapStyleWord( true );
-		textArea.setEditable(false);
-		
-		sp.setOpaque(false);
-		sp.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+	private void customizeEditorPane() {
+		editorPane.setContentType("text/html");
+		editorPane.setOpaque(true);
+		editorPane.setEditable(false);
+		scrollPane.setOpaque(false);
+		scrollPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
 	private void showPanelBorders() {
@@ -82,12 +86,15 @@ public class InfoPanelGUI extends JPanel {
 		twPanel1.setBorder(BorderFactory.createTitledBorder("TW PANEL 1"));
 		twContainer.setBorder(BorderFactory.createTitledBorder("TW Container"));
 		midEmpty.setBorder(BorderFactory.createTitledBorder("MIDEMPTY"));
-		sp.setBorder(BorderFactory.createTitledBorder("SP"));
+		scrollPane.setBorder(BorderFactory.createTitledBorder("SP"));
 	}
 
 	private void customizeTWPanel() {
+		
+//		JScrollBar bar = scrollPane.getVerticalScrollBar();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		twContainer.setLayout(new BorderLayout());
-		twContainer.add(sp, BorderLayout.CENTER);
+		twContainer.add(scrollPane, BorderLayout.CENTER);
 		twContainer.setOpaque(true);
 		
 
@@ -137,39 +144,24 @@ public class InfoPanelGUI extends JPanel {
 	public static void setText( final String txt )  {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				textArea.setText( txt );
-				JScrollBar bar = sp.getVerticalScrollBar();
-				bar.setValue( bar.getMaximum()-bar.getVisibleAmount() );
+				stringBuilder = new StringBuilder(pre);
+				append(txt);
 			}
 		});
 	}
 
-	public static void setText( Object obj )  {
-		setText( obj.toString() );
+	public static synchronized void  append( final String txt ) {
+//		SwingUtilities.invokeLater(new Runnable() {
+//			public void run() {
+				
+				stringBuilder.append("<body style='font-family: ");
+				stringBuilder.append(font);
+				stringBuilder.append("'>");
+				stringBuilder.append(txt+"<br>");
+				editorPane.setText(stringBuilder.toString());
+//			}
+//		});
 	}
 	
-	public static void append( final String txt ) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				textArea.append( txt +"\n");
-			}
-		});
-	}
-	
-	public static void append( Object obj ) {
-		append( obj.toString() );
-	}
-	
-	public static void println() {
-		append( "\n" );
-	}
-	
-	public static void println( String txt ) {
-		append( txt + "\n" );
-	}
-	
-	public static void println( Object obj ) {
-		println( obj.toString() );
-	}
 }
 
