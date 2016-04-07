@@ -36,7 +36,7 @@ public class HeroicPanelGUI extends JPanel {
 	private HeroicSupport[] heroicUnits = new HeroicSupport[2];
 	private HeroicMouseListener listener = new HeroicMouseListener();
 	private BoardGuiController boardController;
-	private Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+	private Border border = BorderFactory.createLineBorder(CustomGui.blueHighlight);
 	private Persons ENUM;
 
 	public HeroicPanelGUI(BoardGuiController boardController, Persons ENUM) {
@@ -165,7 +165,7 @@ public class HeroicPanelGUI extends JPanel {
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			temp.setBorder(defaultBorder);
+			temp.setBorder(border);
 		}
 
 		@Override

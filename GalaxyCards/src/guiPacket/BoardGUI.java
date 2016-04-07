@@ -1,41 +1,24 @@
 package guiPacket;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.DisplayMode;
 import java.awt.Graphics;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import EnumMessage.Lanes;
 import EnumMessage.Persons;
-import cards.Deck;
-import cards.HeroicSupport;
-import cards.Unit;
-import exceptionsPacket.EmptyDeckException;
-import exceptionsPacket.GuiContainerException;
 
 public class BoardGUI extends JPanel {
 
-	private BoardGuiController boardController = new BoardGuiController();
-	private JPanel playFieldPanel, playerPanel, playerContainer, opponentPanel, scrapYardPanel, infoPanel, infoPanel2, middlePanel;
+	private BoardGuiController boardController;
+	private JPanel playFieldPanel, playerPanel, playerContainer, opponentPanel, scrapYardPanel, scrapYardPanel2,
+			scrapYardContainer, infoPanel, infoPanel2, middlePanel;
 	private ArrayLayeredPane playerDefensiveLane, playerOffensiveLane, enemyDefensiveLane, enemyOffensiveLane;
 	private HandGUI hand;
 	private OpponentHandGUI opponentHand;
@@ -45,17 +28,9 @@ public class BoardGUI extends JPanel {
 
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
 
-	// DEBUGG
-	private Card temp;
-	private ButtonListener list = new ButtonListener();
-	private Deck deck, enemyDeck;
-	private ObjectInputStream ois;
-	private JButton testDraw, testOpponentDrawCard, testOpponentPlayCard;
-	private JPanel testPanel;
-
-	public BoardGUI() {
-
-		initiateTestElements();
+	public BoardGUI(BoardGuiController boardController) {
+		this.boardController = boardController;
+		// initiateTestElements();
 		initiateGuiElements();
 		initiateContainers();
 		configurePlayerPanel();
@@ -71,29 +46,9 @@ public class BoardGUI extends JPanel {
 		middlePanel.setOpaque(false);
 		this.setLayout(new BorderLayout());
 		this.add(middlePanel, BorderLayout.CENTER);
-		this.add(scrapYardPanel, BorderLayout.WEST);
+		this.add(scrapYardPanel2, BorderLayout.WEST);
 		this.add(infoPanel, BorderLayout.EAST);
 		this.setOpaque(false);
-
-		// Debugg
-		testMethod();
-
-	}
-
-	private void initiateTestElements() {
-		testDraw = new JButton("Dra kort spelare");
-		testOpponentDrawCard = new JButton("Dra kort motståndare");
-		testOpponentPlayCard = new JButton("Motståndare spela kort");
-
-		testDraw.addActionListener(list);
-		testOpponentDrawCard.addActionListener(list);
-		testOpponentPlayCard.addActionListener(list);
-
-		testPanel = new JPanel();
-		testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
-		testPanel.add(testDraw);
-		testPanel.add(testOpponentDrawCard);
-		testPanel.add(testOpponentPlayCard);
 	}
 
 	private void initiateGuiElements() {
@@ -117,14 +72,15 @@ public class BoardGUI extends JPanel {
 		playerContainer = new JPanel();
 		opponentPanel = new JPanel();
 		playFieldPanel = new JPanel();
+		scrapYardPanel2 = new JPanel();
 		scrapYardPanel = new JPanel();
+		scrapYardContainer = new JPanel();
 		infoPanel = new JPanel();
 		infoPanel2 = new JPanel();
 		middlePanel = new JPanel();
 	}
 
 	private void configureInfoPane() {
-		// TODO Auto-generated method stub
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.X_AXIS));
 		infoPanel.setPreferredSize(new Dimension(400, 1080));
 		infoPanel.setOpaque(true);
@@ -137,47 +93,48 @@ public class BoardGUI extends JPanel {
 
 		infoPanel2.add(Box.createVerticalStrut(10));
 		infoPanel2.add(hoveredCard);
-		// infoPanel2.add(Box.createVerticalGlue());
 		infoPanel2.add(Box.createVerticalStrut(20));
-		// infoPanel2.add(Box.createVerticalGlue());
 
 		infoPanel.add(Box.createHorizontalStrut(10));
 		infoPanel.add(infoPanel2);
 		infoPanel.add(Box.createHorizontalStrut(10));
-		
+
 		infoPanel.setBorder(BorderFactory.createLineBorder(CustomGui.blueHighlight));
 
-		// infoPanel.setBackground(guiTransparentColor);
 	}
 
 	private void configureScrapPane() {
-		// TODO Auto-generated method stub
-		scrapYardPanel.add(new JLabel("PLACEHOLDER"));
-		scrapYardPanel.setBorder(BorderFactory.createLineBorder(CustomGui.blueHighlight));
-		scrapYardPanel.setLayout(new BoxLayout(scrapYardPanel, BoxLayout.Y_AXIS));
-		scrapYardPanel.setPreferredSize(new Dimension(200, 1080));
-		scrapYardPanel.setOpaque(true);
+		scrapYardPanel2.setBorder(BorderFactory.createLineBorder(CustomGui.blueHighlight));
+		scrapYardPanel2.setLayout(new BoxLayout(scrapYardPanel2, BoxLayout.Y_AXIS));
+		scrapYardPanel2.setOpaque(true);
+		scrapYardPanel2.setBackground(CustomGui.guiTransparentColor);
+		scrapYardPanel2.add(Box.createVerticalStrut(10));
+		scrapYardPanel2.add(scrapYardPanel);
+		scrapYardPanel2.add(Box.createVerticalStrut(10));
+		
+		scrapYardPanel.setLayout(new BoxLayout(scrapYardPanel, BoxLayout.X_AXIS));
+		scrapYardPanel.setOpaque(false);
 		scrapYardPanel.setBackground(CustomGui.guiTransparentColor);
-		scrapYardPanel.add(Box.createVerticalStrut(10));
-		scrapYardPanel.add(testPanel);
-
-		// scrapYardPanel.setBackground(guiTransparentColor);
+		scrapYardPanel.add(Box.createHorizontalStrut(10));
+		scrapYardPanel.add(scrapYardContainer);
+		scrapYardPanel.add(Box.createHorizontalStrut(10));
+		
+		
 	}
 
 	private void configurePlayerPanel() {
 		playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
-		
+
 		playerContainer.add(hand);
 		playerContainer.add(hero);
 		playerContainer.add(playerHeroicPanel);
 		playerContainer.setOpaque(false);
-		
-		
+
 		playerPanel.add(Box.createVerticalStrut(3));
 		playerPanel.add(playerContainer);
 		playerPanel.add(Box.createVerticalStrut(5));
 		playerPanel.setBackground(CustomGui.guiTransparentColor);
-		
+
 		playerPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, CustomGui.blueHighlight));
 	}
 
@@ -186,7 +143,7 @@ public class BoardGUI extends JPanel {
 		opponentPanel.add(opponentHero);
 		opponentPanel.add(opponentHeroicPanel);
 		opponentPanel.setBackground(CustomGui.guiTransparentColor);
-		
+
 		opponentPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, CustomGui.blueHighlight));
 	}
 
@@ -218,123 +175,12 @@ public class BoardGUI extends JPanel {
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 	}
 
-	// DEBUGG
-	private void testMethod() {
-
-		// JFrame testFrame = new JFrame("GUI TESTER");
-		// testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// testFrame.add(testPanel);
-		// testFrame.setLocation(1700, 0);
-		// testFrame.setVisible(true);
-		// testFrame.pack();
-
-		try {
-			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("files/decks/padde.dat")));
-			deck = (Deck) ois.readObject();
-			deck.shuffle();
-			System.out.println(deck.toString());
-			temp = deck.drawCard();
-			enemyDeck = deck;
-			System.out.println(enemyDeck.toString());
-			InfoPanelGUI.append(deck.toString() + "\n");
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			InfoPanelGUI.append(e.getMessage());
-		} catch (ClassNotFoundException e) {
-			InfoPanelGUI.append(e.getMessage());
-			e.printStackTrace();
-		} catch (EmptyDeckException e) {
-			InfoPanelGUI.append(e.getMessage());
-			e.printStackTrace();
-		}
-		System.out.println(playerOffensiveLane.length());
-		System.out.println(playerDefensiveLane.length());
-		System.out.println(enemyOffensiveLane.length());
-		System.out.println(enemyDefensiveLane.length());
+	/**
+	 * Adds a debugging panel so we can test the functionality of the system.
+	 * 
+	 * @param panel
+	 */
+	public void addDebuggPanel(TestPanel testPanel) {
+		scrapYardContainer.add(testPanel);
 	}
-
-	// DEBUGG remove when gui is functional
-	private class ButtonListener implements ActionListener {
-
-		private LinkedList<Card> enemyHand = new LinkedList<Card>();
-		private Lanes ENUM = Lanes.PLAYER_DEFENSIVE;
-		private boolean b = false;
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			if (event.getSource() == testDraw) {
-				try {
-					System.out.println("Deck size: " + deck.getAmtOfCards());
-					boardController.drawCard(temp);
-					temp = deck.drawCard();
-				} catch (GuiContainerException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
-				} catch (EmptyDeckException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
-				}
-			}
-			if (event.getSource() == testOpponentDrawCard) {
-				try {
-					boardController.opponentDrawsCard();
-				} catch (GuiContainerException e) {
-					// TODO Auto-generated catch block
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
-				}
-			}
-			if (event.getSource() == testOpponentPlayCard) {
-				try {
-					Card temp = enemyDeck.drawCard();
-					HeroicSupport hs;
-					if (temp instanceof Unit) {
-						Unit unit = (Unit) temp;
-						
-						if (!b) {
-							ENUM = Lanes.PLAYER_OFFENSIVE;
-							b=true;
-						} else {
-							ENUM = Lanes.PLAYER_DEFENSIVE;
-							b=false;
-						}
-						boardController.opponentPlaysUnit(unit, ENUM);
-					}
-					if (temp instanceof HeroicSupport) {
-						hs = (HeroicSupport) temp;
-						boardController.opponentPlaysHeroicSupport(hs);
-					}
-
-				} catch (GuiContainerException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
-				} catch (EmptyDeckException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					InfoPanelGUI.append(e.getMessage());
-				}
-			}
-		}
-	}
-
-	public static void main(String[] args) {
-
-		GraphicsEnvironment gfxEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice gfxDevice = gfxEnvironment.getDefaultScreenDevice();
-		DisplayMode getMode = gfxDevice.getDisplayMode();
-		JFrame frame = new JFrame();
-
-		DisplayMode displayMode = new DisplayMode(getMode.getWidth(), getMode.getHeight(), getMode.getBitDepth(),
-				getMode.getRefreshRate());
-		gfxDevice.setFullScreenWindow(frame);
-		gfxDevice.setDisplayMode(displayMode);
-
-		frame.add(new BoardGUI());
-		frame.setVisible(true);
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
 }
