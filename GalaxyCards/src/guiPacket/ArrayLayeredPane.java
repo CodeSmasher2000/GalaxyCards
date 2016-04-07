@@ -167,7 +167,7 @@ public class ArrayLayeredPane extends JPanel {
 
 		private Unit temp;
 		private Border defaultBorder;
-		private Border highlightB = BorderFactory.createLineBorder(CustomColors.borderMarked, 3, false);
+		private Border highlightB = BorderFactory.createLineBorder(CustomGui.borderMarked, 3, false);
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -180,7 +180,7 @@ public class ArrayLayeredPane extends JPanel {
 			temp = (Unit) event.getSource();
 			defaultBorder = temp.getBorder();
 			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
-
+			boardController.updateHoveredCardGui(temp);
 		}
 
 		@Override

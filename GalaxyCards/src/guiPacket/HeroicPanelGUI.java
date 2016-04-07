@@ -147,7 +147,7 @@ public class HeroicPanelGUI extends JPanel {
 
 		private HeroicSupport temp;
 		private Border defaultBorder;
-		private Border highlightB = BorderFactory.createLineBorder(CustomColors.borderMarked, 3, true);
+		private Border highlightB = BorderFactory.createLineBorder(CustomGui.borderMarked, 3, true);
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {

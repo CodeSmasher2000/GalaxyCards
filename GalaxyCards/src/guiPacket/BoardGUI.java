@@ -9,6 +9,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.peer.ScrollbarPeer;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,15 +36,14 @@ import exceptionsPacket.GuiContainerException;
 public class BoardGUI extends JPanel {
 
 	private BoardGuiController boardController = new BoardGuiController();
-	private JPanel playFieldPanel, playerPanel, opponentPanel, scrapYardPanel, infoPanel, middlePanel;
+	private JPanel playFieldPanel, playerPanel, opponentPanel, scrapYardPanel, infoPanel, infoPanel2, middlePanel;
 	private ArrayLayeredPane playerDefensiveLane, playerOffensiveLane, enemyDefensiveLane, enemyOffensiveLane;
 	private HandGUI hand;
 	private OpponentHandGUI opponentHand;
 	private HeroGUI hero, opponentHero;
 	private HeroicPanelGUI playerHeroicPanel, opponentHeroicPanel;
-	
-	private Color guiTransparentColor = new Color(255,255,255,125);
-	
+	private HoveredCardGUI hoveredCard;
+
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
 
 	// DEBUGG
@@ -56,6 +56,7 @@ public class BoardGUI extends JPanel {
 
 	public BoardGUI() {
 
+		initiateTestElements();
 		initiateGuiElements();
 		initiateContainers();
 		configurePlayerPanel();
@@ -80,6 +81,22 @@ public class BoardGUI extends JPanel {
 
 	}
 
+	private void initiateTestElements() {
+		testDraw = new JButton("Dra kort spelare");
+		testOpponentDrawCard = new JButton("Dra kort motståndare");
+		testOpponentPlayCard = new JButton("Motståndare spela kort");
+
+		testDraw.addActionListener(list);
+		testOpponentDrawCard.addActionListener(list);
+		testOpponentPlayCard.addActionListener(list);
+
+		testPanel = new JPanel();
+		testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
+		testPanel.add(testDraw);
+		testPanel.add(testOpponentDrawCard);
+		testPanel.add(testOpponentPlayCard);
+	}
+
 	private void initiateGuiElements() {
 		hand = new HandGUI(boardController);
 		opponentHand = new OpponentHandGUI(boardController);
@@ -93,10 +110,7 @@ public class BoardGUI extends JPanel {
 		enemyDefensiveLane = new ArrayLayeredPane(boardController, Lanes.ENEMY_DEFENSIVE, 6);
 		enemyOffensiveLane = new ArrayLayeredPane(boardController, Lanes.ENEMY_OFFENSIVE, 6);
 
-		playerDefensiveLane.setOpaque(false);
-		playerOffensiveLane.setOpaque(false);
-		enemyDefensiveLane.setOpaque(false);
-		enemyOffensiveLane.setOpaque(false);
+		hoveredCard = new HoveredCardGUI(boardController);
 	}
 
 	private void initiateContainers() {
@@ -105,26 +119,47 @@ public class BoardGUI extends JPanel {
 		playFieldPanel = new JPanel();
 		scrapYardPanel = new JPanel();
 		infoPanel = new JPanel();
+		infoPanel2 = new JPanel();
 		middlePanel = new JPanel();
 	}
 
 	private void configureInfoPane() {
 		// TODO Auto-generated method stub
-		infoPanel.add(new JLabel("PLACEHOLDER"));
-		infoPanel.setBorder(BorderFactory.createTitledBorder("Info Panel"));
-		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.X_AXIS));
 		infoPanel.setPreferredSize(new Dimension(400, 1080));
-		infoPanel.setBackground(guiTransparentColor);
+		infoPanel.setOpaque(true);
+		infoPanel.setBackground(CustomGui.guiTransparentColor);
+
+		infoPanel2.setLayout(new BoxLayout(infoPanel2, BoxLayout.Y_AXIS));
+		infoPanel2.setPreferredSize(new Dimension(360,1000));
+		infoPanel2.setOpaque(false);
+		infoPanel2.setBackground(CustomGui.guiTransparentColor);
+		
+		infoPanel2.add(Box.createVerticalStrut(10));
+		infoPanel2.add(hoveredCard);
+		infoPanel2.add(Box.createVerticalGlue());
+		infoPanel2.add(Box.createVerticalStrut(20));
+		infoPanel2.add(Box.createVerticalGlue());
+		
+		infoPanel.add(Box.createHorizontalStrut(10));
+		infoPanel.add(infoPanel2);
+		infoPanel.add(Box.createHorizontalStrut(10));
+
+		// infoPanel.setBackground(guiTransparentColor);
 	}
 
 	private void configureScrapPane() {
 		// TODO Auto-generated method stub
 		scrapYardPanel.add(new JLabel("PLACEHOLDER"));
-		scrapYardPanel.setBorder(BorderFactory.createTitledBorder("Scrapyard"));
+		scrapYardPanel.setBorder(BorderFactory.createTitledBorder("SCAPYARD"));
 		scrapYardPanel.setLayout(new BoxLayout(scrapYardPanel, BoxLayout.Y_AXIS));
 		scrapYardPanel.setPreferredSize(new Dimension(200, 1080));
-//		scrapYardPanel.setOpaque(false);
-		scrapYardPanel.setBackground(guiTransparentColor);
+		scrapYardPanel.setOpaque(true);
+		scrapYardPanel.setBackground(CustomGui.guiTransparentColor);
+		scrapYardPanel.add(Box.createVerticalStrut(10));
+		scrapYardPanel.add(testPanel);
+
+		// scrapYardPanel.setBackground(guiTransparentColor);
 	}
 
 	private void configurePlayerPanel() {
@@ -132,18 +167,22 @@ public class BoardGUI extends JPanel {
 		playerPanel.add(hero);
 		playerPanel.add(playerHeroicPanel);
 		playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		playerPanel.setBackground(guiTransparentColor);
+		playerPanel.setBackground(CustomGui.guiTransparentColor);
 	}
 
 	private void configureOpponentPanel() {
 		opponentPanel.add(opponentHand);
 		opponentPanel.add(opponentHero);
 		opponentPanel.add(opponentHeroicPanel);
-		opponentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		opponentPanel.setBackground(guiTransparentColor);
+		opponentPanel.setBackground(CustomGui.guiTransparentColor);
 	}
 
 	private void configurePlayfield() {
+		playerDefensiveLane.setOpaque(false);
+		playerOffensiveLane.setOpaque(false);
+		enemyDefensiveLane.setOpaque(false);
+		enemyOffensiveLane.setOpaque(false);
+
 		playFieldPanel.setLayout(new BoxLayout(playFieldPanel, BoxLayout.Y_AXIS));
 		playFieldPanel.add(Box.createVerticalStrut(3));
 		playFieldPanel.add(Box.createVerticalGlue());
@@ -163,33 +202,18 @@ public class BoardGUI extends JPanel {
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-		g.drawImage(background.getImage(), 0, 0,getWidth(),getHeight(), this);
+		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 	}
 
 	// DEBUGG
 	private void testMethod() {
 
-		testDraw = new JButton("Dra kort spelare");
-		testOpponentDrawCard = new JButton("Dra kort motståndare");
-		testOpponentPlayCard = new JButton("Motståndare spela kort");
-
-		testDraw.addActionListener(list);
-		testOpponentDrawCard.addActionListener(list);
-		testOpponentPlayCard.addActionListener(list);
-
-		testPanel = new JPanel();
-		testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
-		testPanel.add(testDraw);
-		testPanel.add(testOpponentDrawCard);
-		testPanel.add(testOpponentPlayCard);
-		infoPanel.add(testPanel);
-
-//		JFrame testFrame = new JFrame("GUI TESTER");
-//		testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		testFrame.add(testPanel);
-//		testFrame.setLocation(1700, 0);
-//		testFrame.setVisible(true);
-//		testFrame.pack();
+		// JFrame testFrame = new JFrame("GUI TESTER");
+		// testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// testFrame.add(testPanel);
+		// testFrame.setLocation(1700, 0);
+		// testFrame.setVisible(true);
+		// testFrame.pack();
 
 		try {
 			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("files/decks/padde.dat")));
@@ -199,7 +223,7 @@ public class BoardGUI extends JPanel {
 			temp = deck.drawCard();
 			enemyDeck = deck;
 			System.out.println(enemyDeck.toString());
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -247,20 +271,20 @@ public class BoardGUI extends JPanel {
 				try {
 					Card temp = enemyDeck.drawCard();
 					HeroicSupport hs;
-					if(temp instanceof Unit){
-						Unit  unit = (Unit) temp;
+					if (temp instanceof Unit) {
+						Unit unit = (Unit) temp;
 						boardController.opponentPlaysUnit(unit, ENUM);
-						if(ENUM==Lanes.PLAYER_DEFENSIVE){
+						if (ENUM == Lanes.PLAYER_DEFENSIVE) {
 							ENUM = Lanes.PLAYER_OFFENSIVE;
-						}else{
+						} else {
 							ENUM = Lanes.PLAYER_DEFENSIVE;
 						}
 					}
-					if(temp instanceof HeroicSupport){
+					if (temp instanceof HeroicSupport) {
 						hs = (HeroicSupport) temp;
 						boardController.opponentPlaysHeroicSupport(hs);
 					}
-					
+
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
 				} catch (EmptyDeckException e) {
@@ -277,7 +301,7 @@ public class BoardGUI extends JPanel {
 		GraphicsDevice gfxDevice = gfxEnvironment.getDefaultScreenDevice();
 		DisplayMode getMode = gfxDevice.getDisplayMode();
 		JFrame frame = new JFrame();
-		
+
 		DisplayMode displayMode = new DisplayMode(getMode.getWidth(), getMode.getHeight(), getMode.getBitDepth(),
 				getMode.getRefreshRate());
 		gfxDevice.setFullScreenWindow(frame);

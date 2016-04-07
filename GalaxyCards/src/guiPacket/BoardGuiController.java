@@ -32,7 +32,8 @@ public class BoardGuiController {
 	private ArrayLayeredPane playerOffLane;
 	private ArrayLayeredPane enemyDefLane;
 	private ArrayLayeredPane enemyOffLane;
-
+	
+	private HoveredCardGUI hoveredCardPanel;
 	private ArrayLayeredPane tempLane;
 	private LaneSelectListener selectLane;
 	private boolean laneSelected = false;
@@ -65,7 +66,15 @@ public class BoardGuiController {
 	public void addOpponentHandListener(OpponentHandGUI hand) {
 		handGuiOpponent = hand;
 	}
-
+	
+	/**
+	 * Sets up a association between this object and the HoveredCardUI
+	 * @param hoveredCard
+	 */
+	public void addHoveredCardlListener(HoveredCardGUI hoveredCard) {
+		hoveredCardPanel  = hoveredCard;
+	}
+	
 	/**
 	 * Sets up a association between this object the heroicPanelGUI objects.
 	 * ENUM is passed in as argument to set up different versions of the class
@@ -215,6 +224,12 @@ public class BoardGuiController {
 	// *** to update various gui elements. ***
 	// ************************************************************************
 
+	public void updateHoveredCardGui(Unit cardToShow){
+		Unit clonedCard = new Unit(cardToShow.getName(), cardToShow.getRarity(), cardToShow.getImage(),
+				cardToShow.hasAbility(), cardToShow.getAttack(), cardToShow.getDefense(), cardToShow.getPrice());
+		cardToShow = null;
+		hoveredCardPanel.showCard(clonedCard);
+	}
 	/**
 	 * Method that checks the type of card played and places it in the suggested
 	 * container on BoardGUI. This method is called upon when the user selects
@@ -243,7 +258,6 @@ public class BoardGuiController {
 		if (card instanceof Tech) {
 
 		}
-
 	}
 
 	/**
@@ -323,12 +337,10 @@ public class BoardGuiController {
 
 			playerOffLane.setBorder(BorderFactory.createTitledBorder("OFFENSIVE LANE"));
 			playerDefLane.setBorder(BorderFactory.createTitledBorder("DEFENSIVE LANE"));
+			
+			playerDefLane.setBackground(CustomGui.guiTransparentColor);
+			playerOffLane.setBackground(CustomGui.guiTransparentColor);
 
-			playerOffLane.setOpaque(true);
-			playerOffLane.setBackground(new Color(0, 169, 255, 75));
-
-			playerDefLane.setOpaque(true);
-			playerDefLane.setBackground(new Color(0, 169, 255, 75));
 		}
 
 		public void run() {
@@ -351,6 +363,8 @@ public class BoardGuiController {
 
 			playerOffLane.setOpaque(false);
 			playerDefLane.setOpaque(false);
+			
+			
 
 			selectLane = null;
 			laneSelected = false;
@@ -361,6 +375,7 @@ public class BoardGuiController {
 
 	private class LaneSelectListener implements MouseListener {
 
+		
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 			// TODO Auto-generated method stub
@@ -370,10 +385,15 @@ public class BoardGuiController {
 		@Override
 		public void mouseEntered(MouseEvent event) {
 			if (event.getSource() == playerDefLane) {
-				playerDefLane.setBorder(BorderFactory.createLineBorder(CustomColors.borderMarked, 5, true));
+				playerDefLane.setBorder(BorderFactory.createLineBorder(CustomGui.borderMarked, 5, true));
+				playerDefLane.setOpaque(true);
+				
+
 			}
 			if (event.getSource() == playerOffLane) {
-				playerOffLane.setBorder(BorderFactory.createLineBorder(CustomColors.borderMarked, 5, true));
+				playerOffLane.setBorder(BorderFactory.createLineBorder(CustomGui.borderMarked, 5, true));
+				playerOffLane.setOpaque(true);
+				
 			}
 
 		}
@@ -382,9 +402,11 @@ public class BoardGuiController {
 		public void mouseExited(MouseEvent event) {
 			if (event.getSource() == playerDefLane) {
 				playerDefLane.setBorder(BorderFactory.createTitledBorder("DEFENSIVE LANE"));
+				playerDefLane.setOpaque(false);
 			}
 			if (event.getSource() == playerOffLane) {
 				playerOffLane.setBorder(BorderFactory.createTitledBorder("OFFENSIVE LANE"));
+				playerOffLane.setOpaque(false);
 			}
 		}
 
