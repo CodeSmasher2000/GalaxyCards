@@ -4,12 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import EnumMessage.Lanes;
@@ -26,6 +26,8 @@ public class BoardGUI extends JPanel {
 	private HeroGUI hero, opponentHero;
 	private HeroicPanelGUI playerHeroicPanel, opponentHeroicPanel;
 	private InfoPanelGUI hoveredCard;
+	
+	private ScrapyardGUI playerScrapyard, opponentScrapyard;
 
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
 	private ImageIcon historyPanelBg = new ImageIcon("files/pictures/historyPanelTexture.jpg");
@@ -69,6 +71,9 @@ public class BoardGUI extends JPanel {
 		enemyOffensiveLane = new ArrayLayeredPane(boardController, Lanes.ENEMY_OFFENSIVE, 6);
 
 		hoveredCard = new InfoPanelGUI(boardController);
+		
+		playerScrapyard = new ScrapyardGUI(boardController, Persons.PLAYER);
+		opponentScrapyard = new ScrapyardGUI(boardController, Persons.OPPONENT);
 	}
 
 	private void initiateContainers() {
@@ -122,7 +127,8 @@ public class BoardGUI extends JPanel {
 		scrapYardPanel.add(scrapYardContainer2);
 		scrapYardPanel.add(Box.createHorizontalStrut(10));
 		
-		
+		scrapYardContainer2.setLayout(new GridLayout(2,1));
+		scrapYardContainer2.add(playerScrapyard);
 	}
 
 	private void configurePlayerPanel() {

@@ -119,8 +119,6 @@ public class HandGUI extends JPanel {
 		layeredPane.repaint();
 		layeredPane.validate();
 
-		boardController.clearHand();
-
 		for (int i = 0; i < tempCards.length; i++) {
 			if (tempCards[i] != null) {
 				tempCards[i].removeMouseListener(listener);

@@ -3,9 +3,6 @@ package guiPacket;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-
 import EnumMessage.Lanes;
 import EnumMessage.Persons;
 import cards.HeroicSupport;
@@ -25,14 +22,15 @@ import exceptionsPacket.NoLaneSelectedException;
 public class BoardGuiController {
 
 	private HandGUI handGuiPlayer;
-	private HeroicPanelGUI heroicGui, enemyHeroicGui;
-	private HeroGUI heroGui;
 	private OpponentHandGUI handGuiOpponent;
+	private HeroicPanelGUI heroicGui, enemyHeroicGui;
+	private ScrapyardGUI playerScrapyard, enemyScrapyard;
+	private HeroGUI heroGui;
 	private ArrayLayeredPane playerDefLane;
 	private ArrayLayeredPane playerOffLane;
 	private ArrayLayeredPane enemyDefLane;
 	private ArrayLayeredPane enemyOffLane;
-	
+
 	private InfoPanelGUI hoveredCardPanel;
 	private ArrayLayeredPane tempLane;
 	private LaneSelectListener selectLane;
@@ -49,11 +47,28 @@ public class BoardGuiController {
 	// *************************************************************************
 
 	/**
+	 * Sets up a association between this object and the ScrapYardGUI object. A
+	 * Persons enum is passed in to detrminate if the object belongs to the
+	 * player or opponent.
+	 * 
+	 * @param hand : ScrapyardGUI
+	 * @param PLAYER, OPPONENT : Persons
+	 */
+	protected void addScrapyardListener(ScrapyardGUI scrapyardGUI, Persons ENUM) {
+		if (ENUM == Persons.PLAYER) {
+			playerScrapyard = scrapyardGUI;
+		}
+		if (ENUM == Persons.OPPONENT) {
+			enemyScrapyard = scrapyardGUI;
+		}
+	}
+
+	/**
 	 * Sets up a association between this object and the HandGUI object.
 	 * 
 	 * @param hand
 	 */
-	public void addHandPanelListener(HandGUI hand) {
+	protected void addHandPanelListener(HandGUI hand) {
 		handGuiPlayer = hand;
 	}
 
@@ -63,18 +78,19 @@ public class BoardGuiController {
 	 * 
 	 * @param hand
 	 */
-	public void addOpponentHandListener(OpponentHandGUI hand) {
+	protected void addOpponentHandListener(OpponentHandGUI hand) {
 		handGuiOpponent = hand;
 	}
-	
+
 	/**
 	 * Sets up a association between this object and the HoveredCardUI
+	 * 
 	 * @param hoveredCard
 	 */
-	public void addHoveredCardlListener(InfoPanelGUI hoveredCard) {
-		hoveredCardPanel  = hoveredCard;
+	protected void addHoveredCardlListener(InfoPanelGUI hoveredCard) {
+		hoveredCardPanel = hoveredCard;
 	}
-	
+
 	/**
 	 * Sets up a association between this object the heroicPanelGUI objects.
 	 * ENUM is passed in as argument to set up different versions of the class
@@ -84,7 +100,7 @@ public class BoardGuiController {
 	 * @param ENUM
 	 *            : PLAYER, OPPONENT
 	 */
-	public void addHeroicPanelListener(HeroicPanelGUI heroicPanelGUI, Persons ENUM) {
+	protected void addHeroicPanelListener(HeroicPanelGUI heroicPanelGUI, Persons ENUM) {
 		if (ENUM == Persons.PLAYER) {
 			heroicGui = heroicPanelGUI;
 		}
@@ -98,7 +114,7 @@ public class BoardGuiController {
 	 * 
 	 * @param heroGui
 	 */
-	public void addHeroListener(HeroGUI heroGui) {
+	protected void addHeroListener(HeroGUI heroGui) {
 		this.heroGui = heroGui;
 	}
 
@@ -113,7 +129,7 @@ public class BoardGuiController {
 	 *            : PLAYER_OFFENSIVE, PLAYER_DEFENSIVE, ENEMY_OFFENSIVE,
 	 *            ENEMY_DEFENSIVE
 	 */
-	public void addLaneListener(ArrayLayeredPane arrayLayeredPane, Lanes ENUM) {
+	protected void addLaneListener(ArrayLayeredPane arrayLayeredPane, Lanes ENUM) {
 		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
 			playerDefLane = arrayLayeredPane;
 		}
@@ -200,20 +216,20 @@ public class BoardGuiController {
 	// *** to update various gui elements. ***
 	// ********************************************************************
 
-	public void addCardToHand(Card card) {
+	protected void addCardToHand(Card card) {
 		// controller.addCardToHand(card);
 	}
 
-	public void clearHand() {
+	protected void clearHand() {
 		// controller.clearHand();
 	}
 
-	public void getCardType(Card playCard) {
+	protected void getCardType(Card playCard) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public String getHeroName() {
+	protected String getHeroName() {
 		// TODO Auto-generated method stub
 		// TODO get the hero name from the Hero class.
 		return null;
@@ -223,13 +239,6 @@ public class BoardGuiController {
 	// *** Methods in this section are called upon from the GUI elements ***
 	// *** to update various gui elements. ***
 	// ************************************************************************
-
-	public void updateHoveredCardGui(Unit cardToShow){
-		Unit clonedCard = new Unit(cardToShow.getName(), cardToShow.getRarity(), cardToShow.getImage(),
-				cardToShow.hasAbility(), cardToShow.getAttack(), cardToShow.getDefense(), cardToShow.getPrice());
-		cardToShow = null;
-		hoveredCardPanel.showCard(clonedCard);
-	}
 	/**
 	 * Method that checks the type of card played and places it in the suggested
 	 * container on BoardGUI. This method is called upon when the user selects
@@ -239,9 +248,11 @@ public class BoardGuiController {
 	 * @throws GuiContainerException
 	 * @throws NoLaneSelectedException
 	 */
-	public void playCard(Card card) throws GuiContainerException, NoLaneSelectedException {
+	protected void playCard(Card card) throws GuiContainerException, NoLaneSelectedException {
 		if (card instanceof ResourceCard) {
-
+			ResourceCard temp = (ResourceCard)card;
+			temp = (ResourceCard) cloneCard(temp);
+			addToPlayerScrapyard(temp);
 		}
 		if (card instanceof Unit) {
 			unitToPlay = (Unit) card;
@@ -249,15 +260,27 @@ public class BoardGuiController {
 		}
 		if (card instanceof HeroicSupport) {
 			HeroicSupport cardToPlay = (HeroicSupport) card;
-
-			// Debugging. the flow of events need to send the cardObject to
-			// class responsible for determining if player has enough of
-			// resources to play this card. Or Rules.getInstance() ?
 			playHeroicSupport(cardToPlay);
 		}
 		if (card instanceof Tech) {
 
 		}
+		card=null;
+	}
+
+	protected void addToPlayerScrapyard(Card card) {
+		playerScrapyard.addCard(card);
+	}
+	
+	protected void addToOpponentScrapyard(Card card) {
+		enemyScrapyard.addCard(card);
+	}
+	
+	protected void updateHoveredCardGui(Unit cardToShow) {
+		Unit clonedCard = new Unit(cardToShow.getName(), cardToShow.getRarity(), cardToShow.getImage(),
+				cardToShow.hasAbility(), cardToShow.getAttack(), cardToShow.getDefense(), cardToShow.getPrice());
+		cardToShow = null;
+		hoveredCardPanel.showCard(clonedCard);
 	}
 
 	/**
@@ -270,12 +293,33 @@ public class BoardGuiController {
 	 */
 	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException {
 
-		// For some reason the same instance of a Card cant be placed in
-		// different containers, the object will not be drawn. Need to clone.
 		HeroicSupport clonedCard = new HeroicSupport(cardToPlay.getName(), cardToPlay.getRarity(),
 				cardToPlay.getImage(), cardToPlay.hasAbility(), cardToPlay.getPrice(), cardToPlay.getDefense());
 		cardToPlay = null;
+		
 		heroicGui.addHeroicSupport(clonedCard);
+	}
+	
+	private Card cloneCard(Card card){
+		if (card instanceof ResourceCard) {
+			ResourceCard clonedCard = new ResourceCard();
+			return clonedCard;
+		}
+//		if (card instanceof Unit) {
+//			unitToPlay = (Unit) card;
+//			selectLane();
+//			return clonedCard;
+//		}
+//		if (card instanceof HeroicSupport) {
+//			HeroicSupport cardToPlay = (HeroicSupport) card;
+//			playHeroicSupport(cardToPlay);
+//			return clonedCard;
+//		}
+//		if (card instanceof Tech) {
+//			return clonedCard;
+//		}
+//		card=null;
+		return null;
 	}
 
 	private void playUnitCard(Unit cardToPlay) throws GuiContainerException {
@@ -302,7 +346,7 @@ public class BoardGuiController {
 	 * 
 	 * @throws NoLaneSelectedException
 	 */
-	public void selectLane() throws NoLaneSelectedException {
+	protected void selectLane() throws NoLaneSelectedException {
 		if (laneSelectThread == null) {
 			laneSelectThread = new LaneSelectThread();
 			laneSelectThread.start();
@@ -332,14 +376,14 @@ public class BoardGuiController {
 
 		public LaneSelectThread() {
 			InfoPanelGUI.append("Lane select thread started...waiting for unput");
-			
+
 			selectLane = new LaneSelectListener();
 			playerOffLane.addMouseListener(selectLane);
 			playerDefLane.addMouseListener(selectLane);
 
 			playerOffLane.setBorder(CustomGui.offLaneBorder);
 			playerDefLane.setBorder(CustomGui.deffLaneBorder);
-			
+
 			playerDefLane.setBackground(CustomGui.guiTransparentColor);
 			playerOffLane.setBackground(CustomGui.guiTransparentColor);
 
@@ -355,8 +399,8 @@ public class BoardGuiController {
 					e.printStackTrace();
 				}
 			}
-			
-			//When the input is done remove interaction from the lane panels.
+
+			// When the input is done remove interaction from the lane panels.
 			playerOffLane.removeMouseListener(selectLane);
 			playerDefLane.removeMouseListener(selectLane);
 
@@ -365,22 +409,18 @@ public class BoardGuiController {
 
 			playerOffLane.setOpaque(false);
 			playerDefLane.setOpaque(false);
-			
-			
 
 			selectLane = null;
 			laneSelected = false;
 			laneSelectThread = null;
 			System.err.println("Lane select thread stopped");
 			InfoPanelGUI.append("Lane select thread stopped");
-			
-			
+
 		}
 	}
 
 	private class LaneSelectListener implements MouseListener {
 
-		
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 			// TODO Auto-generated method stub
@@ -392,13 +432,12 @@ public class BoardGuiController {
 			if (event.getSource() == playerDefLane) {
 				playerDefLane.setBorder(CustomGui.defLaneMarkedBorder);
 				playerDefLane.setOpaque(true);
-				
 
 			}
 			if (event.getSource() == playerOffLane) {
 				playerOffLane.setBorder(CustomGui.offLaneMarkedBorder);
 				playerOffLane.setOpaque(true);
-				
+
 			}
 
 		}
@@ -421,8 +460,8 @@ public class BoardGuiController {
 			try {
 				setSelectedLane();
 			} catch (GuiContainerException e) {
-				if(laneSelectThread!=null){
-					laneSelected=true;
+				if (laneSelectThread != null) {
+					laneSelected = true;
 				}
 				e.printStackTrace();
 				InfoPanelGUI.append(e.getMessage());
@@ -436,5 +475,4 @@ public class BoardGuiController {
 		}
 
 	}
-
 }

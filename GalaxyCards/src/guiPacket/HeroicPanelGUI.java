@@ -171,13 +171,12 @@ public class HeroicPanelGUI extends JPanel {
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			temp.setBorder(null);
+			temp.setBorder(defaultBorder);
 		}
 
 		@Override
 		public void mousePressed(MouseEvent event) {
 			temp = (HeroicSupport) event.getSource();
-
 			// Debugging. should send the object to controller or w/e to
 			// calculate the damages and remove if the objects defensive value
 			// is 0

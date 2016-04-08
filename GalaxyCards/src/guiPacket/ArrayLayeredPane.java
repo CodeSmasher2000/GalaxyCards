@@ -23,7 +23,7 @@ public class ArrayLayeredPane extends JPanel {
 	private Unit[] units;
 	private MouseListener listener = new UnitMouseListener();
 	private BoardGuiController boardController;
-	private Lanes LANE;
+	private Lanes ENUM;
 
 	/**
 	 * Instantiate this object with a int passed in as argument which tells how
@@ -34,7 +34,7 @@ public class ArrayLayeredPane extends JPanel {
 	public ArrayLayeredPane(BoardGuiController boardController, Lanes ENUM, int nbrOfElements) {
 
 		this.boardController = boardController;
-		LANE = ENUM;
+		this.ENUM = ENUM;
 		this.nbrOfElements = nbrOfElements;
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
@@ -92,7 +92,7 @@ public class ArrayLayeredPane extends JPanel {
 	 *         ENEMY_DEFENSIVE
 	 */
 	public Lanes getLaneType() {
-		return LANE;
+		return ENUM;
 	}
 
 	/**
@@ -152,7 +152,14 @@ public class ArrayLayeredPane extends JPanel {
 		for (int i = 0; i < units.length; i++) {
 			if (units[i] == target) {
 				layerArray[i].remove(target);
-				layerArray[i].setBorder(null);
+				units[i].removeMouseListener(listener);
+				units[i].setBorder(null);
+				units[i].enlarge();
+				if(ENUM==Lanes.PLAYER_DEFENSIVE || ENUM==Lanes.PLAYER_OFFENSIVE){
+					boardController.addToPlayerScrapyard(units[i]);
+				}else{
+					boardController.addToOpponentScrapyard(units[i]);
+				}
 				units[i] = null;
 				repaint();
 			}
