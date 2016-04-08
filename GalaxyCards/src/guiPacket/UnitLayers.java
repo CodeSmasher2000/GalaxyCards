@@ -16,7 +16,7 @@ import EnumMessage.Lanes;
 import cards.Unit;
 import exceptionsPacket.GuiContainerException;
 
-public class ArrayLayeredPane extends JPanel {
+public class UnitLayers extends JPanel {
 
 	private int nbrOfElements;
 	private JLayeredPane[] layerArray;
@@ -31,7 +31,7 @@ public class ArrayLayeredPane extends JPanel {
 	 * 
 	 * @param nbrOfElements
 	 */
-	public ArrayLayeredPane(BoardGuiController boardController, Lanes ENUM, int nbrOfElements) {
+	public UnitLayers(BoardGuiController boardController, Lanes ENUM, int nbrOfElements) {
 
 		this.boardController = boardController;
 		this.ENUM = ENUM;
@@ -64,7 +64,7 @@ public class ArrayLayeredPane extends JPanel {
 	 * @param nbrOfElements
 	 * @param listener
 	 */
-	public ArrayLayeredPane(BoardGuiController boardController, Lanes ENUM, int nbrOfElements, MouseListener listener) {
+	public UnitLayers(BoardGuiController boardController, Lanes ENUM, int nbrOfElements, MouseListener listener) {
 		this(boardController, ENUM, nbrOfElements);
 		this.listener = listener;
 	}
@@ -156,7 +156,7 @@ public class ArrayLayeredPane extends JPanel {
 				units[i].setBorder(null);
 				units[i].enlarge();
 				if(ENUM==Lanes.PLAYER_DEFENSIVE || ENUM==Lanes.PLAYER_OFFENSIVE){
-					boardController.addToPlayerScrapyard(units[i]);
+					boardController.addToPlayerScrapyard(boardController.cloneCard(units[i]));
 				}else{
 					boardController.addToOpponentScrapyard(units[i]);
 				}

@@ -60,36 +60,37 @@ public class ScrapyardGUI extends JPanel {
 	 *            : Card
 	 */
 	protected void addCard(Card card) {
-		card.setBounds(5, verticalPosition, card.getPreferredSize().width, card.getPreferredSize().height);
-		card.addMouseListener(listener);
-		layeredPane.add(card, new Integer(cardsInScrapyard));
-		buffer[cardsInScrapyard] = card;
-		verticalPosition += 40;
-		cardsInScrapyard++;
-		if (cardsInScrapyard > 5) {
+		if (cardsInScrapyard < 5) {
+			card.setBounds(5, verticalPosition, card.getPreferredSize().width, card.getPreferredSize().height);
+			card.addMouseListener(listener);
+			layeredPane.add(card, new Integer(cardsInScrapyard));
+			buffer[cardsInScrapyard] = card;
+			verticalPosition += 60;
+			cardsInScrapyard++;
+		} else {
 			removeCard();
+			addCard(card);
 		}
-
 	}
 
 	private void removeCard() {
 
-		buffer[cardsInScrapyard] = null;
-
-		Card[] tempCards = new Card[8];
+		buffer[0] = null;
+//		for (int i =1; i<buffer.length;i++){
+//			buffer[i-1]=buffer[i];
+//		}
+		Card[] tempCards = new Card[5];
 		tempCards = buffer;
 		buffer = null;
-		buffer = new Card[8];
+		buffer = new Card[5];
 
 		layeredPane.removeAll();
-		verticalPosition = 10;
-		cardsInScrapyard = 0;
 		layeredPane.repaint();
 		layeredPane.validate();
+		verticalPosition = 10;
+		cardsInScrapyard = 0;
 
-		verticalPosition -= 10;
-
-		for (int i = 0; i < tempCards.length; i++) {
+		for (int i = 0; i < 5; i++) {
 			if (tempCards[i] != null) {
 				tempCards[i].removeMouseListener(listener);
 				addCard(tempCards[i]);
@@ -108,6 +109,7 @@ public class ScrapyardGUI extends JPanel {
 		private Card temp;
 		private Border defaultBorder;
 		private Border highlightB = BorderFactory.createLineBorder(CustomGui.borderMarked, 3, true);
+		private int defaultHorizontal;
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
@@ -119,6 +121,7 @@ public class ScrapyardGUI extends JPanel {
 			cardOriginalLayer = layeredPane.getLayer(temp);
 			layeredPane.setLayer(temp, Integer.MAX_VALUE);
 			defaultBorder = temp.getBorder();
+			defaultHorizontal = temp.getX();
 			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
 		}
 

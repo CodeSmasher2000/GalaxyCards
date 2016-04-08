@@ -26,13 +26,13 @@ public class BoardGuiController {
 	private HeroicPanelGUI heroicGui, enemyHeroicGui;
 	private ScrapyardGUI playerScrapyard, enemyScrapyard;
 	private HeroGUI heroGui;
-	private ArrayLayeredPane playerDefLane;
-	private ArrayLayeredPane playerOffLane;
-	private ArrayLayeredPane enemyDefLane;
-	private ArrayLayeredPane enemyOffLane;
+	private UnitLayers playerDefLane;
+	private UnitLayers playerOffLane;
+	private UnitLayers enemyDefLane;
+	private UnitLayers enemyOffLane;
 
 	private InfoPanelGUI hoveredCardPanel;
-	private ArrayLayeredPane tempLane;
+	private UnitLayers tempLane;
 	private LaneSelectListener selectLane;
 	private boolean laneSelected = false;
 	private LaneSelectThread laneSelectThread;
@@ -51,8 +51,10 @@ public class BoardGuiController {
 	 * Persons enum is passed in to detrminate if the object belongs to the
 	 * player or opponent.
 	 * 
-	 * @param hand : ScrapyardGUI
-	 * @param PLAYER, OPPONENT : Persons
+	 * @param hand
+	 *            : ScrapyardGUI
+	 * @param PLAYER,
+	 *            OPPONENT : Persons
 	 */
 	protected void addScrapyardListener(ScrapyardGUI scrapyardGUI, Persons ENUM) {
 		if (ENUM == Persons.PLAYER) {
@@ -129,7 +131,7 @@ public class BoardGuiController {
 	 *            : PLAYER_OFFENSIVE, PLAYER_DEFENSIVE, ENEMY_OFFENSIVE,
 	 *            ENEMY_DEFENSIVE
 	 */
-	protected void addLaneListener(ArrayLayeredPane arrayLayeredPane, Lanes ENUM) {
+	protected void addLaneListener(UnitLayers arrayLayeredPane, Lanes ENUM) {
 		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
 			playerDefLane = arrayLayeredPane;
 		}
@@ -186,6 +188,7 @@ public class BoardGuiController {
 	 *            PLAYER_OFFENSIVE :ENUM
 	 * @throws GuiContainerException
 	 */
+	
 	public void opponentPlaysUnit(Unit unit, Lanes ENUM) throws GuiContainerException {
 		unit.shrink();
 		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
@@ -250,37 +253,72 @@ public class BoardGuiController {
 	 */
 	protected void playCard(Card card) throws GuiContainerException, NoLaneSelectedException {
 		if (card instanceof ResourceCard) {
-			ResourceCard temp = (ResourceCard)card;
-			temp = (ResourceCard) cloneCard(temp);
-			addToPlayerScrapyard(temp);
+			ResourceCard temp = (ResourceCard) card;
+			playResourceCard(cloneCard(temp));
 		}
+		// Do not use the cloneCard() method when playing unitCard... need a
+		// referense to the original object while waiting for lane input.
 		if (card instanceof Unit) {
 			unitToPlay = (Unit) card;
 			selectLane();
 		}
 		if (card instanceof HeroicSupport) {
-			HeroicSupport cardToPlay = (HeroicSupport) card;
-			playHeroicSupport(cardToPlay);
+			HeroicSupport temp = (HeroicSupport) card;
+			playHeroicSupport((HeroicSupport) cloneCard(temp));
 		}
 		if (card instanceof Tech) {
+			Tech temp = (Tech) card;
+			playTech((Tech) cloneCard(temp));
 
 		}
-		card=null;
+		card = null;
+	}
+
+	/**
+	 * Whenever a cardobject moves between different containers it needs to be
+	 * cloned or else the visuals will hang up the system.
+	 * 
+	 * @param card : Card
+	 * @return card : Card
+	 */
+	protected Card cloneCard(Card card) {
+		if (card instanceof ResourceCard) {
+			ResourceCard clonedCard = new ResourceCard();
+			return clonedCard;
+		} else if (card instanceof HeroicSupport) {
+			HeroicSupport temp = (HeroicSupport) card;
+			HeroicSupport clonedCard = new HeroicSupport(temp.getName(), temp.getRarity(), temp.getImage(),
+					temp.hasAbility(), temp.getPrice(), temp.getDefense());
+			temp = null;
+			return clonedCard;
+		} else if (card instanceof Tech) {
+			Tech temp = (Tech) card;
+			Tech clonedCard = new Tech(temp.getName(), temp.getRarity(), temp.getImage(), temp.getPrice());
+			return clonedCard;
+		} else {
+			Unit temp = (Unit) card;
+			Unit clonedCard = new Unit(temp.getName(), temp.getRarity(), temp.getImage(), temp.hasAbility(),
+					temp.getAttack(), temp.getDefense(), temp.getPrice());
+			card = null;
+			return clonedCard;
+		}
 	}
 
 	protected void addToPlayerScrapyard(Card card) {
 		playerScrapyard.addCard(card);
 	}
-	
+
 	protected void addToOpponentScrapyard(Card card) {
 		enemyScrapyard.addCard(card);
 	}
-	
+
 	protected void updateHoveredCardGui(Unit cardToShow) {
-		Unit clonedCard = new Unit(cardToShow.getName(), cardToShow.getRarity(), cardToShow.getImage(),
-				cardToShow.hasAbility(), cardToShow.getAttack(), cardToShow.getDefense(), cardToShow.getPrice());
-		cardToShow = null;
-		hoveredCardPanel.showCard(clonedCard);
+		cardToShow = (Unit) cloneCard(cardToShow);
+		hoveredCardPanel.showCard(cardToShow);
+	}
+
+	private void playResourceCard(Card cloneCard) {
+		playerScrapyard.addCard(cloneCard);
 	}
 
 	/**
@@ -292,47 +330,23 @@ public class BoardGuiController {
 	 * @throws GuiContainerException
 	 */
 	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException {
-
-		HeroicSupport clonedCard = new HeroicSupport(cardToPlay.getName(), cardToPlay.getRarity(),
-				cardToPlay.getImage(), cardToPlay.hasAbility(), cardToPlay.getPrice(), cardToPlay.getDefense());
-		cardToPlay = null;
-		
-		heroicGui.addHeroicSupport(clonedCard);
+		heroicGui.addHeroicSupport(cardToPlay);
 	}
-	
-	private Card cloneCard(Card card){
-		if (card instanceof ResourceCard) {
-			ResourceCard clonedCard = new ResourceCard();
-			return clonedCard;
-		}
-//		if (card instanceof Unit) {
-//			unitToPlay = (Unit) card;
-//			selectLane();
-//			return clonedCard;
-//		}
-//		if (card instanceof HeroicSupport) {
-//			HeroicSupport cardToPlay = (HeroicSupport) card;
-//			playHeroicSupport(cardToPlay);
-//			return clonedCard;
-//		}
-//		if (card instanceof Tech) {
-//			return clonedCard;
-//		}
-//		card=null;
-		return null;
+
+	private void playTech(Tech cloneCard) {
+		// TODO Figure out how to use abilities before implementing more to this
+		// method.
+		playerScrapyard.addCard(cloneCard);
 	}
 
 	private void playUnitCard(Unit cardToPlay) throws GuiContainerException {
-		Unit clonedCard = new Unit(cardToPlay.getName(), cardToPlay.getRarity(), cardToPlay.getImage(),
-				cardToPlay.hasAbility(), cardToPlay.getAttack(), cardToPlay.getDefense(), cardToPlay.getPrice());
-		cardToPlay = null;
-
-		clonedCard.shrink();
+		cardToPlay = (Unit) cloneCard(cardToPlay);
+		cardToPlay.shrink();
 		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
-			playerDefLane.addUnit(clonedCard);
+			playerDefLane.addUnit(cardToPlay);
 		}
 		if (tempLane.getLaneType() == Lanes.PLAYER_OFFENSIVE) {
-			playerOffLane.addUnit(clonedCard);
+			playerOffLane.addUnit(cardToPlay);
 			System.out.println(playerOffLane.length());
 		}
 
@@ -456,7 +470,7 @@ public class BoardGuiController {
 
 		@Override
 		public void mousePressed(MouseEvent event) {
-			tempLane = (ArrayLayeredPane) event.getSource();
+			tempLane = (UnitLayers) event.getSource();
 			try {
 				setSelectedLane();
 			} catch (GuiContainerException e) {

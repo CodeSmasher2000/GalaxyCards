@@ -20,7 +20,7 @@ public class BoardGUI extends JPanel {
 	private BoardGuiController boardController;
 	private JPanel playFieldPanel, playerPanel, playerContainer, opponentPanel, scrapYardPanel, scrapYardPanel2,
 			scrapYardContainer, infoPanel, infoPanel2, middlePanel;
-	private ArrayLayeredPane playerDefensiveLane, playerOffensiveLane, enemyDefensiveLane, enemyOffensiveLane;
+	private UnitLayers playerDefensiveLane, playerOffensiveLane, enemyDefensiveLane, enemyOffensiveLane;
 	private HandGUI hand;
 	private OpponentHandGUI opponentHand;
 	private HeroGUI hero, opponentHero;
@@ -65,10 +65,10 @@ public class BoardGUI extends JPanel {
 		opponentHero = new HeroGUI(boardController);
 		hero = new HeroGUI(boardController);
 
-		playerDefensiveLane = new ArrayLayeredPane(boardController, Lanes.PLAYER_DEFENSIVE, 6);
-		playerOffensiveLane = new ArrayLayeredPane(boardController, Lanes.PLAYER_OFFENSIVE, 6);
-		enemyDefensiveLane = new ArrayLayeredPane(boardController, Lanes.ENEMY_DEFENSIVE, 6);
-		enemyOffensiveLane = new ArrayLayeredPane(boardController, Lanes.ENEMY_OFFENSIVE, 6);
+		playerDefensiveLane = new UnitLayers(boardController, Lanes.PLAYER_DEFENSIVE, 6);
+		playerOffensiveLane = new UnitLayers(boardController, Lanes.PLAYER_OFFENSIVE, 6);
+		enemyDefensiveLane = new UnitLayers(boardController, Lanes.ENEMY_DEFENSIVE, 6);
+		enemyOffensiveLane = new UnitLayers(boardController, Lanes.ENEMY_OFFENSIVE, 6);
 
 		hoveredCard = new InfoPanelGUI(boardController);
 		

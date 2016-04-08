@@ -180,6 +180,7 @@ public class HeroicPanelGUI extends JPanel {
 			// Debugging. should send the object to controller or w/e to
 			// calculate the damages and remove if the objects defensive value
 			// is 0
+			boardController.addToPlayerScrapyard(boardController.cloneCard(temp));
 			removeHeroicSupport(temp);
 		}
 
