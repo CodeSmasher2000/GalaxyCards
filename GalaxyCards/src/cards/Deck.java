@@ -14,7 +14,6 @@ public class Deck implements Serializable{
 	 */
 	private static final long serialVersionUID = -4951209232481964562L;
 	private LinkedList<Card> deck = new LinkedList<Card>();
-	private Hero hero;
 	private int nbrOfUnitCards = 0;
 	private int nbrOfResourceCards = 0;
 	private int nbrOfHeroicSupport = 0;

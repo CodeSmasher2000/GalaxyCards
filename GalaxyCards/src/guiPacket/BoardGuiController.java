@@ -31,7 +31,7 @@ public class BoardGuiController {
 	private UnitLayers enemyDefLane;
 	private UnitLayers enemyOffLane;
 
-	private InfoPanelGUI hoveredCardPanel;
+	private InfoPanelGUI infoPanel;
 	private UnitLayers tempLane;
 	private LaneSelectListener selectLane;
 	private boolean laneSelected = false;
@@ -90,7 +90,7 @@ public class BoardGuiController {
 	 * @param hoveredCard
 	 */
 	protected void addHoveredCardlListener(InfoPanelGUI hoveredCard) {
-		hoveredCardPanel = hoveredCard;
+		infoPanel = hoveredCard;
 	}
 
 	/**
@@ -305,16 +305,16 @@ public class BoardGuiController {
 	}
 
 	protected void addToPlayerScrapyard(Card card) {
-		playerScrapyard.addCard(card);
+		playerScrapyard.addCard(cloneCard(card));
 	}
 
 	protected void addToOpponentScrapyard(Card card) {
-		enemyScrapyard.addCard(card);
+		enemyScrapyard.addCard(cloneCard(card));
 	}
 
-	protected void updateHoveredCardGui(Unit cardToShow) {
-		cardToShow = (Unit) cloneCard(cardToShow);
-		hoveredCardPanel.showCard(cardToShow);
+	protected  void updateHoveredCardGui(Card cardToShow) {
+		cardToShow = (Card) cloneCard(cardToShow);
+		infoPanel.showCard(cardToShow);
 	}
 
 	private void playResourceCard(Card cloneCard) {

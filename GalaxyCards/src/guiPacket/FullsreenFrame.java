@@ -2,6 +2,8 @@ package guiPacket;
 
 import javax.swing.JFrame;
 
+import testClasses.TestPanel;
+
 public class FullsreenFrame extends JFrame {
 	
 	private BoardGuiController boardController;

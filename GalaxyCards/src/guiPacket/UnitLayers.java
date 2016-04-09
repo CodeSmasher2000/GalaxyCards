@@ -18,12 +18,16 @@ import exceptionsPacket.GuiContainerException;
 
 public class UnitLayers extends JPanel {
 
-	private int nbrOfElements;
 	private JLayeredPane[] layerArray;
 	private Unit[] units;
-	private MouseListener listener = new UnitMouseListener();
 	private BoardGuiController boardController;
 	private Lanes ENUM;
+
+	private int nbrOfElements;
+	private int index =-1;
+	
+	private OpponentTargetMouseListener opponentListener;
+	private PlayerTargetMouseListener playerListener;
 
 	/**
 	 * Instantiate this object with a int passed in as argument which tells how
@@ -34,6 +38,8 @@ public class UnitLayers extends JPanel {
 	public UnitLayers(BoardGuiController boardController, Lanes ENUM, int nbrOfElements) {
 
 		this.boardController = boardController;
+		playerListener = new PlayerTargetMouseListener(boardController);
+		opponentListener = new OpponentTargetMouseListener(boardController);
 		this.ENUM = ENUM;
 		this.nbrOfElements = nbrOfElements;
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -57,30 +63,17 @@ public class UnitLayers extends JPanel {
 	}
 
 	/**
-	 * Overloaded constructor that takes a MouseListener object as argument. the
-	 * mouselistener obj will be added to every Card object placed in this
-	 * container.
-	 * 
-	 * @param nbrOfElements
-	 * @param listener
-	 */
-	public UnitLayers(BoardGuiController boardController, Lanes ENUM, int nbrOfElements, MouseListener listener) {
-		this(boardController, ENUM, nbrOfElements);
-		this.listener = listener;
-	}
-
-	private void addCustomMouseListener(Card card) {
-		card.addMouseListener(listener);
-	}
-
-	/**
 	 * Returns the number of elements that this container can hold. Notice that
 	 * it does not specify if there are any elements in this container or not.
 	 * 
 	 * @return
 	 */
 	public int length() {
-		return nbrOfElements;
+		return nbrOfElements+1;
+	}
+	
+	public Unit[] getUnits(){
+		return units;
 	}
 
 	/**
@@ -107,17 +100,6 @@ public class UnitLayers extends JPanel {
 		}
 	}
 
-	/**
-	 * Adds a titled border to this container with the String passed in as
-	 * argument for the border text.
-	 * 
-	 * @param name
-	 *            : String
-	 */
-	public void setContainerName(String name) {
-		this.setBorder(BorderFactory.createTitledBorder(name));
-	}
-
 	public boolean addUnit(Unit unit) throws GuiContainerException {
 
 		boolean okToPlace = false;
@@ -133,8 +115,10 @@ public class UnitLayers extends JPanel {
 				units[index] = unit;
 				units[index].setBounds(0, 0, units[index].getPreferredSize().width,
 						units[index].getPreferredSize().height);
-				if (listener != null) {
-					units[index].addMouseListener(listener);
+				if (ENUM==Lanes.ENEMY_DEFENSIVE || ENUM==Lanes.ENEMY_OFFENSIVE) {
+					units[index].addMouseListener(opponentListener);
+				}else{
+					units[index].addMouseListener(playerListener);
 				}
 				okToPlace = true;
 				layerArray[index].add(units[index], new Integer(0));
@@ -152,7 +136,7 @@ public class UnitLayers extends JPanel {
 		for (int i = 0; i < units.length; i++) {
 			if (units[i] == target) {
 				layerArray[i].remove(target);
-				units[i].removeMouseListener(listener);
+//				units[i].removeMouseListener(listener);
 				units[i].setBorder(null);
 				units[i].enlarge();
 				if(ENUM==Lanes.PLAYER_DEFENSIVE || ENUM==Lanes.PLAYER_OFFENSIVE){
@@ -167,50 +151,4 @@ public class UnitLayers extends JPanel {
 
 		return target;
 	}
-
-	// DEBUGG. Listeners will be in seperate classes and the objects will be
-	// passed in to the constructor.
-	private class UnitMouseListener implements MouseListener {
-
-		private Unit temp;
-		private Border defaultBorder;
-		private Border highlightB = BorderFactory.createLineBorder(CustomGui.borderMarked, 3, false);
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent event) {
-			temp = (Unit) event.getSource();
-			defaultBorder = temp.getBorder();
-			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
-			boardController.updateHoveredCardGui(temp);
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			temp.setBorder(defaultBorder);
-		}
-
-		@Override
-		public void mousePressed(MouseEvent event) {
-			temp = (Unit) event.getSource();
-
-			// Debugging. should send the object to controller or w/e to
-			// calculate the damages and remove if the objects defensive value
-			// is 0
-			removeUnit(temp);
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
-
 }

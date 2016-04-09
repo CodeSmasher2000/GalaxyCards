@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import EnumMessage.Lanes;
 import EnumMessage.Persons;
+import testClasses.TestPanel;
 
 public class BoardGUI extends JPanel {
 

@@ -1,4 +1,4 @@
-package guiPacket;
+package testClasses;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +18,10 @@ import cards.HeroicSupport;
 import cards.Unit;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.GuiContainerException;
+import guiPacket.BoardGuiController;
+import guiPacket.Card;
+import guiPacket.FullsreenFrame;
+import guiPacket.InfoPanelGUI;
 
 public class TestPanel extends JPanel{
 	

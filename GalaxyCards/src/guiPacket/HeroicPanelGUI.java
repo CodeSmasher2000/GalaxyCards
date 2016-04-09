@@ -35,18 +35,25 @@ public class HeroicPanelGUI extends JPanel {
 	// LayeredPanes hold the objects b/c feedback will be drawn over them
 	private JLayeredPane heroicPane1, heroicPane2;
 	private HeroicSupport[] heroicUnits = new HeroicSupport[2];
-	private HeroicMouseListener listener = new HeroicMouseListener();
 	private BoardGuiController boardController;
 	private Persons ENUM;
 	
-	private ImageIcon background = new ImageIcon("files/pictures/heroicPanelTexture.jpg");
+	private OpponentTargetMouseListener opponentListener;
+	private PlayerTargetMouseListener playerListener;
+	
+	private ImageIcon background;
 
 	public HeroicPanelGUI(BoardGuiController boardController, Persons ENUM) {
-
+		this.ENUM=ENUM;
 		if(ENUM==Persons.PLAYER){
 			background = new ImageIcon("files/pictures/heroicPanelTexture2.jpg");
+		}else{
+			background = new ImageIcon("files/pictures/heroicPanelTexture.jpg");
 		}
+		
 		this.boardController = boardController;
+		playerListener = new PlayerTargetMouseListener(boardController);
+		opponentListener = new OpponentTargetMouseListener(boardController);
 		boardController.addHeroicPanelListener(this, ENUM);
 
 		initiateLayeredPanes();
@@ -93,7 +100,13 @@ public class HeroicPanelGUI extends JPanel {
 				heroicUnits[i] = heroicSupport;
 				heroicUnits[i].setBounds(0, 10, heroicUnits[i].getPreferredSize().width,
 						heroicUnits[i].getPreferredSize().height);
-				heroicUnits[i].addMouseListener(listener);
+				//if ENUM is player or opponent add different listener
+				if(ENUM==Persons.PLAYER){
+					heroicUnits[i].addMouseListener(playerListener);
+				}
+				if(ENUM==Persons.OPPONENT){
+					heroicUnits[i].addMouseListener(opponentListener);
+				}
 				okToPlace = true;
 				if (i == 0) {
 					heroicPane1.add(heroicUnits[i], new Integer(0));
@@ -134,7 +147,11 @@ public class HeroicPanelGUI extends JPanel {
 					heroicPane2.remove(heroicUnits[i]);
 					repaint();
 				}
-				heroicUnits[i] = null;
+				if(ENUM==Persons.OPPONENT){
+					boardController.addToOpponentScrapyard(heroicUnits[i]);
+				}else{
+					boardController.addToPlayerScrapyard(heroicUnits[i]);
+				}
 			}
 		}
 
@@ -145,50 +162,5 @@ public class HeroicPanelGUI extends JPanel {
 
 		super.paintComponent(g);
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
-	}
-
-	// DEBUGG. Listeners will be in seperate classes and the objects will be
-	// passed in to the constructor.
-	private class HeroicMouseListener implements MouseListener {
-
-		private HeroicSupport temp;
-		private Border defaultBorder;
-		private Border highlightB = BorderFactory.createLineBorder(CustomGui.borderMarked, 3, true);
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent event) {
-			temp = (HeroicSupport) event.getSource();
-			defaultBorder = temp.getBorder();
-			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
-
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			temp.setBorder(defaultBorder);
-		}
-
-		@Override
-		public void mousePressed(MouseEvent event) {
-			temp = (HeroicSupport) event.getSource();
-			// Debugging. should send the object to controller or w/e to
-			// calculate the damages and remove if the objects defensive value
-			// is 0
-			boardController.addToPlayerScrapyard(boardController.cloneCard(temp));
-			removeHeroicSupport(temp);
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
 	}
 }

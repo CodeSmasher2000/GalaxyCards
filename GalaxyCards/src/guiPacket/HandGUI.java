@@ -147,7 +147,7 @@ public class HandGUI extends JPanel {
 
 		private Card temp;
 		private Border defaultBorder;
-		private Border highlightB = BorderFactory.createLineBorder(CustomGui.borderMarked, 3, true);
+		private Border highlightB = BorderFactory.createLineBorder(CustomGui.playerColor, 3, true);
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {

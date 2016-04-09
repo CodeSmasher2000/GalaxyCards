@@ -145,7 +145,7 @@ public class InfoPanelGUI extends JPanel {
 	 * @param cardContainer
 	 *            - the card to show
 	 */
-	public void showCard(Unit cardToShow) {
+	public void showCard(Card cardToShow) {
 		cardContainer.removeAll();
 		cardToShow.setBorder(CustomGui.highlightBorder);
 		cardContainer.setPreferredSize(new Dimension(cardToShow.getPreferredSize().width, cardToShow.getPreferredSize().height));
