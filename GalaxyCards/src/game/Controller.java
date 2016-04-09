@@ -15,6 +15,9 @@ public class Controller {
     private Board board;
     private BoardGuiController boardController;
     
+    // Variables needed for a round in the game
+    private boolean resourceCardPlayed;
+    
     // Variables for the friendlyPlayer
     private Hero friendlyHero;
     
