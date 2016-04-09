@@ -20,7 +20,7 @@ import EnumMessage.Lanes;
 import cards.Deck;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.GuiContainerException;
-import guiPacket.UnitLayers;
+import guiPacket.UnitLanes;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.HandGUI;
@@ -37,10 +37,10 @@ public class BoardTestClass {
 	private HeroGUI hero, hero2;
 	private Deck deck;
 	private ObjectInputStream ois;
-	private UnitLayers playerDefensiveLane;
-	private UnitLayers playerOffensive;
-	private UnitLayers enemyDefensiveLane;
-	private UnitLayers enemyOffensiveLane;
+	private UnitLanes playerDefensiveLane;
+	private UnitLanes playerOffensive;
+	private UnitLanes enemyDefensiveLane;
+	private UnitLanes enemyOffensiveLane;
 
 	private JPanel panelGUI = new JPanel();
 	private JPanel enemyGui = new JPanel();
@@ -62,10 +62,10 @@ public class BoardTestClass {
 		hero2 = new HeroGUI(board2);
 		opponentHand = new OpponentHandGUI(board);
 
-		playerDefensiveLane = new UnitLayers(board, Lanes.PLAYER_DEFENSIVE, 6);
-		playerOffensive = new UnitLayers(board, Lanes.PLAYER_OFFENSIVE, 6);
-		enemyDefensiveLane = new UnitLayers(board, Lanes.ENEMY_DEFENSIVE, 6);
-		enemyOffensiveLane = new UnitLayers(board, Lanes.PLAYER_OFFENSIVE, 6);
+		playerDefensiveLane = new UnitLanes(board, Lanes.PLAYER_DEFENSIVE, 6);
+		playerOffensive = new UnitLanes(board, Lanes.PLAYER_OFFENSIVE, 6);
+		enemyDefensiveLane = new UnitLanes(board, Lanes.ENEMY_DEFENSIVE, 6);
+		enemyOffensiveLane = new UnitLanes(board, Lanes.PLAYER_OFFENSIVE, 6);
 
 		draw.addActionListener(list);
 		draw2.addActionListener(list);

@@ -26,13 +26,13 @@ public class BoardGuiController {
 	private HeroicPanelGUI heroicGui, enemyHeroicGui;
 	private ScrapyardGUI playerScrapyard, enemyScrapyard;
 	private HeroGUI heroGui;
-	private UnitLayers playerDefLane;
-	private UnitLayers playerOffLane;
-	private UnitLayers enemyDefLane;
-	private UnitLayers enemyOffLane;
+	private UnitLanes playerDefLane;
+	private UnitLanes playerOffLane;
+	private UnitLanes enemyDefLane;
+	private UnitLanes enemyOffLane;
 
 	private InfoPanelGUI infoPanel;
-	private UnitLayers tempLane;
+	private UnitLanes tempLane;
 	private LaneSelectListener selectLane;
 	private boolean laneSelected = false;
 	private LaneSelectThread laneSelectThread;
@@ -131,7 +131,7 @@ public class BoardGuiController {
 	 *            : PLAYER_OFFENSIVE, PLAYER_DEFENSIVE, ENEMY_OFFENSIVE,
 	 *            ENEMY_DEFENSIVE
 	 */
-	protected void addLaneListener(UnitLayers arrayLayeredPane, Lanes ENUM) {
+	protected void addLaneListener(UnitLanes arrayLayeredPane, Lanes ENUM) {
 		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
 			playerDefLane = arrayLayeredPane;
 		}
@@ -470,7 +470,7 @@ public class BoardGuiController {
 
 		@Override
 		public void mousePressed(MouseEvent event) {
-			tempLane = (UnitLayers) event.getSource();
+			tempLane = (UnitLanes) event.getSource();
 			try {
 				setSelectedLane();
 			} catch (GuiContainerException e) {

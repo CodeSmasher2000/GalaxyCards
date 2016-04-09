@@ -16,7 +16,7 @@ import EnumMessage.Lanes;
 import cards.Unit;
 import exceptionsPacket.GuiContainerException;
 
-public class UnitLayers extends JPanel {
+public class UnitLanes extends JPanel {
 
 	private JLayeredPane[] layerArray;
 	private Unit[] units;
@@ -35,7 +35,7 @@ public class UnitLayers extends JPanel {
 	 * 
 	 * @param nbrOfElements
 	 */
-	public UnitLayers(BoardGuiController boardController, Lanes ENUM, int nbrOfElements) {
+	public UnitLanes(BoardGuiController boardController, Lanes ENUM, int nbrOfElements) {
 
 		this.boardController = boardController;
 		playerListener = new PlayerTargetMouseListener(boardController);
