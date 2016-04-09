@@ -188,7 +188,7 @@ public class BoardGuiController {
 	 *            PLAYER_OFFENSIVE :ENUM
 	 * @throws GuiContainerException
 	 */
-	
+
 	public void opponentPlaysUnit(Unit unit, Lanes ENUM) throws GuiContainerException {
 		unit.shrink();
 		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
@@ -260,7 +260,20 @@ public class BoardGuiController {
 		// referense to the original object while waiting for lane input.
 		if (card instanceof Unit) {
 			unitToPlay = (Unit) card;
-			selectLane();
+			// selectLane();
+			/*
+			 * startSelectLaneThread(); 
+			 * tempLane=getSelectedLane();
+			 * playUnitCard(unitToPlay, tempCard);
+			 */
+			startSelectLaneThread();
+			while(laneSelectThread.isAlive()){
+				
+			}
+			InfoPanelGUI.append("gget lane");
+			tempLane=getSelectedLane();
+			playUnitCard(unitToPlay, tempLane);
+			
 		}
 		if (card instanceof HeroicSupport) {
 			HeroicSupport temp = (HeroicSupport) card;
@@ -278,7 +291,8 @@ public class BoardGuiController {
 	 * Whenever a cardobject moves between different containers it needs to be
 	 * cloned or else the visuals will hang up the system.
 	 * 
-	 * @param card : Card
+	 * @param card
+	 *            : Card
 	 * @return card : Card
 	 */
 	protected Card cloneCard(Card card) {
@@ -312,7 +326,7 @@ public class BoardGuiController {
 		enemyScrapyard.addCard(cloneCard(card));
 	}
 
-	protected  void updateHoveredCardGui(Card cardToShow) {
+	protected void updateHoveredCardGui(Card cardToShow) {
 		cardToShow = (Card) cloneCard(cardToShow);
 		infoPanel.showCard(cardToShow);
 	}
@@ -339,7 +353,7 @@ public class BoardGuiController {
 		playerScrapyard.addCard(cloneCard);
 	}
 
-	private void playUnitCard(Unit cardToPlay) throws GuiContainerException {
+	private void playUnitCard(Unit cardToPlay, UnitLanes tempLane) throws GuiContainerException {
 		cardToPlay = (Unit) cloneCard(cardToPlay);
 		cardToPlay.shrink();
 		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
@@ -360,7 +374,7 @@ public class BoardGuiController {
 	 * 
 	 * @throws NoLaneSelectedException
 	 */
-	protected void selectLane() throws NoLaneSelectedException {
+	protected void startSelectLaneThread() throws NoLaneSelectedException {
 		if (laneSelectThread == null) {
 			laneSelectThread = new LaneSelectThread();
 			laneSelectThread.start();
@@ -372,10 +386,15 @@ public class BoardGuiController {
 
 	}
 
-	private void setSelectedLane() throws GuiContainerException {
-		playUnitCard(unitToPlay);
-		handGuiPlayer.playCard(unitToPlay);
-		laneSelected = true;
+	private void setSelectedLane(UnitLanes tempLane) {
+		this.tempLane = tempLane;
+		laneSelected=true;
+		InfoPanelGUI.append("Lane selected: "+tempLane.getLaneType());
+	}
+
+	private UnitLanes getSelectedLane() {
+		InfoPanelGUI.append("Lane selected: "+tempLane.getLaneType());
+		return tempLane;
 	}
 
 	/**
@@ -427,7 +446,6 @@ public class BoardGuiController {
 			selectLane = null;
 			laneSelected = false;
 			laneSelectThread = null;
-			System.err.println("Lane select thread stopped");
 			InfoPanelGUI.append("Lane select thread stopped");
 
 		}
@@ -471,15 +489,8 @@ public class BoardGuiController {
 		@Override
 		public void mousePressed(MouseEvent event) {
 			tempLane = (UnitLanes) event.getSource();
-			try {
-				setSelectedLane();
-			} catch (GuiContainerException e) {
-				if (laneSelectThread != null) {
-					laneSelected = true;
-				}
-				e.printStackTrace();
-				InfoPanelGUI.append(e.getMessage());
-			}
+			setSelectedLane(tempLane);
+			
 		}
 
 		@Override
