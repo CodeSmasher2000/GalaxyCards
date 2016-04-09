@@ -260,20 +260,7 @@ public class BoardGuiController {
 		// referense to the original object while waiting for lane input.
 		if (card instanceof Unit) {
 			unitToPlay = (Unit) card;
-			// selectLane();
-			/*
-			 * startSelectLaneThread(); 
-			 * tempLane=getSelectedLane();
-			 * playUnitCard(unitToPlay, tempCard);
-			 */
 			startSelectLaneThread();
-			while(laneSelectThread.isAlive()){
-				
-			}
-			InfoPanelGUI.append("gget lane");
-			tempLane=getSelectedLane();
-			playUnitCard(unitToPlay, tempLane);
-			
 		}
 		if (card instanceof HeroicSupport) {
 			HeroicSupport temp = (HeroicSupport) card;
@@ -353,7 +340,7 @@ public class BoardGuiController {
 		playerScrapyard.addCard(cloneCard);
 	}
 
-	private void playUnitCard(Unit cardToPlay, UnitLanes tempLane) throws GuiContainerException {
+	private void playUnitCard(Unit cardToPlay) throws GuiContainerException {
 		cardToPlay = (Unit) cloneCard(cardToPlay);
 		cardToPlay.shrink();
 		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
@@ -364,6 +351,17 @@ public class BoardGuiController {
 			System.out.println(playerOffLane.length());
 		}
 
+	}
+	public void setSelectedLane() throws GuiContainerException {
+		// TODO Auto-generated method stub
+		/*laneSelected = true
+		 * stoppa tråden
+		 * 
+		 * 
+		 */
+		playUnitCard(unitToPlay);
+		handGuiPlayer.playCard(unitToPlay);
+		laneSelected = true;
 	}
 
 	/**
@@ -385,18 +383,6 @@ public class BoardGuiController {
 		}
 
 	}
-
-	private void setSelectedLane(UnitLanes tempLane) {
-		this.tempLane = tempLane;
-		laneSelected=true;
-		InfoPanelGUI.append("Lane selected: "+tempLane.getLaneType());
-	}
-
-	private UnitLanes getSelectedLane() {
-		InfoPanelGUI.append("Lane selected: "+tempLane.getLaneType());
-		return tempLane;
-	}
-
 	/**
 	 * A thread that waits for player input when selecting a lane to play unit
 	 * cards on. Instantiates a mouselistener that gets connected to the
@@ -423,7 +409,7 @@ public class BoardGuiController {
 		}
 
 		public void run() {
-			while (!laneSelected) {
+			while (!laneSelected || Thread.interrupted()) {
 				System.err.println("Waiting for selection of lane");
 				try {
 					Thread.sleep(500);
@@ -489,9 +475,15 @@ public class BoardGuiController {
 		@Override
 		public void mousePressed(MouseEvent event) {
 			tempLane = (UnitLanes) event.getSource();
-			setSelectedLane(tempLane);
+			try {
+				setSelectedLane();
+			} catch (GuiContainerException e) {
+				// TODO Auto-generated catch block
+				InfoPanelGUI.append(e.getMessage());
+				laneSelected=true;
+				}
+			}
 			
-		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
