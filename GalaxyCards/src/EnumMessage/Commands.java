@@ -1,4 +1,4 @@
-package EnumMessage;
+package enumMessage;
 	/**
 	 * Klass som innehåller enums för olika commands.
 	 * @author Jonte

@@ -1,4 +1,4 @@
-package EnumMessage;
+package enumMessage;
 
 /**
  * Enum values for different kind of players. PLAYER, OPPONENT
