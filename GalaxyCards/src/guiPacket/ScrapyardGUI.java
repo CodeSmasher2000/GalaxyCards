@@ -26,7 +26,7 @@ public class ScrapyardGUI extends JPanel {
 	private ImageIcon background = new ImageIcon("files/pictures/handPanelTexture2.jpg");
 	private Card[] buffer = new Card[5];
 	private Persons ENUM;
-	ScarpyardMouseListener listener = new ScarpyardMouseListener();
+	ScarpyardMouseListener mouseListener = new ScarpyardMouseListener();
 
 	public ScrapyardGUI(BoardGuiController boardController, Persons ENUM) {
 		this.boardController = boardController;
@@ -62,7 +62,7 @@ public class ScrapyardGUI extends JPanel {
 	protected void addCard(Card card) {
 		if (cardsInScrapyard < 5) {
 			card.setBounds(5, verticalPosition, card.getPreferredSize().width, card.getPreferredSize().height);
-			card.addMouseListener(listener);
+			card.addMouseListener(mouseListener);
 			layeredPane.add(card, new Integer(cardsInScrapyard));
 			buffer[cardsInScrapyard] = card;
 			verticalPosition += 60;
@@ -92,7 +92,7 @@ public class ScrapyardGUI extends JPanel {
 
 		for (int i = 0; i < 5; i++) {
 			if (tempCards[i] != null) {
-				tempCards[i].removeMouseListener(listener);
+				tempCards[i].removeMouseListener(mouseListener);
 				addCard(tempCards[i]);
 			}
 		}
@@ -108,12 +108,7 @@ public class ScrapyardGUI extends JPanel {
 
 		private Card temp;
 		private Border defaultBorder;
-		private Border highlightB = BorderFactory.createLineBorder(CustomGui.playerColor, 3, true);
-		private int defaultHorizontal;
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-		}
+		private Border highlightBorder = BorderFactory.createLineBorder(CustomGui.playerColor, 3, true);
 
 		@Override
 		public void mouseEntered(MouseEvent event) {
@@ -121,8 +116,7 @@ public class ScrapyardGUI extends JPanel {
 			cardOriginalLayer = layeredPane.getLayer(temp);
 			layeredPane.setLayer(temp, Integer.MAX_VALUE);
 			defaultBorder = temp.getBorder();
-			defaultHorizontal = temp.getX();
-			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
+			temp.setBorder(BorderFactory.createCompoundBorder(highlightBorder, defaultBorder));
 		}
 
 		@Override
@@ -139,6 +133,10 @@ public class ScrapyardGUI extends JPanel {
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
 			// Do nothing
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
 		}
 
 	}

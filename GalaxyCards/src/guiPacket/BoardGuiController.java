@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 
 import EnumMessage.Lanes;
 import EnumMessage.Persons;
+import abilities.Ability;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
@@ -21,29 +22,115 @@ import exceptionsPacket.NoLaneSelectedException;
  */
 public class BoardGuiController {
 
-	private HandGUI handGuiPlayer;
-	private OpponentHandGUI handGuiOpponent;
-	private HeroicPanelGUI heroicGui, enemyHeroicGui;
-	private ScrapyardGUI playerScrapyard, enemyScrapyard;
-	private HeroGUI heroGui;
+	private HandGUI playerHandGui;
+	private OpponentHandGUI opponentHandGui;
+	private HeroicPanelGUI heroicGui, opponentHeroicGui;
+	private ScrapyardGUI playerScrapyard, opponentScrapyard;
+	private HeroGUI playerHeroGui, opponentHeroGui;
 	private UnitLanes playerDefLane;
 	private UnitLanes playerOffLane;
-	private UnitLanes enemyDefLane;
-	private UnitLanes enemyOffLane;
+	private UnitLanes opponentDefLane;
+	private UnitLanes opponentOffLane;
 
 	private InfoPanelGUI infoPanel;
-	private UnitLanes tempLane;
-	private LaneSelectListener selectLane;
+	private LaneSelectListener laneListener;
 	private boolean laneSelected = false;
 	private LaneSelectThread laneSelectThread;
 
-	private Unit unitToPlay;
+	private UnitLanes tempLane;
+	private Unit tempUnit;
 
-	// skapa association med controller
+	// ***MESSAGES SENT TO GUI ELEMENTS************************************
+	// *** Methods in this section are called upon from the system to
+	// *** update various gui elements.
+	// ********************************************************************
 
-	// ***ADD GUI LISTENERS*****************************************************
-	// *** Methods in this section are called upon from custom GUI objects
-	// *** To add connections between the GUI objects and the GUI controller
+	/**
+	 * Attempts to place the Card object passed in as argument to the handGui
+	 * container. Throws exception if there is no more space for cards. Maximum
+	 * amount of cards on hand = 8.
+	 * 
+	 * @param card
+	 *            : Card
+	 * @throws GuiContainerException
+	 */
+	public void drawCard(Card card) throws GuiContainerException {
+		playerHandGui.addCard(card);
+	}
+
+	/**
+	 * When opponent draws a card the corresponding gui element for opponents
+	 * hand get a Icon representing the card's backside added and displayed. The
+	 * client does not have referenses to the opponents Card objects on hand.
+	 * 
+	 * @throws GuiContainerException
+	 */
+	public void opponentDrawsCard() throws GuiContainerException {
+		opponentHandGui.drawCard();
+	}
+
+	/**
+	 * When opponent plays a unitcard the gui elements get updated with the Unit
+	 * object passed in as argument. Lanes.ENUM decide to which unit-panel place
+	 * the played card. When PLAYER_DEFENSIVE is passed in as argument the unit
+	 * object will be placed in opponent-defensive lane. When PLAYER_OFFENSIVE
+	 * is passed in the unit object will be placed in opponents offensive lane.
+	 * 
+	 * @param unit
+	 *            : Unit
+	 * @param PLAYER_DEFENSIVE,
+	 *            PLAYER_OFFENSIVE :ENUM
+	 * @throws GuiContainerException
+	 */
+
+	public void opponentPlaysUnit(Unit unit, Lanes ENUM) throws GuiContainerException {
+		unit.shrink();
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			opponentDefLane.addUnit(unit);
+			opponentHandGui.playCard();
+		}
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			opponentOffLane.addUnit(unit);
+			opponentHandGui.playCard();
+		}
+	}
+
+	/**
+	 * When opponent plays a heroic support object the heroicSupportGUI panel
+	 * for opponents objects get updated with the argument passed in.
+	 * 
+	 * @param heroicSupport
+	 *            : HeroicSupport
+	 * @throws GuiContainerException
+	 */
+	public void opponentPlaysHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
+		opponentHeroicGui.addHeroicSupport(heroicSupport);
+		opponentHandGui.playCard();
+	}
+
+	/**
+	 * Moves the Card object to the opponent's scrapyard container.
+	 * 
+	 * @param card
+	 */
+	public void addToOpponentScrapyard(Card card) {
+		opponentScrapyard.addCard(cloneCard(card));
+	}
+
+	public void opponentPlaysTech(Tech tech) {
+		// TODO
+	}
+
+	public void opponentPlaysResource(ResourceCard resourceCard) {
+		// TODO
+	}
+
+	public void opponentPlaysAbility(Ability ability) {
+		// TODO
+	}
+
+	// ***PROTECTED METHODs*****************************************************
+	// *** Methods called upon from this package from various gui-elements
 	// *************************************************************************
 
 	/**
@@ -61,7 +148,7 @@ public class BoardGuiController {
 			playerScrapyard = scrapyardGUI;
 		}
 		if (ENUM == Persons.OPPONENT) {
-			enemyScrapyard = scrapyardGUI;
+			opponentScrapyard = scrapyardGUI;
 		}
 	}
 
@@ -71,7 +158,7 @@ public class BoardGuiController {
 	 * @param hand
 	 */
 	protected void addHandPanelListener(HandGUI hand) {
-		handGuiPlayer = hand;
+		playerHandGui = hand;
 	}
 
 	/**
@@ -81,7 +168,7 @@ public class BoardGuiController {
 	 * @param hand
 	 */
 	protected void addOpponentHandListener(OpponentHandGUI hand) {
-		handGuiOpponent = hand;
+		opponentHandGui = hand;
 	}
 
 	/**
@@ -89,8 +176,8 @@ public class BoardGuiController {
 	 * 
 	 * @param hoveredCard
 	 */
-	protected void addHoveredCardlListener(InfoPanelGUI hoveredCard) {
-		infoPanel = hoveredCard;
+	protected void addInfoPanelListener(InfoPanelGUI infoPanel) {
+		this.infoPanel = infoPanel;
 	}
 
 	/**
@@ -107,7 +194,7 @@ public class BoardGuiController {
 			heroicGui = heroicPanelGUI;
 		}
 		if (ENUM == Persons.OPPONENT) {
-			enemyHeroicGui = heroicPanelGUI;
+			opponentHeroicGui = heroicPanelGUI;
 		}
 	}
 
@@ -117,7 +204,7 @@ public class BoardGuiController {
 	 * @param heroGui
 	 */
 	protected void addHeroListener(HeroGUI heroGui) {
-		this.heroGui = heroGui;
+		this.playerHeroGui = heroGui;
 	}
 
 	/**
@@ -139,79 +226,12 @@ public class BoardGuiController {
 			playerOffLane = arrayLayeredPane;
 		}
 		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
-			enemyDefLane = arrayLayeredPane;
+			opponentDefLane = arrayLayeredPane;
 		}
 		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
-			enemyOffLane = arrayLayeredPane;
+			opponentOffLane = arrayLayeredPane;
 		}
 
-	}
-
-	// ***MESSAGES SENT TO GUI ELEMENTS************************************
-	// *** Methods in this section are called upon from the system to
-	// *** update various gui elements.
-	// ********************************************************************
-
-	/**
-	 * Attempts to place the Card object passed in as argument to the handGui
-	 * container. Throws exception if there is no more space for cards. Maximum
-	 * amount of cards on hand = 8.
-	 * 
-	 * @param card
-	 *            : Card
-	 * @throws GuiContainerException
-	 */
-	public void drawCard(Card card) throws GuiContainerException {
-		handGuiPlayer.addCard(card);
-	}
-
-	/**
-	 * When opponent draws a card the corresponding gui element for opponents
-	 * hand get a card Icon representing the card's backside added and displayed
-	 * 
-	 * @throws GuiContainerException
-	 */
-	public void opponentDrawsCard() throws GuiContainerException {
-		handGuiOpponent.drawCard();
-	}
-
-	/**
-	 * When opponent plays a unitcard the gui elements get updated with the Unit
-	 * object passed in as argument. Lanes.ENUM decide to which unit-panel place
-	 * the played card. When PLAYER_DEFENSIVE is passed in as argument the unit
-	 * object will be placed in opponent-defensive lane. When PLAYER_OFFENSIVE
-	 * is passed in the unit object will be placed in opponents offensive lane.
-	 * 
-	 * @param unit
-	 *            : Unit
-	 * @param PLAYER_DEFENSIVE,
-	 *            PLAYER_OFFENSIVE :ENUM
-	 * @throws GuiContainerException
-	 */
-
-	public void opponentPlaysUnit(Unit unit, Lanes ENUM) throws GuiContainerException {
-		unit.shrink();
-		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
-			enemyDefLane.addUnit(unit);
-			handGuiOpponent.playCard();
-		}
-		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
-			enemyOffLane.addUnit(unit);
-			handGuiOpponent.playCard();
-		}
-	}
-
-	/**
-	 * When opponent plays a heroic support object the heroicSupportGUI panel
-	 * for opponents objects get updated with the argument passed in.
-	 * 
-	 * @param heroicSupport
-	 *            : HeroicSupport
-	 * @throws GuiContainerException
-	 */
-	public void opponentPlaysHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
-		enemyHeroicGui.addHeroicSupport(heroicSupport);
-		handGuiOpponent.playCard();
 	}
 
 	// ***MESSAGES SENT TO THE SYSTEM**************************************
@@ -257,9 +277,10 @@ public class BoardGuiController {
 			playResourceCard(cloneCard(temp));
 		}
 		// Do not use the cloneCard() method when playing unitCard... need a
-		// referense to the original object while waiting for lane input.
+		// referense to the original object while waiting for lane-selection
+		// input.
 		if (card instanceof Unit) {
-			unitToPlay = (Unit) card;
+			tempUnit = (Unit) card;
 			startSelectLaneThread();
 		}
 		if (card instanceof HeroicSupport) {
@@ -305,39 +326,37 @@ public class BoardGuiController {
 		}
 	}
 
+	/**
+	 * Moves the Card object to the PlayerScrapyard container
+	 * 
+	 * @param card
+	 *            : Card
+	 */
 	protected void addToPlayerScrapyard(Card card) {
 		playerScrapyard.addCard(cloneCard(card));
 	}
 
-	protected void addToOpponentScrapyard(Card card) {
-		enemyScrapyard.addCard(cloneCard(card));
-	}
-
-	protected void updateHoveredCardGui(Card cardToShow) {
+	/**
+	 * UnitCards that are placed in UnitLanes container get the mouseover
+	 * ability to show the object in its full size on the infoPanel.
+	 * 
+	 * @param cardToShow
+	 */
+	protected void updateInfoPanelCard(Card cardToShow) {
 		cardToShow = (Card) cloneCard(cardToShow);
 		infoPanel.showCard(cardToShow);
 	}
 
-	private void playResourceCard(Card cloneCard) {
-		playerScrapyard.addCard(cloneCard);
+	// ***PRIVATE METHODS******************************************************
+	// *** Methods in this section are called within this class
+	// ************************************************************************
+
+	private void playResourceCard(Card card) {
+		playerScrapyard.addCard(card);
 	}
 
-	/**
-	 * Attempts to play the Heroic Support object passed in as argument and
-	 * place it on the corresponding Gui container. Throws exception if there is
-	 * no more space. Maximum amount of Heroic Support objects on board = 2.
-	 * 
-	 * @param cardToPlay
-	 * @throws GuiContainerException
-	 */
 	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException {
 		heroicGui.addHeroicSupport(cardToPlay);
-	}
-
-	private void playTech(Tech cloneCard) {
-		// TODO Figure out how to use abilities before implementing more to this
-		// method.
-		playerScrapyard.addCard(cloneCard);
 	}
 
 	private void playUnitCard(Unit cardToPlay) throws GuiContainerException {
@@ -350,17 +369,16 @@ public class BoardGuiController {
 			playerOffLane.addUnit(cardToPlay);
 			System.out.println(playerOffLane.length());
 		}
-
 	}
-	public void setSelectedLane() throws GuiContainerException {
-		// TODO Auto-generated method stub
-		/*laneSelected = true
-		 * stoppa tråden
-		 * 
-		 * 
-		 */
-		playUnitCard(unitToPlay);
-		handGuiPlayer.playCard(unitToPlay);
+
+	private void playTech(Tech cloneCard) {
+		// TODO Figure out how to use abilities before implementing more to this
+		// method.
+	}
+
+	private void setSelectedLane() throws GuiContainerException {
+		playUnitCard(tempUnit);
+		playerHandGui.playCard(tempUnit);
 		laneSelected = true;
 	}
 
@@ -372,7 +390,7 @@ public class BoardGuiController {
 	 * 
 	 * @throws NoLaneSelectedException
 	 */
-	protected void startSelectLaneThread() throws NoLaneSelectedException {
+	private void startSelectLaneThread() throws NoLaneSelectedException {
 		if (laneSelectThread == null) {
 			laneSelectThread = new LaneSelectThread();
 			laneSelectThread.start();
@@ -383,6 +401,7 @@ public class BoardGuiController {
 		}
 
 	}
+
 	/**
 	 * A thread that waits for player input when selecting a lane to play unit
 	 * cards on. Instantiates a mouselistener that gets connected to the
@@ -396,9 +415,9 @@ public class BoardGuiController {
 		public LaneSelectThread() {
 			InfoPanelGUI.append("Lane select thread started...waiting for unput");
 
-			selectLane = new LaneSelectListener();
-			playerOffLane.addMouseListener(selectLane);
-			playerDefLane.addMouseListener(selectLane);
+			laneListener = new LaneSelectListener();
+			playerOffLane.addMouseListener(laneListener);
+			playerDefLane.addMouseListener(laneListener);
 
 			playerOffLane.setBorder(CustomGui.offLaneBorder);
 			playerDefLane.setBorder(CustomGui.deffLaneBorder);
@@ -420,8 +439,8 @@ public class BoardGuiController {
 			}
 
 			// When the input is done remove interaction from the lane panels.
-			playerOffLane.removeMouseListener(selectLane);
-			playerDefLane.removeMouseListener(selectLane);
+			playerOffLane.removeMouseListener(laneListener);
+			playerDefLane.removeMouseListener(laneListener);
 
 			playerOffLane.setBorder(null);
 			playerDefLane.setBorder(null);
@@ -429,7 +448,7 @@ public class BoardGuiController {
 			playerOffLane.setOpaque(false);
 			playerDefLane.setOpaque(false);
 
-			selectLane = null;
+			laneListener = null;
 			laneSelected = false;
 			laneSelectThread = null;
 			InfoPanelGUI.append("Lane select thread stopped");
@@ -440,24 +459,15 @@ public class BoardGuiController {
 	private class LaneSelectListener implements MouseListener {
 
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
 		public void mouseEntered(MouseEvent event) {
 			if (event.getSource() == playerDefLane) {
 				playerDefLane.setBorder(CustomGui.defLaneMarkedBorder);
 				playerDefLane.setOpaque(true);
-
 			}
 			if (event.getSource() == playerOffLane) {
 				playerOffLane.setBorder(CustomGui.offLaneMarkedBorder);
 				playerOffLane.setOpaque(true);
-
 			}
-
 		}
 
 		@Override
@@ -480,15 +490,17 @@ public class BoardGuiController {
 			} catch (GuiContainerException e) {
 				// TODO Auto-generated catch block
 				InfoPanelGUI.append(e.getMessage());
-				laneSelected=true;
-				}
+				laneSelected = true;
 			}
-			
+		}
 
+		// Do nothing
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+		}
 
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
 		}
 
 	}

@@ -91,7 +91,7 @@ public class HeroicPanelGUI extends JPanel {
 	 * @return boolean
 	 * @throws GuiContainerException
 	 */
-	public boolean addHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
+	protected boolean addHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
 
 		boolean okToPlace = false;
 
@@ -137,7 +137,7 @@ public class HeroicPanelGUI extends JPanel {
 	 *            : HeroicSupport
 	 * @return target : HeroicSupport
 	 */
-	public HeroicSupport removeHeroicSupport(HeroicSupport target) {
+	protected HeroicSupport removeHeroicSupport(HeroicSupport target) {
 		for (int i = 0; i < heroicUnits.length; i++) {
 			if (heroicUnits[i] == target) {
 				if (i == 0) {

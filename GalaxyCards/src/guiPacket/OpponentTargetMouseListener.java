@@ -39,7 +39,7 @@ public class OpponentTargetMouseListener implements MouseListener {
 			card.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
 		}
 		if (card instanceof Unit){
-			boardController.updateHoveredCardGui((Unit) card);
+			boardController.updateInfoPanelCard((Unit) card);
 		}
 	}
 

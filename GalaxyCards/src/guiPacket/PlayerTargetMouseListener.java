@@ -31,7 +31,7 @@ public class PlayerTargetMouseListener implements MouseListener {
 		defaultBorder = card.getBorder();
 		card.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
 		if (card instanceof Unit){
-			boardController.updateHoveredCardGui((Unit) card);
+			boardController.updateInfoPanelCard((Unit) card);
 		}
 		
 

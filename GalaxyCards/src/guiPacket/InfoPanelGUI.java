@@ -55,10 +55,10 @@ public class InfoPanelGUI extends JPanel {
 
 	public InfoPanelGUI(BoardGuiController boardController) {
 		this.boardController = boardController;
-		boardController.addHoveredCardlListener(this);
+		boardController.addInfoPanelListener(this);
 		
 		customizeCardPanel();
-		customizeTWPanel();
+		customizeEditorPanel();
 		customizeEditorPane();
 		
 		//FOR DEBUGGING
@@ -82,6 +82,7 @@ public class InfoPanelGUI extends JPanel {
 		scrollPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
+	//Just for debugging
 	private void showPanelBorders() {
 		this.setBorder(BorderFactory.createTitledBorder("MAIN PANEL"));
 		
@@ -95,7 +96,7 @@ public class InfoPanelGUI extends JPanel {
 		scrollPane.setBorder(BorderFactory.createTitledBorder("SP"));
 	}
 
-	private void customizeTWPanel() {
+	private void customizeEditorPanel() {
 		
 //		JScrollBar bar = scrollPane.getVerticalScrollBar();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -145,7 +146,7 @@ public class InfoPanelGUI extends JPanel {
 	 * @param cardContainer
 	 *            - the card to show
 	 */
-	public void showCard(Card cardToShow) {
+	protected void showCard(Card cardToShow) {
 		cardContainer.removeAll();
 		cardToShow.setBorder(CustomGui.highlightBorder);
 		cardContainer.setPreferredSize(new Dimension(cardToShow.getPreferredSize().width, cardToShow.getPreferredSize().height));

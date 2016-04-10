@@ -31,9 +31,6 @@ import exceptionsPacket.NoLaneSelectedException;
  *
  */
 
-// TODO when a card object is added to hand with addCard(Card card) method, if
-// the card has ability, disable the button. When the card is played from hand
-// and is on board - enable the button.
 public class HandGUI extends JPanel {
 
 	private JLayeredPane layeredPane;
@@ -82,7 +79,7 @@ public class HandGUI extends JPanel {
 	 * @param card
 	 * @throws GuiContainerException
 	 */
-	public void addCard(Card card) throws GuiContainerException {
+	protected void addCard(Card card) throws GuiContainerException {
 		if (cardsOnHand < 8) {
 			cards[cardsOnHand] = card;
 			boardController.addCardToHand(card);
@@ -106,7 +103,7 @@ public class HandGUI extends JPanel {
 	 * @param card
 	 * @return : card
 	 */
-	public Card playCard(Card card) {
+	protected Card playCard(Card card) {
 
 		Card[] tempCards = new Card[8];
 		tempCards = cards;
@@ -148,10 +145,6 @@ public class HandGUI extends JPanel {
 		private Card temp;
 		private Border defaultBorder;
 		private Border highlightB = BorderFactory.createLineBorder(CustomGui.playerColor, 3, true);
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-		}
 
 		@Override
 		public void mouseEntered(MouseEvent event) {
@@ -204,6 +197,11 @@ public class HandGUI extends JPanel {
 		public void mouseReleased(MouseEvent arg0) {
 			// Do nothing
 		}
+		
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+		}
+
 
 	}
 }
