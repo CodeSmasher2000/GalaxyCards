@@ -7,6 +7,7 @@ import cards.Target;
 import cards.Tech;
 import cards.Unit;
 import exceptionsPacket.EmptyDeckException;
+import exceptionsPacket.FullHandException;
 import exceptionsPacket.NotValidMove;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
@@ -53,7 +54,15 @@ public class Rules {
 	 * Draws a card from the current players deck.
 	 */
 	public void drawCard() {
-		controller.drawCard();
+		try {
+			Card card = controller.drawCard();
+			controller.addCardToHand(card);
+		} catch (EmptyDeckException e) {
+			// TODO DEAL INCREMENTAL DAMAGE TO HERO
+		} catch (FullHandException e) {
+			// TODO Discard card!?
+		}
+		
 	}
 
 	/**
