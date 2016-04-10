@@ -1,6 +1,7 @@
 package guiPacket;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -11,13 +12,12 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-import cards.Unit;
+import testClasses.TestPanel;
 
 /**
  * GUI class that contains events for when a card is hovered over. The last card
@@ -48,6 +48,8 @@ public class InfoPanelGUI extends JPanel {
 	
 	private ImageIcon background = new ImageIcon("files/pictures/infoPanelTexture.jpg");
 	
+	private TestPanel testPanel;
+	
 //	private static JTextArea textArea = new JTextArea();
 	private static JScrollPane scrollPane = new JScrollPane( editorPane );
 	
@@ -56,6 +58,7 @@ public class InfoPanelGUI extends JPanel {
 	public InfoPanelGUI(BoardGuiController boardController) {
 		this.boardController = boardController;
 		boardController.addInfoPanelListener(this);
+		testPanel = new TestPanel(boardController);
 		
 		customizeCardPanel();
 		customizeEditorPanel();
@@ -64,12 +67,14 @@ public class InfoPanelGUI extends JPanel {
 		//FOR DEBUGGING
 //		showPanelBorders();
 		midEmpty.setOpaque(false);
+		midEmpty.add(testPanel);
 		
 		this.setLayout(new GridLayout(3,1));
 //		this.setOpaque(false);
 		this.add(cardPanel2);
 		this.add(midEmpty);
 		this.add(twPanel2);
+		this.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		
 
 	}

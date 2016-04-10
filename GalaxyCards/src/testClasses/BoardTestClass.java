@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import EnumMessage.Lanes;
 import cards.Deck;
+import enumMessage.Lanes;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.GuiContainerException;
 import guiPacket.UnitLanes;

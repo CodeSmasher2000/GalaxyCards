@@ -3,13 +3,13 @@ package guiPacket;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import EnumMessage.Lanes;
-import EnumMessage.Persons;
 import abilities.Ability;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
+import enumMessage.Lanes;
+import enumMessage.Persons;
 import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.NoLaneSelectedException;
 

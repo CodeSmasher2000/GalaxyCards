@@ -13,7 +13,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import EnumMessage.Persons;
+import enumMessage.Persons;
 import exceptionsPacket.GuiContainerException;
 
 public class ScrapyardGUI extends JPanel {
@@ -23,7 +23,7 @@ public class ScrapyardGUI extends JPanel {
 	private int verticalPosition = 10, cardsInScrapyard = 0;
 	private int cardOriginalLayer;
 
-	private ImageIcon background = new ImageIcon("files/pictures/handPanelTexture2.jpg");
+	private ImageIcon background;
 	private Card[] buffer = new Card[5];
 	private Persons ENUM;
 	ScarpyardMouseListener mouseListener = new ScarpyardMouseListener();
@@ -31,6 +31,11 @@ public class ScrapyardGUI extends JPanel {
 	public ScrapyardGUI(BoardGuiController boardController, Persons ENUM) {
 		this.boardController = boardController;
 		this.ENUM = ENUM;
+		if(ENUM==Persons.PLAYER){
+			background = new ImageIcon("files/pictures/scrapPanelPlayer.jpg");
+		}else{
+			background = new ImageIcon("files/pictures/scrapPanelOpponent.jpg");
+		}
 		boardController.addScrapyardListener(this, ENUM);
 		initiateLayeredPane();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

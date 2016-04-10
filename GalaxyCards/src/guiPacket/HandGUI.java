@@ -39,7 +39,7 @@ public class HandGUI extends JPanel {
 	private HandMouseListener listener = new HandMouseListener();
 	private BoardGuiController boardController;
 	
-	private ImageIcon background = new ImageIcon("files/pictures/handPanelTexture2.jpg");
+	private ImageIcon background = new ImageIcon("files/pictures/handPanelTexturePlayer.jpg");
 
 	private Card[] cards = new Card[8];
 
@@ -67,7 +67,6 @@ public class HandGUI extends JPanel {
 		layeredPane.setOpaque(false);
 		layeredPane.setLayout(null);
 		layeredPane.setPreferredSize(new Dimension(730, 230));
-//		layeredPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
 	/**

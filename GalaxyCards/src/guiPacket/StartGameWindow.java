@@ -4,23 +4,23 @@ import javax.swing.JFrame;
 
 import testClasses.TestPanel;
 
-public class FullsreenFrame extends JFrame {
+public class StartGameWindow extends JFrame {
 	
 	private BoardGuiController boardController;
 	private BoardGUI boardGui;
 
 	
-	public FullsreenFrame(){
+	public StartGameWindow(){
 		boardController = new BoardGuiController();
 		boardGui = new BoardGUI(boardController);
 	}
 	
-	public FullsreenFrame(BoardGuiController boardController, TestPanel testPanel){
-		this.boardController=boardController;
-		boardGui = new BoardGUI(boardController);
-		boardGui.addDebuggPanel(testPanel);
-		showUi();
-	}
+//	public StartGameWindow(BoardGuiController boardController, TestPanel testPanel){
+//		this.boardController=boardController;
+//		boardGui = new BoardGUI(boardController);
+//		boardGui.addDebuggPanel(testPanel);
+//		showUi();
+//	}
 	
 	private void showUi(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,7 +35,7 @@ public class FullsreenFrame extends JFrame {
 
 	public static void main(String[] args) {
 
-		FullsreenFrame frame = new FullsreenFrame();
+		StartGameWindow frame = new StartGameWindow();
 		frame.showUi();
 		
 	}

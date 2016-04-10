@@ -12,8 +12,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import EnumMessage.Lanes;
 import cards.Unit;
+import enumMessage.Lanes;
 import exceptionsPacket.GuiContainerException;
 
 public class UnitLanes extends JPanel {

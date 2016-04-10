@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import EnumMessage.CommandMessage;
-import EnumMessage.Commands;
+import enumMessage.CommandMessage;
+import enumMessage.Commands;
 
 public class ServerController {
 	

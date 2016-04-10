@@ -13,7 +13,7 @@ public class CustomGui {
 	//Colors
 	public static Color playerColor = new Color(0, 190, 255);
 	public static Color opponentColor = new Color(247,61,66);
-	public static Color guiTransparentColor = new Color(255, 255, 255, 35);
+	public static Color guiTransparentColor = new Color(255, 255, 255, 55);
 	public static Color blueHighlight = new Color(0, 169, 255);
 	//Fonts
 	public static Font fontBig = new FontUIResource("BankGothic Md BT", Font.ITALIC, 22);

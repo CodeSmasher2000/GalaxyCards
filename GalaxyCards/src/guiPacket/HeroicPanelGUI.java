@@ -13,8 +13,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import EnumMessage.Persons;
 import cards.HeroicSupport;
+import enumMessage.Persons;
 import exceptionsPacket.GuiContainerException;
 
 /**

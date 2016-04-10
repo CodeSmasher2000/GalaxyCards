@@ -1,5 +1,6 @@
 package testClasses;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -10,23 +11,28 @@ import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-import EnumMessage.Lanes;
 import cards.Deck;
 import cards.HeroicSupport;
 import cards.Unit;
+import enumMessage.Lanes;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.GuiContainerException;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
-import guiPacket.FullsreenFrame;
+import guiPacket.CustomGui;
 import guiPacket.InfoPanelGUI;
+import guiPacket.StartGameWindow;
 
 public class TestPanel extends JPanel{
 	
 	private BoardGuiController boardController;
-	private FullsreenFrame frame;
+	private StartGameWindow frame;
 
 	private Card temp;
 	private ButtonListener list = new ButtonListener();
@@ -34,7 +40,8 @@ public class TestPanel extends JPanel{
 	private ObjectInputStream ois;
 	private JButton testDraw, testOpponentDrawCard, testOpponentPlayCard;
 	private JPanel testPanel;
-	
+	private JLabel label = new JLabel("Debugging tool");
+
 	public TestPanel(){
 		
 		initiateTestElements();
@@ -42,10 +49,15 @@ public class TestPanel extends JPanel{
 		add(testPanel);
 		
 		boardController = new BoardGuiController();
-		frame = new FullsreenFrame(boardController,this);
+//		frame = new StartGameWindow(boardController,this);
 		System.out.println("VADFAN");
 		
 		
+	}
+	
+	public TestPanel(BoardGuiController boardController){
+		this();
+		this.boardController=boardController;
 	}
 	
 	private void initiateTestElements() {
@@ -59,6 +71,7 @@ public class TestPanel extends JPanel{
 
 		testPanel = new JPanel();
 		testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
+		testPanel.add(label);
 		testPanel.add(testDraw);
 		testPanel.add(testOpponentDrawCard);
 		testPanel.add(testOpponentPlayCard);
@@ -161,7 +174,6 @@ public class TestPanel extends JPanel{
 				}
 			}
 		}
-	
 	
 	public static void main(String[] args) {
 		new TestPanel();

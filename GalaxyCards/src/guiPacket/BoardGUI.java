@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -12,28 +11,28 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import EnumMessage.Lanes;
-import EnumMessage.Persons;
-import testClasses.TestPanel;
+import enumMessage.Lanes;
+import enumMessage.Persons;
 
 public class BoardGUI extends JPanel {
 
 	private BoardGuiController boardController;
-	private JPanel playFieldPanel, playerPanel, playerContainer, opponentPanel, scrapYardPanel, scrapYardPanel2,
+	private JPanel playFieldPanel, playerPanel, playerContainer, opponentPanel, scrapyardPanel, scrapyardPanel2,
 			scrapYardContainer, infoPanel, infoPanel2, middlePanel;
 	private UnitLanes playerDefensiveLane, playerOffensiveLane, enemyDefensiveLane, enemyOffensiveLane;
-	private HandGUI hand;
+	private HandGUI playerHand;
 	private OpponentHandGUI opponentHand;
-	private HeroGUI hero, opponentHero;
+	private HeroGUI playerHero, opponentHero;
 	private HeroicPanelGUI playerHeroicPanel, opponentHeroicPanel;
-	private InfoPanelGUI hoveredCard;
-	
+	private InfoPanelGUI info;
+
 	private ScrapyardGUI playerScrapyard, opponentScrapyard;
+	private ScrapyardPanel scrapyards;
 
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
-	private ImageIcon historyPanelBg = new ImageIcon("files/pictures/historyPanelTexture.jpg");
-	
-	private PaintedPanel scrapYardContainer2 = new PaintedPanel(historyPanelBg);
+//	private ImageIcon historyPanelBg = new ImageIcon("files/pictures/historyPanelTexture.jpg");
+
+//	private PaintedPanel scrapYardContainer2 = new PaintedPanel(historyPanelBg);
 
 	public BoardGUI(BoardGuiController boardController) {
 		this.boardController = boardController;
@@ -43,8 +42,8 @@ public class BoardGUI extends JPanel {
 		configurePlayerPanel();
 		configureOpponentPanel();
 		configurePlayfield();
-		configureScrapPane();
-		configureInfoPane();
+		configureScrapPanel();
+		configureInfoPanel();
 
 		middlePanel.setLayout(new BorderLayout());
 		middlePanel.add(playFieldPanel, BorderLayout.CENTER);
@@ -53,26 +52,26 @@ public class BoardGUI extends JPanel {
 		middlePanel.setOpaque(false);
 		this.setLayout(new BorderLayout());
 		this.add(middlePanel, BorderLayout.CENTER);
-		this.add(scrapYardPanel2, BorderLayout.WEST);
+		this.add(scrapyardPanel2, BorderLayout.WEST);
 		this.add(infoPanel, BorderLayout.EAST);
 		this.setOpaque(false);
 	}
 
 	private void initiateGuiElements() {
-		hand = new HandGUI(boardController);
+		playerHand = new HandGUI(boardController);
 		opponentHand = new OpponentHandGUI(boardController);
 		playerHeroicPanel = new HeroicPanelGUI(boardController, Persons.PLAYER);
 		opponentHeroicPanel = new HeroicPanelGUI(boardController, Persons.OPPONENT);
 		opponentHero = new HeroGUI(boardController);
-		hero = new HeroGUI(boardController);
+		playerHero = new HeroGUI(boardController);
 
 		playerDefensiveLane = new UnitLanes(boardController, Lanes.PLAYER_DEFENSIVE, 6);
 		playerOffensiveLane = new UnitLanes(boardController, Lanes.PLAYER_OFFENSIVE, 6);
 		enemyDefensiveLane = new UnitLanes(boardController, Lanes.ENEMY_DEFENSIVE, 6);
 		enemyOffensiveLane = new UnitLanes(boardController, Lanes.ENEMY_OFFENSIVE, 6);
 
-		hoveredCard = new InfoPanelGUI(boardController);
-		
+		info = new InfoPanelGUI(boardController);
+
 		playerScrapyard = new ScrapyardGUI(boardController, Persons.PLAYER);
 		opponentScrapyard = new ScrapyardGUI(boardController, Persons.OPPONENT);
 	}
@@ -82,15 +81,16 @@ public class BoardGUI extends JPanel {
 		playerContainer = new JPanel();
 		opponentPanel = new JPanel();
 		playFieldPanel = new JPanel();
-		scrapYardPanel2 = new JPanel();
-		scrapYardPanel = new JPanel();
+		scrapyardPanel2 = new JPanel();
+		scrapyardPanel = new JPanel();
 		scrapYardContainer = new JPanel();
 		infoPanel = new JPanel();
 		infoPanel2 = new JPanel();
 		middlePanel = new JPanel();
+		scrapyards = new ScrapyardPanel(playerScrapyard, opponentScrapyard);
 	}
 
-	private void configureInfoPane() {
+	private void configureInfoPanel() {
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.X_AXIS));
 		infoPanel.setPreferredSize(new Dimension(400, 1080));
 		infoPanel.setOpaque(true);
@@ -102,41 +102,54 @@ public class BoardGUI extends JPanel {
 		infoPanel2.setBackground(CustomGui.guiTransparentColor);
 
 		infoPanel2.add(Box.createVerticalStrut(10));
-		infoPanel2.add(hoveredCard);
+		infoPanel2.add(info);
 		infoPanel2.add(Box.createVerticalStrut(20));
 
 		infoPanel.add(Box.createHorizontalStrut(10));
 		infoPanel.add(infoPanel2);
 		infoPanel.add(Box.createHorizontalStrut(10));
 
-		infoPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+		infoPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 1, Color.WHITE));
 	}
 
-	private void configureScrapPane() {
-		scrapYardPanel2.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-		scrapYardPanel2.setLayout(new BoxLayout(scrapYardPanel2, BoxLayout.Y_AXIS));
-		scrapYardPanel2.setOpaque(true);
-		scrapYardPanel2.setBackground(CustomGui.guiTransparentColor);
-		scrapYardPanel2.add(Box.createVerticalStrut(10));
-		scrapYardPanel2.add(scrapYardPanel);
-		scrapYardPanel2.add(Box.createVerticalStrut(10));
+	private void configureScrapPanel() {
+		scrapyardPanel2.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 0, Color.WHITE));
+		scrapyardPanel2.setLayout(new BoxLayout(scrapyardPanel2, BoxLayout.Y_AXIS));
+		scrapyardPanel2.setOpaque(true);
+		scrapyardPanel2.setBackground(CustomGui.guiTransparentColor);
+		scrapyardPanel2.add(Box.createVerticalStrut(10));
+		scrapyardPanel2.add(scrapyardPanel);
+		scrapyardPanel2.add(Box.createVerticalStrut(10));
+
+		scrapyardPanel.setLayout(new BoxLayout(scrapyardPanel, BoxLayout.X_AXIS));
+		scrapyardPanel.setOpaque(false);
+		scrapyardPanel.setBackground(CustomGui.guiTransparentColor);
+		scrapyardPanel.add(Box.createHorizontalStrut(10));
+		scrapyardPanel.add(scrapyards);
+		scrapyardPanel.add(Box.createHorizontalStrut(10));
+
+//		scrapYardContainer2.setLayout(new BoxLayout(scrapYardContainer2, BoxLayout.Y_AXIS));
+//		scrapYardContainer2.add(Box.createVerticalStrut(10));
+//		scrapYardContainer2.add(opponentScrapyard);
+//		scrapYardContainer2.add(Box.createVerticalGlue());
+//		scrapYardContainer2.add(Box.createVerticalStrut(10));
+//		scrapYardContainer2.add(Box.createVerticalGlue());
+//		scrapYardContainer2.add(playerScrapyard);
+//		scrapYardContainer2.add(Box.createVerticalStrut(10));
 		
-		scrapYardPanel.setLayout(new BoxLayout(scrapYardPanel, BoxLayout.X_AXIS));
-		scrapYardPanel.setOpaque(false);
-		scrapYardPanel.setBackground(CustomGui.guiTransparentColor);
-		scrapYardPanel.add(Box.createHorizontalStrut(10));
-		scrapYardPanel.add(scrapYardContainer2);
-		scrapYardPanel.add(Box.createHorizontalStrut(10));
+//		scrapYardContainer.setLayout(new BoxLayout(scrapYardContainer, BoxLayout.X_AXIS));
+//		scrapYardContainer.add(Box.createHorizontalStrut(5));
+//		scrapYardContainer.setOpaque(true);
+//		scrapYardContainer.add(scrapYardContainer2);
+//		scrapYardContainer.add(Box.createHorizontalStrut(5));
 		
-		scrapYardContainer2.setLayout(new GridLayout(2,1));
-		scrapYardContainer2.add(playerScrapyard);
 	}
 
 	private void configurePlayerPanel() {
 		playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
 
-		playerContainer.add(hand);
-		playerContainer.add(hero);
+		playerContainer.add(playerHand);
+		playerContainer.add(playerHero);
 		playerContainer.add(playerHeroicPanel);
 		playerContainer.setOpaque(false);
 
@@ -145,7 +158,7 @@ public class BoardGUI extends JPanel {
 		playerPanel.add(Box.createVerticalStrut(5));
 		playerPanel.setBackground(CustomGui.guiTransparentColor);
 
-		playerPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.WHITE));
+		playerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
 	}
 
 	private void configureOpponentPanel() {
@@ -154,7 +167,7 @@ public class BoardGUI extends JPanel {
 		opponentPanel.add(opponentHeroicPanel);
 		opponentPanel.setBackground(CustomGui.guiTransparentColor);
 
-		opponentPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.WHITE));
+		opponentPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.WHITE));
 	}
 
 	private void configurePlayfield() {
@@ -164,6 +177,7 @@ public class BoardGUI extends JPanel {
 		enemyOffensiveLane.setOpaque(false);
 
 		playFieldPanel.setLayout(new BoxLayout(playFieldPanel, BoxLayout.Y_AXIS));
+		playFieldPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		playFieldPanel.add(Box.createVerticalStrut(3));
 		playFieldPanel.add(Box.createVerticalGlue());
 		playFieldPanel.add(enemyDefensiveLane);
@@ -183,14 +197,5 @@ public class BoardGUI extends JPanel {
 
 		super.paintComponent(g);
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
-	}
-
-	/**
-	 * Adds a debugging panel so we can test the functionality of the system.
-	 * 
-	 * @param panel
-	 */
-	public void addDebuggPanel(TestPanel testPanel) {
-		scrapYardContainer2.add(testPanel);
 	}
 }
