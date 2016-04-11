@@ -1,4 +1,4 @@
-package EnumMessage;
+package enumMessage;
 	/**
 	 * Klass som hanterar de olika Commandsen man skickar och tar emot.
 	 * @author Jonte

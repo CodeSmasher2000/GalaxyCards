@@ -1,4 +1,4 @@
-package EnumMessage;
+package enumMessage;
 
 /**
  * Enums for different lanes that are added to boardGuiController.

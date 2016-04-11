@@ -16,11 +16,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import EnumMessage.Lanes;
 import cards.Deck;
+import enumMessage.Lanes;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.GuiContainerException;
-import guiPacket.ArrayLayeredPane;
+import guiPacket.UnitLanes;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.HandGUI;
@@ -37,10 +37,10 @@ public class BoardTestClass {
 	private HeroGUI hero, hero2;
 	private Deck deck;
 	private ObjectInputStream ois;
-	private ArrayLayeredPane playerDefensiveLane;
-	private ArrayLayeredPane playerOffensive;
-	private ArrayLayeredPane enemyDefensiveLane;
-	private ArrayLayeredPane enemyOffensiveLane;
+	private UnitLanes playerDefensiveLane;
+	private UnitLanes playerOffensive;
+	private UnitLanes enemyDefensiveLane;
+	private UnitLanes enemyOffensiveLane;
 
 	private JPanel panelGUI = new JPanel();
 	private JPanel enemyGui = new JPanel();
@@ -62,10 +62,10 @@ public class BoardTestClass {
 		hero2 = new HeroGUI(board2);
 		opponentHand = new OpponentHandGUI(board);
 
-		playerDefensiveLane = new ArrayLayeredPane(board, Lanes.PLAYER_DEFENSIVE, 6);
-		playerOffensive = new ArrayLayeredPane(board, Lanes.PLAYER_OFFENSIVE, 6);
-		enemyDefensiveLane = new ArrayLayeredPane(board, Lanes.ENEMY_DEFENSIVE, 6);
-		enemyOffensiveLane = new ArrayLayeredPane(board, Lanes.PLAYER_OFFENSIVE, 6);
+		playerDefensiveLane = new UnitLanes(board, Lanes.PLAYER_DEFENSIVE, 6);
+		playerOffensive = new UnitLanes(board, Lanes.PLAYER_OFFENSIVE, 6);
+		enemyDefensiveLane = new UnitLanes(board, Lanes.ENEMY_DEFENSIVE, 6);
+		enemyOffensiveLane = new UnitLanes(board, Lanes.PLAYER_OFFENSIVE, 6);
 
 		draw.addActionListener(list);
 		draw2.addActionListener(list);
@@ -160,7 +160,7 @@ public class BoardTestClass {
 			}
 			if(event.getSource()==draw3){
 				try {
-					board.opponentPlaysCard();
+					board.opponentPlaysUnit();
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
 				}

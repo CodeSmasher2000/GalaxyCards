@@ -6,8 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.TreeMap;
 
-import EnumMessage.CommandMessage;
-import EnumMessage.Commands;
+import enumMessage.CommandMessage;
+import enumMessage.Commands;
 /**
  * Klass som ska ta hand om alla klienter som ansluter
  * @author Jonte

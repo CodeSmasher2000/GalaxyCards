@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-import EnumMessage.CommandMessage;
-import EnumMessage.Commands;
+import enumMessage.CommandMessage;
+import enumMessage.Commands;
 
 /**
  * Klass som innehåller logik för klienten.

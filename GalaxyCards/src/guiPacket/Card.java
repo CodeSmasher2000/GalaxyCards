@@ -325,7 +325,7 @@ public abstract class Card extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(cardBG1.getImage(), 0, 0, null);
+		g.drawImage(cardBG1.getImage(), 0, 0, this);
 	}
 
 	// Loads a image from a directory and sets it as background for the main

@@ -7,8 +7,8 @@ import java.net.Socket;
 
 import javax.swing.JOptionPane;
 
-import EnumMessage.CommandMessage;
-import EnumMessage.Commands;
+import enumMessage.CommandMessage;
+import enumMessage.Commands;
 
 
 /**
