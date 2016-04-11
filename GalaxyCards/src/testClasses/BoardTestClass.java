@@ -20,13 +20,13 @@ import cards.Deck;
 import enumMessage.Lanes;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.GuiContainerException;
-import guiPacket.UnitLanes;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.HandGUI;
 import guiPacket.HeroGUI;
 import guiPacket.HeroicPanelGUI;
 import guiPacket.OpponentHandGUI;
+import guiPacket.UnitLanes;
 
 public class BoardTestClass {
 
@@ -56,9 +56,9 @@ public class BoardTestClass {
 
 	public BoardTestClass() {
 		hand = new HandGUI(board);
-		hp = new HeroicPanelGUI(board);
+//		hp = new HeroicPanelGUI(board);
 		hero = new HeroGUI(board);
-		hp2 = new HeroicPanelGUI(board2);
+//		hp2 = new HeroicPanelGUI(board2);
 		hero2 = new HeroGUI(board2);
 		opponentHand = new OpponentHandGUI(board);
 
@@ -77,10 +77,10 @@ public class BoardTestClass {
 
 		enemyGui.add(opponentHand);
 		enemyGui.add(hero2);
-		enemyGui.add(hp2);
+//		enemyGui.add(hp2);
 		panelGUI.add(hand);
 		panelGUI.add(hero);
-		panelGUI.add(hp);
+//		panelGUI.add(hp);
 
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(enemyDefensiveLane);

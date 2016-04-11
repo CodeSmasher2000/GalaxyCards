@@ -8,12 +8,17 @@ import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
+import exceptionsPacket.EmptyDeckException;
+import exceptionsPacket.FullHandException;
 import exceptionsPacket.NotValidMove;
 import guiPacket.*;
 
 public class Controller {
     private Board board;
     private BoardGuiController boardController;
+    
+    // Variables needed for a round in the game
+    private boolean resourceCardPlayed;
     
     // Variables for the friendlyPlayer
     private Hero friendlyHero;
@@ -36,7 +41,7 @@ public class Controller {
     	this.enemyHero = enemy;
     }
 
-    public void addCardToHand(Card card) {
+    public void addCardToHand(Card card) throws FullHandException {
         board.addCardToHand(card);
     }
     
@@ -44,8 +49,8 @@ public class Controller {
     	board.clearHand();
     }
     
-    public void drawCard() {
-    	
+    public Card drawCard() throws EmptyDeckException {
+    	return board.getPlayerDeck().drawCard();
     }
     
     // *********************************
@@ -63,6 +68,10 @@ public class Controller {
     public void playCard(Card card) {
     	board.removeCardFromHand(card);
     	// TODO: Contact GUI
+    }
+    
+    public int getHandSize() {
+    	return board.getHandSize();
     }
     
     // *********************************
