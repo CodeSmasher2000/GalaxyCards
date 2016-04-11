@@ -20,13 +20,13 @@ import cards.Deck;
 import enumMessage.Lanes;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.GuiContainerException;
-import guiPacket.UnitLanes;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.HandGUI;
 import guiPacket.HeroGUI;
 import guiPacket.HeroicPanelGUI;
 import guiPacket.OpponentHandGUI;
+import guiPacket.UnitLanes;
 
 public class BoardTestClass {
 

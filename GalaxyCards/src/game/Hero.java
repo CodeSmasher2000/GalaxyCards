@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 import javax.naming.InsufficientResourcesException;
 
+import exceptionsPacket.ResourcePlayedException;
+
 /**
  * This class represents the player's hero and is responsible for a logical
  * representation of the hero and his attributes. This class is also responsible
- * for altering the hero's attributes aswell as determinating if the player has
- * lost the match.
+ * for altering the hero's attributes and interaction with deck.
  * 
  * @author 13120dde
  *
@@ -57,7 +58,7 @@ public class Hero implements Serializable {
 
 	/**
 	 * Add x amount of energy shield to this hero. The shield's max amount is
-	 * 10.
+	 * 10 and if amount is higher than 10 the energyShield attribute will be set to 10.
 	 * 
 	 * @param amount
 	 */
@@ -103,10 +104,11 @@ public class Hero implements Serializable {
 		return energyShield;
 	}
 	
-	public void addResource(){
+	public void addResource() throws ResourcePlayedException{
 		if(!resourcecardPlayed){
 		maxResource++;
 		currentResource++;
+		resourcecardPlayed = true;
 		}else{
 			throw new ResourcePlayedException("You can only play one resource card each turn");
 		}
