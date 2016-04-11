@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 
 import EnumMessage.CommandMessage;
 import EnumMessage.Commands;
+import Server.ClientHandler;
 
 /**
  * Klass som innehåller logik för klienten.
@@ -20,6 +21,7 @@ public class ClientController {
 		
 	}
 	
+	
 	/**
 	 * Metod som låter klienten ansluta till en given server.
 	 * @param ip
@@ -27,21 +29,17 @@ public class ClientController {
 	 * @param port
 	 * 			Serverns port
 	 */			
-	public void connect(String ip, int port) {
-		ClientController controller = new ClientController();
-		try {
-			client = new Client(ip, port);
-			client.setClientController(controller);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public synchronized void connect(String ip, int port) {
+		client = new Client(ip, port);
+		client.setClientController(this);
 	}
+	
 	
 	
 	/**
 	 * Metod som hanterar låter användaren skriva in användarnamn och skickar det till server.
 	 */
-	public void login(){
+	public synchronized void login(){
 		
 		boolean login = false;
 		while(login !=true){
@@ -52,7 +50,6 @@ public class ClientController {
 			if(response.getCommand()==Commands.OK){
 				login = true;
 			}
-			
 		}
 	}
 

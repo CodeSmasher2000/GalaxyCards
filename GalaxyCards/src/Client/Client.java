@@ -5,14 +5,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import javax.swing.JOptionPane;
-
 import EnumMessage.CommandMessage;
 import EnumMessage.Commands;
+import Server.ServerController;
 
 
 /**
- * Klass som tar hand om klientens skriv och läsmetoder.
+ * Klass som skapar en ny klient och tar hand om klientens skriv och läsmetoder.
  * @author Jonte
  *
  */
@@ -22,16 +21,28 @@ public class Client {
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	private Listener listener;
+	private ServerController serverController;
 
 	
 
-	public Client(String ip, int port) throws IOException {
-		socket = new Socket(ip, port);
-		oos = new ObjectOutputStream(socket.getOutputStream());
-		ois = new ObjectInputStream(socket.getInputStream());
+	public Client(String ip, int port) {
+		try {
+			socket = new Socket(ip, port);
+			oos = new ObjectOutputStream(socket.getOutputStream());
+			ois = new ObjectInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		this.listener = new Listener();
 		this.listener.start();
 		
+	}
+	
+	public void disconnect(){
+		try{
+			this.socket.close();
+		}catch(IOException e){}
 	}
 	
 	public ObjectOutputStream getOos(){
@@ -41,6 +52,7 @@ public class Client {
 	public ObjectInputStream getOis(){
 		return ois;
 	}
+	
 	/**
 	 * Skickar CommandMessages 
 	 * @param cmdMessage
@@ -92,15 +104,11 @@ public class Client {
 			System.out.println("Klient: Ansluten Till Server");
 			controller.login();
 				while (true) {
-					controller.listenForMessage();
+					listenForMessage();
 				}
 		}
 	}
 	
-	public static void main(String[] args) {
-		ClientController controller = new ClientController();
-		controller.connect("192.168.1.228",3550);
-	}
 	
 	
 }
