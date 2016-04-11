@@ -5,13 +5,16 @@ import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import EnumMessage.CommandMessage;
-import EnumMessage.Commands;
+
+import enumMessage.CommandMessage;
+import enumMessage.Commands;
+
 /**
  * Klass som tar hand om nya anslutningar och lagrar dem i en TreeMap.
  * @author Jonte
  *
  */
+
 public class ServerController {
 	
 	private  SortedMap<String, ClientHandler> userMap =

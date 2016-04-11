@@ -1,73 +1,88 @@
 package testClasses;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.LinkedList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import cards.Deck;
+import enumMessage.Lanes;
 import exceptionsPacket.EmptyDeckException;
-import exceptionsPacket.NoPlaceOnBoardException;
-import guiPacket.ArrayLayeredPane;
+import exceptionsPacket.GuiContainerException;
+import guiPacket.UnitLanes;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.HandGUI;
 import guiPacket.HeroGUI;
 import guiPacket.HeroicPanelGUI;
+import guiPacket.OpponentHandGUI;
 
 public class BoardTestClass {
 
 	private BoardGuiController board = new BoardGuiController();
 	private BoardGuiController board2 = new BoardGuiController();
-	private HandGUI hand, hand2;
-	private HeroicPanelGUI hp, hp2;
+	private HandGUI hand;
+	private OpponentHandGUI opponentHand;
 	private HeroGUI hero, hero2;
 	private Deck deck;
 	private ObjectInputStream ois;
-	private ArrayLayeredPane playerDefensiveLane = new ArrayLayeredPane(6);
-	private ArrayLayeredPane playerOffensive = new ArrayLayeredPane(6);
-	private ArrayLayeredPane enemyDefensiveLane = new ArrayLayeredPane(6);
-	private ArrayLayeredPane enemyOffensiveLane = new ArrayLayeredPane(6);
-	
+	private UnitLanes playerDefensiveLane;
+	private UnitLanes playerOffensive;
+	private UnitLanes enemyDefensiveLane;
+	private UnitLanes enemyOffensiveLane;
+
 	private JPanel panelGUI = new JPanel();
 	private JPanel enemyGui = new JPanel();
 	private JPanel panelBTN = new JPanel();
 	private JPanel mainPanel = new JPanel();
-	
+	private JPanel fullScreen = new JPanel();
+
 	private JButton draw = new JButton("Dra kort");
-	private Card temp;	
-	
-	public BoardTestClass(){
+	private JButton draw2 = new JButton("Motstanderen drar kort");
+	private JButton draw3 = new JButton("Motstanderen spelar kort");
+	private Card temp;
+	private ButtonListener list = new ButtonListener();
+
+	public BoardTestClass() {
 		hand = new HandGUI(board);
 		hp = new HeroicPanelGUI(board);
 		hero = new HeroGUI(board);
-		hand2 = new HandGUI(board2);
 		hp2 = new HeroicPanelGUI(board2);
 		hero2 = new HeroGUI(board2);
-		
-		draw.addActionListener(new ButtonListener());
-//		playerDefensiveLane.setContainerName("Defensive Lane");
-//		playerOffensive.setContainerName("Offensive Lane");
-//		enemyDefensiveLane.setContainerName("Enemy's Defensive Lane");
-//		enemyOffensiveLane.setContainerName("Enemy's Offensive Lane");
-		
-		enemyGui.add(hand2);
+		opponentHand = new OpponentHandGUI(board);
+
+		playerDefensiveLane = new UnitLanes(board, Lanes.PLAYER_DEFENSIVE, 6);
+		playerOffensive = new UnitLanes(board, Lanes.PLAYER_OFFENSIVE, 6);
+		enemyDefensiveLane = new UnitLanes(board, Lanes.ENEMY_DEFENSIVE, 6);
+		enemyOffensiveLane = new UnitLanes(board, Lanes.PLAYER_OFFENSIVE, 6);
+
+		draw.addActionListener(list);
+		draw2.addActionListener(list);
+		draw3.addActionListener(list);
+		// playerDefensiveLane.setContainerName("Defensive Lane");
+		// playerOffensive.setContainerName("Offensive Lane");
+		// enemyDefensiveLane.setContainerName("Enemy's Defensive Lane");
+		// enemyOffensiveLane.setContainerName("Enemy's Offensive Lane");
+
+		enemyGui.add(opponentHand);
 		enemyGui.add(hero2);
 		enemyGui.add(hp2);
 		panelGUI.add(hand);
 		panelGUI.add(hero);
 		panelGUI.add(hp);
-		
+
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(enemyGui);
 		mainPanel.add(enemyDefensiveLane);
 		mainPanel.add(Box.createVerticalStrut(2));
 		mainPanel.add(enemyOffensiveLane);
@@ -75,12 +90,21 @@ public class BoardTestClass {
 		mainPanel.add(playerOffensive);
 		mainPanel.add(Box.createVerticalStrut(2));
 		mainPanel.add(playerDefensiveLane);
-		mainPanel.add(panelGUI);
+
+		panelBTN.setLayout(new BoxLayout(panelBTN, BoxLayout.Y_AXIS));
 		panelBTN.add(draw);
-		
+		panelBTN.add(draw2);
+		panelBTN.add(draw3);
+
+		fullScreen.setLayout(new BorderLayout());
+		fullScreen.add(enemyGui, BorderLayout.NORTH);
+		fullScreen.add(mainPanel, BorderLayout.CENTER);
+		fullScreen.add(panelGUI, BorderLayout.SOUTH);
+		fullScreen.add(panelBTN, BorderLayout.EAST);
+
 		try {
 			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("files/decks/padde.dat")));
-			deck = (Deck)ois.readObject();
+			deck = (Deck) ois.readObject();
 			deck.shuffle();
 			System.out.println(deck.toString());
 			temp = deck.drawCard();
@@ -95,21 +119,23 @@ public class BoardTestClass {
 			e.printStackTrace();
 		}
 	}
-	
-	public void showUI(){
+
+	public void showUI() {
+
 		JFrame frame = new JFrame();
-		frame.add(mainPanel);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		// frame.setUndecorated(true);
+
+		frame.add(fullScreen);
 		frame.setVisible(true);
 		frame.pack();
-		
-		JFrame frame2= new JFrame();
-		frame2.add(panelBTN);
-		frame2.setVisible(true);
-		frame2.pack();
-		
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 	}
-	
-	private class ButtonListener implements ActionListener{
+
+	private class ButtonListener implements ActionListener {
+
+		private LinkedList<Card> enemyHand = new LinkedList<Card>();
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -118,16 +144,33 @@ public class BoardTestClass {
 					System.out.println("Deck size: "+deck.getAmtOfCards());
 					board.drawCard(temp);
 					temp=deck.drawCard();
-				} catch (NoPlaceOnBoardException e) {
+				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
 				} catch (EmptyDeckException e) {
 					System.err.println(e.getMessage());
 				}
 			}
+			if(event.getSource()==draw2){
+				try {
+					board.opponentDrawsCard();
+				} catch (GuiContainerException e) {
+					// TODO Auto-generated catch block
+					System.err.println(e.getMessage());
+				}
+			}
+			if(event.getSource()==draw3){
+				try {
+					board.opponentPlaysUnit();
+				} catch (GuiContainerException e) {
+					System.err.println(e.getMessage());
+				}
+			}
+		}
+	}
+		
+
+		public static void main(String[] args) {
+			new BoardTestClass().showUI();
 		}
 		
-	}
-	public static void main(String[] args) {
-		new BoardTestClass().showUI();
-	}
 }

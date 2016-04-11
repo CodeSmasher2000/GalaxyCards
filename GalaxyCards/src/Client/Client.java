@@ -5,9 +5,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import EnumMessage.CommandMessage;
-import EnumMessage.Commands;
+
 import Server.ServerController;
+
+import javax.swing.JOptionPane;
+
+import enumMessage.CommandMessage;
+import enumMessage.Commands;
+
 
 
 /**
@@ -21,7 +26,7 @@ public class Client {
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	private Listener listener;
-	private ServerController serverController;
+
 
 	
 
@@ -45,13 +50,7 @@ public class Client {
 		}catch(IOException e){}
 	}
 	
-	public ObjectOutputStream getOos(){
-		return oos;
-	}
-	
-	public ObjectInputStream getOis(){
-		return ois;
-	}
+
 	
 	/**
 	 * Skickar CommandMessages 
