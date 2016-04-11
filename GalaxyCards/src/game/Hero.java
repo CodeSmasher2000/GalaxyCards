@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import javax.swing.JOptionPane;
 
+import cards.Deck;
+import exceptionsPacket.EmptyDeckException;
+import guiPacket.Card;
 import guiPacket.HeroGUI;
 
 /**
@@ -25,7 +28,8 @@ public class Hero implements Serializable {
 	 */
 	private static final long serialVersionUID = -704227521994333558L;
 	private int life, energyShield, maxResource, currentResource;
-
+	private Deck deck;
+	
 	public Hero(String heroName) {
 		life = 20;
 		energyShield = 10;
@@ -125,6 +129,25 @@ public class Hero implements Serializable {
 
 	public int getMaxResource() {
 		return maxResource;
+	}
+	
+	/**
+	 * Sets the deck of the hero
+	 * @param deck The deck to use
+	 */
+	public void setDeck(Deck deck) {
+		this.deck = deck;
+	}
+	
+	/**
+	 * Returns the deck of the hero
+	 * @return A deck
+	 */
+	public Deck getDeck() {
+		return this.deck;
+	}
+	
+	public Card drawCard() throws EmptyDeckException {
 	}
 
 	public String toString() {

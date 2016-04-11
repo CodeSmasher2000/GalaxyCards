@@ -71,21 +71,33 @@ public class TestRules {
 		test.runTest();
 		test.reset();
 	}
-
+	
+	/**
+	 * This class is used to test the drawCard rule
+	 * @Version 2
+	 * @author patriklarsson
+	 *
+	 */
 	private class DrawCard implements TestCase {
 		private Unit unit1 = new Unit("1", "Common", "starship1", false, 3, 3, 3);
 		private Unit unit2 = new Unit("2", "Common", "starship1", false, 3, 3, 3);
 		private Unit unit3 = new Unit("3", "Common", "starship1", false, 3, 3, 3);
 		private Unit unit4 = new Unit("4", "Common", "starship1", false, 3, 3, 3);
 		private Unit unit5 = new Unit("5", "Common", "starship1", false, 3, 3, 3);
-
+		
+		private Deck deck  = new Deck();
+		private Hero hero = new Hero("Test");
+		
 		public void setup() {
 			// Adds Five Cards to the deck
-			board.getPlayerDeck().addCard(unit1);
-			board.getPlayerDeck().addCard(unit2);
-			board.getPlayerDeck().addCard(unit3);
-			board.getPlayerDeck().addCard(unit4);
-			board.getPlayerDeck().addCard(unit5);
+			deck.addCard(unit1);
+			deck.addCard(unit2);
+			deck.addCard(unit3);
+			deck.addCard(unit4);
+			deck.addCard(unit5);
+			
+			// Adds the deck to the hero
+			hero.setDeck(deck);
 		}
 
 		public void runTest() {
