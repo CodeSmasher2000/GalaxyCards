@@ -82,6 +82,8 @@ public class Client {
 			CommandMessage message = (CommandMessage)ois.readObject();
 			if(message.getCommand()==Commands.LOGIN){
 				controller.login();
+			}else if(message.getCommand()==Commands.GETHERO){
+				controller.setHero(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");;

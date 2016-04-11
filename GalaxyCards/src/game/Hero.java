@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.naming.InsufficientResourcesException;
 
+import cards.Deck;
 import exceptionsPacket.ResourcePlayedException;
 
 /**
@@ -25,6 +26,15 @@ public class Hero implements Serializable {
 	private static final long serialVersionUID = -704227521994333558L;
 	private int life, energyShield, maxResource, currentResource;
 	private boolean resourcecardPlayed = false;
+	private Deck deck;
+	
+	public Deck getDeck() {
+		return deck;
+	}
+
+	public void setDeck(Deck deck) {
+		this.deck = deck;
+	}
 
 	public Hero(String heroName) {
 		life = 20;

@@ -17,19 +17,10 @@ import guiPacket.Card;
 public class Board {
 	private LinkedList<Card> playerHand = new LinkedList<Card>();
 	private Deck playerDeck;
-	private Controller controller;
 	
 
 	// ******CONSTRUCTORS*************************************
-
-	public Board(Deck playerDeck) {
-		this.playerDeck = playerDeck;
-		printNbrOfCards();
-	}
 	
-	public Board(Controller controller){
-		this.controller=controller;
-	}
 
 	// ******HAND METHODS*************************************
 

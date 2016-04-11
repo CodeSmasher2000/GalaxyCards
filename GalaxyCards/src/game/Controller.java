@@ -61,6 +61,11 @@ public class Controller {
     	return friendlyHero;
     }
     
+    public void setFriendlyHero(Hero hero){
+    	this.friendlyHero = hero; 
+    	// TODO send to GUI
+    }
+    
     public Deck getFriendlyDeck() {
         return board.getPlayerDeck();
     }

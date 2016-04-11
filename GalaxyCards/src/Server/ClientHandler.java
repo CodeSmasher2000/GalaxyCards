@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.TreeMap;
 
-
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 
@@ -32,33 +31,38 @@ public class ClientHandler extends Thread {
 
 		start();
 	}
-	
-	public String getActiveUser(){
+
+	public String getActiveUser() {
 		return activeUser;
 	}
-	
-	public void setActiveUser(String userName){
-		this.activeUser= userName;
+
+	public void setActiveUser(String userName) {
+		this.activeUser = userName;
 	}
-	
-	public ClientHandler getUser(){
+
+	public ClientHandler getUser() {
 		return this;
 	}
+
 	/**
 	 * Metod som stänger klientens socket för att avsluta anslutningen.
 	 */
-	public void disconnect(){
+	public void disconnect() {
 		this.interrupt();
-		try{
+		try {
 			this.socket.close();
-		}catch(IOException e){}
+		} catch (IOException e) {
+		}
 		serverController.disconnect(this);
 		System.out.println("Disconnected");
 	}
+
 	/**
-	 * Metod som lyssnar efter meddelande från servern. Om meddelandet är LOGINOK är
-	 * användarnamnet ledigt och klientens användarnamn läggs in i en TreeMap.
-	 * @throws IOException 
+	 * Metod som lyssnar efter meddelande från servern. Om meddelandet är
+	 * LOGINOK är användarnamnet ledigt och klientens användarnamn läggs in i en
+	 * TreeMap.
+	 * 
+	 * @throws IOException
 	 */
 	public void listenForMessage() throws IOException {
 		String username;
@@ -69,8 +73,11 @@ public class ClientHandler extends Thread {
 					username = message.getSender();
 					serverController.login(username, this);
 
-			}
-			}catch (ClassNotFoundException e) {
+				}else if(message.getCommand()== Commands.GETHERO){
+					
+					serverController.sendHero(this);
+				}
+			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 		}

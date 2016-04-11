@@ -16,6 +16,9 @@ import Client.ClientController;
 import Server.ClientHandler;
 import Server.Server;
 import Server.ServerController;
+import board.Board;
+import game.Controller;
+import guiPacket.BoardGuiController;
 
 public class TestLogin {
 
@@ -25,8 +28,12 @@ public class TestLogin {
 	private TestGui gui = new TestGui();
 
 	private ClientController newClientController(){
-		
-		return new ClientController();
+		ClientController clientController = new ClientController();
+		Board board = new Board();
+		BoardGuiController boardController = new BoardGuiController();
+		Controller gameController = new Controller(board, boardController);
+		clientController.setGameController(gameController);
+		return clientController;
 	}
 	
 	private class TestGui extends JFrame{
@@ -35,6 +42,7 @@ public class TestLogin {
 		private JButton btnStartClient = new JButton("Start Client");
 		private JButton btnDisconnect = new JButton("Disconnect");
 		private JButton btnPrintUsers = new JButton("Print users");
+		private JButton btnGetHero = new JButton("Get Hero");
 		private JPanel pnlMain = new JPanel();
 		private JPanel pnlBtns = new JPanel();
 		
@@ -49,6 +57,7 @@ public class TestLogin {
 			pnlBtns.add(btnStartClient);
 			pnlBtns.add(btnDisconnect);
 			pnlBtns.add(btnPrintUsers);
+			pnlBtns.add(btnGetHero);
 			pnlMain.add(pnlBtns, BorderLayout.SOUTH);
 			
 			ButtonListener btnListener = new ButtonListener();
@@ -56,6 +65,7 @@ public class TestLogin {
 			btnStartClient.addActionListener(btnListener);
 			btnDisconnect.addActionListener(btnListener);
 			btnPrintUsers.addActionListener(btnListener);
+			btnGetHero.addActionListener(btnListener);
 			add(pnlMain);
 			this.pack();
 			this.setVisible(true);
@@ -85,6 +95,8 @@ public class TestLogin {
 				ServerController serverController = server.getServerController();
 				String userList = serverController.printUsers();
 				textArea.append("\n" + userList);
+			}else if(e.getSource()==btnGetHero){
+				userList.get(0).askForHero();
 			}
 			
 		}

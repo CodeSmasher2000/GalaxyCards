@@ -6,9 +6,11 @@ import javax.swing.JOptionPane;
 
 
 import Server.ClientHandler;
-
+import cards.Deck;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
+import game.Controller;
+import game.Hero;
 
 
 /**
@@ -18,6 +20,8 @@ import enumMessage.Commands;
  */
 public class ClientController {
 	private Client client;
+	private Controller controller;
+	private String activeUser;
 	
 	public void setClient(Client client) {
 		this.client = client;
@@ -26,6 +30,10 @@ public class ClientController {
 	
 	public void disconnect(){
 		client.disconnect();
+	}
+	
+	public void setGameController(Controller controller){
+		this.controller= controller;
 	}
 	
 	
@@ -50,14 +58,33 @@ public class ClientController {
 		
 		boolean login = false;
 		while(login !=true){
-			String userName = JOptionPane.showInputDialog("Enter your username: ");
-			CommandMessage loginMsg = new CommandMessage(Commands.LOGIN,userName);
+			activeUser = JOptionPane.showInputDialog("Enter your username: ");
+			CommandMessage loginMsg = new CommandMessage(Commands.LOGIN,activeUser);
 			client.sendMessage(loginMsg);
 			CommandMessage response = client.readMessage();
 			if(response.getCommand()==Commands.OK){
 				login = true;
 			}
 		}
+	}
+	/**
+	 * Hämtar hero från ett CommandMessage
+	 * @param message
+	 */
+	public void setHero(CommandMessage message){
+		System.out.println("Set hero");
+		Hero hero = (Hero)message.getData();
+		controller.setFriendlyHero(hero);
+		
+		// For Debug purpose
+		System.out.println(hero.toString());
+		
+	}
+	
+	public void askForHero(){
+		System.out.println("Ask for hero");
+		CommandMessage message = new CommandMessage(Commands.GETHERO,activeUser);
+		client.sendMessage(message);
 	}
 
 

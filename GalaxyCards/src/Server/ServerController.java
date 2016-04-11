@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-
+import cards.Deck;
+import cards.ResourceCard;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
+import game.Hero;
 
 /**
  * Klass som tar hand om nya anslutningar och lagrar dem i en TreeMap.
@@ -72,5 +74,18 @@ public class ServerController {
 			 System.out.println(userList);
 		}
 		return userList;
+	}
+	
+	public void sendHero(ClientHandler clientHandler){
+		System.out.println("sendHero är kallad");
+		//The following code is only for test purpose
+		Deck deck = new Deck(); 
+		for (int i = 0; i<5;i++){
+			deck.addCard(new ResourceCard());
+		}
+		Hero hero = new Hero("Testa Patteson");
+		hero.setDeck(deck);
+		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",hero);
+		clientHandler.writeMessage(commandMessage);
 	}
 }
