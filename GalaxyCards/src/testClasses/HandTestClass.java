@@ -15,7 +15,7 @@ import cards.Deck;
 import cards.HeroicSupport;
 import cards.Unit;
 import exceptionsPacket.EmptyDeckException;
-import exceptionsPacket.NoPlaceOnBoardException;
+import exceptionsPacket.GuiContainerException;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.HandGUI;
@@ -101,7 +101,7 @@ public class HandTestClass {
 				
 				try {
 					boardController.drawCard(deck.drawCard());
-				} catch (NoPlaceOnBoardException e) {
+				} catch (GuiContainerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (EmptyDeckException e) {
@@ -112,7 +112,7 @@ public class HandTestClass {
 			if(event.getSource()==playHS){
 				try {
 					boardController.playCard(heroicSupports[x]);
-				} catch (NoPlaceOnBoardException e) {
+				} catch (GuiContainerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

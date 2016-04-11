@@ -7,6 +7,7 @@ import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
+import exceptionsPacket.FullHandException;
 import game.Controller;
 import guiPacket.Card;
 
@@ -32,9 +33,18 @@ public class Board {
 
 	// ******HAND METHODS*************************************
 
-	public synchronized void addCardToHand(Card cardToAdd) {
-		playerHand.add(cardToAdd);
-		printNbrOfCards();
+	public synchronized void addCardToHand(Card cardToAdd) throws FullHandException {
+		// Max 8 cards in hand if over throw exception
+		if (getHandSize() >= 8) {
+			throw new FullHandException("The hand is full");
+		} else {
+			playerHand.add(cardToAdd);
+			printNbrOfCards();
+		}
+	}
+	
+	public synchronized Card getCardFromHand(int index) {
+		return playerHand.get(index);
 	}
 
 	public synchronized void removeCardFromHand(Card card) {
@@ -46,6 +56,10 @@ public class Board {
 		while (!playerHand.isEmpty()) {
 			playerHand.remove();
 		}
+	}
+	
+	public synchronized int getHandSize() {
+		return playerHand.size();
 	}
 
 	public void printNbrOfCards() {
@@ -62,7 +76,7 @@ public class Board {
 
 
 	// ******DECK METHODS*************************************
-
+	
 	public Deck getPlayerDeck() {
 		return playerDeck;
 	}

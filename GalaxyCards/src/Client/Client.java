@@ -5,14 +5,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+
+import Server.ServerController;
+
 import javax.swing.JOptionPane;
 
-import EnumMessage.CommandMessage;
-import EnumMessage.Commands;
+import enumMessage.CommandMessage;
+import enumMessage.Commands;
+
 
 
 /**
- * Klass som tar hand om klientens skriv och läsmetoder.
+ * Klass som skapar en ny klient och tar hand om klientens skriv och läsmetoder.
  * @author Jonte
  *
  */
@@ -23,24 +27,32 @@ public class Client {
 	private ObjectInputStream ois;
 	private Listener listener;
 
+
 	
 
-	public Client(String ip, int port) throws IOException {
-		socket = new Socket(ip, port);
-		oos = new ObjectOutputStream(socket.getOutputStream());
-		ois = new ObjectInputStream(socket.getInputStream());
+	public Client(String ip, int port) {
+		try {
+			socket = new Socket(ip, port);
+			oos = new ObjectOutputStream(socket.getOutputStream());
+			ois = new ObjectInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		this.listener = new Listener();
 		this.listener.start();
 		
 	}
 	
-	public ObjectOutputStream getOos(){
-		return oos;
+	public void disconnect(){
+		try{
+			this.listener.interrupt();
+			this.socket.close();
+		}catch(IOException e){}
 	}
 	
-	public ObjectInputStream getOis(){
-		return ois;
-	}
+
+	
 	/**
 	 * Skickar CommandMessages 
 	 * @param cmdMessage
@@ -72,7 +84,7 @@ public class Client {
 				controller.login();
 			}
 		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
+			System.out.println("User Disconnected");;
 		}
 	}
 	
@@ -91,16 +103,12 @@ public class Client {
 		public void run() {
 			System.out.println("Klient: Ansluten Till Server");
 			controller.login();
-				while (true) {
-					controller.listenForMessage();
+				while (!socket.isClosed()) {
+					listenForMessage();
 				}
 		}
 	}
 	
-	public static void main(String[] args) {
-		ClientController controller = new ClientController();
-		controller.connect("192.168.1.228",3550);
-	}
 	
 	
 }
