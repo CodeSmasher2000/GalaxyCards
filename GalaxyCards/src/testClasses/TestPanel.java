@@ -150,10 +150,10 @@ public class TestPanel extends JPanel{
 							Unit unit = (Unit) temp;
 							
 							if (!b) {
-								ENUM = Lanes.PLAYER_OFFENSIVE;
+								ENUM = Lanes.PLAYER_DEFENSIVE;
 								b=true;
 							} else {
-								ENUM = Lanes.PLAYER_DEFENSIVE;
+								ENUM = Lanes.PLAYER_OFFENSIVE;
 								b=false;
 							}
 							boardController.opponentPlaysUnit(unit, ENUM);
