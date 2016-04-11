@@ -36,6 +36,7 @@ public class ServerController {
 		}else{
 			CommandMessage loginOK = new CommandMessage(Commands.OK,"Server");
 			clientHandler.writeMessage(loginOK);
+			clientHandler.setActiveUser(userName);
 			userMap.put(userName, clientHandler);
 			System.out.println("Login OK");
 		}
@@ -48,7 +49,7 @@ public class ServerController {
 	 */
 	public void disconnect(ClientHandler clientHandler){
 		synchronized(userMap){
-			userMap.remove(clientHandler);
+			userMap.remove(clientHandler.getActiveUser());
 			printUsers();
 		}
 	}

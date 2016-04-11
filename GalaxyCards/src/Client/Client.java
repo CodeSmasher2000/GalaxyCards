@@ -46,6 +46,7 @@ public class Client {
 	
 	public void disconnect(){
 		try{
+			this.listener.interrupt();
 			this.socket.close();
 		}catch(IOException e){}
 	}
@@ -83,7 +84,7 @@ public class Client {
 				controller.login();
 			}
 		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
+			System.out.println("User Disconnected");;
 		}
 	}
 	
@@ -102,7 +103,7 @@ public class Client {
 		public void run() {
 			System.out.println("Klient: Ansluten Till Server");
 			controller.login();
-				while (true) {
+				while (!socket.isClosed()) {
 					listenForMessage();
 				}
 		}

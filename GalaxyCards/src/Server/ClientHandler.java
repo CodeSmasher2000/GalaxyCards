@@ -22,6 +22,7 @@ public class ClientHandler extends Thread {
 	private ServerController serverController;
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
+	private String activeUser = null;
 
 	public ClientHandler(Socket socket, ServerController serverController) throws IOException {
 		this.socket = socket;
@@ -30,6 +31,14 @@ public class ClientHandler extends Thread {
 		oos = new ObjectOutputStream(socket.getOutputStream());
 
 		start();
+	}
+	
+	public String getActiveUser(){
+		return activeUser;
+	}
+	
+	public void setActiveUser(String userName){
+		this.activeUser= userName;
 	}
 	
 	public ClientHandler getUser(){
@@ -49,8 +58,9 @@ public class ClientHandler extends Thread {
 	/**
 	 * Metod som lyssnar efter meddelande från servern. Om meddelandet är LOGINOK är
 	 * användarnamnet ledigt och klientens användarnamn läggs in i en TreeMap.
+	 * @throws IOException 
 	 */
-	public void listenForMessage() {
+	public void listenForMessage() throws IOException {
 		String username;
 		while (true) {
 			try {
@@ -59,7 +69,8 @@ public class ClientHandler extends Thread {
 					username = message.getSender();
 					serverController.login(username, this);
 
-			} catch (ClassNotFoundException e) {
+			}
+			}catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
@@ -86,6 +97,10 @@ public class ClientHandler extends Thread {
 	@Override
 	public void run() {
 
-		listenForMessage();
+		try {
+			listenForMessage();
+		} catch (IOException e) {
+			disconnect();
+		}
 	}
 }

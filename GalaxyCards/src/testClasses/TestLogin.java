@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,11 +20,14 @@ import Server.ServerController;
 public class TestLogin {
 
 	private Server server ;
-	private ClientController clientController = new ClientController();
-	private ClientHandler clientHandler;
+	
+	private ArrayList<ClientController> userList = new ArrayList<ClientController>();
 	private TestGui gui = new TestGui();
 
-	
+	private ClientController newClientController(){
+		
+		return new ClientController();
+	}
 	
 	private class TestGui extends JFrame{
 		private JTextArea textArea = new JTextArea();
@@ -69,11 +73,13 @@ public class TestLogin {
 				server = new Server();
 				textArea.setText("Server Startas");
 			}else if(e.getSource() == btnStartClient){
-				clientController.connect("localhost", 3550);
+				ClientController controller = newClientController();
+				controller.connect("localhost", 3550);
+				userList.add(controller);
 				textArea.append("\n" + "Klient Ansluten");
 			}else if(e.getSource() == btnDisconnect){
-				clientController.disconnect();
-				
+				ClientController controller = userList.remove(0);
+				controller.disconnect();
 				textArea.append("Användare loggades ut");
 			}else if(e.getSource() == btnPrintUsers){
 				ServerController serverController = server.getServerController();

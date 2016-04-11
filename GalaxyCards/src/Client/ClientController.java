@@ -24,6 +24,10 @@ public class ClientController {
 		
 	}
 	
+	public void disconnect(){
+		client.disconnect();
+	}
+	
 	
 	/**
 	 * Metod som låter klienten ansluta till en given server.
