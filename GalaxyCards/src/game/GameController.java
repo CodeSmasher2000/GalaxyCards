@@ -1,10 +1,14 @@
 package game;
 
-<<<<<<< HEAD
+
+import cards.HeroicSupport;
+import cards.Tech;
+import cards.Unit;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.ResourcePlayedException;
 import guiPacket.BoardGUI;
 import guiPacket.BoardGuiController;
+import guiPacket.Card;
 
 public class GameController {
 	private Hero hero;
@@ -35,21 +39,27 @@ public class GameController {
 		//TODO snacka med klient
 	}
 	
-	public void updateHeroGio(int life, int energyShield, int currentResource) {
+	public void updatePlayerHeroGui(int life, int energyShield, int currentResource) {
 		board.updatePlayerHeroGui(life, energyShield, currentResource);
 	}
-=======
-import guiPacket.BoardGuiController;
-
-public class GameController {
 	
-	private Hero playerHero; 
-	private BoardGuiController boardController;
-
-	public void updatePlayerHeroGui(int life, int energyShield, int currentResource) {
-		// TODO Auto-generated method stub
+	public void playCard(Card card) throws InsufficientResourcesException{
+		
+		if(card instanceof HeroicSupport) {
+			hero.useResource(card.getPrice());
+			//TODO skicka till klient
+		} else if (card instanceof Unit) {
+			hero.useResource(card.getPrice());
+			//TODO skicka till klient
+		} else if (card instanceof Tech) {
+			hero.useResource(card.getPrice());
+			//TODO skicka till klient
+		} else {
+			hero.addResource();
+			//TODO skicka till klient
+		}
+		
 		
 	}
 
->>>>>>> origin/master
 }

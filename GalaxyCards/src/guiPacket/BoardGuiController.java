@@ -11,6 +11,7 @@ import cards.Unit;
 import enumMessage.Lanes;
 import enumMessage.Persons;
 import exceptionsPacket.GuiContainerException;
+import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
 import game.GameController;
 
@@ -373,17 +374,20 @@ public class BoardGuiController {
 	// *** Methods in this section are called within this class
 	// ************************************************************************
 
-	private void playResourceCard(Card card) {
+	private void playResourceCard(Card card) throws InsufficientResourcesException {
+		gameController.playCard(card);
 		playerScrapyard.addCard(card);
 	}
 
-	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException {
+	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException, InsufficientResourcesException {
+		gameController.playCard(cardToPlay);
 		heroicGui.addHeroicSupport(cardToPlay);
 	}
 
-	private void playUnitCard(Unit cardToPlay) throws GuiContainerException {
+	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException {
 		cardToPlay = (Unit) cloneCard(cardToPlay);
 		cardToPlay.shrink();
+		gameController.playCard(cardToPlay);
 		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
 			playerDefLane.addUnit(cardToPlay);
 		}

@@ -166,11 +166,16 @@ public class Hero implements Serializable {
 	 *            : int
 	 * @throws InsufficientResourcesException
 	 */
-	public void useResource(int amount) throws InsufficientResourcesException {
+	public boolean useResource(int amount) throws InsufficientResourcesException {
+		boolean resource = false;
 		if (amount > currentResource) {
 			throw new InsufficientResourcesException("Insufficient resources");
-		}
+			
+		} else {
 		currentResource -= amount;
+		resource = true;
+		}
+		return resource;
 	}
 
 	/**
