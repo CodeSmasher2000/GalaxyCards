@@ -16,7 +16,10 @@ public enum Commands  implements Serializable {
 	OK (1),
 	NOTOK (2),
 	DISCONNECT(3),
-	GETHERO(4);
+	GETHERO(4),
+	MATCHMAKING_MATCH_FOUND(5),
+	MATCHMAKING_STOP(6),
+	MATCHMAKING_START(7);
 	
 	private int value;
 	private static final long serialVersionUID = 42L;

@@ -84,6 +84,8 @@ public class Client {
 				controller.login();
 			}else if(message.getCommand()==Commands.GETHERO){
 				controller.setHero(message);
+			} else if(message.getCommand() == Commands.MATCHMAKING_MATCH_FOUND) {
+				controller.matchFound(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");;

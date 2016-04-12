@@ -43,6 +43,7 @@ public class TestLogin {
 		private JButton btnDisconnect = new JButton("Disconnect");
 		private JButton btnPrintUsers = new JButton("Print users");
 		private JButton btnGetHero = new JButton("Get Hero");
+		private JButton btnMatchMachmaking = new JButton("Test MatchMacking");
 		private JPanel pnlMain = new JPanel();
 		private JPanel pnlBtns = new JPanel();
 		
@@ -58,6 +59,7 @@ public class TestLogin {
 			pnlBtns.add(btnDisconnect);
 			pnlBtns.add(btnPrintUsers);
 			pnlBtns.add(btnGetHero);
+			pnlBtns.add(btnMatchMachmaking);
 			pnlMain.add(pnlBtns, BorderLayout.SOUTH);
 			
 			ButtonListener btnListener = new ButtonListener();
@@ -66,6 +68,7 @@ public class TestLogin {
 			btnDisconnect.addActionListener(btnListener);
 			btnPrintUsers.addActionListener(btnListener);
 			btnGetHero.addActionListener(btnListener);
+			btnMatchMachmaking.addActionListener(btnListener);
 			add(pnlMain);
 			this.pack();
 			this.setVisible(true);
@@ -97,6 +100,10 @@ public class TestLogin {
 				textArea.append("\n" + userList);
 			}else if(e.getSource()==btnGetHero){
 				userList.get(0).askForHero();
+			} else if(e.getSource() == btnMatchMachmaking) {
+				// Två användare måste vara anslutna för vi är lata
+				userList.get(0).startMatchMaking();
+				userList.get(1).startMatchMaking();
 			}
 			
 		}

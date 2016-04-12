@@ -72,10 +72,10 @@ public class ClientHandler extends Thread {
 				if (message.getCommand() == Commands.LOGIN) {
 					username = message.getSender();
 					serverController.login(username, this);
-
 				}else if(message.getCommand()== Commands.GETHERO){
-					
 					serverController.sendHero(this);
+				} else if(message.getCommand() == Commands.MATCHMAKING_START) {
+					serverController.addUserToMatchMaking(activeUser);
 				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
