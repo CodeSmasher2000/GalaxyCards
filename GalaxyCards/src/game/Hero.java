@@ -2,12 +2,13 @@ package game;
 
 import java.io.Serializable;
 
-import javax.naming.InsufficientResourcesException;
+
 
 import cards.Deck;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.InsufficientShieldException;
 import exceptionsPacket.ResourcePlayedException;
+import exceptionsPacket.InsufficientResourcesException;
 import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 
@@ -148,14 +149,19 @@ public class Hero implements Serializable {
 	 * 
 	 * @throws ResourcePlayedException
 	 */
-	public void addResource() throws ResourcePlayedException {
+	public boolean addResource() throws ResourcePlayedException {
+		boolean addResourceOK = false;
 		if (!resourceCardPlayedThisRound) {
 			maxResource++;
 			currentResource++;
 			resourceCardPlayedThisRound = true;
+			addResourceOK = true;
+			
 		} else {
 			throw new ResourcePlayedException("You can only play one resource card each turn");
 		}
+		return addResourceOK;
+		
 	}
 
 	/**
@@ -167,15 +173,15 @@ public class Hero implements Serializable {
 	 * @throws InsufficientResourcesException
 	 */
 	public boolean useResource(int amount) throws InsufficientResourcesException {
-		boolean resource = false;
+		boolean useResourceOK = false;
 		if (amount > currentResource) {
-			throw new InsufficientResourcesException("Insufficient resources");
+			throw new InsufficientResourcesException("Not enough resources");
 			
 		} else {
 		currentResource -= amount;
-		resource = true;
+		useResourceOK = true;
 		}
-		return resource;
+		return useResourceOK;
 	}
 
 	/**

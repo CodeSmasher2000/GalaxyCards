@@ -14,7 +14,9 @@ import javax.swing.border.Border;
 
 import cards.Unit;
 import exceptionsPacket.GuiContainerException;
+import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
+import exceptionsPacket.ResourcePlayedException;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -183,6 +185,10 @@ public class HandGUI extends JPanel {
 				InfoPanelGUI.append(e.getMessage());
 			} catch (NoLaneSelectedException e) {
 				System.err.println(e.getMessage());
+			} catch (ResourcePlayedException e) {
+				InfoPanelGUI.append(e.getMessage());
+			} catch (InsufficientResourcesException e) {
+				InfoPanelGUI.append(e.getMessage());
 			} finally {
 				repaint();
 			}

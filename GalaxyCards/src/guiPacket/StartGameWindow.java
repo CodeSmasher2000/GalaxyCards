@@ -13,12 +13,12 @@ public class StartGameWindow extends JFrame {
 	
 	public StartGameWindow(){
 		gameController = new GameController();
-		boardController = new BoardGuiController(gameController);
+		boardController = new BoardGuiController(gameController, null);
 		boardGui = new BoardGUI(boardController);
 	}
 	
 	public StartGameWindow(GameController gameController){
-		boardController = new BoardGuiController(gameController);
+		boardController = new BoardGuiController(gameController, null);
 	}
 	
 	private void showUi(){

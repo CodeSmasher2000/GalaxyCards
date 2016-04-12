@@ -2,6 +2,7 @@ package game;
 
 
 import cards.HeroicSupport;
+import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
 import exceptionsPacket.InsufficientResourcesException;
@@ -18,7 +19,7 @@ public class GameController {
 		
 	}
 	
-	public void addResource() throws ResourcePlayedException {
+	public void addResource(Card card) throws ResourcePlayedException {
 		boolean addResourceOK = hero.addResource();
 
 		if(addResourceOK == true){
@@ -44,22 +45,8 @@ public class GameController {
 	}
 	
 	public void playCard(Card card) throws InsufficientResourcesException{
-		
-		if(card instanceof HeroicSupport) {
-			hero.useResource(card.getPrice());
-			//TODO skicka till klient
-		} else if (card instanceof Unit) {
-			hero.useResource(card.getPrice());
-			//TODO skicka till klient
-		} else if (card instanceof Tech) {
-			hero.useResource(card.getPrice());
-			//TODO skicka till klient
-		} else {
-			hero.addResource();
-			//TODO skicka till klient
-		}
-		
-		
+			useResources(card.getPrice());
 	}
+	
 
 }
