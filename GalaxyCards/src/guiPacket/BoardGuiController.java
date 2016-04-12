@@ -12,6 +12,7 @@ import enumMessage.Lanes;
 import enumMessage.Persons;
 import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.NoLaneSelectedException;
+import game.GameController;
 
 /**
  * This class is responsible for message-passing between the gui elements and
@@ -22,6 +23,8 @@ import exceptionsPacket.NoLaneSelectedException;
  */
 public class BoardGuiController {
 
+	private GameController gameController;
+	
 	private HandGUI playerHandGui;
 	private OpponentHandGUI opponentHandGui;
 	private HeroicPanelGUI heroicGui, opponentHeroicGui;
@@ -44,6 +47,14 @@ public class BoardGuiController {
 	// *** Methods in this section are called upon from the system to
 	// *** update various gui elements.
 	// ********************************************************************
+
+	public BoardGuiController(GameController gameController) {
+		this.gameController=gameController;
+	}
+
+	public BoardGuiController() {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * Updates playerHeroGui when changes are made to life, shield or resource

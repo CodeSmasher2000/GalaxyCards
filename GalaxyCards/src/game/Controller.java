@@ -1,17 +1,10 @@
 package game;
 
-import java.util.LinkedList;
-
 import board.Board;
 import cards.Deck;
-import cards.HeroicSupport;
-import cards.ResourceCard;
-import cards.Tech;
-import cards.Unit;
 import exceptionsPacket.EmptyDeckException;
-import exceptionsPacket.FullHandException;
-import exceptionsPacket.NotValidMove;
-import guiPacket.*;
+import guiPacket.BoardGuiController;
+import guiPacket.Card;
 
 public class Controller {
     private Board board;

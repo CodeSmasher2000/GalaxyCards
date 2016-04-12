@@ -1,5 +1,6 @@
 package game;
 
+<<<<<<< HEAD
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.ResourcePlayedException;
 import guiPacket.BoardGUI;
@@ -37,4 +38,18 @@ public class GameController {
 	public void updateHeroGio(int life, int energyShield, int currentResource) {
 		board.updatePlayerHeroGui(life, energyShield, currentResource);
 	}
+=======
+import guiPacket.BoardGuiController;
+
+public class GameController {
+	
+	private Hero playerHero; 
+	private BoardGuiController boardController;
+
+	public void updatePlayerHeroGui(int life, int energyShield, int currentResource) {
+		// TODO Auto-generated method stub
+		
+	}
+
+>>>>>>> origin/master
 }
