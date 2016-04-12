@@ -76,6 +76,12 @@ public class ServerController {
 		return userList;
 	}
 	
+	
+	/**
+	 * Metod som skickar ett Hero-objekt till en klient.
+	 * @param clientHandler
+	 * 				Den klient som ska ta emot Hero-objektet.
+	 */
 	public void sendHero(ClientHandler clientHandler){
 		System.out.println("sendHero är kallad");
 		//The following code is only for test purpose

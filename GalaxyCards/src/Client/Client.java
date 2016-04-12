@@ -16,7 +16,7 @@ import enumMessage.Commands;
 
 
 /**
- * Klass som skapar en ny klient och tar hand om klientens skriv och läsmetoder.
+ * Klass som skapar en klients strömmar  och tar hand om klientens skriv och läsmetoder.
  * @author Jonte
  *
  */
@@ -44,6 +44,9 @@ public class Client {
 		
 	}
 	
+	/**
+	 *Metod som avbryter Listener-tråden och stänger klientens socket.
+	 */
 	public void disconnect(){
 		try{
 			this.listener.interrupt();
@@ -56,7 +59,7 @@ public class Client {
 	/**
 	 * Skickar CommandMessages 
 	 * @param cmdMessage
-	 * 			Det typ av Commands man skickar.
+	 * 			Meddelande som ska skickas
 	 */			
 	public void sendMessage(CommandMessage cmdMessage){
 		try {
@@ -66,7 +69,11 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Metod som läser ett meddelande och returnerar innehållet.
+	 * @return
+	 * 		CommandMessage
+	 */
 	public CommandMessage readMessage(){
 		try {
 			CommandMessage response = (CommandMessage)ois.readObject();
@@ -76,7 +83,10 @@ public class Client {
 		}return null;
 		
 	}
-	
+	/**
+	 * Metod som lyssnar efter CommandMessage från servern. Beroende på vilket command som finns 
+	 *  i meddelandet anropas olika metoder.
+	 */
 	public void listenForMessage(){
 		try {
 			CommandMessage message = (CommandMessage)ois.readObject();

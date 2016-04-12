@@ -27,7 +27,9 @@ public class ClientController {
 		this.client = client;
 		
 	}
-	
+	/**
+	 * Anropar klientens disconnect metod.
+	 */
 	public void disconnect(){
 		client.disconnect();
 	}
@@ -52,7 +54,7 @@ public class ClientController {
 	
 	
 	/**
-	 * Metod som hanterar låter användaren skriva in användarnamn och skickar det till server.
+	 * Metod som låter användaren skriva in användarnamn och skickar det till server.
 	 */
 	public synchronized void login(){
 		
@@ -80,7 +82,9 @@ public class ClientController {
 		System.out.println(hero.toString());
 		
 	}
-	
+	/**
+	 * Metod som frågar servern efter ett Hero-objekt.
+	 */
 	public void askForHero(){
 		System.out.println("Ask for hero");
 		CommandMessage message = new CommandMessage(Commands.GETHERO,activeUser);

@@ -31,11 +31,17 @@ public class ClientHandler extends Thread {
 
 		start();
 	}
-
+	
+	
 	public String getActiveUser() {
 		return activeUser;
 	}
-
+	
+	/**
+	 * Sätter activeUser till det användarnamn som matats in när en klient loggar in.
+	 * @param userName
+	 * 			Det inmatade användarnamnet
+	 */
 	public void setActiveUser(String userName) {
 		this.activeUser = userName;
 	}
@@ -82,7 +88,11 @@ public class ClientHandler extends Thread {
 			}
 		}
 	}
-
+	/**
+	 * Metod som skickar CommandMessage till klienten
+	 * @param message
+	 * 			Det meddelande som ska skickas
+	 */
 	public void writeMessage(CommandMessage message) {
 		try {
 			oos.writeObject(message);
@@ -90,7 +100,12 @@ public class ClientHandler extends Thread {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Metod som läser meddelande från klienten.
+	 * @return
+	 * 		CommandMessage från klienten.
+	 */
 	public CommandMessage readMessage() {
 		try {
 			CommandMessage message = (CommandMessage) ois.readObject();
