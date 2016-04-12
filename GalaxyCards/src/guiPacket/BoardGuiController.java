@@ -46,6 +46,17 @@ public class BoardGuiController {
 	// ********************************************************************
 
 	/**
+	 * Updates playerHeroGui when changes are made to life, shield or resource
+	 * @param life
+	 * @param energyShield
+	 * @param currentResource
+	 */
+	public void updatePlayerHeroGui(int life, int energyShield, int currentResource) {
+		playerHeroGui.updateLifeBar(life);
+		playerHeroGui.updateResourceBar(currentResource);
+		playerHeroGui.updateShiledBar(energyShield);
+	}
+	/**
 	 * Attempts to place the Card object passed in as argument to the handGui
 	 * container. Throws exception if there is no more space for cards. Maximum
 	 * amount of cards on hand = 8.
