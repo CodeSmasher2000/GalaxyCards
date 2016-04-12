@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.TreeMap;
+import java.util.Observable;
+import java.util.Observer;
 
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
@@ -12,24 +13,27 @@ import enumMessage.Commands;
 /**
  * Klass som ska ta hand om alla klienter som ansluter
  * 
- * @author Jonte
+ * @author Jonte, Patrik Larsson
  *
  */
 
-public class ClientHandler extends Thread {
+public class ClientHandler extends Observable implements Runnable {
 	private Socket socket;
 	private ServerController serverController;
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private String activeUser = null;
+	private Thread listenerThread;
 
 	public ClientHandler(Socket socket, ServerController serverController) throws IOException {
 		this.socket = socket;
 		this.serverController = serverController;
 		ois = new ObjectInputStream(socket.getInputStream());
 		oos = new ObjectOutputStream(socket.getOutputStream());
-
-		start();
+		
+		// Starts a thread that is listening for incomming messages.
+		listenerThread = new Thread(this);
+		listenerThread.start();
 	}
 	
 	
@@ -54,7 +58,7 @@ public class ClientHandler extends Thread {
 	 * Metod som stänger klientens socket för att avsluta anslutningen.
 	 */
 	public void disconnect() {
-		this.interrupt();
+		listenerThread.interrupt();
 		try {
 			this.socket.close();
 		} catch (IOException e) {
@@ -75,13 +79,22 @@ public class ClientHandler extends Thread {
 		while (true) {
 			try {
 				CommandMessage message = (CommandMessage) ois.readObject();
-				if (message.getCommand() == Commands.LOGIN) {
+				switch (message.getCommand()) {
+				case LOGIN:
 					username = message.getSender();
 					serverController.login(username, this);
-				}else if(message.getCommand()== Commands.GETHERO){
+					break;
+				case GETHERO:
 					serverController.sendHero(this);
-				} else if(message.getCommand() == Commands.MATCHMAKING_START) {
+					break;
+				case MATCHMAKING_START:
 					serverController.addUserToMatchMaking(activeUser);
+					break;
+				case MATCH_PLAYCARD:
+					updateObservers(message);
+					break;
+				default:
+					break;
 				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -115,6 +128,29 @@ public class ClientHandler extends Thread {
 		}
 		return null;
 	}
+	
+	public void addObserver(Observer obs) {
+		this.addObserver(obs);
+	}
+	
+	public void removeObserver() {
+		this.removeObserver();
+	}
+	
+	@Override
+	public void notifyObservers(Object arg) {
+		super.notifyObservers(arg);
+	}
+
+	@Override
+	protected synchronized void setChanged() {
+		super.setChanged();
+	}
+	
+	public void updateObservers(CommandMessage message) {
+		setChanged();
+		notifyObservers(message);
+	}
 
 	@Override
 	public void run() {
@@ -125,4 +161,8 @@ public class ClientHandler extends Thread {
 			disconnect();
 		}
 	}
+	
+	
+	
+	
 }
