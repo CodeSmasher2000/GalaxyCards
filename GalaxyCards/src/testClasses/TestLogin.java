@@ -48,7 +48,7 @@ public class TestLogin {
 		private JPanel pnlBtns = new JPanel();
 		
 		public TestGui(){
-			setSize(new Dimension(800,600));
+			setPreferredSize(new Dimension(800,600));
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			textArea.setEditable(false); // kan bara visa text
 			textArea.setSize(new Dimension(500,300));
