@@ -47,7 +47,7 @@ public class Match {
 	 * @author patriklarsson
 	 *
 	 */
-	private class Player implements Observer {
+	private class Player {
 		private String name;
 		private List<HeroicSupport> HeroicSupportLane = new LinkedList<HeroicSupport>();
 		private List<Card> defensiveLane = new LinkedList<Card>();
@@ -64,12 +64,6 @@ public class Match {
 		}
 		
 		public void playCard(Card card) {
-			
-		}
-
-		@Override
-		public void update(Observable o, Object arg) {
-			// TODO Auto-generated method stub
 			
 		}
 		
