@@ -1,5 +1,6 @@
 package testClasses;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -12,6 +13,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import cards.Deck;
 import cards.HeroicSupport;
@@ -19,23 +23,22 @@ import cards.Unit;
 import enumMessage.Lanes;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.GuiContainerException;
-import game.GameController;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
+import guiPacket.CustomGui;
 import guiPacket.InfoPanelGUI;
 import guiPacket.StartGameWindow;
 
 public class TestPanel extends JPanel {
 
 	private BoardGuiController boardController;
-	private GameController gameController;
 	private StartGameWindow frame;
 
 	private Card temp;
 	private ButtonListener list = new ButtonListener();
 	private Deck deck, enemyDeck;
 	private ObjectInputStream ois;
-	private JButton testDraw, testOpponentDrawCard, testOpponentPlayCard, newRound;
+	private JButton testDraw, testOpponentDrawCard, testOpponentPlayCard;
 	private JPanel testPanel;
 	private JLabel label = new JLabel("Debugging tool");
 
@@ -45,6 +48,7 @@ public class TestPanel extends JPanel {
 		loadDeck();
 		add(testPanel);
 
+		boardController = new BoardGuiController();
 		// frame = new StartGameWindow(boardController,this);
 		System.out.println("VADFAN");
 
@@ -53,26 +57,21 @@ public class TestPanel extends JPanel {
 	public TestPanel(BoardGuiController boardController) {
 		this();
 		this.boardController = boardController;
-		gameController=boardController.getGameController();
 	}
-	
 
 	private void initiateTestElements() {
 		testDraw = new JButton("Dra kort spelare");
 		testOpponentDrawCard = new JButton("Dra kort motståndare");
 		testOpponentPlayCard = new JButton("Motståndare spela kort");
-		newRound = new JButton("Ny runda");
 
 		testDraw.addActionListener(list);
 		testOpponentDrawCard.addActionListener(list);
 		testOpponentPlayCard.addActionListener(list);
-		newRound.addActionListener(list);
 
 		testPanel = new JPanel();
 		testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
 		testPanel.add(label);
 		testPanel.add(testDraw);
-		testPanel.add(newRound);
 		testPanel.add(testOpponentDrawCard);
 		testPanel.add(testOpponentPlayCard);
 		testPanel.setOpaque(false);
@@ -120,9 +119,6 @@ public class TestPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			if(event.getSource()==newRound){
-				gameController.newRound();
-			}
 			if (event.getSource() == testDraw) {
 				try {
 					System.out.println("Deck size: " + deck.getAmtOfCards());

@@ -30,6 +30,9 @@ public class BoardGUI extends JPanel {
 	private ScrapyardPanel scrapyards;
 
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
+//	private ImageIcon historyPanelBg = new ImageIcon("files/pictures/historyPanelTexture.jpg");
+
+//	private PaintedPanel scrapYardContainer2 = new PaintedPanel(historyPanelBg);
 
 	public BoardGUI(BoardGuiController boardController) {
 		this.boardController = boardController;
@@ -125,6 +128,21 @@ public class BoardGUI extends JPanel {
 		scrapyardPanel.add(scrapyards);
 		scrapyardPanel.add(Box.createHorizontalStrut(10));
 
+//		scrapYardContainer2.setLayout(new BoxLayout(scrapYardContainer2, BoxLayout.Y_AXIS));
+//		scrapYardContainer2.add(Box.createVerticalStrut(10));
+//		scrapYardContainer2.add(opponentScrapyard);
+//		scrapYardContainer2.add(Box.createVerticalGlue());
+//		scrapYardContainer2.add(Box.createVerticalStrut(10));
+//		scrapYardContainer2.add(Box.createVerticalGlue());
+//		scrapYardContainer2.add(playerScrapyard);
+//		scrapYardContainer2.add(Box.createVerticalStrut(10));
+		
+//		scrapYardContainer.setLayout(new BoxLayout(scrapYardContainer, BoxLayout.X_AXIS));
+//		scrapYardContainer.add(Box.createHorizontalStrut(5));
+//		scrapYardContainer.setOpaque(true);
+//		scrapYardContainer.add(scrapYardContainer2);
+//		scrapYardContainer.add(Box.createHorizontalStrut(5));
+		
 	}
 
 	private void configurePlayerPanel() {
