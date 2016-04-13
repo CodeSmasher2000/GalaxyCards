@@ -46,6 +46,10 @@ public class Hero implements Serializable {
 	public Hero(String heroName, GameController gameController) {
 		this(gameController);
 		this.heroName = heroName;
+		life = 20;
+		energyShield = 10;
+		maxResource = 0;
+		currentResource = 0;
 	}
 
 	public void setDeck(Deck deck) {
@@ -84,8 +88,6 @@ public class Hero implements Serializable {
 		} else {
 			energyShield = 0;
 			life -= amount;
-
-			gameController.updatePlayerHeroGui(life, energyShield, currentResource);
 		}
 
 	}
@@ -102,8 +104,6 @@ public class Hero implements Serializable {
 		if (energyShield > 10) {
 			energyShield = 10;
 		}
-
-		gameController.updatePlayerHeroGui(life, energyShield, currentResource);
 	}
 
 	/**
@@ -120,7 +120,6 @@ public class Hero implements Serializable {
 			throw new InsufficientShieldException("Insufficient Shield");
 		} else {
 			energyShield -= amount;
-			gameController.updatePlayerHeroGui(life, energyShield, currentResource);
 		}
 
 	}
@@ -142,6 +141,14 @@ public class Hero implements Serializable {
 	public int getEnergyShield() {
 		return energyShield;
 	}
+	
+	public int getCurrentResources() {
+		return currentResource;
+	}
+	
+	public int getMaxResource(){
+		return maxResource;
+	}
 
 	/**
 	 * Attempts to add 1 resource to the hero's currentResource and maxResource
@@ -156,7 +163,6 @@ public class Hero implements Serializable {
 			currentResource++;
 			resourceCardPlayedThisRound = true;
 			addResourceOK = true;
-			
 		} else {
 			throw new ResourcePlayedException("You can only play one resource card each turn");
 		}

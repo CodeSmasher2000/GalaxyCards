@@ -51,13 +51,13 @@ public class BoardGuiController {
 	// *** update various gui elements.
 	// ********************************************************************
 
-	public BoardGuiController(GameController gameController, Persons ENUM) {
+	public BoardGuiController(GameController gameController) {
 		this.gameController=gameController;
-		this.ENUM = ENUM;
 	}
-
-	public BoardGuiController() {
-		// TODO Auto-generated constructor stub
+	
+	//for debbugging, remove when testpanel is removed.
+	public GameController getGameController(){
+		return gameController;
 	}
 
 	/**
@@ -66,9 +66,9 @@ public class BoardGuiController {
 	 * @param energyShield
 	 * @param currentResource
 	 */
-	public void updatePlayerHeroGui(int life, int energyShield, int currentResource) {
+	public void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
 		playerHeroGui.updateLifeBar(life);
-		playerHeroGui.updateResourceBar(currentResource);
+		playerHeroGui.updateResourceBar(currentResource, maxResource);
 		playerHeroGui.updateShiledBar(energyShield);
 	}
 	/**
@@ -373,6 +373,10 @@ public class BoardGuiController {
 	protected void updateInfoPanelCard(Card cardToShow) {
 		cardToShow = (Card) cloneCard(cardToShow);
 		infoPanel.showCard(cardToShow);
+	}
+	
+	protected int getAvaibleResources() {
+		return gameController.getAvaibleResources();
 	}
 
 	// ***PRIVATE METHODS******************************************************
