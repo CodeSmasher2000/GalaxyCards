@@ -17,7 +17,7 @@ import enumMessage.Commands;
  *
  */
 
-public class ClientHandler extends Observable implements Runnable {
+public class ClientHandler implements Runnable {
 	private Socket socket;
 	private ServerController serverController;
 	private ObjectInputStream ois;
@@ -91,7 +91,7 @@ public class ClientHandler extends Observable implements Runnable {
 					serverController.addUserToMatchMaking(activeUser);
 					break;
 				case MATCH_PLAYCARD:
-					updateObservers(message);
+					
 					break;
 				default:
 					break;
@@ -129,29 +129,6 @@ public class ClientHandler extends Observable implements Runnable {
 		return null;
 	}
 	
-	public void addObserver(Observer obs) {
-		this.addObserver(obs);
-	}
-	
-	public void removeObserver() {
-		this.removeObserver();
-	}
-	
-	@Override
-	public void notifyObservers(Object arg) {
-		super.notifyObservers(arg);
-	}
-
-	@Override
-	protected synchronized void setChanged() {
-		super.setChanged();
-	}
-	
-	public void updateObservers(CommandMessage message) {
-		setChanged();
-		notifyObservers(message);
-	}
-
 	@Override
 	public void run() {
 
