@@ -1,5 +1,9 @@
 package Server;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -101,14 +105,25 @@ public class ServerController {
 	public void sendHero(ClientHandler clientHandler){
 		System.out.println("sendHero är kallad");
 		//The following code is only for test purpose
-		Deck deck = new Deck(); 
-		for (int i = 0; i<5;i++){
-			deck.addCard(new ResourceCard());
-		}
+		Deck deck = loadDeck("files/decks/TestServerDeck.dat");
+//		for (int i = 0; i<5;i++){
+//			deck.addCard(new ResourceCard());
+//		}
 		Hero hero = new Hero("Testa Patteson");
 		hero.setDeck(deck);
 		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",hero);
 		clientHandler.writeMessage(commandMessage);
+	}
+	
+	public Deck loadDeck(String filepath){
+		File file = new File(filepath);
+		try(
+			FileInputStream fin = new FileInputStream(file);
+			ObjectInputStream ois = new ObjectInputStream(fin)) {
+			return (Deck)ois.readObject();
+		} catch(ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}return null;
 	}
 	
 	private class LookingForGameThread extends Thread {

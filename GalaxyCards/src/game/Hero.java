@@ -3,6 +3,8 @@ package game;
 import java.io.Serializable;
 
 import javax.naming.InsufficientResourcesException;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import cards.Deck;
 import exceptionsPacket.ResourcePlayedException;
@@ -136,10 +138,31 @@ public class Hero implements Serializable {
 	}
 	
 	public String toString() {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				JFrame frame = new JFrame();
+				frame.add(deck.getCard(12));
+				frame.pack();
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.setVisible(true);
+				
+			}
+		});
+		deckInfo();
 		return "life: " + life + "\nShield: " + energyShield + "\n current resource: " + currentResource + " / "
 				+ maxResource;
 	}
-
+	
+	public void deckInfo() {
+		System.out.println("-------- Deck Info ---------");
+		System.out.println(deck.getAmtOfCards());
+		for (int i = 0; i < deck.getAmtOfCards(); i++) {
+			System.out.println(deck.getCard(i));
+		}
+	}
+	
 	private void youLoose() {
 		// TODO Auto-generated method stub
 		// TODO Update gui
