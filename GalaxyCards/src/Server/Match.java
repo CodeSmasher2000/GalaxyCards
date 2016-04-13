@@ -41,10 +41,6 @@ public class Match {
 		player2 = new Player(user2);
 	}
 	
-	public void playCard() {
-		
-	}
-	
 	/**
 	 * Contatins three lists representing the differnet lanes in a gameboard
 	 * 
