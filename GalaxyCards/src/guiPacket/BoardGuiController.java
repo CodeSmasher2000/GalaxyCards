@@ -11,7 +11,10 @@ import cards.Unit;
 import enumMessage.Lanes;
 import enumMessage.Persons;
 import exceptionsPacket.GuiContainerException;
+import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
+import exceptionsPacket.ResourcePlayedException;
+import game.GameController;
 
 /**
  * This class is responsible for message-passing between the gui elements and
@@ -22,6 +25,8 @@ import exceptionsPacket.NoLaneSelectedException;
  */
 public class BoardGuiController {
 
+	private GameController gameController;
+	
 	private HandGUI playerHandGui;
 	private OpponentHandGUI opponentHandGui;
 	private HeroicPanelGUI heroicGui, opponentHeroicGui;
@@ -31,6 +36,7 @@ public class BoardGuiController {
 	private UnitLanes playerOffLane;
 	private UnitLanes opponentDefLane;
 	private UnitLanes opponentOffLane;
+	private Persons ENUM;
 
 	private InfoPanelGUI infoPanel;
 	private LaneSelectListener laneListener;
@@ -45,6 +51,26 @@ public class BoardGuiController {
 	// *** update various gui elements.
 	// ********************************************************************
 
+	public BoardGuiController(GameController gameController, Persons ENUM) {
+		this.gameController=gameController;
+		this.ENUM = ENUM;
+	}
+
+	public BoardGuiController() {
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * Updates playerHeroGui when changes are made to life, shield or resource
+	 * @param life
+	 * @param energyShield
+	 * @param currentResource
+	 */
+	public void updatePlayerHeroGui(int life, int energyShield, int currentResource) {
+		playerHeroGui.updateLifeBar(life);
+		playerHeroGui.updateResourceBar(currentResource);
+		playerHeroGui.updateShiledBar(energyShield);
+	}
 	/**
 	 * Attempts to place the Card object passed in as argument to the handGui
 	 * container. Throws exception if there is no more space for cards. Maximum
@@ -270,8 +296,10 @@ public class BoardGuiController {
 	 * @param card
 	 * @throws GuiContainerException
 	 * @throws NoLaneSelectedException
+	 * @throws ResourcePlayedException 
+	 * @throws InsufficientResourcesException 
 	 */
-	protected void playCard(Card card) throws GuiContainerException, NoLaneSelectedException {
+	protected void playCard(Card card) throws GuiContainerException, NoLaneSelectedException, ResourcePlayedException, InsufficientResourcesException {
 		if (card instanceof ResourceCard) {
 			ResourceCard temp = (ResourceCard) card;
 			playResourceCard(cloneCard(temp));
@@ -351,17 +379,20 @@ public class BoardGuiController {
 	// *** Methods in this section are called within this class
 	// ************************************************************************
 
-	private void playResourceCard(Card card) {
+	private void playResourceCard(Card card) throws ResourcePlayedException {
+		gameController.addResource(card);
 		playerScrapyard.addCard(card);
 	}
 
-	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException {
+	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException, InsufficientResourcesException {
+		gameController.playCard(cardToPlay);
 		heroicGui.addHeroicSupport(cardToPlay);
 	}
 
-	private void playUnitCard(Unit cardToPlay) throws GuiContainerException {
+	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException{
 		cardToPlay = (Unit) cloneCard(cardToPlay);
 		cardToPlay.shrink();
+		gameController.playCard(cardToPlay);
 		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
 			playerDefLane.addUnit(cardToPlay);
 		}
@@ -376,7 +407,7 @@ public class BoardGuiController {
 		// method.
 	}
 
-	private void setSelectedLane() throws GuiContainerException {
+	private void setSelectedLane() throws GuiContainerException, InsufficientResourcesException, ResourcePlayedException {
 		playUnitCard(tempUnit);
 		playerHandGui.playCard(tempUnit);
 		laneSelected = true;
@@ -491,6 +522,12 @@ public class BoardGuiController {
 				// TODO Auto-generated catch block
 				InfoPanelGUI.append(e.getMessage());
 				laneSelected = true;
+			} catch (InsufficientResourcesException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourcePlayedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 

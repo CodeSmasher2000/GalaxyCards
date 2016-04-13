@@ -14,7 +14,9 @@ import javax.swing.border.Border;
 
 import cards.Unit;
 import exceptionsPacket.GuiContainerException;
+import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
+import exceptionsPacket.ResourcePlayedException;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -157,11 +159,9 @@ public class HandGUI extends JPanel {
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-//			if (!mousePressed) {
 				layeredPane.setLayer(temp, cardOriginalLayer);
 				temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
 				temp.setBorder(defaultBorder);
-//			}
 		}
 
 		@Override
@@ -174,7 +174,6 @@ public class HandGUI extends JPanel {
 			// before putting in a container.
 
 			// Debugg remove when rest of gui is complete
-//			mousePressed = true;
 			try {
 				boardController.playCard(temp);
 				temp = playCard(temp);
@@ -186,6 +185,10 @@ public class HandGUI extends JPanel {
 				InfoPanelGUI.append(e.getMessage());
 			} catch (NoLaneSelectedException e) {
 				System.err.println(e.getMessage());
+			} catch (ResourcePlayedException e) {
+				InfoPanelGUI.append(e.getMessage());
+			} catch (InsufficientResourcesException e) {
+				InfoPanelGUI.append(e.getMessage());
 			} finally {
 				repaint();
 			}
