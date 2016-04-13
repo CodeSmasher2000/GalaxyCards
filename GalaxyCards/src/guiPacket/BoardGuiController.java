@@ -384,25 +384,24 @@ public class BoardGuiController {
 	// ************************************************************************
 
 	private void playResourceCard(Card card) throws ResourcePlayedException {
-		gameController.addResource(card);
+		gameController.playResourceCard(card);
 		playerScrapyard.addCard(card);
 	}
 
 	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException, InsufficientResourcesException {
-		gameController.playCard(cardToPlay);
+		gameController.playHeroicSupport(cardToPlay);
 		heroicGui.addHeroicSupport(cardToPlay);
 	}
 
 	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException{
 		cardToPlay = (Unit) cloneCard(cardToPlay);
+		gameController.playUnit(cardToPlay, tempLane.getLaneType());
 		cardToPlay.shrink();
-		gameController.playCard(cardToPlay);
 		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
 			playerDefLane.addUnit(cardToPlay);
 		}
 		if (tempLane.getLaneType() == Lanes.PLAYER_OFFENSIVE) {
 			playerOffLane.addUnit(cardToPlay);
-			System.out.println(playerOffLane.length());
 		}
 	}
 
