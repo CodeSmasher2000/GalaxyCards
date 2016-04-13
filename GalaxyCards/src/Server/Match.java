@@ -18,11 +18,12 @@ import guiPacket.Card;
  * @author patriklarsson
  *
  */
-public class Match {
+public class Match implements Observer {
 	private ClientHandler user1;
 	private ClientHandler user2;
 	private Player player1;
 	private Player player2;
+	private int id;
 	
 	/**
 	 * The constructor sets up a Match object with two clientHandlers that are
@@ -36,11 +37,36 @@ public class Match {
 	public Match(ClientHandler user1, ClientHandler user2) {
 		this.user1 = user1;
 		this.user2 = user2;
+		this.user1.addObserver(this);
+		this.user2.addObserver(this);
 		System.out.println("Server: Match Started");
 		player1 = new Player(user1);
 		player2 = new Player(user2);
 	}
 	
+	/**
+	 * Adds the card to the correct player and the correct lane and sends a
+	 * message to the other player
+	 */
+	public void cardPlayed() {
+		
+	}
+	
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		System.out.println("Jag har ändradts");
+	}
+
 	/**
 	 * Contatins three lists representing the differnet lanes in a gameboard
 	 * 

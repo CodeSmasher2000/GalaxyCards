@@ -109,7 +109,8 @@ public class ServerController {
 //		for (int i = 0; i<5;i++){
 //			deck.addCard(new ResourceCard());
 //		}
-		Hero hero = new Hero("Testa Patteson");
+//		Hero hero = new Hero("Testa Patteson");
+		Hero hero = new Hero(null);
 		hero.setDeck(deck);
 		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",hero);
 		clientHandler.writeMessage(commandMessage);
@@ -126,6 +127,10 @@ public class ServerController {
 		}return null;
 	}
 	
+	public void gameMessageRecived(CommandMessage message) {
+		
+	}
+	
 	private class LookingForGameThread extends Thread {
 		
 		public void LookForGame() {
@@ -133,11 +138,7 @@ public class ServerController {
 				// If there are more than two users a match can be created
 				if (usersLookingForGame.size() >= 2) {
 					matchFound();
-				}
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					break;
 				}
 			}
 			
