@@ -96,7 +96,6 @@ public class Client {
 				controller.setHero(message);
 			} else if(message.getCommand() == Commands.MATCHMAKING_MATCH_FOUND) {
 				controller.matchFound(message);
-			} else if(message.getCommand() == Commands.MATCH_MOVE) {
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");;

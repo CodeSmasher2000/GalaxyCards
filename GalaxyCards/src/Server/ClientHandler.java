@@ -90,7 +90,7 @@ public class ClientHandler extends Observable implements Runnable {
 				case MATCHMAKING_START:
 					serverController.addUserToMatchMaking(activeUser);
 					break;
-				case MATCH_MOVE:
+				case MATCH_PLAYCARD:
 					updateObservers(message);
 					break;
 				default:

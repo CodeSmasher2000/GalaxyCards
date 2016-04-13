@@ -20,7 +20,7 @@ public enum Commands  implements Serializable {
 	MATCHMAKING_MATCH_FOUND(5),
 	MATCHMAKING_STOP(6),
 	MATCHMAKING_START(7),
-	MATCH_MOVE(8);
+	MATCH_PLAYCARD(8);
 	
 	private int value;
 	private static final long serialVersionUID = 42L;

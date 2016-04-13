@@ -9,10 +9,8 @@ import java.util.Observer;
 import cards.HeroicSupport;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
-import enumMessage.Lanes;
 import game.Hero;
 import guiPacket.Card;
-import moves.PlayCard;
 
 /**
  * This class contatins nessarsacry data and methods for storing data about
@@ -44,28 +42,6 @@ public class Match {
 	}
 	
 	/**
-	 * Takes a player that played a card and how the card was played and sends
-	 * it to the other client
-	 * @param player
-	 * 		The player that made the move
-	 * @param move
-	 * 		The move that was played
-	 */
-	public void cardPlayed(Player player, PlayCard move) {
-		// Send to the other player
-		if (player.equals(player1)) {
-			CommandMessage message = new CommandMessage(Commands.MATCH_MOVE,
-					"Server", move);
-			user2.writeMessage(message);
-		} else if (player.equals(player2)) {
-			CommandMessage message = new CommandMessage(Commands.MATCH_MOVE,
-					"Server", move);
-			user1.writeMessage(message);
-		}
-	}
-	
-	
-	/**
 	 * Contatins three lists representing the differnet lanes in a gameboard
 	 * 
 	 * @author patriklarsson
@@ -83,41 +59,18 @@ public class Match {
 		public Player(ClientHandler clientHandler) {
 			this.clientHandler = clientHandler;
 			this.name = clientHandler.getActiveUser();
-			clientHandler.addObserver(this);
 			// TODO Ask the client for what hero it plays with
+			
 		}
 		
-		/**
-		 * Adds a card to the defefensive lane or offensive lane
-		 * 
-		 * @param card
-		 * 		The card object to add
-		 * @param lane
-		 * 		The lane where the card should be added
-		 */
-		public void playCard(PlayCard move) {
-			PlayCard moveToSend;
-			switch (move.getLane()) {
-			case PLAYER_OFFENSIVE:
-				offensiveLane.add(move.getCard());
-				cardPlayed(this, move);
-				break;
-			case PLAYER_DEFENSIVE:
-				defensiveLane.add(move.getCard());
-				cardPlayed(this,move);
-				break;
-			default:
-				break;
-			}
+		public void playCard(Card card) {
+			
 		}
 
 		@Override
 		public void update(Observable o, Object arg) {
-			CommandMessage message = (CommandMessage)arg;
-			if (message.getCommand() == Commands.MATCH_MOVE) {
-				PlayCard move = (PlayCard)message.getData();
-				playCard(move);
-			}
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}
