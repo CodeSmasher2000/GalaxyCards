@@ -29,8 +29,8 @@ import guiPacket.CustomGui;
 import guiPacket.InfoPanelGUI;
 import guiPacket.StartGameWindow;
 
-public class TestPanel extends JPanel {
-
+public class TestPanel extends JPanel{
+	
 	private BoardGuiController boardController;
 	private StartGameWindow frame;
 
@@ -42,23 +42,24 @@ public class TestPanel extends JPanel {
 	private JPanel testPanel;
 	private JLabel label = new JLabel("Debugging tool");
 
-	public TestPanel() {
-
+	public TestPanel(){
+		
 		initiateTestElements();
 		loadDeck();
 		add(testPanel);
-
+		
 		boardController = new BoardGuiController();
-		// frame = new StartGameWindow(boardController,this);
+//		frame = new StartGameWindow(boardController,this);
 		System.out.println("VADFAN");
-
+		
+		
 	}
-
-	public TestPanel(BoardGuiController boardController) {
+	
+	public TestPanel(BoardGuiController boardController){
 		this();
-		this.boardController = boardController;
+		this.boardController=boardController;
 	}
-
+	
 	private void initiateTestElements() {
 		testDraw = new JButton("Dra kort spelare");
 		testOpponentDrawCard = new JButton("Dra kort motståndare");
@@ -78,7 +79,7 @@ public class TestPanel extends JPanel {
 		testDraw.setOpaque(false);
 		testOpponentDrawCard.setOpaque(false);
 	}
-
+	
 	private void loadDeck() {
 		try {
 			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("files/decks/padde.dat")));
@@ -100,7 +101,7 @@ public class TestPanel extends JPanel {
 		} catch (EmptyDeckException e) {
 			InfoPanelGUI.append(e.getMessage());
 			e.printStackTrace();
-		} finally {
+		}finally{
 			try {
 				ois.close();
 				ois = null;
@@ -111,66 +112,70 @@ public class TestPanel extends JPanel {
 		}
 	}
 
-	private class ButtonListener implements ActionListener {
+		private class ButtonListener implements ActionListener {
 
-		private LinkedList<Card> enemyHand = new LinkedList<Card>();
-		private Lanes ENUM = Lanes.PLAYER_DEFENSIVE;
-		private boolean b = false;
+			private LinkedList<Card> enemyHand = new LinkedList<Card>();
+			private Lanes ENUM = Lanes.PLAYER_DEFENSIVE;
+			private boolean b = false;
 
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			if (event.getSource() == testDraw) {
-				try {
-					System.out.println("Deck size: " + deck.getAmtOfCards());
-					boardController.drawCard(temp);
-					temp = deck.drawCard();
-				} catch (GuiContainerException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
-				} catch (EmptyDeckException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (event.getSource() == testDraw) {
+					try {
+						System.out.println("Deck size: " + deck.getAmtOfCards());
+						boardController.drawCard(temp);
+						temp = deck.drawCard();
+					} catch (GuiContainerException e) {
+						System.err.println(e.getMessage());
+						InfoPanelGUI.append(e.getMessage());
+					} catch (EmptyDeckException e) {
+						System.err.println(e.getMessage());
+						InfoPanelGUI.append(e.getMessage());
+					}
 				}
-			}
-			if (event.getSource() == testOpponentDrawCard) {
-				try {
-					boardController.opponentDrawsCard();
-				} catch (GuiContainerException e) {
-					// TODO Auto-generated catch block
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
+				if (event.getSource() == testOpponentDrawCard) {
+					try {
+						boardController.opponentDrawsCard();
+					} catch (GuiContainerException e) {
+						// TODO Auto-generated catch block
+						System.err.println(e.getMessage());
+						InfoPanelGUI.append(e.getMessage());
+					}
 				}
-			}
-			if (event.getSource() == testOpponentPlayCard) {
-				try {
-					Card temp = enemyDeck.drawCard();
-					HeroicSupport hs;
-					if (temp instanceof Unit) {
-						Unit unit = (Unit) temp;
-
-						if (!b) {
-							ENUM = Lanes.PLAYER_DEFENSIVE;
-							b = true;
-						} else {
-							ENUM = Lanes.PLAYER_OFFENSIVE;
-							b = false;
+				if (event.getSource() == testOpponentPlayCard) {
+					try {
+						Card temp = enemyDeck.drawCard();
+						HeroicSupport hs;
+						if (temp instanceof Unit) {
+							Unit unit = (Unit) temp;
+							
+							if (!b) {
+								ENUM = Lanes.PLAYER_DEFENSIVE;
+								b=true;
+							} else {
+								ENUM = Lanes.PLAYER_OFFENSIVE;
+								b=false;
+							}
+							boardController.opponentPlaysUnit(unit, ENUM);
 						}
-						boardController.opponentPlaysUnit(unit, ENUM);
-					}
-					if (temp instanceof HeroicSupport) {
-						hs = (HeroicSupport) temp;
-						boardController.opponentPlaysHeroicSupport(hs);
-					}
+						if (temp instanceof HeroicSupport) {
+							hs = (HeroicSupport) temp;
+							boardController.opponentPlaysHeroicSupport(hs);
+						}
 
-				} catch (GuiContainerException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
-				} catch (EmptyDeckException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					InfoPanelGUI.append(e.getMessage());
+					} catch (GuiContainerException e) {
+						System.err.println(e.getMessage());
+						InfoPanelGUI.append(e.getMessage());
+					} catch (EmptyDeckException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						InfoPanelGUI.append(e.getMessage());
+					}
 				}
 			}
 		}
+	
+	public static void main(String[] args) {
+		new TestPanel();
 	}
 }

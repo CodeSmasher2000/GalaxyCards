@@ -2,24 +2,25 @@ package guiPacket;
 
 import javax.swing.JFrame;
 
-import game.GameController;
+import testClasses.TestPanel;
 
 public class StartGameWindow extends JFrame {
 	
-	private GameController gameController; 
 	private BoardGuiController boardController;
 	private BoardGUI boardGui;
 
 	
 	public StartGameWindow(){
-		gameController = new GameController();
-		boardController = new BoardGuiController(gameController, null);
+		boardController = new BoardGuiController();
 		boardGui = new BoardGUI(boardController);
 	}
 	
-	public StartGameWindow(GameController gameController){
-		boardController = new BoardGuiController(gameController, null);
-	}
+//	public StartGameWindow(BoardGuiController boardController, TestPanel testPanel){
+//		this.boardController=boardController;
+//		boardGui = new BoardGUI(boardController);
+//		boardGui.addDebuggPanel(testPanel);
+//		showUi();
+//	}
 	
 	private void showUi(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

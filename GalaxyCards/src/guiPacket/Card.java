@@ -250,10 +250,6 @@ public abstract class Card extends JPanel {
 	public void setPrice(int price) {
 		lbPrice.setText("  " + price + "  ");
 	}
-	
-	public int getPrice() {
-		return Integer.parseInt(lbPrice.getText());
-	}
 
 	/**
 	 * Sets the attack value for this image by passing in an int as argument.
