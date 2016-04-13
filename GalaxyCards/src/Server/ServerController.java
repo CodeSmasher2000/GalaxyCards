@@ -109,9 +109,9 @@ public class ServerController {
 //		for (int i = 0; i<5;i++){
 //			deck.addCard(new ResourceCard());
 //		}
-		Hero hero = new Hero("Testa Patteson");
-		hero.setDeck(deck);
-		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",hero);
+		
+		
+		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",deck);
 		clientHandler.writeMessage(commandMessage);
 	}
 	
@@ -164,5 +164,9 @@ public class ServerController {
 		public void run() {
 			LookForGame();
 		}
+	}
+	
+	public static void main(String[] args) {
+		new Server();
 	}
 }

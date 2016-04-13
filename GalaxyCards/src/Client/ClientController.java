@@ -10,6 +10,7 @@ import cards.Deck;
 import enumMessage.Commands;
 import enumMessage.CommandMessage;
 import game.Controller;
+import game.GameController;
 import game.Hero;
 
 
@@ -20,8 +21,8 @@ import game.Hero;
  */
 public class ClientController {
 	private Client client;
-	private Controller controller;
 	private String activeUser;
+	private GameController gameController= new GameController(this);
 	
 	public void setClient(Client client) {
 		this.client = client;
@@ -34,9 +35,7 @@ public class ClientController {
 		client.disconnect();
 	}
 	
-	public void setGameController(Controller controller){
-		this.controller= controller;
-	}
+
 	
 	
 	/**
@@ -69,17 +68,21 @@ public class ClientController {
 			}
 		}
 	}
+	
+	public void writeMessage(CommandMessage message){
+		client.sendMessage(message);
+	}
 	/**
 	 * Hämtar hero från ett CommandMessage
 	 * @param message
 	 */
 	public void setHero(CommandMessage message){
 		System.out.println("Set hero");
-		Hero hero = (Hero)message.getData();
-		controller.setFriendlyHero(hero);
+		Deck deck = (Deck)message.getData();
+		Hero hero = new Hero(gameController);
+		hero.setDeck(deck);
+		gameController.setChosenHero(hero);
 		
-		// For Debug purpose
-		System.out.println(hero.toString());
 		
 	}
 	/**
@@ -108,6 +111,8 @@ public class ClientController {
 	 * Calls the GameController to setup a new game when a match is found
 	 */
 	public void matchFound(CommandMessage message) {
+		
+		gameController.startNewGame();
 		// Logging Messaged used for debug purpose
 		System.out.println("Client Controller: " + activeUser + " matchFound()");
 

@@ -1,8 +1,11 @@
 package game;
 
+import Client.ClientController;
 import cards.HeroicSupport;
 import cards.Tech;
 import cards.Unit;
+import enumMessage.CommandMessage;
+import enumMessage.Commands;
 import enumMessage.Lanes;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.ResourcePlayedException;
@@ -10,16 +13,18 @@ import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 import guiPacket.StartGameWindow;
+import move.PlayCard;
 
 public class GameController {
 	private Hero hero;
 	private BoardGuiController boardController;
+	private ClientController clientController;
 
-	public GameController() {
-		
+	public GameController(ClientController clientController) {
+		this.clientController=clientController;
 		//TODO ta bort när huvudmeny och hämta hjälte är fixat,
-		hero = new Hero(this);
-		startNewGame();
+//		hero = new Hero(this);
+//		startNewGame();
 	}
 	
 	public void setChosenHero(Hero hero){
@@ -44,6 +49,9 @@ public class GameController {
 			// hero.getCurrentResources(). Klienten ska säga till motståndaren
 			// vilket kort som spelas och uppdatera
 			// opponentHeroGui.setCurrentResources(int newValue)
+			PlayCard move = new PlayCard(card,lane);
+			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
+			clientController.writeMessage(message);
 			
 			//Debugg
 			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server");
@@ -94,8 +102,4 @@ public class GameController {
 		new StartGameWindow(boardController);
 	}
 
-	public static void main(String[] args) {
-		new GameController();
-
-	}
 }

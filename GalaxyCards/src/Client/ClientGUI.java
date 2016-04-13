@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
 import Server.Server;
 import board.Board;
 import game.Controller;
+import game.GameController;
 import guiPacket.BoardGuiController;
 
 public class ClientGUI extends JPanel {
@@ -33,7 +34,6 @@ public class ClientGUI extends JPanel {
 		initComponents();
 		add(txtArea,BorderLayout.CENTER);
 		add(btnPanel,BorderLayout.SOUTH);
-		new Server();
 		txtArea.setText("Connected to Server");
 		clientConnect();
 		ButtonListener btnListener = new ButtonListener();
@@ -69,10 +69,7 @@ public class ClientGUI extends JPanel {
 	 */
 	private ClientController newClientController(){
 		ClientController clientController = new ClientController();
-		Board board = new Board();
-		BoardGuiController boardController = new BoardGuiController();
-		Controller gameController = new Controller(board, boardController);
-		clientController.setGameController(gameController);
+		
 		return clientController;
 	}
 	
