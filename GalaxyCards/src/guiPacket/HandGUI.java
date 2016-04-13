@@ -12,9 +12,11 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import cards.Unit;
+import cards.ResourceCard;
 import exceptionsPacket.GuiContainerException;
+import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
+import exceptionsPacket.ResourcePlayedException;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -38,7 +40,7 @@ public class HandGUI extends JPanel {
 	private int cardOriginalLayer;
 	private HandMouseListener listener = new HandMouseListener();
 	private BoardGuiController boardController;
-	
+
 	private ImageIcon background = new ImageIcon("files/pictures/handPanelTexturePlayer.jpg");
 
 	private Card[] cards = new Card[8];
@@ -132,7 +134,7 @@ public class HandGUI extends JPanel {
 
 		return card;
 	}
-	
+
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
@@ -157,37 +159,58 @@ public class HandGUI extends JPanel {
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-//			if (!mousePressed) {
-				layeredPane.setLayer(temp, cardOriginalLayer);
-				temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
-				temp.setBorder(defaultBorder);
-//			}
+			layeredPane.setLayer(temp, cardOriginalLayer);
+			temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
+			temp.setBorder(defaultBorder);
 		}
 
 		@Override
 		public void mousePressed(MouseEvent event) {
+			if (temp instanceof ResourceCard) {
 
-			// send the object to controller or w/e where it is determined where
-			// the card should be put based on instanceof
-			// playCard(temp);
-			// if the Card object is instanceOf Unit then use shrink() method
-			// before putting in a container.
+				try {
+					boardController.playCard(temp);
+					temp = playCard(temp);
+					temp.setBorder(defaultBorder);
+					// temp.shrink();
+					temp.removeMouseListener(listener);
+				} catch (GuiContainerException e) {
+					System.err.println(e.getMessage());
+					InfoPanelGUI.append(e.getMessage());
+				} catch (NoLaneSelectedException e) {
+					System.err.println(e.getMessage());
+				} catch (ResourcePlayedException e) {
+					InfoPanelGUI.append(e.getMessage());
+				} catch (InsufficientResourcesException e) {
+					InfoPanelGUI.append(e.getMessage());
+				} finally {
+					repaint();
+				}
 
-			// Debugg remove when rest of gui is complete
-//			mousePressed = true;
-			try {
-				boardController.playCard(temp);
-				temp = playCard(temp);
-				temp.setBorder(defaultBorder);
-				// temp.shrink();
-				temp.removeMouseListener(listener);
-			} catch (GuiContainerException e) {
-				System.err.println(e.getMessage());
-				InfoPanelGUI.append(e.getMessage());
-			} catch (NoLaneSelectedException e) {
-				System.err.println(e.getMessage());
-			} finally {
-				repaint();
+			} else {
+				if (temp.getPrice() <= boardController.getAvaibleResources()) {
+
+					try {
+						boardController.playCard(temp);
+						temp = playCard(temp);
+						temp.setBorder(defaultBorder);
+						// temp.shrink();
+						temp.removeMouseListener(listener);
+					} catch (GuiContainerException e) {
+						System.err.println(e.getMessage());
+						InfoPanelGUI.append(e.getMessage());
+					} catch (NoLaneSelectedException e) {
+						System.err.println(e.getMessage());
+					} catch (ResourcePlayedException e) {
+						InfoPanelGUI.append(e.getMessage());
+					} catch (InsufficientResourcesException e) {
+						InfoPanelGUI.append(e.getMessage());
+					} finally {
+						repaint();
+					}
+				} else {
+					InfoPanelGUI.append("Insufficient resources");
+				}
 			}
 
 		}
@@ -196,11 +219,10 @@ public class HandGUI extends JPanel {
 		public void mouseReleased(MouseEvent arg0) {
 			// Do nothing
 		}
-		
+
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 		}
-
 
 	}
 }

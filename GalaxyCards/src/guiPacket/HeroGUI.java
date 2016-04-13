@@ -38,7 +38,7 @@ public class HeroGUI extends JPanel {
 
 	public HeroGUI(BoardGuiController boardController) {
 		this.boardController=boardController;
-		boardController.addHeroListener(this);
+		this.boardController.addHeroListener(this);
 		
 		String heroName = boardController.getHeroName();
 		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
@@ -120,25 +120,13 @@ public class HeroGUI extends JPanel {
 	 * Updates the progressbar representing the hero's resources with a int
 	 * given as argument.
 	 * 
-	 * @param newValue
+	 * @param newValueCurrent
 	 *            :int
 	 */
-	public void updateResourceBar(int newValue) {
-		resourceBar.setValue(newValue);
-		resourceBar.setString(newValue + " / " + resourceBar.getMaximum());
-	}
-
-	/**
-	 * Updates the resource progressbar by adding to the maximum value of hero's
-	 * resources and adding to the current value avaible to the hero.
-	 * 
-	 * @param amount
-	 *            : int
-	 */
-	public void addResources(int amount) {
-		resourceBar.setMaximum(resourceBar.getMaximum() + amount);
-		resourceBar.setValue(resourceBar.getValue() + amount);
-		resourceBar.setString(resourceBar.getValue() + " / " + resourceBar.getMaximum());
+	public void updateResourceBar(int newValueCurrent, int newValueMax) {
+		resourceBar.setMaximum(newValueMax);
+		resourceBar.setValue(newValueCurrent);
+		resourceBar.setString(newValueCurrent + " / " + resourceBar.getMaximum());
 	}
 
 	/**

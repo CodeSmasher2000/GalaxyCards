@@ -2,23 +2,25 @@ package game;
 
 import java.io.Serializable;
 
-import javax.naming.InsufficientResourcesException;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+
 
 import cards.Deck;
+import exceptionsPacket.EmptyDeckException;
+import exceptionsPacket.InsufficientShieldException;
 import exceptionsPacket.ResourcePlayedException;
+import exceptionsPacket.InsufficientResourcesException;
+import guiPacket.Card;
+import guiPacket.InfoPanelGUI;
 
 /**
  * This class represents the player's hero and is responsible for a logical
  * representation of the hero and his attributes. This class is also responsible
- * for altering the hero's attributes and interaction with deck.
+ * for altering the hero's attributes and holds a deck object from which the
+ * player draws Cards.
  * 
  * @author 13120dde
  *
  */
-// TODO refactor, this class should not communicate with HeroGUI directly,
-// values should be sent trough controller.
 
 public class Hero implements Serializable {
 
@@ -26,23 +28,48 @@ public class Hero implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -704227521994333558L;
-	private int life, energyShield, maxResource, currentResource;
-	private boolean resourcecardPlayed = false;
+
 	private Deck deck;
-	
-	public Deck getDeck() {
-		return deck;
+	private GameController gameController;
+	private String heroName = "Supreme Commander";
+	private int life, energyShield, maxResource, currentResource, incrementalDamage = 0;
+	private boolean resourceCardPlayedThisRound = false;
+
+	public Hero(GameController gameController) {
+		this.gameController = gameController;
+		life = 20;
+		energyShield = 10;
+		maxResource = 0;
+		currentResource = 0;
+	}
+
+	public Hero(String heroName, GameController gameController) {
+		this(gameController);
+		this.heroName = heroName;
+		life = 20;
+		energyShield = 10;
+		maxResource = 0;
+		currentResource = 0;
 	}
 
 	public void setDeck(Deck deck) {
 		this.deck = deck;
 	}
 
-	public Hero(String heroName) {
-		life = 20;
-		energyShield = 10;
-		maxResource = 0;
-		currentResource = 0;
+	/**
+	 * Attempts to draw a card from the deck and return the card object. If deck
+	 * is empty deals incremental damage to the player's hero.
+	 * 
+	 * @return
+	 */
+	public Card DrawCard() {
+		try {
+			return deck.drawCard();
+		} catch (EmptyDeckException e) {
+			dealDamage(incrementalDamage++);
+			InfoPanelGUI.append("For every round your hero takes incremental damage: " + incrementalDamage);
+			return null;
+		}
 	}
 
 	/**
@@ -52,6 +79,7 @@ public class Hero implements Serializable {
 	 * damage won't go trough to the hero's life.
 	 * 
 	 * @param amount
+	 *            : int
 	 */
 	public void dealDamage(int amount) {
 		if (energyShield > 0) {
@@ -60,17 +88,14 @@ public class Hero implements Serializable {
 		} else {
 			energyShield = 0;
 			life -= amount;
-
-			// Debugg
-			// updateLifeBar(life);
-			// updateShiledBar(energyShield);
 		}
 
 	}
 
 	/**
-	 * Add x amount of energy shield to this hero. The shield's max amount is
-	 * 10 and if amount is higher than 10 the energyShield attribute will be set to 10.
+	 * Add x amount of energy shield to this hero. The shield's max amount is 10
+	 * and if amount is higher than 10 the energyShield attribute will be set to
+	 * 10.
 	 * 
 	 * @param amount
 	 */
@@ -79,94 +104,111 @@ public class Hero implements Serializable {
 		if (energyShield > 10) {
 			energyShield = 10;
 		}
-
-		// DEBUGG
-		// updateShiledBar(energyShield);
 	}
-	
 
 	/**
 	 * Attempts to remove x amount of energy shield from the hero. If x is
-	 * higher than the amount of shield then nothing will be removed and false
-	 * is returned. Else removes x from shield and returns true.
+	 * higher than the amount of shield then throws exception.
 	 * 
 	 * @param amount
+	 *            : int
 	 * @return
+	 * @throws InsufficientShieldException
 	 */
-	public boolean removeShield(int amount) {
+	public void removeShield(int amount) throws InsufficientShieldException {
 		if (energyShield == 0 || energyShield < amount) {
-			return false;
-			// throw exception that is catched in the object which tries to
-			// activate the ability
+			throw new InsufficientShieldException("Insufficient Shield");
 		} else {
 			energyShield -= amount;
-
-			// DEBUGG
-			// updateShiledBar(energyShield);
-			return true;
 		}
 
 	}
 
-	public int getLife(){
+	/**
+	 * Returns the hero's current life value.
+	 * 
+	 * @return life : int
+	 */
+	public int getLife() {
 		return life;
 	}
-	
-	public int getEnergyShield(){
+
+	/**
+	 * Returns the hero's current energyShield value.
+	 * 
+	 * @return energyShield : int
+	 */
+	public int getEnergyShield() {
 		return energyShield;
 	}
 	
-	public void addResource() throws ResourcePlayedException{
-		if(!resourcecardPlayed){
-		maxResource++;
-		currentResource++;
-		resourcecardPlayed = true;
-		}else{
-			throw new ResourcePlayedException("You can only play one resource card each turn");
-		}
+	public int getCurrentResources() {
+		return currentResource;
 	}
 	
-	public void useResource(int amount) throws InsufficientResourcesException{
-		if(amount>currentResource){
-			throw new InsufficientResourcesException("Insufficient resources");
-		}
-		currentResource-=amount;
-	}
-	
-	public void resetResources(){
-		currentResource=maxResource;
-	}
-	
-	public String toString() {
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				JFrame frame = new JFrame();
-				frame.add(deck.getCard(12));
-				frame.pack();
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setVisible(true);
-				
-			}
-		});
-		deckInfo();
-		return "life: " + life + "\nShield: " + energyShield + "\n current resource: " + currentResource + " / "
-				+ maxResource;
-	}
-	
-	public void deckInfo() {
-		System.out.println("-------- Deck Info ---------");
-		System.out.println(deck.getAmtOfCards());
-		for (int i = 0; i < deck.getAmtOfCards(); i++) {
-			System.out.println(deck.getCard(i));
-		}
-	}
-	
-	private void youLoose() {
-		// TODO Auto-generated method stub
-		// TODO Update gui
-		// TODO send info to the otherplayer
+	public int getMaxResource(){
+		return maxResource;
 	}
 
+	/**
+	 * Attempts to add 1 resource to the hero's currentResource and maxResource
+	 * values. Throws exception if resourceCard is played this turn.
+	 * 
+	 * @throws ResourcePlayedException
+	 */
+	public boolean addResource() throws ResourcePlayedException {
+		boolean addResourceOK = false;
+		if (!resourceCardPlayedThisRound) {
+			maxResource++;
+			currentResource++;
+			resourceCardPlayedThisRound = true;
+			addResourceOK = true;
+		} else {
+			throw new ResourcePlayedException("You can only play one resource card each turn");
+		}
+		return addResourceOK;
+		
+	}
+
+	/**
+	 * Attempts to use the hero's current resource to play a card from hand.
+	 * Throws exception if insufficient resources avaible.
+	 * 
+	 * @param amount
+	 *            : int
+	 * @throws InsufficientResourcesException
+	 */
+	public boolean useResource(int amount) throws InsufficientResourcesException {
+		boolean useResourceOK = false;
+		if (amount > currentResource) {
+			throw new InsufficientResourcesException("Not enough resources");
+			
+		} else {
+		currentResource -= amount;
+		useResourceOK = true;
+		}
+		return useResourceOK;
+	}
+
+	/**
+	 * When a new round starts call this method to reset hero's currentResources
+	 * and enable him to play a resource card from hand.
+	 */
+	public void resetResources() {
+		currentResource = maxResource;
+		resourceCardPlayedThisRound = false;
+	}
+
+	public void setHeroName(String heroName) {
+		this.heroName = heroName;
+	}
+
+	public String getHeroName() {
+		return heroName;
+	}
+
+	public String toString() {
+		return "[ " + heroName + " ] Life: " + life + "Energyshield: " + energyShield + " Resources: " + currentResource
+				+ " / " + maxResource;
+	}
 }
