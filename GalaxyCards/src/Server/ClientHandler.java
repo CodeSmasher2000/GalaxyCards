@@ -17,7 +17,7 @@ import enumMessage.Commands;
  *
  */
 
-public class ClientHandler implements Runnable {
+public class ClientHandler extends Observable implements Runnable {
 	private Socket socket;
 	private ServerController serverController;
 	private ObjectInputStream ois;
@@ -91,7 +91,8 @@ public class ClientHandler implements Runnable {
 					serverController.addUserToMatchMaking(activeUser);
 					break;
 				case MATCH_PLAYCARD:
-					
+					setChanged();
+					notifyObservers(message);
 					break;
 				default:
 					break;
