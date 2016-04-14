@@ -106,7 +106,6 @@ public class ServerController {
 		System.out.println("sendHero är kallad");
 		//The following code is only for test purpose
 		Deck deck = loadDeck("files/decks/TestServerDeck.dat");
-
 		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",deck);
 		clientHandler.writeMessage(commandMessage);
 	}
@@ -133,7 +132,6 @@ public class ServerController {
 				// If there are more than two users a match can be created
 				if (usersLookingForGame.size() >= 2) {
 					matchFound();
-					break;
 				}
 			}
 			

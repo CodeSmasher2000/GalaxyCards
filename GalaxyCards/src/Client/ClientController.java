@@ -45,9 +45,9 @@ public class ClientController {
 	 * @param port
 	 * 			Serverns port
 	 */			
-	public synchronized void connect(String ip, int port) {
-		client = new Client(ip, port);
-		client.setClientController(this);
+	public void connect(String ip, int port) {
+		client = new Client(ip, port, this);
+
 	}
 	
 	

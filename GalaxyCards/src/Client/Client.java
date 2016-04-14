@@ -30,8 +30,9 @@ public class Client {
 
 	
 
-	public Client(String ip, int port) {
+	public Client(String ip, int port, ClientController clientController) {
 		try {
+			this.controller = clientController;
 			socket = new Socket(ip, port);
 			oos = new ObjectOutputStream(socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
@@ -105,10 +106,10 @@ public class Client {
 		}
 	}
 	
-	public void setClientController(ClientController controller) {
-		this.controller = controller;
-		controller.setClient(this);
-	}
+//	public void setClientController(ClientController controller) {
+//		this.controller = controller;
+//		controller.setClient(this);
+//	}
 	
 	/**
 	 * Klass som ärver Thread. Låter klienten logga in och lyssnar sedan efter meddelanden från servern.
