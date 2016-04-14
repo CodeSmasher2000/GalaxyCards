@@ -100,7 +100,7 @@ public class Client {
 			} else if(message.getCommand() == Commands.MATCHMAKING_MATCH_FOUND) {
 				System.out.println("Match Found");
 				controller.matchFound(message);
-			} else if(message.getCommand() == Commands.MATCH_PLAYCARD); {
+			} else if(message.getCommand() == Commands.MATCH_PLAYCARD) {
 				controller.cardPlayed(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
