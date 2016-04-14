@@ -12,22 +12,22 @@ import java.io.Serializable;
 	 *
 	 */
 public enum Commands  implements Serializable {
-	LOGIN(0),
-	OK (1),
-	NOTOK (2),
-	DISCONNECT(3),
-	GETHERO(4),
-	MATCHMAKING_MATCH_FOUND(5),
-	MATCHMAKING_STOP(6),
-	MATCHMAKING_START(7),
-	MATCH_PLAYCARD(8);
+	LOGIN,
+	OK,
+	NOTOK,
+	DISCONNECT,
+	GETHERO,
+	MATCHMAKING_MATCH_FOUND,
+	MATCHMAKING_STOP,
+	MATCHMAKING_START,
+	MATCH_PLAYCARD;
 	
 	private int value;
 	private static final long serialVersionUID = 42L;
 
-	 Commands(int value){
-		this.value = value;
-	}
+//	 Commands(int value){
+//		this.value = value;
+//	}
 	 
 	 public int getValue(){
 		 return value;
