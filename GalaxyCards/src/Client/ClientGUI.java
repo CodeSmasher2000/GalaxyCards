@@ -14,7 +14,6 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import Server.Server;
-import board.Board;
 import game.GameController;
 import guiPacket.BoardGuiController;
 
