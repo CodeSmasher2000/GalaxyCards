@@ -50,8 +50,11 @@ public class GameController {
 			// vilket kort som spelas och uppdatera
 			// opponentHeroGui.setCurrentResources(int newValue)
 			PlayCard move = new PlayCard(card,lane);
+			
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
+			
 			clientController.writeMessage(message);
+			
 			
 			//Debugg
 			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server");

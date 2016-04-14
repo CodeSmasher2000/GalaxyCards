@@ -106,14 +106,7 @@ public class ServerController {
 		System.out.println("sendHero är kallad");
 		//The following code is only for test purpose
 		Deck deck = loadDeck("files/decks/TestServerDeck.dat");
-//		for (int i = 0; i<5;i++){
-//			deck.addCard(new ResourceCard());
-//		}
-
-//		Hero hero = new Hero("Testa Patteson");
-		Hero hero = new Hero(null);
-		hero.setDeck(deck);
-		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",hero);
+		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",deck);
 		clientHandler.writeMessage(commandMessage);
 	}
 	
@@ -139,7 +132,6 @@ public class ServerController {
 				// If there are more than two users a match can be created
 				if (usersLookingForGame.size() >= 2) {
 					matchFound();
-					break;
 				}
 			}
 			

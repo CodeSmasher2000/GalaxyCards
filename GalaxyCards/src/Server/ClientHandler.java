@@ -62,6 +62,7 @@ public class ClientHandler extends Observable implements Runnable {
 		try {
 			this.socket.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		serverController.disconnect(this);
 		System.out.println("Disconnected");
@@ -136,7 +137,9 @@ public class ClientHandler extends Observable implements Runnable {
 		try {
 			listenForMessage();
 		} catch (IOException e) {
+			e.printStackTrace();
 			disconnect();
+			listenerThread.interrupt();
 		}
 	}
 	
