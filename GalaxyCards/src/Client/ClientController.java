@@ -7,11 +7,13 @@ import javax.swing.JOptionPane;
 
 import Server.ClientHandler;
 import cards.Deck;
+import cards.Unit;
 import enumMessage.Commands;
 import enumMessage.CommandMessage;
 import game.Controller;
 import game.GameController;
 import game.Hero;
+import move.PlayCard;
 
 
 /**
@@ -107,7 +109,8 @@ public class ClientController {
 	}
 	
 	public void cardPlayed(CommandMessage message) {
-		gameController.
+		PlayCard move = (PlayCard)message.getData();
+		gameController.opponentPlaysUnit((Unit) move.getCard(), move.getLane());
 	}
 	
 	/**
