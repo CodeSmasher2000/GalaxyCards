@@ -45,7 +45,10 @@ public class CommandMessage implements Serializable {
 		this.data = data;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return this.commands.name();
+	}
 	
 	
 		

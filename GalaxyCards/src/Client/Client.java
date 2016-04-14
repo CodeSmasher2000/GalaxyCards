@@ -90,6 +90,7 @@ public class Client {
 	public void listenForMessage(){
 		try {
 			CommandMessage message = (CommandMessage)ois.readObject();
+			message.toString();
 			if(message.getCommand()==Commands.LOGIN){
 				System.out.println("Login");
 				controller.login();
@@ -100,7 +101,8 @@ public class Client {
 				System.out.println("Match Found");
 				controller.matchFound(message);
 			} else if(message.getCommand() == Commands.MATCH_PLAYCARD); {
-				controller.playCard();
+				System.out.println("cARD PLAYED");
+				controller.cardPlayed(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");
