@@ -106,6 +106,10 @@ public class ClientController {
 		client.sendMessage(message);
 	}
 	
+	public void cardPlayed(CommandMessage message) {
+		gameController.
+	}
+	
 	/**
 	 * Calls the GameController to setup a new game when a match is found
 	 */

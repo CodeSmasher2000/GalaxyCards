@@ -121,10 +121,6 @@ public class ServerController {
 		}return null;
 	}
 	
-	public void gameMessageRecived(CommandMessage message) {
-		
-	}
-	
 	private class LookingForGameThread extends Thread {
 		
 		public void LookForGame() {

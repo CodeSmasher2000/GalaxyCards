@@ -99,6 +99,8 @@ public class Client {
 			} else if(message.getCommand() == Commands.MATCHMAKING_MATCH_FOUND) {
 				System.out.println("Match Found");
 				controller.matchFound(message);
+			} else if(message.getCommand() == Commands.MATCH_PLAYCARD); {
+				controller.playCard();
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");

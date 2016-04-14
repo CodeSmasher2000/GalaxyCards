@@ -7,6 +7,7 @@ import cards.Unit;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import enumMessage.Lanes;
+import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.ResourcePlayedException;
 import guiPacket.BoardGuiController;
@@ -97,6 +98,14 @@ public class GameController {
 
 	private void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
 		boardController.updatePlayerHeroGui(life, energyShield, currentResource, maxResource);
+	}
+	
+	public void opponentPlaysUnit(Unit unit, Lanes lane) {
+		try {
+			boardController.opponentPlaysUnit(unit, lane);
+		} catch (GuiContainerException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void startNewGame() {
