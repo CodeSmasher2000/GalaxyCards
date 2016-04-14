@@ -1,12 +1,14 @@
 package move;
 
+import java.io.Serializable;
+
 import cards.HeroicSupport;
 /**
  * This class contatins nessacary information about a placing a heroic support on the board
  * @author patri
  *
  */
-public class PlayHeroicSupportCard {
+public class PlayHeroicSupportCard implements Serializable {
 	private HeroicSupport card;
 
 	public PlayHeroicSupportCard(HeroicSupport card) {
