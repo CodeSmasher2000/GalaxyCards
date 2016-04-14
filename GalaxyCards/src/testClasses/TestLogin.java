@@ -16,8 +16,7 @@ import Client.ClientController;
 import Server.ClientHandler;
 import Server.Server;
 import Server.ServerController;
-import board.Board;
-import game.Controller;
+
 import guiPacket.BoardGuiController;
 
 public class TestLogin {
