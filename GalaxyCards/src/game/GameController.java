@@ -7,6 +7,7 @@ import cards.Unit;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import enumMessage.Lanes;
+import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.ResourcePlayedException;
 import guiPacket.BoardGuiController;
@@ -49,9 +50,11 @@ public class GameController {
 			// hero.getCurrentResources(). Klienten ska säga till motståndaren
 			// vilket kort som spelas och uppdatera
 			// opponentHeroGui.setCurrentResources(int newValue)
-			PlayCard move = new PlayCard(card,lane);
+			PlayCard move = new PlayCard(card,lane);			
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
+			
 			clientController.writeMessage(message);
+			
 			
 			//Debugg
 			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server");
@@ -95,6 +98,14 @@ public class GameController {
 
 	private void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
 		boardController.updatePlayerHeroGui(life, energyShield, currentResource, maxResource);
+	}
+	
+	public void opponentPlaysUnit(Unit unit, Lanes lane) {
+		try {
+			boardController.opponentPlaysUnit(unit, lane);
+		} catch (GuiContainerException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void startNewGame() {

@@ -62,6 +62,7 @@ public class ClientHandler extends Observable implements Runnable {
 		try {
 			this.socket.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		serverController.disconnect(this);
 		System.out.println("Disconnected");
@@ -91,6 +92,7 @@ public class ClientHandler extends Observable implements Runnable {
 					serverController.addUserToMatchMaking(activeUser);
 					break;
 				case MATCH_PLAYCARD:
+					System.out.println("Hej");
 					setChanged();
 					notifyObservers(message);
 					break;
@@ -109,7 +111,9 @@ public class ClientHandler extends Observable implements Runnable {
 	 */
 	public void writeMessage(CommandMessage message) {
 		try {
+			System.out.println(message.toString());
 			oos.writeObject(message);
+			oos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -136,7 +140,9 @@ public class ClientHandler extends Observable implements Runnable {
 		try {
 			listenForMessage();
 		} catch (IOException e) {
+			e.printStackTrace();
 			disconnect();
+			listenerThread.interrupt();
 		}
 	}
 	

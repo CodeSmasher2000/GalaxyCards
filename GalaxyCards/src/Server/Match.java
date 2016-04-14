@@ -11,6 +11,7 @@ import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import game.Hero;
 import guiPacket.Card;
+import move.PlayCard;
 
 /**
  * This class contatins nessarsacry data and methods for storing data about
@@ -43,17 +44,7 @@ public class Match implements Observer {
 		player1 = new Player(user1);
 		player2 = new Player(user2);
 	}
-	
-	/**
-	 * Adds the card to the correct player and the correct lane and sends a
-	 * message to the other player
-	 */
-	public void cardPlayed() {
 		
-	}
-	
-	
-	
 	public int getId() {
 		return id;
 	}
@@ -64,7 +55,17 @@ public class Match implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("Jag har ändradts");
+		CommandMessage message = (CommandMessage)arg;
+		PlayCard move = (PlayCard)message.getData();
+		if(o.equals(user1)) {
+			player1.playCard(move);
+			user2.writeMessage(message);
+		} else if(o.equals(user2)) {
+			player2.playCard(move);
+			user1.writeMessage(message);
+		} else {
+			System.out.println("Server: Någotting gick fel vid playcard");
+		}
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class Match implements Observer {
 			
 		}
 		
-		public void playCard(Card card) {
+		public void playCard(PlayCard move) {
 			
 		}
 		

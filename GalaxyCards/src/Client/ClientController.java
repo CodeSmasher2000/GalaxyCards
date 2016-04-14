@@ -7,11 +7,13 @@ import javax.swing.JOptionPane;
 
 import Server.ClientHandler;
 import cards.Deck;
+import cards.Unit;
 import enumMessage.Commands;
 import enumMessage.CommandMessage;
 import game.Controller;
 import game.GameController;
 import game.Hero;
+import move.PlayCard;
 
 
 /**
@@ -45,11 +47,10 @@ public class ClientController {
 	 * @param port
 	 * 			Serverns port
 	 */			
-	public synchronized void connect(String ip, int port) {
-		client = new Client(ip, port);
-		client.setClientController(this);
+	public void connect(String ip, int port) {
+		client = new Client(ip, port, this);
+
 	}
-	
 	
 	
 	/**
@@ -107,6 +108,11 @@ public class ClientController {
 				activeUser);
 		// Sends the message to server
 		client.sendMessage(message);
+	}
+	
+	public void cardPlayed(CommandMessage message) {
+		PlayCard move = (PlayCard)message.getData();
+		gameController.opponentPlaysUnit((Unit) move.getCard(), move.getLane());
 	}
 	
 	/**

@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import Server.Server;
 import board.Board;
@@ -69,7 +70,6 @@ public class ClientGUI extends JPanel {
 	 */
 	private ClientController newClientController(){
 		ClientController clientController = new ClientController();
-		
 		return clientController;
 	}
 	
@@ -84,17 +84,21 @@ public class ClientGUI extends JPanel {
 			else if( e.getSource()== btnFindMatch){
 				txtArea.append("\n Searching for opponent...");
 				clientController.startMatchMaking();
-				
 			}
 			
 		}
 		
 	}
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("Start Match");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add( new ClientGUI() );
-		frame.pack();
-		frame.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				JFrame frame = new JFrame("Start Match");
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.add( new ClientGUI() );
+				frame.pack();
+				frame.setVisible(true);
+			}
+		});
+		
 	}
 }
