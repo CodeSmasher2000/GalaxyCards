@@ -44,17 +44,7 @@ public class Match implements Observer {
 		player1 = new Player(user1);
 		player2 = new Player(user2);
 	}
-	
-	/**
-	 * Adds the card to the correct player and the correct lane and sends a
-	 * message to the other player
-	 */
-	public void cardPlayed() {
 		
-	}
-	
-	
-	
 	public int getId() {
 		return id;
 	}

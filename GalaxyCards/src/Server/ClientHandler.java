@@ -92,6 +92,7 @@ public class ClientHandler extends Observable implements Runnable {
 					serverController.addUserToMatchMaking(activeUser);
 					break;
 				case MATCH_PLAYCARD:
+					System.out.println("Hej");
 					setChanged();
 					notifyObservers(message);
 					break;
@@ -110,6 +111,7 @@ public class ClientHandler extends Observable implements Runnable {
 	 */
 	public void writeMessage(CommandMessage message) {
 		try {
+			System.out.println(message.toString());
 			oos.writeObject(message);
 			oos.flush();
 		} catch (IOException e) {
