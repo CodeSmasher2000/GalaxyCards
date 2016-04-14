@@ -51,7 +51,6 @@ public class ClientController {
 	}
 	
 	
-	
 	/**
 	 * Metod som låter användaren skriva in användarnamn och skickar det till server.
 	 */

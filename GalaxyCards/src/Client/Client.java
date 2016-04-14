@@ -51,9 +51,20 @@ public class Client {
 		try{
 			this.listener.interrupt();
 			this.socket.close();
-		}catch(IOException e){}
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 	
+	public CommandMessage readMessage() {
+		try {
+			CommandMessage respone =  (CommandMessage)ois.readObject();
+			return respone;
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	
 	/**
@@ -64,25 +75,13 @@ public class Client {
 	public void sendMessage(CommandMessage cmdMessage){
 		try {
 			oos.writeObject(cmdMessage);
+			oos.flush();
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * Metod som läser ett meddelande och returnerar innehållet.
-	 * @return
-	 * 		CommandMessage
-	 */
-	public CommandMessage readMessage(){
-		try {
-			CommandMessage response = (CommandMessage)ois.readObject();
-			return response;
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}return null;
-		
-	}
+	
 	/**
 	 * Metod som lyssnar efter CommandMessage från servern. Beroende på vilket command som finns 
 	 *  i meddelandet anropas olika metoder.
@@ -91,14 +90,18 @@ public class Client {
 		try {
 			CommandMessage message = (CommandMessage)ois.readObject();
 			if(message.getCommand()==Commands.LOGIN){
+				System.out.println("Login");
 				controller.login();
 			}else if(message.getCommand()==Commands.GETHERO){
+				System.out.println("GetHero");
 				controller.setHero(message);
 			} else if(message.getCommand() == Commands.MATCHMAKING_MATCH_FOUND) {
+				System.out.println("Match Found");
 				controller.matchFound(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
-			System.out.println("User Disconnected");;
+			System.out.println("User Disconnected");
+			e.printStackTrace();
 		}
 	}
 	

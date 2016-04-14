@@ -110,6 +110,7 @@ public class ClientHandler extends Observable implements Runnable {
 	public void writeMessage(CommandMessage message) {
 		try {
 			oos.writeObject(message);
+			oos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

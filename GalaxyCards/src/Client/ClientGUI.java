@@ -59,7 +59,7 @@ public class ClientGUI extends JPanel {
 	 */
 	public void clientConnect(){
 		clientController = newClientController();
-		clientController.connect("localhost", 3550);
+		clientController.connect("192.168.137.1", 3550);
 		
 		
 	}
@@ -69,7 +69,6 @@ public class ClientGUI extends JPanel {
 	 */
 	private ClientController newClientController(){
 		ClientController clientController = new ClientController();
-		
 		return clientController;
 	}
 	

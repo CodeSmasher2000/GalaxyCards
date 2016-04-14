@@ -49,7 +49,10 @@ public class GameController {
 			// hero.getCurrentResources(). Klienten ska säga till motståndaren
 			// vilket kort som spelas och uppdatera
 			// opponentHeroGui.setCurrentResources(int newValue)
-			PlayCard move = new PlayCard(card,lane);
+			Unit toSend = new Unit(card.getName(), card.getRarity(), card.getImage(),
+					card.hasAbility(), card.getAttack(), card.getDefense(), card.getPrice());
+			PlayCard move = new PlayCard(toSend,lane);
+			
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
 			clientController.writeMessage(message);
 			
