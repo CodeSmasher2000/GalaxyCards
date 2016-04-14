@@ -29,10 +29,6 @@ public class TestLogin {
 
 	private ClientController newClientController(){
 		ClientController clientController = new ClientController();
-		Board board = new Board();
-		BoardGuiController boardController = new BoardGuiController(null);
-		Controller gameController = new Controller(board, boardController);
-		clientController.setGameController(gameController);
 		return clientController;
 	}
 	

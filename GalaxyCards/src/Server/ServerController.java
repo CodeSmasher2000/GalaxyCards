@@ -113,7 +113,7 @@ public class ServerController {
 //		Hero hero = new Hero("Testa Patteson");
 		Hero hero = new Hero(null);
 		hero.setDeck(deck);
-		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",hero);
+		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",deck);
 		clientHandler.writeMessage(commandMessage);
 	}
 	

@@ -65,6 +65,8 @@ public class ClientController {
 			CommandMessage response = client.readMessage();
 			if(response.getCommand()==Commands.OK){
 				login = true;
+			}else {
+				System.out.println("Username already in use. Enter a new one");
 			}
 		}
 	}
