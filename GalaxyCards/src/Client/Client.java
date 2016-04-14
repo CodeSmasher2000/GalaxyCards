@@ -1,4 +1,4 @@
-package Client;
+﻿package Client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -101,7 +101,6 @@ public class Client {
 				System.out.println("Match Found");
 				controller.matchFound(message);
 			} else if(message.getCommand() == Commands.MATCH_PLAYCARD); {
-				System.out.println("cARD PLAYED");
 				controller.cardPlayed(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {

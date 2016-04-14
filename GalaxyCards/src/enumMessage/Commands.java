@@ -1,4 +1,4 @@
-
+﻿
 package enumMessage;
 import java.io.Serializable;
 
@@ -12,6 +12,7 @@ import java.io.Serializable;
 	 *
 	 */
 public enum Commands  implements Serializable {
+
 //	LOGIN(0),
 //	OK (1),
 //	NOTOK (2),
@@ -21,7 +22,6 @@ public enum Commands  implements Serializable {
 //	MATCHMAKING_STOP(6),
 //	MATCHMAKING_START(7),
 //	MATCH_PLAYCARD(8);
-	
 	LOGIN,
 	OK,
 	NOTOK,
