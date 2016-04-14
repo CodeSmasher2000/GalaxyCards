@@ -14,7 +14,9 @@ import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 import guiPacket.StartGameWindow;
-import move.PlayCard;
+import move.PlayHeroicSupportCard;
+import move.PlayResourceCard;
+import move.PlayUnitCard;
 
 public class GameController {
 	private Hero hero;
@@ -50,7 +52,7 @@ public class GameController {
 			// hero.getCurrentResources(). Klienten ska säga till motståndaren
 			// vilket kort som spelas och uppdatera
 			// opponentHeroGui.setCurrentResources(int newValue)
-			PlayCard move = new PlayCard(card,lane);			
+			PlayUnitCard move = new PlayUnitCard(card,lane);			
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
 			
 			clientController.writeMessage(message);
@@ -63,7 +65,9 @@ public class GameController {
 	
 	public void playHeroicSupport(HeroicSupport card) throws InsufficientResourcesException{
 		if(useResources(card.getPrice())){
-			//TODO: Skicka till klient: card objektet
+			PlayHeroicSupportCard move = new PlayHeroicSupportCard(card);
+			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD, null, move);
+			clientController.writeMessage(message);
 		}
 	}
 	
@@ -111,6 +115,15 @@ public class GameController {
 	public void startNewGame() {
 		boardController = new BoardGuiController(this);
 		new StartGameWindow(boardController);
+	}
+
+	public void opponentPlaysHeroic(HeroicSupport card) {
+		try {
+			boardController.opponentPlaysHeroicSupport(card);
+		} catch (GuiContainerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -12,7 +12,8 @@ import enumMessage.Commands;
 import enumMessage.CommandMessage;
 import game.GameController;
 import game.Hero;
-import move.PlayCard;
+import move.PlayHeroicSupportCard;
+import move.PlayUnitCard;
 
 
 /**
@@ -110,8 +111,15 @@ public class ClientController {
 	}
 	
 	public void cardPlayed(CommandMessage message) {
-		PlayCard move = (PlayCard)message.getData();
-		gameController.opponentPlaysUnit((Unit) move.getCard(), move.getLane());
+		Object data = message.getData();
+		if (data instanceof PlayUnitCard) {
+			PlayUnitCard move = (PlayUnitCard)message.getData();
+			gameController.opponentPlaysUnit((Unit) move.getCard(), move.getLane());
+		} else if( data instanceof PlayHeroicSupportCard) {
+			PlayHeroicSupportCard move  = (PlayHeroicSupportCard)data;
+			gameController.opponentPlaysHeroic(move.getCard());
+		}
+
 	}
 	
 	/**

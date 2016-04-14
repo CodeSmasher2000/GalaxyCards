@@ -15,7 +15,6 @@ import javax.swing.SwingUtilities;
 
 import Server.Server;
 import board.Board;
-import game.Controller;
 import game.GameController;
 import guiPacket.BoardGuiController;
 

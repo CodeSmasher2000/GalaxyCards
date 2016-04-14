@@ -7,11 +7,13 @@ import java.util.Observable;
 import java.util.Observer;
 
 import cards.HeroicSupport;
+import cards.Unit;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
+import enumMessage.Lanes;
 import game.Hero;
 import guiPacket.Card;
-import move.PlayCard;
+import move.PlayUnitCard;
 
 /**
  * This class contatins nessarsacry data and methods for storing data about
@@ -52,19 +54,32 @@ public class Match implements Observer {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
+	public void sendMessageToOtherPlayer(Player player, CommandMessage message) {
+		if (player.equals(player1)) {
+			user2.writeMessage(message);
+		} else if(player.equals(player2)) {
+			user1.writeMessage(message);
+		}
+	}
+ 
 	@Override
 	public void update(Observable o, Object arg) {
-		CommandMessage message = (CommandMessage)arg;
-		PlayCard move = (PlayCard)message.getData();
-		if(o.equals(user1)) {
-			player1.playCard(move);
-			user2.writeMessage(message);
+		// Kontrollerar vilken spelare som har gjort draget
+		Player player = null;
+		if (o.equals(user1)) {
+			player = player1;
 		} else if(o.equals(user2)) {
-			player2.playCard(move);
-			user1.writeMessage(message);
-		} else {
-			System.out.println("Server: Någotting gick fel vid playcard");
+			player = player2;
+		}
+		
+		// Läser av meddelanded och hämtar data objektet
+		CommandMessage message = (CommandMessage)arg;
+		Object object = message.getData();
+		
+		if (object instanceof PlayUnitCard) {
+			PlayUnitCard move = (PlayUnitCard)object;
+			player.playUnitCard(move);
 		}
 	}
 
@@ -86,14 +101,17 @@ public class Match implements Observer {
 		public Player(ClientHandler clientHandler) {
 			this.clientHandler = clientHandler;
 			this.name = clientHandler.getActiveUser();
-			// TODO Ask the client for what hero it plays with
-			
+			// TODO Ask the client for what hero it plays with	
 		}
 		
-		public void playCard(PlayCard move) {
-			
+		public void playUnitCard(PlayUnitCard move) {
+			if (move.getLane() == Lanes.PLAYER_DEFENSIVE) {
+				defensiveLane.add(move.getCard());
+			} else if (move.getLane() == Lanes.PLAYER_OFFENSIVE) {
+				offensiveLane.add(move.getCard());
+			}
+			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 		}
-		
 	}
 	
 	

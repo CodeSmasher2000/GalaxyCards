@@ -12,7 +12,7 @@ import guiPacket.Card;
  * @author patri
  *
  */
-public class PlayCard implements Serializable {
+public class PlayUnitCard implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Card card;
@@ -34,7 +34,7 @@ public class PlayCard implements Serializable {
 		this.lane = lane;
 	}
 
-	public PlayCard(Card card, Lanes lane) {
+	public PlayUnitCard(Card card, Lanes lane) {
 		this.card = card;
 		this.lane = lane;
 	}
