@@ -2,7 +2,7 @@ package move;
 
 import java.io.Serializable;
 
-import guiPacket.Card;
+import cards.ResourceCard;
 /**
  * This class boxes in information about when a ResourceCard is played. Contains
  * getters and setters for the card.
@@ -13,16 +13,16 @@ import guiPacket.Card;
 public class PlayResourceCard implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Card card;
+	private ResourceCard card;
 	
-	public PlayResourceCard(Card card){
+	public PlayResourceCard(ResourceCard card){
 		this.card=card;
 	}
 	
-	public Card getCard() {
+	public ResourceCard getCard() {
 		return card;
 	}
-	public void setCard(Card card) {
+	public void setCard(ResourceCard card) {
 		this.card = card;
 	}
 

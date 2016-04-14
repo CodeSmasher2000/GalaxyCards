@@ -2,6 +2,7 @@ package game;
 
 import Client.ClientController;
 import cards.HeroicSupport;
+import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
 import enumMessage.CommandMessage;
@@ -124,6 +125,10 @@ public class GameController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void opponentPlaysResourceCard(ResourceCard card){
+		boardController.opponentPlaysResource(card);
 	}
 
 }

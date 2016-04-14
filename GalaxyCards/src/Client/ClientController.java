@@ -13,6 +13,7 @@ import enumMessage.CommandMessage;
 import game.GameController;
 import game.Hero;
 import move.PlayHeroicSupportCard;
+import move.PlayResourceCard;
 import move.PlayUnitCard;
 
 
@@ -118,6 +119,9 @@ public class ClientController {
 		} else if( data instanceof PlayHeroicSupportCard) {
 			PlayHeroicSupportCard move  = (PlayHeroicSupportCard)data;
 			gameController.opponentPlaysHeroic(move.getCard());
+		}else if (data instanceof PlayResourceCard){
+			PlayResourceCard move = (PlayResourceCard)data;
+			gameController.opponentPlaysResourceCard(move.getCard());
 		}
 
 	}
