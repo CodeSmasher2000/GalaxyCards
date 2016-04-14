@@ -13,6 +13,7 @@ import enumMessage.Commands;
 import enumMessage.Lanes;
 import game.Hero;
 import guiPacket.Card;
+import move.PlayHeroicSupportCard;
 import move.PlayUnitCard;
 
 /**
@@ -80,6 +81,9 @@ public class Match implements Observer {
 		if (object instanceof PlayUnitCard) {
 			PlayUnitCard move = (PlayUnitCard)object;
 			player.playUnitCard(move);
+		} else if(object instanceof PlayHeroicSupportCard) {
+			PlayHeroicSupportCard move = (PlayHeroicSupportCard)object;
+			player.playHeroicSupport(move);
 		}
 	}
 
@@ -104,6 +108,12 @@ public class Match implements Observer {
 			// TODO Ask the client for what hero it plays with	
 		}
 		
+		public void playHeroicSupport(PlayHeroicSupportCard move) {
+			HeroicSupportLane.add(move.getCard());
+			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
+			
+		}
+
 		public void playUnitCard(PlayUnitCard move) {
 			if (move.getLane() == Lanes.PLAYER_DEFENSIVE) {
 				defensiveLane.add(move.getCard());
