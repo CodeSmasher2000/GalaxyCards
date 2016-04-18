@@ -3,6 +3,7 @@ package game;
 import board.Board;
 import cards.Deck;
 import exceptionsPacket.EmptyDeckException;
+import exceptionsPacket.FullHandException;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
 
