@@ -16,6 +16,15 @@ import javax.swing.border.Border;
 import enumMessage.Persons;
 import exceptionsPacket.GuiContainerException;
 
+/**
+ * This class is responsible for containing card objects in a layered panel.
+ * Each card which enters this container get a simple mouselistener that reacts
+ * to mouseover and alters it's öayerposition and border. This class can hold 5
+ * card objects and removes cards if there is no more space by FIFO
+ * 
+ * @author 13120dde
+ *
+ */
 public class ScrapyardGUI extends JPanel {
 
 	private BoardGuiController boardController;
@@ -28,12 +37,22 @@ public class ScrapyardGUI extends JPanel {
 	private Persons ENUM;
 	ScarpyardMouseListener mouseListener = new ScarpyardMouseListener();
 
+	/**
+	 * Instantiate this object by passing a BoardGuiController and Persons enum
+	 * as arguments. The Persons enum determinate if this object belong to the
+	 * player or the opponent.
+	 * 
+	 * @param boardController
+	 *            : BoardGuiController
+	 * @param ENUM
+	 *            : Persons
+	 */
 	public ScrapyardGUI(BoardGuiController boardController, Persons ENUM) {
 		this.boardController = boardController;
 		this.ENUM = ENUM;
-		if(ENUM==Persons.PLAYER){
+		if (ENUM == Persons.PLAYER) {
 			background = new ImageIcon("files/pictures/scrapPanelPlayer.jpg");
-		}else{
+		} else {
 			background = new ImageIcon("files/pictures/scrapPanelOpponent.jpg");
 		}
 		boardController.addScrapyardListener(this, ENUM);
@@ -44,6 +63,12 @@ public class ScrapyardGUI extends JPanel {
 
 	}
 
+	/**
+	 * Returns the enum which this object is associated to. The enum can either
+	 * be PLAYER or OPPONENT
+	 * 
+	 * @return PLAYER, OPPONENT : Persons
+	 */
 	public Persons getEnum() {
 		return ENUM;
 	}
@@ -81,9 +106,9 @@ public class ScrapyardGUI extends JPanel {
 	private void removeCard() {
 
 		buffer[0] = null;
-//		for (int i =1; i<buffer.length;i++){
-//			buffer[i-1]=buffer[i];
-//		}
+		// for (int i =1; i<buffer.length;i++){
+		// buffer[i-1]=buffer[i];
+		// }
 		Card[] tempCards = new Card[5];
 		tempCards = buffer;
 		buffer = null;
@@ -109,6 +134,14 @@ public class ScrapyardGUI extends JPanel {
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 	}
 
+	/**
+	 * Private mouselistener class that enables interaction with the cardobjets
+	 * which are placed in this container. The interaction is mouseEntered and
+	 * mouseExited which alters the card's layer and borders.
+	 * 
+	 * @author 13120dde
+	 *
+	 */
 	private class ScarpyardMouseListener implements MouseListener {
 
 		private Card temp;
@@ -139,7 +172,7 @@ public class ScrapyardGUI extends JPanel {
 		public void mouseReleased(MouseEvent arg0) {
 			// Do nothing
 		}
-		
+
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 		}

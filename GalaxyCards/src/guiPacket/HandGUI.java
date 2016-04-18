@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -45,6 +46,12 @@ public class HandGUI extends JPanel {
 
 	private Card[] cards = new Card[8];
 
+	/**
+	 * Instantiate this object with a BoardGuiController passed in as argument.
+	 * 
+	 * @param boardController
+	 *            : BoardGuiController
+	 */
 	public HandGUI(BoardGuiController boardController) {
 		this.boardController = boardController;
 		boardController.addHandPanelListener(this);
@@ -72,6 +79,51 @@ public class HandGUI extends JPanel {
 	}
 
 	/**
+	 * If cardsOnHand is greater than 8 removes a random card from hand and
+	 * moves it to player's scrapyard.
+	 */
+	private void removeRandomCard() {
+		Random rand = new Random();
+		Card cardToRemove = null;
+		int index = 0;
+
+		while (cardToRemove == null) {
+			index = rand.nextInt(8);
+			cardToRemove = cards[index];
+		}
+		// cards[index] = null;
+
+		Card[] tempCards = new Card[8];
+		tempCards = cards;
+		cards = null;
+		cards = new Card[8];
+
+		layeredPane.removeAll();
+		horizontalPosition = 10;
+		cardsOnHand = 0;
+		layeredPane.repaint();
+		layeredPane.validate();
+
+		for (int i = 0; i < tempCards.length; i++) {
+			if (tempCards[i] != null) {
+
+				tempCards[i].removeMouseListener(listener);
+				if (tempCards[i] != cardToRemove) {
+					try {
+						addCard(tempCards[i]);
+					} catch (GuiContainerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					boardController.addToPlayerScrapyard(cardToRemove);
+				}
+			}
+		}
+
+	}
+
+	/**
 	 * Adds a Card object to the hand by passing in a Card (or its subclasses)
 	 * objects as argument. Each card object is added to a new layer higher than
 	 * the previous card's layer, overlapping the object beneath it. Maximum
@@ -81,18 +133,17 @@ public class HandGUI extends JPanel {
 	 * @throws GuiContainerException
 	 */
 	protected void addCard(Card card) throws GuiContainerException {
-		if (cardsOnHand < 8) {
-			cards[cardsOnHand] = card;
-			boardController.addCardToHand(card);
-			card.setBounds(horizontalPosition, 10, card.getPreferredSize().width, card.getPreferredSize().height);
-			card.addMouseListener(listener);
-			layeredPane.add(card, new Integer(cardsOnHand));
-			horizontalPosition += 80;
-			cardsOnHand++;
-		} else {
-			throw new GuiContainerException("You can only have 8 cards on hand");
+		if (cardsOnHand >= 8) {
+			removeRandomCard();
+			InfoPanelGUI.append("You can only have 8 cards on hand. A random card was thrown to scrapyard");
 		}
-
+		cards[cardsOnHand] = card;
+		boardController.addCardToHand(card);
+		card.setBounds(horizontalPosition, 10, card.getPreferredSize().width, card.getPreferredSize().height);
+		card.addMouseListener(listener);
+		layeredPane.add(card, new Integer(cardsOnHand));
+		horizontalPosition += 80;
+		cardsOnHand++;
 	}
 
 	/**
@@ -141,6 +192,17 @@ public class HandGUI extends JPanel {
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 	}
 
+	/**
+	 * This mouselistener class is responsible for providing interaction with
+	 * the cards held on hand. Methods that are implemented are mouseEntered,
+	 * mouseExited and mousePressed. MouseEnetered and Exited alter the layer in
+	 * which the card is displayed aswell as altering the object's border.
+	 * Mouseplayed attempts to play the cardobject by calling the method
+	 * playCard(Card card)
+	 * 
+	 * @author 13120dde
+	 *
+	 */
 	private class HandMouseListener implements MouseListener {
 
 		private Card temp;

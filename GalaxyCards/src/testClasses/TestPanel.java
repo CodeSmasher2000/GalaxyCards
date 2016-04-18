@@ -122,6 +122,15 @@ public class TestPanel extends JPanel {
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource()==newRound){
 				gameController.newRound();
+				try {
+					boardController.drawCard(deck.drawCard());
+				} catch (GuiContainerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (EmptyDeckException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if (event.getSource() == testDraw) {
 				try {

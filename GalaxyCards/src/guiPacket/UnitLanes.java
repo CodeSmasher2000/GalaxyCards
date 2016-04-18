@@ -16,6 +16,15 @@ import cards.Unit;
 import enumMessage.Lanes;
 import exceptionsPacket.GuiContainerException;
 
+/**
+ * This class is responsible for holding unitobjects that are placed on
+ * playfield. Each player has access to two lanes, an offensive lane and a
+ * defensive lane. Whenever a Unit object is placed in a lane it will get a
+ * custom mouselistener depending if the lanes belong to the player or opponent.
+ * 
+ * @author 13120dde
+ *
+ */
 public class UnitLanes extends JPanel {
 
 	private JLayeredPane[] layerArray;
@@ -24,8 +33,8 @@ public class UnitLanes extends JPanel {
 	private Lanes ENUM;
 
 	private int nbrOfElements;
-	private int index =-1;
-	
+	private int index = -1;
+
 	private OpponentTargetMouseListener opponentListener;
 	private PlayerTargetMouseListener playerListener;
 
@@ -69,10 +78,10 @@ public class UnitLanes extends JPanel {
 	 * @return
 	 */
 	public int length() {
-		return nbrOfElements+1;
+		return nbrOfElements + 1;
 	}
-	
-	public Unit[] getUnits(){
+
+	public Unit[] getUnits() {
 		return units;
 	}
 
@@ -100,6 +109,15 @@ public class UnitLanes extends JPanel {
 		}
 	}
 
+	/**
+	 * Attempts to place a Unit object passed in as argument in this container.
+	 * If there is no space to place the object a exception is thrown.
+	 * 
+	 * @param unit
+	 *            : Unit
+	 * @return : boolean
+	 * @throws GuiContainerException
+	 */
 	public boolean addUnit(Unit unit) throws GuiContainerException {
 
 		boolean okToPlace = false;
@@ -115,9 +133,9 @@ public class UnitLanes extends JPanel {
 				units[index] = unit;
 				units[index].setBounds(0, 0, units[index].getPreferredSize().width,
 						units[index].getPreferredSize().height);
-				if (ENUM==Lanes.ENEMY_DEFENSIVE || ENUM==Lanes.ENEMY_OFFENSIVE) {
+				if (ENUM == Lanes.ENEMY_DEFENSIVE || ENUM == Lanes.ENEMY_OFFENSIVE) {
 					units[index].addMouseListener(opponentListener);
-				}else{
+				} else {
 					units[index].addMouseListener(playerListener);
 				}
 				okToPlace = true;
@@ -132,16 +150,25 @@ public class UnitLanes extends JPanel {
 		return okToPlace;
 	}
 
+	/**
+	 * Removes the target Unit object passed in as argument from this container.
+	 * The unit object is then placed in the scrapyard depending if the object
+	 * belongs to the player or opponent.
+	 * 
+	 * @param target
+	 *            : Unit
+	 * @return target : Unit
+	 */
 	public Unit removeUnit(Unit target) {
 		for (int i = 0; i < units.length; i++) {
 			if (units[i] == target) {
 				layerArray[i].remove(target);
-//				units[i].removeMouseListener(listener);
+				// units[i].removeMouseListener(listener);
 				units[i].setBorder(null);
 				units[i].enlarge();
-				if(ENUM==Lanes.PLAYER_DEFENSIVE || ENUM==Lanes.PLAYER_OFFENSIVE){
+				if (ENUM == Lanes.PLAYER_DEFENSIVE || ENUM == Lanes.PLAYER_OFFENSIVE) {
 					boardController.addToPlayerScrapyard(boardController.cloneCard(units[i]));
-				}else{
+				} else {
 					boardController.addToOpponentScrapyard(units[i]);
 				}
 				units[i] = null;

@@ -13,7 +13,12 @@ import javax.swing.JPanel;
 
 import enumMessage.Lanes;
 import enumMessage.Persons;
-
+/**
+ * Class that sets the layout for the board gui and holds the various custom gui elements.
+ * 
+ * @author 13120dde
+ *
+ */
 public class BoardGUI extends JPanel {
 
 	private BoardGuiController boardController;
