@@ -98,9 +98,9 @@ public class ServerController {
 	}
 	
 	/**
-	 * Metod som skickar ett Hero-objekt till en klient.
+	 * Sends a Hero-object to a client.
 	 * @param clientHandler
-	 * 				Den klient som ska ta emot Hero-objektet.
+	 * 				The client who recieves the Hero-object.
 	 */
 	public void sendHero(ClientHandler clientHandler){
 		System.out.println("sendHero är kallad");

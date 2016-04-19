@@ -26,6 +26,7 @@ public class ClientController {
 	private Client client;
 	private String activeUser;
 	private GameController gameController= new GameController(this);
+	private ClientGUI clientGUI;
 	
 	public void setClient(Client client) {
 		this.client = client;
@@ -52,6 +53,7 @@ public class ClientController {
 		client = new Client(ip, port, this);
 
 	}
+	
 	
 	
 	/**
