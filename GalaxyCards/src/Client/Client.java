@@ -1,4 +1,4 @@
-package Client;
+﻿package Client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,7 +16,7 @@ import enumMessage.Commands;
 
 
 /**
- * Klass som skapar en ny klient och tar hand om klientens skriv och läsmetoder.
+ * Klass som skapar en klients strömmar  och tar hand om klientens skriv och läsmetoder.
  * @author Jonte
  *
  */
@@ -30,8 +30,9 @@ public class Client {
 
 	
 
-	public Client(String ip, int port) {
+	public Client(String ip, int port, ClientController clientController) {
 		try {
+			this.controller = clientController;
 			socket = new Socket(ip, port);
 			oos = new ObjectOutputStream(socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
@@ -44,54 +45,74 @@ public class Client {
 		
 	}
 	
+	/**
+	 *Metod som avbryter Listener-tråden och stänger klientens socket.
+	 */
 	public void disconnect(){
 		try{
 			this.listener.interrupt();
 			this.socket.close();
-		}catch(IOException e){}
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 	
+	public CommandMessage readMessage() {
+		try {
+			CommandMessage respone =  (CommandMessage)ois.readObject();
+			return respone;
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	
 	/**
 	 * Skickar CommandMessages 
 	 * @param cmdMessage
-	 * 			Det typ av Commands man skickar.
+	 * 			Meddelande som ska skickas
 	 */			
 	public void sendMessage(CommandMessage cmdMessage){
 		try {
 			oos.writeObject(cmdMessage);
+			oos.flush();
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
 	}
 	
-	public CommandMessage readMessage(){
-		try {
-			CommandMessage response = (CommandMessage)ois.readObject();
-			return response;
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}return null;
-		
-	}
-	
+	/**
+	 * Metod som lyssnar efter CommandMessage från servern. Beroende på vilket command som finns 
+	 *  i meddelandet anropas olika metoder.
+	 */
 	public void listenForMessage(){
 		try {
 			CommandMessage message = (CommandMessage)ois.readObject();
+			message.toString();
 			if(message.getCommand()==Commands.LOGIN){
+				System.out.println("Login");
 				controller.login();
+			}else if(message.getCommand()==Commands.GETHERO){
+				System.out.println("GetHero");
+				controller.setHero(message);
+			} else if(message.getCommand() == Commands.MATCHMAKING_MATCH_FOUND) {
+				System.out.println("Match Found");
+				controller.matchFound(message);
+			} else if(message.getCommand() == Commands.MATCH_PLAYCARD) {
+				controller.cardPlayed(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
-			System.out.println("User Disconnected");;
+			System.out.println("User Disconnected");
+			e.printStackTrace();
 		}
 	}
 	
-	public void setClientController(ClientController controller) {
-		this.controller = controller;
-		controller.setClient(this);
-	}
+//	public void setClientController(ClientController controller) {
+//		this.controller = controller;
+//		controller.setClient(this);
+//	}
 	
 	/**
 	 * Klass som ärver Thread. Låter klienten logga in och lyssnar sedan efter meddelanden från servern.

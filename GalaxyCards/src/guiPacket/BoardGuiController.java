@@ -395,6 +395,7 @@ public class BoardGuiController {
 
 	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException{
 		cardToPlay = (Unit) cloneCard(cardToPlay);
+		System.out.println(Thread.currentThread());
 		gameController.playUnit(cardToPlay, tempLane.getLaneType());
 		cardToPlay.shrink();
 		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
@@ -448,7 +449,6 @@ public class BoardGuiController {
 
 		public LaneSelectThread() {
 			InfoPanelGUI.append("Lane select thread started...waiting for unput");
-
 			laneListener = new LaneSelectListener();
 			playerOffLane.addMouseListener(laneListener);
 			playerDefLane.addMouseListener(laneListener);
