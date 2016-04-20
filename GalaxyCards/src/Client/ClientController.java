@@ -114,6 +114,12 @@ public class ClientController {
 		client.sendMessage(message);
 	}
 	
+	/**
+	 * The method is called when the client reciesves a message with the command
+	 * MATCH_PLAYCARD
+	 * @param message
+	 * 		The message to unpack
+	 */
 	public void cardPlayed(CommandMessage message) {
 		Object data = message.getData();
 		if (data instanceof PlayUnitCard) {

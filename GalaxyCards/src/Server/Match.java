@@ -28,7 +28,6 @@ public class Match implements Observer {
 	private ClientHandler user2;
 	private Player player1;
 	private Player player2;
-	private int id;
 	
 	/**
 	 * The constructor sets up a Match object with two clientHandlers that are
@@ -47,14 +46,6 @@ public class Match implements Observer {
 		System.out.println("Server: Match Started");
 		player1 = new Player(user1);
 		player2 = new Player(user2);
-	}
-		
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 	
 	public void sendMessageToOtherPlayer(Player player, CommandMessage message) {

@@ -9,7 +9,7 @@ import guiPacket.Card;
  * This class boxes in information about when a UnitCard is played. Contains
  * getters and setters for the card and and lane of the card
  * 
- * @author patri
+ * @author Patrik
  *
  */
 public class PlayUnitCard implements Serializable {

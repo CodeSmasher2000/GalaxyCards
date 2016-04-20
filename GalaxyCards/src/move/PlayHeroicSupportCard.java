@@ -3,9 +3,11 @@ package move;
 import java.io.Serializable;
 
 import cards.HeroicSupport;
+
 /**
- * This class contatins nessacary information about a placing a heroic support on the board
- * @author patri
+ * This class stores a HeroicSupport card and getter and setter to get that card
+ * when a instance of the object is sent to the server or other client.
+ * @author patriklarsson
  *
  */
 public class PlayHeroicSupportCard implements Serializable {
