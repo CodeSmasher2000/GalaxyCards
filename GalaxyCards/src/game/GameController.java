@@ -35,12 +35,15 @@ public class GameController {
 		this.hero=hero;
 	}
 
-	public void playResourceCard(Card card) throws ResourcePlayedException {
+	public void playResourceCard(ResourceCard card) throws ResourcePlayedException {
 		boolean addResourceOK = hero.addResource();
 
 		if (addResourceOK == true) {
 			updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
 					hero.getMaxResource());
+			PlayResourceCard move = new PlayResourceCard(card,hero.getCurrentResources(),hero.getMaxResource());
+			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
+			clientController.writeMessage(message);
 			// TODO skicka till klient: ResourceCard som ska placeras på brädans
 			// opponentScrapyardGui samt hero.getCurrentReseources +
 			// heroGetMaxResource som ska uppdatera opponentHeroGui
@@ -130,9 +133,9 @@ public class GameController {
 		}
 	}
 	
-	public void opponentPlaysResourceCard(ResourceCard card){
+	public void opponentPlaysResourceCard(PlayResourceCard move){
 		try{
-			boardController.opponentPlaysResource(card);
+			boardController.opponentPlaysResource(move.getCard(),move.getCurrentResource(),move.getMaxResource());
 		} catch(Exception e){
 			e.printStackTrace();
 		}

@@ -124,7 +124,7 @@ public class ClientController {
 			gameController.opponentPlaysHeroic(move.getCard());
 		}else if (data instanceof PlayResourceCard){
 			PlayResourceCard move = (PlayResourceCard)data;
-			gameController.opponentPlaysResourceCard(move.getCard());
+			gameController.opponentPlaysResourceCard(move);
 			InfoPanelGUI.append("opponent played resource");
 		}
 

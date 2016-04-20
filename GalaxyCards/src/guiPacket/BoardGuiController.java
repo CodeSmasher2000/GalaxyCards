@@ -71,6 +71,13 @@ public class BoardGuiController {
 		playerHeroGui.updateResourceBar(currentResource, maxResource);
 		playerHeroGui.updateShiledBar(energyShield);
 	}
+	
+	public void updateOpponentHeroGui(int life, int energyShield, int currentResource, int maxResource) {
+		opponentHeroGui.updateLifeBar(life);
+		opponentHeroGui.updateResourceBar(currentResource, maxResource);
+		opponentHeroGui.updateShiledBar(energyShield);
+	
+	}
 	/**
 	 * Attempts to place the Card object passed in as argument to the handGui
 	 * container. Throws exception if there is no more space for cards. Maximum
@@ -151,8 +158,8 @@ public class BoardGuiController {
 	 * Updates the opponents Resource-pool when a resource is played.
 	 * @param resourceCard
 	 */
-	public void opponentPlaysResource(ResourceCard resourceCard) throws GuiContainerException{
-		opponentHeroGui.updateResourceBar(getAvaibleResources()+1,gameController.getMaxResources()+1);
+	public void opponentPlaysResource(ResourceCard resourceCard,int newValue, int maxValue) throws GuiContainerException{
+		opponentHeroGui.updateResourceBar(newValue,maxValue);
 		addToOpponentScrapyard(resourceCard);
 		opponentHandGui.playCard();
 	}
@@ -308,7 +315,7 @@ public class BoardGuiController {
 	protected void playCard(Card card) throws GuiContainerException, NoLaneSelectedException, ResourcePlayedException, InsufficientResourcesException {
 		if (card instanceof ResourceCard) {
 			ResourceCard temp = (ResourceCard) card;
-			playResourceCard(cloneCard(temp));
+			playResourceCard((ResourceCard)cloneCard(temp));
 		}
 		// Do not use the cloneCard() method when playing unitCard... need a
 		// referense to the original object while waiting for lane-selection
@@ -389,7 +396,7 @@ public class BoardGuiController {
 	// *** Methods in this section are called within this class
 	// ************************************************************************
 
-	private void playResourceCard(Card card) throws ResourcePlayedException {
+	private void playResourceCard(ResourceCard card) throws ResourcePlayedException {
 		gameController.playResourceCard(card);
 		playerScrapyard.addCard(card);
 	}
