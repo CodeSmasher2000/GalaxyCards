@@ -87,6 +87,10 @@ public class GameController {
 
 			// Debugg
 			InfoPanelGUI.append(card.toString() + " was able to be played, send object to server");
+			PlayUnitCard move = new PlayUnitCard(card,lane);			
+			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
+			
+			clientController.writeMessage(message);
 		}
 	}
 
