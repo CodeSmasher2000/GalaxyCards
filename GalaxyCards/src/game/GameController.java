@@ -58,7 +58,7 @@ public class GameController {
 			
 			clientController.writeMessage(message);
 			
-			
+			// Amen Tjena
 			//Debugg
 			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server");
 		}
