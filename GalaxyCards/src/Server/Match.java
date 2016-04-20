@@ -103,7 +103,7 @@ public class Match implements Observer {
 		private List<Card> defensiveLane = new LinkedList<Card>();
 		private List<Card> offensiveLane = new LinkedList<Card>();
 		private Hero hero;
-		private List<Card> scarpYard = new ArrayList<Card>();
+		private List<Card> scrapYard = new ArrayList<Card>();
 		private ClientHandler clientHandler;
 		
 		public Player(ClientHandler clientHandler) {
@@ -129,6 +129,7 @@ public class Match implements Observer {
 		
 		public void playResourceCard(PlayResourceCard move){
 			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD,this.name,move));
+			scrapYard.add(move.getCard());
 		}
 	}
 	
