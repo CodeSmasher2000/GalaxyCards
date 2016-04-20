@@ -12,6 +12,7 @@ import enumMessage.Commands;
 import enumMessage.CommandMessage;
 import game.GameController;
 import game.Hero;
+import guiPacket.InfoPanelGUI;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayUnitCard;
@@ -124,6 +125,7 @@ public class ClientController {
 		}else if (data instanceof PlayResourceCard){
 			PlayResourceCard move = (PlayResourceCard)data;
 			gameController.opponentPlaysResourceCard(move.getCard());
+			InfoPanelGUI.append("opponent played resource");
 		}
 
 	}

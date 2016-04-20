@@ -1,60 +1,40 @@
 package game;
 
+import Client.ClientController;
 import cards.HeroicSupport;
+import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
+import enumMessage.CommandMessage;
+import enumMessage.Commands;
 import enumMessage.Lanes;
+import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.ResourcePlayedException;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 import guiPacket.StartGameWindow;
+import move.PlayHeroicSupportCard;
+import move.PlayResourceCard;
+import move.PlayUnitCard;
 
-/**
- * This class manages the communication between BoardGuiController, Hero and
- * Client.
- * 
- * @author 13120dde
- *
- */
 public class GameController {
 	private Hero hero;
 	private BoardGuiController boardController;
+	private ClientController clientController;
 
-	public GameController() {
-
-		// TODO ta bort när huvudmeny och hämta hjälte är fixat,
-		hero = new Hero(this);
-		startNewGame();
+	public GameController(ClientController clientController) {
+		this.clientController=clientController;
+		//TODO ta bort när huvudmeny och hämta hjälte är fixat,
+//		hero = new Hero(this);
+//		startNewGame();
+	}
+	
+	public void setChosenHero(Hero hero){
+		this.hero=hero;
 	}
 
-	/**
-	 * When the user chooses a hero to play with from the menu this method is
-	 * should be called upon.
-	 * 
-	 * @param hero
-	 *            : Hero
-	 */
-	public void setChosenHero(Hero hero) {
-		this.hero = hero;
-	}
-
-	// ***CALLBACKS FROM CLIENT'S UpdatePlayerThread*****
-
-	// TODO See GameController in classdiagram v3.2 all +opponent...methods and
-	// updateOpponentHerGui
-
-	// ***SEND TO CLIENT
-
-	/**
-	 * Attempts to play a resource card by checking if a resourceCard has beeen
-	 * played this round. If not plays the card and sends the object to Client.
-	 * 
-	 * @param card
-	 *            : Card
-	 * @throws ResourcePlayedException
-	 */
 	public void playResourceCard(Card card) throws ResourcePlayedException {
 		boolean addResourceOK = hero.addResource();
 
@@ -66,116 +46,45 @@ public class GameController {
 			// heroGetMaxResource som ska uppdatera opponentHeroGui
 		}
 	}
-
-	/**
-	 * Attempts to play the card by checking if the player has enough resources
-	 * to pay for the card's cost. If he has the card is played and the card
-	 * object aswell as the passed in lane is sent to Client.
-	 * 
-	 * @param card
-	 *            : Unit
-	 * @param lane
-	 *            : Lanes
-	 * @throws InsufficientResourcesException
-	 */
+	
 	public void playUnit(Unit card, Lanes lane) throws InsufficientResourcesException {
 		if (useResources(card.getPrice())) {
 			// TODO Skicka till klient: card objektet samt Lanes lane.
 			// hero.getCurrentResources(). Klienten ska säga till motståndaren
 			// vilket kort som spelas och uppdatera
 			// opponentHeroGui.setCurrentResources(int newValue)
-
-			// Debugg
-			InfoPanelGUI.append(card.toString() + " was able to be played, send object to server");
 			PlayUnitCard move = new PlayUnitCard(card,lane);			
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
 			
 			clientController.writeMessage(message);
+			
+			// Amen Tjena
+			//Debugg
+			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server");
+		}
+	}
+	
+	public void playHeroicSupport(HeroicSupport card) throws InsufficientResourcesException{
+		if(useResources(card.getPrice())){
+			PlayHeroicSupportCard move = new PlayHeroicSupportCard(card);
+			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD, null, move);
+			clientController.writeMessage(message);
+		}
+	}
+	
+	public void playTech(Tech card) throws InsufficientResourcesException{
+		if(useResources(card.getPrice())){
+			//TODO Skicka till klient card objektet
 		}
 	}
 
-	/**
-	 * Attempts to play the card passed in as argument by checking if player has
-	 * enough resources to pay for the card. If he has, the card is played and
-	 * sent to the Client.
-	 * 
-	 * @param card
-	 *            : HeroicSupport
-	 * @throws InsufficientResourcesException
-	 */
-	public void playHeroicSupport(HeroicSupport card) throws InsufficientResourcesException {
-		if (useResources(card.getPrice())) {
-			// TODO: Skicka till klient: card objektet
-		}
-	}
-
-	/**
-	 * Attempts to play the card passed in as argument by checking if the player
-	 * has enough resources to pay for the card. If he has, the card is played
-	 * and sent to Client.
-	 * 
-	 * @param card
-	 * @throws InsufficientResourcesException
-	 */
-	public void playTech(Tech card) throws InsufficientResourcesException {
-		if (useResources(card.getPrice())) {
-			// TODO Skicka till klient card objektet
-		}
-	}
-
-	/**
-	 * Returns the hero's avaible resources this round.
-	 * 
-	 * @return currentResources : int
-	 */
 	public int getAvaibleResources() {
 		return hero.getCurrentResources();
 	}
-
-	/**
-	 * Reset the hero's currentResources and enables to play a resource card
-	 * from hand. Untaps tapped cards.
-	 */
-	public void newRound() {
-		hero.resetResources();
-		updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(), hero.getMaxResource());
-		// TODO Untap cards
+	public int getMaxResources(){
+		return hero.getMaxResource();
 	}
 
-	/**
-	 * Updates the player's HeroGui with its various attributes.
-	 * 
-	 * @param life
-	 *            : int
-	 * @param energyShield
-	 *            : int
-	 * @param currentResource
-	 *            : int
-	 * @param maxResource
-	 *            : int
-	 */
-	public void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
-		boardController.updatePlayerHeroGui(life, energyShield, currentResource, maxResource);
-		// TODO Skicka datan till servern så heroGui uppdateras också hos
-		// motståndaren
-	}
-
-	/**
-	 * When two players are matchmade, this method shows the game window.
-	 */
-	public void startNewGame() {
-		boardController = new BoardGuiController(this);
-		new StartGameWindow(boardController);
-	}
-
-	/**
-	 * Attempts to use the hero's currentResources to pay for cards to play.
-	 * 
-	 * @param amount
-	 *            : int
-	 * @return : boolean
-	 * @throws InsufficientResourcesException
-	 */
 	private boolean useResources(int amount) throws InsufficientResourcesException {
 		boolean useResourceOK = hero.useResource(amount);
 
@@ -188,8 +97,46 @@ public class GameController {
 		return useResourceOK;
 	}
 
-	public static void main(String[] args) {
-		new GameController();
-
+	public void newRound() {
+		hero.resetResources();
+		updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(), hero.getMaxResource());
+		// TODO Untap cards
+		// TODO snacka med klient
 	}
+
+	private void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
+		boardController.updatePlayerHeroGui(life, energyShield, currentResource, maxResource);
+	}
+	
+	public void opponentPlaysUnit(Unit unit, Lanes lane) {
+		try {
+			boardController.opponentPlaysUnit(unit, lane);
+		} catch (GuiContainerException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void startNewGame() {
+		boardController = new BoardGuiController(this);
+		new StartGameWindow(boardController);
+	}
+
+	public void opponentPlaysHeroic(HeroicSupport card) {
+		try {
+			boardController.opponentPlaysHeroicSupport(card);
+		} catch (GuiContainerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void opponentPlaysResourceCard(ResourceCard card){
+		try{
+			boardController.opponentPlaysResource(card);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+
 }
