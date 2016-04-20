@@ -146,9 +146,15 @@ public class BoardGuiController {
 	public void opponentPlaysTech(Tech tech) {
 		// TODO
 	}
-
-	public void opponentPlaysResource(ResourceCard resourceCard) {
-		// TODO
+	
+	/**
+	 * Updates the opponents Resource-pool when a resource is played.
+	 * @param resourceCard
+	 */
+	public void opponentPlaysResource(ResourceCard resourceCard) throws GuiContainerException{
+		opponentHeroGui.updateResourceBar(getAvaibleResources()+1,gameController.getMaxResources()+1);
+		addToOpponentScrapyard(resourceCard);
+		opponentHandGui.playCard();
 	}
 
 	public void opponentPlaysAbility(Ability ability) {

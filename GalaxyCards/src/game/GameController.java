@@ -81,6 +81,9 @@ public class GameController {
 	public int getAvaibleResources() {
 		return hero.getCurrentResources();
 	}
+	public int getMaxResources(){
+		return hero.getMaxResource();
+	}
 
 	private boolean useResources(int amount) throws InsufficientResourcesException {
 		boolean useResourceOK = hero.useResource(amount);
@@ -128,7 +131,12 @@ public class GameController {
 	}
 	
 	public void opponentPlaysResourceCard(ResourceCard card){
-		boardController.opponentPlaysResource(card);
+		try{
+			boardController.opponentPlaysResource(card);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 
 }
