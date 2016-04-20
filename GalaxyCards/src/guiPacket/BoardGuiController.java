@@ -146,9 +146,15 @@ public class BoardGuiController {
 	public void opponentPlaysTech(Tech tech) {
 		// TODO
 	}
-
-	public void opponentPlaysResource(ResourceCard resourceCard) {
-		// TODO
+	
+	/**
+	 * Updates the opponents Resource-pool when a resource is played.
+	 * @param resourceCard
+	 */
+	public void opponentPlaysResource(ResourceCard resourceCard) throws GuiContainerException{
+		opponentHeroGui.updateResourceBar(getAvaibleResources()+1,gameController.getMaxResources()+1);
+		addToOpponentScrapyard(resourceCard);
+		opponentHandGui.playCard();
 	}
 
 	public void opponentPlaysAbility(Ability ability) {
@@ -395,6 +401,7 @@ public class BoardGuiController {
 
 	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException{
 		cardToPlay = (Unit) cloneCard(cardToPlay);
+		System.out.println(Thread.currentThread());
 		gameController.playUnit(cardToPlay, tempLane.getLaneType());
 		cardToPlay.shrink();
 		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
@@ -448,7 +455,6 @@ public class BoardGuiController {
 
 		public LaneSelectThread() {
 			InfoPanelGUI.append("Lane select thread started...waiting for unput");
-
 			laneListener = new LaneSelectListener();
 			playerOffLane.addMouseListener(laneListener);
 			playerDefLane.addMouseListener(laneListener);
