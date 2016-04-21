@@ -12,12 +12,13 @@ import javax.swing.JOptionPane;
 
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
+import guiPacket.InfoPanelGUI;
 
 
 
 /**
  * Klass som skapar en klients strömmar  och tar hand om klientens skriv och läsmetoder.
- * @author Jonte
+ * @author Jonte, Patrik Larsson
  *
  */
 public class Client {
@@ -26,9 +27,6 @@ public class Client {
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	private Listener listener;
-
-
-	
 
 	public Client(String ip, int port, ClientController clientController) {
 		try {
@@ -105,6 +103,11 @@ public class Client {
 			}else if(message.getCommand() == Commands.MATCH_UPDATE_HERO){
 				System.out.println("Hero values changed");
 				controller.heroValuesChanged(message);
+			} else if(message.getCommand() == Commands.MATCH_INIT_GAME) {
+				InfoPanelGUI.append("InitGame");
+				controller.initGame();
+			} else if(message.getCommand() == Commands.MATCH_DRAW_CARD) {
+				controller.opponentDrawCard();
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");
