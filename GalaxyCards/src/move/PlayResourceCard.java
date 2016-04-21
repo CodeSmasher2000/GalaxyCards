@@ -14,10 +14,8 @@ public class PlayResourceCard implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private ResourceCard card;
-	private int currentResource;
-	private int maxResource;
 	
-	public PlayResourceCard(ResourceCard card, int currentResource,int maxResource){
+	public PlayResourceCard(ResourceCard card){
 		this.card=card;
 	}
 	
@@ -27,21 +25,4 @@ public class PlayResourceCard implements Serializable {
 	public void setCard(ResourceCard card) {
 		this.card = card;
 	}
-
-	public int getCurrentResource() {
-		return currentResource;
-	}
-
-	public void setCurrentResource(int currentResource) {
-		this.currentResource = currentResource;
-	}
-
-	public int getMaxResource() {
-		return maxResource;
-	}
-
-	public void setMaxResource(int maxResource) {
-		this.maxResource = maxResource;
-	}
-
 }

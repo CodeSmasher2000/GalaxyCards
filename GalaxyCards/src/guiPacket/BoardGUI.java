@@ -64,8 +64,8 @@ public class BoardGUI extends JPanel {
 		opponentHand = new OpponentHandGUI(boardController);
 		playerHeroicPanel = new HeroicPanelGUI(boardController, Persons.PLAYER);
 		opponentHeroicPanel = new HeroicPanelGUI(boardController, Persons.OPPONENT);
-		opponentHero = new HeroGUI(boardController);
-		playerHero = new HeroGUI(boardController);
+		opponentHero = new HeroGUI(boardController, Persons.OPPONENT);
+		playerHero = new HeroGUI(boardController, Persons.PLAYER);
 
 		playerDefensiveLane = new UnitLanes(boardController, Lanes.PLAYER_DEFENSIVE, 6);
 		playerOffensiveLane = new UnitLanes(boardController, Lanes.PLAYER_OFFENSIVE, 6);

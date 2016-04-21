@@ -7,7 +7,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import cards.HeroicSupport;
-import cards.Unit;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import enumMessage.Lanes;
@@ -16,6 +15,7 @@ import guiPacket.Card;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayUnitCard;
+import move.UpdateHeroValues;
 
 /**
  * This class contatins nessarsacry data and methods for storing data about
@@ -79,6 +79,9 @@ public class Match implements Observer {
 		}else if(object instanceof PlayResourceCard){
 			PlayResourceCard move = (PlayResourceCard)object;
 			player.playResourceCard(move);
+		}else if (object instanceof UpdateHeroValues){
+			UpdateHeroValues move = (UpdateHeroValues)object;
+			player.updateHeroValues(move);
 		}
 	}
 
@@ -122,7 +125,13 @@ public class Match implements Observer {
 			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD,this.name,move));
 			scrapYard.add(move.getCard());
 		}
+		
+		public void updateHeroValues(UpdateHeroValues move){
+			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_HERO, this.name, move));
+		}
 	}
+	
+	
 	
 	
 	

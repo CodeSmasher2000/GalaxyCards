@@ -158,8 +158,7 @@ public class BoardGuiController {
 	 * Updates the opponents Resource-pool when a resource is played.
 	 * @param resourceCard
 	 */
-	public void opponentPlaysResource(ResourceCard resourceCard,int newValue, int maxValue) throws GuiContainerException{
-		opponentHeroGui.updateResourceBar(newValue,maxValue);
+	public void opponentPlaysResource(ResourceCard resourceCard) throws GuiContainerException{
 		addToOpponentScrapyard(resourceCard);
 		opponentHandGui.playCard();
 	}
@@ -242,8 +241,12 @@ public class BoardGuiController {
 	 * 
 	 * @param heroGui
 	 */
-	protected void addHeroListener(HeroGUI heroGui) {
-		this.playerHeroGui = heroGui;
+	protected void addHeroListener(HeroGUI heroGui, Persons ENUM) {
+		if(ENUM==Persons.PLAYER){
+			this.playerHeroGui = heroGui;
+		}else{
+			this.opponentHeroGui= heroGui;
+		}
 	}
 
 	/**
@@ -375,6 +378,8 @@ public class BoardGuiController {
 	 */
 	protected void addToPlayerScrapyard(Card card) {
 		playerScrapyard.addCard(cloneCard(card));
+		gameController.updateOpponentScrapYard(card);
+		
 	}
 
 	/**

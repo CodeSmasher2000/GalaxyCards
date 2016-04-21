@@ -18,6 +18,7 @@ import guiPacket.StartGameWindow;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayUnitCard;
+import move.UpdateHeroValues;
 
 public class GameController {
 	private Hero hero;
@@ -41,12 +42,9 @@ public class GameController {
 		if (addResourceOK == true) {
 			updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
 					hero.getMaxResource());
-			PlayResourceCard move = new PlayResourceCard(card,hero.getCurrentResources(),hero.getMaxResource());
+			PlayResourceCard move = new PlayResourceCard(card);
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
 			clientController.writeMessage(message);
-			// TODO skicka till klient: ResourceCard som ska placeras på brädans
-			// opponentScrapyardGui samt hero.getCurrentReseources +
-			// heroGetMaxResource som ska uppdatera opponentHeroGui
 		}
 	}
 	
@@ -109,6 +107,16 @@ public class GameController {
 
 	private void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
 		boardController.updatePlayerHeroGui(life, energyShield, currentResource, maxResource);
+		UpdateHeroValues move = new UpdateHeroValues(life, energyShield, currentResource, maxResource);
+		CommandMessage message = new CommandMessage(Commands.MATCH_UPDATE_HERO ,null,move);
+		clientController.writeMessage(message);
+		
+	}
+	
+	public void updateOpponentHero(CommandMessage message){
+		UpdateHeroValues opHero = (UpdateHeroValues) message.getData();
+		boardController.updateOpponentHeroGui(opHero.getLife(), opHero.getEnergyShield(), opHero.getCurrentResource(), opHero.getMaxResource());
+		
 	}
 	
 	public void opponentPlaysUnit(Unit unit, Lanes lane) {
@@ -135,11 +143,27 @@ public class GameController {
 	
 	public void opponentPlaysResourceCard(PlayResourceCard move){
 		try{
-			boardController.opponentPlaysResource(move.getCard(),move.getCurrentResource(),move.getMaxResource());
+			boardController.opponentPlaysResource(move.getCard());
 		} catch(Exception e){
 			e.printStackTrace();
 		}
 		
+	}
+
+	public void updateOpponentScrapYard(Card card) {
+		if (card instanceof ResourceCard){
+			PlayResourceCard move = new PlayResourceCard((ResourceCard)card);
+			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
+			clientController.writeMessage(message);
+		} 
+		if(card instanceof HeroicSupport){
+			
+		}
+		if(card instanceof Unit){
+			
+		}if (card instanceof Tech){
+			
+		}
 	}
 
 }

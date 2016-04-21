@@ -1,17 +1,17 @@
 package guiPacket;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+
+import enumMessage.Persons;
 
 /**
  * Class responsible for visual representation of the hero. The hero has life,
@@ -32,13 +32,16 @@ public class HeroGUI extends JPanel {
 	private JProgressBar lifeBar, shieldBar, resourceBar;
 	private ImageIcon heroImage;
 	private BoardGuiController boardController;
+	private Persons ENUM;
 
 	private Border b1;
 	private Border b2;
 
-	public HeroGUI(BoardGuiController boardController) {
+	public HeroGUI(BoardGuiController boardController, Persons ENUM) {
 		this.boardController=boardController;
-		this.boardController.addHeroListener(this);
+		this.ENUM=ENUM;
+		
+		this.boardController.addHeroListener(this, ENUM);
 		
 		String heroName = boardController.getHeroName();
 		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);

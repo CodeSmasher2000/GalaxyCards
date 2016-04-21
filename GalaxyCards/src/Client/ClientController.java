@@ -148,6 +148,10 @@ public class ClientController {
 		//		controller.initGame(friendly, enemy);
 		//TODO Unpack data in message and send to controller
 	}
+	public void heroValuesChanged(CommandMessage message) {
+		gameController.updateOpponentHero(message);
+		System.out.println("Clientcontroller hero values...");
+	}
 
 
 	

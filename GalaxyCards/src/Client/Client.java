@@ -102,6 +102,9 @@ public class Client {
 				controller.matchFound(message);
 			} else if(message.getCommand() == Commands.MATCH_PLAYCARD) {
 				controller.cardPlayed(message);
+			}else if(message.getCommand() == Commands.MATCH_UPDATE_HERO){
+				System.out.println("Hero values changed");
+				controller.heroValuesChanged(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");
