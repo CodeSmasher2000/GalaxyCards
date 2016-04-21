@@ -96,6 +96,10 @@ public class ClientHandler extends Observable implements Runnable {
 					setChanged();
 					notifyObservers(message);
 					break;
+				case MATCH_DRAW_CARD:
+					setChanged();
+					notifyObservers(message);
+					break;
 				default:
 					break;
 				}

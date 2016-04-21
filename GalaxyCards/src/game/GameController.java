@@ -123,6 +123,18 @@ public class GameController {
 		boardController = new BoardGuiController(this);
 		new StartGameWindow(boardController);
 	}
+	
+	public void drawCard() {
+		Card card = hero.DrawCard();
+		try {
+			boardController.drawCard(card);
+			clientController.writeMessage(new CommandMessage(Commands.MATCH_DRAW_CARD,
+					null));
+		} catch (GuiContainerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void opponentPlaysHeroic(HeroicSupport card) {
 		try {
@@ -140,6 +152,24 @@ public class GameController {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void initGame() {
+		InfoPanelGUI.append("InitGame()");
+		// Draw 7 Cards
+		for (int i = 0; i < 7; i++) {
+			drawCard();
+			// Skicka till Servern att den har dragit ett kort
+		}
+	}
+
+	public void opponentDrawCard() {
+		try {
+			boardController.opponentDrawsCard();
+		} catch (GuiContainerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

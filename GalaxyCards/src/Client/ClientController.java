@@ -55,6 +55,9 @@ public class ClientController {
 
 	}
 	
+	public void initGame() {
+		gameController.initGame();
+	}
 	
 	
 	/**
@@ -116,7 +119,7 @@ public class ClientController {
 	
 	/**
 	 * The method is called when the client reciesves a message with the command
-	 * MATCH_PLAYCARD
+	 * MATCH_PLAYCARD and delegates
 	 * @param message
 	 * 		The message to unpack
 	 */
@@ -147,6 +150,9 @@ public class ClientController {
 
 		//		controller.initGame(friendly, enemy);
 		//TODO Unpack data in message and send to controller
+	}
+	public void opponentDrawCard() {
+		gameController.opponentDrawCard();
 	}
 
 

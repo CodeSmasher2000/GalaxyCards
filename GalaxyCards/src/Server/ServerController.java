@@ -142,12 +142,19 @@ public class ServerController {
 			// is found they are not longer looking for a match.
 			ClientHandler ch1 = userMap.get(usersLookingForGame.remove(0));
 			ClientHandler ch2 = userMap.get(usersLookingForGame.remove(0));
-			Match match = new Match(ch1, ch2);
+			
 			// TODO Kanske ska skicka med match objectet
 			ch1.writeMessage(new CommandMessage(Commands.MATCHMAKING_MATCH_FOUND,
 					"Server"));
 			ch2.writeMessage(new CommandMessage(Commands.MATCHMAKING_MATCH_FOUND,
 					"Server"));
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Match match = new Match(ch1, ch2);
 		}
 		
 		
