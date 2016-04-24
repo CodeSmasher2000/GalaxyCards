@@ -2,6 +2,7 @@ package move;
 
 import java.io.Serializable;
 
+import cards.Unit;
 import enumMessage.Lanes;
 import guiPacket.Card;
 
@@ -13,17 +14,31 @@ import guiPacket.Card;
  *
  */
 public class PlayUnitCard implements Serializable {
-
+	// Variables for storing data about the card
+	private String imageName;
+	private String name;
+	private int defense;
+	private int attack;
+	private int price;
+	private String abilityText;
+	private String rarity;
+	
+	// Variables for storing the data about the play
 	private static final long serialVersionUID = 1L;
-	private Card card;
 	private Lanes lane;
-
-	public Card getCard() {
-		return card;
-	}
-
-	public void setCard(Card card) {
-		this.card = card;
+	
+	/**
+	 * The method returns a new card recreated from the data.
+	 * @return
+	 * 		A new card object
+	 */
+	public Unit getCard() {
+		boolean hasAbility = false;
+		// Kontrollerar ifall kortet har en ability.
+		if (abilityText != null) {
+			hasAbility = true;
+		}
+		return new Unit(name, rarity, imageName, hasAbility, attack, defense, price);
 	}
 
 	public Lanes getLane() {
@@ -34,9 +49,13 @@ public class PlayUnitCard implements Serializable {
 		this.lane = lane;
 	}
 
-	public PlayUnitCard(Card card, Lanes lane) {
-		this.card = card;
-		this.lane = lane;
+	public PlayUnitCard(Unit card, Lanes lane) {
+		this.imageName = card.getImage();
+		this.defense = card.getDefense();
+		this.attack = card.getAttack();
+		this.price = card.getPrice();
+		this.abilityText = card.getAbilityText();
+		this.rarity = card.getRarity();
 	}
 
 }
