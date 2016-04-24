@@ -35,7 +35,7 @@ public class PlayUnitCard implements Serializable {
 	public Unit getCard() {
 		boolean hasAbility = false;
 		// Kontrollerar ifall kortet har en ability.
-		if (abilityText != null) {
+		if (abilityText != "") {
 			hasAbility = true;
 		}
 		return new Unit(name, rarity, imageName, hasAbility, attack, defense, price);
