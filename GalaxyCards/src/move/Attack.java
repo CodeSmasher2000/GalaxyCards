@@ -60,8 +60,18 @@ public class Attack {
 			}
 		}
 	}
+<<<<<<< HEAD
 	public void setDefender(Unit defender, int index) {
 		defensive[index] = defender;
+=======
+	public void Defend(Unit defender, Unit target) {
+		for(int i = 0; i<offensive.length; i++){
+			if(offensive[i]==target){
+				defensive[i]=(Unit)defender;
+			}
+		}
+	
+>>>>>>> origin/master
 	}
 	
 	

@@ -25,11 +25,11 @@ public class OpponentTargetMouseListener implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		if (event.getSource() instanceof HeroicSupport) {
-			boardController.setDefender(card);
-		} else if(event.getSource() instanceof HeroGUI) {
-			boardController.setDefender(heroGui);
-		}
+//		if (event.getSource() instanceof HeroicSupport) {
+//			boardController.setDefender(card);
+//		} else if(event.getSource() instanceof HeroGUI) {
+//			boardController.setDefender(heroGui);
+//		}
 	}
 
 	@Override
@@ -44,8 +44,8 @@ public class OpponentTargetMouseListener implements MouseListener {
 		}
 		if (event.getSource() instanceof HeroGUI) {
 			heroGui = (HeroGUI)event.getSource();
-			heroDefaultBorder = heroGui.getBorder();
-			heroGui.setBorder(highlightB);
+//			heroDefaultBorder = heroGui.getBorder();
+//			heroGui.setBorder(highlightB);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class OpponentTargetMouseListener implements MouseListener {
 			card.setBorder(cardDefaultBorder);
 		}
 		if(event.getSource() instanceof HeroGUI){
-			heroGui.setBorder(heroDefaultBorder);
+//			heroGui.setBorder(heroDefaultBorder);
 		}
 	}
 
@@ -63,10 +63,15 @@ public class OpponentTargetMouseListener implements MouseListener {
 	public void mousePressed(MouseEvent event) {
 		if (event.getSource() instanceof HeroGUI) {
 			 InfoPanelGUI.append(heroGui.toString());
+			 boardController.setDefender(heroGui);
 		}
 		if (event.getSource() instanceof Card) {
 			InfoPanelGUI.append("Target: " + card.toString(),"RED");
 			InfoPanelGUI.append(Integer.toString(System.identityHashCode(card)),"RED");
+		}
+		
+		if (event.getSource() instanceof HeroicSupport) {
+			boardController.setDefender(card);
 		}
 	}
 

@@ -26,6 +26,11 @@ import move.PlayResourceCard;
 import move.PlayUnitCard;
 import move.UpdateHeroValues;
 
+/**This class manages the communication between the boardGui, hero and client classes.
+ * 
+ * @author 13120dde
+ *
+ */
 public class GameController {
 	private Hero hero;
 	private BoardGuiController boardController;
@@ -50,9 +55,9 @@ public class GameController {
 		if (addResourceOK == true) {
 			updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
 					hero.getMaxResource());
-//			PlayResourceCard move = new PlayResourceCard(card);
-//			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
-//			clientController.writeMessage(message);
+			PlayResourceCard move = new PlayResourceCard(card);
+			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
+			clientController.writeMessage(message);
 		}
 	}
 	
@@ -109,8 +114,12 @@ public class GameController {
 	public void newRound() {
 		hero.resetResources();
 		updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(), hero.getMaxResource());
-		// TODO Untap cards
+		untapCards();
 		// TODO snacka med klient
+	}
+
+	private void untapCards() {
+		boardController.untapCards();
 	}
 
 	private void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
@@ -226,6 +235,12 @@ public class GameController {
 		InfoPanelGUI.append("In " + phase, "BLUE");
 	}
 
+	/**
+	 * Checks the defensive values of each unit and heroic support object placed
+	 * on board. If their's values are less than or equal to 0 the object will
+	 * be removed.
+	 * 
+	 */
 	public void checkStatus(){
 		boardController.checkStatus();
 	}

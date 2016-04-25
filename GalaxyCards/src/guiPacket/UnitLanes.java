@@ -192,4 +192,16 @@ public class UnitLanes extends JPanel {
 			}
 		}
 	}
+
+	/**
+	 * Untaps all cards held in this container.
+	 * 
+	 */
+	public void untap() {
+		for (int i = 0; i < units.length; i++) {
+			if (units[i] != null) {
+				units[i].untap();
+			}
+		}
+	}
 }
