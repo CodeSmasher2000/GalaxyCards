@@ -42,6 +42,9 @@ public class BoardGuiController {
 	private LaneSelectListener laneListener;
 	private boolean laneSelected = false;
 	private LaneSelectThread laneSelectThread;
+	
+	private AttackThreadListener attackSelectThread;
+	private boolean targetSelected = false;
 
 	private UnitLanes tempLane;
 	private Unit tempUnit;
@@ -452,7 +455,21 @@ public class BoardGuiController {
 		if (!laneSelected) {
 			throw new NoLaneSelectedException("Thread for selecting lane started...waiting for input");
 		}
+	}
+	
+	public void startAttackThreadListner() {
+		if(attackSelectThread == null) {
+			attackSelectThread = new AttackThreadListener();
+			attackSelectThread = new AttackThreadListener();
+		}
+	}
 
+	public boolean isTargetSelected() {
+		return targetSelected;
+	}
+
+	public void setTargetSelected(boolean targetSelected) {
+		this.targetSelected = targetSelected;
 	}
 
 	/**
@@ -504,10 +521,9 @@ public class BoardGuiController {
 			laneSelected = false;
 			laneSelectThread = null;
 			InfoPanelGUI.append("Lane select thread stopped");
-
 		}
 	}
-
+	
 	private class LaneSelectListener implements MouseListener {
 
 		@Override
@@ -562,4 +578,51 @@ public class BoardGuiController {
 		}
 
 	}
+
+	private class AttackThreadListener extends Thread {
+		private Unit attacker;
+		private Object defender;
+		
+		public AttackThreadListener() {
+			InfoPanelGUI.append("Attack Thread Started");
+			this.start();
+		}
+		
+		public void setAttacker(Card card) {
+			this.attacker = (Unit) card;
+		}
+		
+		public void setDefender(Object defender) {
+			this.defender = defender;
+			setTargetSelected(true);
+			infoPanel.append("Target is set");
+		}
+
+		@Override
+		public void run() {
+			while(!isTargetSelected() || Thread.interrupted()) {
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			infoPanel.append("Target Selected. Attack Thread stopped");
+			// TODO Add the attacker and defender to the attack object
+		}
+		
+		
+	}
+
+	public void setAttacker(Card card) {
+		attackSelectThread.setAttacker(card);
+		
+	}
+
+	public void setDefender(Object defender) {
+		attackSelectThread.setDefender(defender);
+		
+	}
+	
 }

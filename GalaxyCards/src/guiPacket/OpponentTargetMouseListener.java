@@ -23,9 +23,12 @@ public class OpponentTargetMouseListener implements MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void mouseClicked(MouseEvent event) {
+		if (event.getSource() instanceof HeroicSupport) {
+			boardController.setDefender(this);
+		} else if(event.getSource() instanceof HeroGUI) {
+			
+		}
 	}
 
 	@Override
