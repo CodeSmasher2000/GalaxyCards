@@ -196,5 +196,9 @@ public class GameController {
 			
 		}
 	}
+	
+	public void checkStatus(){
+		boardController.checkStatus();
+	}
 
 }
