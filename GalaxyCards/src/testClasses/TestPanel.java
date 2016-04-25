@@ -35,8 +35,8 @@ public class TestPanel extends JPanel {
 	private ButtonListener list = new ButtonListener();
 	private Deck deck, enemyDeck;
 	private ObjectInputStream ois;
-//	private JButton testDraw, testOpponentDrawCard, testOpponentPlayCard, newRound, btnCommit;
-	private JButton testDraw, testOpponentDrawCard, testOpponentPlayCard, newRound;
+	private JButton testDraw, testOpponentDrawCard, testOpponentPlayCard, newRound, btnCommit;
+//	private JButton testDraw, testOpponentDrawCard, testOpponentPlayCard, newRound;
 	private JPanel testPanel;
 	private JLabel label = new JLabel("Debugging tool");
 
@@ -62,13 +62,13 @@ public class TestPanel extends JPanel {
 		testOpponentDrawCard = new JButton("Dra kort motståndare");
 		testOpponentPlayCard = new JButton("Motståndare spela kort");
 		newRound = new JButton("Ny runda");
-//		btnCommit = new JButton("Commit moves");
+		btnCommit = new JButton("Commit moves");
 
 		testDraw.addActionListener(list);
 		testOpponentDrawCard.addActionListener(list);
 		testOpponentPlayCard.addActionListener(list);
 		newRound.addActionListener(list);
-//		btnCommit.addActionListener(list);
+		btnCommit.addActionListener(list);
 
 		testPanel = new JPanel();
 		testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
@@ -77,7 +77,7 @@ public class TestPanel extends JPanel {
 		testPanel.add(newRound);
 		testPanel.add(testOpponentDrawCard);
 		testPanel.add(testOpponentPlayCard);
-//		testPanel.add(btnCommit);
+		testPanel.add(btnCommit);
 		testPanel.setOpaque(false);
 		testDraw.setOpaque(false);
 		testOpponentDrawCard.setOpaque(false);
@@ -187,9 +187,9 @@ public class TestPanel extends JPanel {
 					InfoPanelGUI.append(e.getMessage(),"RED");
 				}
 			}
-//			if(event.getSource() == btnCommit) {
-//				gameController.commitMove();
-//			}
+			if(event.getSource() == btnCommit) {
+				gameController.commitMove();
+			}
 		}
 	}
 }

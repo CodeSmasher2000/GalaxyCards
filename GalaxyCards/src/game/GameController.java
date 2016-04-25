@@ -247,7 +247,7 @@ public class GameController {
 
 	public void commitMove() {
 		clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
-				null,attack));
+				null,this.attack));
 		InfoPanelGUI.append("Move Commited", "BLUE");
 	}
 

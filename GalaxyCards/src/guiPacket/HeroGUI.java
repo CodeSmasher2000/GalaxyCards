@@ -31,7 +31,7 @@ public class HeroGUI extends JPanel {
 	private JPanel imagePanel;
 	private JProgressBar lifeBar, shieldBar, resourceBar;
 	private ImageIcon heroImage;
-	private BoardGuiController boardController;
+	private transient BoardGuiController boardController;
 	private Persons ENUM;
 
 	private Border b1;

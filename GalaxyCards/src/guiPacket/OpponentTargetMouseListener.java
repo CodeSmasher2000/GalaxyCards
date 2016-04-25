@@ -63,7 +63,7 @@ public class OpponentTargetMouseListener implements MouseListener {
 	public void mousePressed(MouseEvent event) {
 		if (event.getSource() instanceof HeroGUI) {
 			 InfoPanelGUI.append(heroGui.toString());
-			 boardController.setDefender(heroGui);
+			 boardController.setDefender(heroGui); // TODO: This needs to be changed to the hero gui.
 		}
 		if (event.getSource() instanceof Card) {
 			InfoPanelGUI.append("Target: " + card.toString(),"RED");
