@@ -2,6 +2,8 @@ package game;
 
 import java.awt.Color;
 
+import javax.sound.midi.MidiDevice.Info;
+
 import Client.ClientController;
 import cards.HeroicSupport;
 import cards.ResourceCard;
@@ -18,6 +20,7 @@ import guiPacket.BoardGuiController;
 import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 import guiPacket.StartGameWindow;
+import move.Attack;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayUnitCard;
@@ -28,6 +31,7 @@ public class GameController {
 	private BoardGuiController boardController;
 	private ClientController clientController;
 	private Phase phase;
+	private Attack attack = new Attack();
 
 	public GameController(ClientController clientController) {
 		this.clientController=clientController;
@@ -224,6 +228,16 @@ public class GameController {
 
 	public void checkStatus(){
 		boardController.checkStatus();
+	}
+
+	public void commitMove() {
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
+				null,attack));
+		InfoPanelGUI.append("Move Commited", "BLUE");
+	}
+
+	public Attack getAttack() {
+		return this.attack;
 	}
 
 }

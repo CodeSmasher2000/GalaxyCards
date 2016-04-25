@@ -15,6 +15,7 @@ import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
 import exceptionsPacket.ResourcePlayedException;
 import game.GameController;
+import move.Attack;
 
 /**
  * This class is responsible for message-passing between the gui elements and
@@ -467,9 +468,9 @@ public class BoardGuiController {
 	}
 	
 	public void startAttackThreadListner() {
-		if(attackSelectThread == null) {
+		if (attackSelectThread == null) {
 			attackSelectThread = new AttackThreadListener();
-			attackSelectThread = new AttackThreadListener();
+			attackSelectThread.start();
 		}
 	}
 
@@ -598,8 +599,7 @@ public class BoardGuiController {
 		private Object defender;
 		
 		public AttackThreadListener() {
-			InfoPanelGUI.append("Attack Thread Started", null);
-			this.start();
+			InfoPanelGUI.append("Attack Thread Started");
 		}
 		
 		public void setAttacker(Card card) {
@@ -609,7 +609,7 @@ public class BoardGuiController {
 		public void setDefender(Object defender) {
 			this.defender = defender;
 			setTargetSelected(true);
-			infoPanel.append("Target is set", null);
+			infoPanel.append("Target is set");
 		}
 
 		@Override
@@ -623,9 +623,10 @@ public class BoardGuiController {
 				}
 			}
 			// TODO Add the attacker and defender to the attack object
-			// TODO Send the attack object to the server
+			Attack attack = gameController.getAttack();
+			attack.setOpponents(attacker, defender);
 			infoPanel.append("Target Selected. Attack Thread stopped", null);
-			
+			attackSelectThread = null;
 		}
 		
 	}
@@ -636,7 +637,6 @@ public class BoardGuiController {
 
 	public void setDefender(Object defender) {
 		attackSelectThread.setDefender(defender);
-		
 	}
 	
 }

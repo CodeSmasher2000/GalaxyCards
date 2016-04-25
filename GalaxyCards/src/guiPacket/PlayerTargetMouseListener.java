@@ -22,11 +22,6 @@ public class PlayerTargetMouseListener implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		card = (Card) event.getSource();
-		if(card instanceof Unit) {
-			boardController.startAttackThreadListner();
-			boardController.setAttacker(card);
-		}
 	}
 
 	@Override
@@ -62,11 +57,11 @@ public class PlayerTargetMouseListener implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent event) {
 		if (event.getSource() instanceof Card) {
-
 			card = (Card) event.getSource();
 			if (card instanceof Unit) {
-				// Initiate Attack
-				InfoPanelGUI.append("//TODO: attack target: opponent Hero/HeroicSupport cards");
+				boardController.startAttackThreadListner();
+				boardController.setAttacker(card);
+//				InfoPanelGUI.append("//TODO: attack target: opponent Hero/HeroicSupport cards");
 
 			}
 			if (card instanceof HeroicSupport) {
