@@ -4,6 +4,12 @@ import cards.HeroicSupport;
 import cards.Unit;
 import guiPacket.HeroGUI;
 
+/**
+ * 
+ * @author emilsundberg, jonte
+ *
+ */
+
 public class Attack {
 	
 	private Unit[] offensive = new Unit[6];
