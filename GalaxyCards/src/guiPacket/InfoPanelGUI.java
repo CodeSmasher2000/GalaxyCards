@@ -39,9 +39,8 @@ public class InfoPanelGUI extends JPanel {
 	private JPanel twPanel2 = new JPanel();
 
 	private static JEditorPane editorPane = new JEditorPane();
-	private static String pre = "<html><body style='font-size: 12px;'><ul>";
+	private static String pre = "<html><head><style></style></head><ul><body>";
 	private static StringBuilder stringBuilder = new StringBuilder();
-	private static String font = "BankGothic Md BT";
 
 	private Border b1 = BorderFactory.createEmptyBorder(0, 10, 0, 10);
 
@@ -166,7 +165,7 @@ public class InfoPanelGUI extends JPanel {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				stringBuilder = new StringBuilder(pre);
-				append(txt);
+				append(txt,null);
 			}
 		});
 	}
@@ -175,15 +174,32 @@ public class InfoPanelGUI extends JPanel {
 	 * Appends text to the editorpane, previous rows are not removed.
 	 * 
 	 * @param txt
+	 * 
 	 */
-	public static synchronized void append(final String txt) {
+	public static synchronized void append(final String txt, String color) {
 		// SwingUtilities.invokeLater(new Runnable() {
 		// public void run() {
-
-		stringBuilder.append("<body style='font-family: ");
-		stringBuilder.append(font);
-		stringBuilder.append("'>");
-		stringBuilder.append(txt + "<br>");
+		if(color == "RED") {
+			stringBuilder.append("<p1><FONT COLOR=");
+			stringBuilder.append("red");
+			stringBuilder.append(" SIZE=3 FACE=arial,helvetica,sans-serif>");
+			stringBuilder.append(txt + "</FONT></p1><br>");
+				
+		}
+		else if(color == "GREEN") {
+			stringBuilder.append("<p2><FONT COLOR=green SIZE=3 FACE=arial,helvetica,sans-serif>");
+			stringBuilder.append(txt + "</FONT></p2><br>");
+			
+		}
+		else if(color == "BLUE") {
+			stringBuilder.append("<p3><FONT COLOR=blue SIZE=3 FACE=arial,helvetica,sans-serif>");
+			stringBuilder.append(txt + "</FONT></p3><br>");
+		}
+		else if(color == null) {
+		stringBuilder.append("<p4><FONT SIZE=3 FACE=arial,helvetica,sans-serif>");
+		stringBuilder.append(txt + "</FONT></p4><br>");
+		
+		}
 		editorPane.setText(stringBuilder.toString());
 		// }
 		// });

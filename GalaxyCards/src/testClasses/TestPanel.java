@@ -89,17 +89,17 @@ public class TestPanel extends JPanel {
 			temp = deck.drawCard();
 			enemyDeck = deck;
 			System.out.println(enemyDeck.toString());
-			InfoPanelGUI.append(deck.toString() + "\n");
+			InfoPanelGUI.append(deck.toString() + "\n",null);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			InfoPanelGUI.append(e.getMessage());
+			InfoPanelGUI.append(e.getMessage(),"RED");
 		} catch (ClassNotFoundException e) {
-			InfoPanelGUI.append(e.getMessage());
+			InfoPanelGUI.append(e.getMessage(),"RED");
 			e.printStackTrace();
 		} catch (EmptyDeckException e) {
-			InfoPanelGUI.append(e.getMessage());
+			InfoPanelGUI.append(e.getMessage(),"RED");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -139,10 +139,10 @@ public class TestPanel extends JPanel {
 					temp = deck.drawCard();
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
+					InfoPanelGUI.append(e.getMessage(),"RED");
 				} catch (EmptyDeckException e) {
 					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
+					InfoPanelGUI.append(e.getMessage(),"RED");
 				}
 			}
 			if (event.getSource() == testOpponentDrawCard) {
@@ -151,7 +151,7 @@ public class TestPanel extends JPanel {
 				} catch (GuiContainerException e) {
 					// TODO Auto-generated catch block
 					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
+					InfoPanelGUI.append(e.getMessage(),"RED");
 				}
 			}
 			if (event.getSource() == testOpponentPlayCard) {
@@ -177,11 +177,11 @@ public class TestPanel extends JPanel {
 
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
+					InfoPanelGUI.append(e.getMessage(),"RED");
 				} catch (EmptyDeckException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					InfoPanelGUI.append(e.getMessage());
+					InfoPanelGUI.append(e.getMessage(),"RED");
 				}
 			}
 		}

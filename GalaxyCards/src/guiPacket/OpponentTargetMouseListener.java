@@ -55,8 +55,8 @@ public class OpponentTargetMouseListener implements MouseListener {
 			// InfoPanelGUI.append("Target: " +hero.toString());
 		}
 		if (event.getSource() instanceof Card) {
-			InfoPanelGUI.append("Target: " + card.toString());
-			InfoPanelGUI.append(Integer.toString(System.identityHashCode(card)));
+			InfoPanelGUI.append("Target: " + card.toString(),"RED");
+			InfoPanelGUI.append(Integer.toString(System.identityHashCode(card)),"RED");
 		}
 	}
 

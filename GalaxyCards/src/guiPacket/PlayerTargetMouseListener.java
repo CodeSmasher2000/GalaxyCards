@@ -47,11 +47,11 @@ public class PlayerTargetMouseListener implements MouseListener {
 		card = (Card) event.getSource();
 		if(card instanceof Unit){
 			//Initiate Attack
-			InfoPanelGUI.append("//TODO: attack target: opponent Hero/HeroicSupport cards");
+			InfoPanelGUI.append("//TODO: attack target: opponent Hero/HeroicSupport cards","GREEN");
 			
 		}
 		if(card instanceof HeroicSupport){
-			InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ");
+			InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ","YELLOW");
 		}
 	}
 
