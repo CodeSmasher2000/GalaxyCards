@@ -520,7 +520,6 @@ public class BoardGuiController {
 			laneListener = null;
 			laneSelected = false;
 			laneSelectThread = null;
-			InfoPanelGUI.append("Lane select thread stopped");
 			InfoPanelGUI.append("Lane select thread stopped",null);
 
 		}
@@ -586,7 +585,7 @@ public class BoardGuiController {
 		private Object defender;
 		
 		public AttackThreadListener() {
-			InfoPanelGUI.append("Attack Thread Started");
+			InfoPanelGUI.append("Attack Thread Started", null);
 			this.start();
 		}
 		
@@ -597,7 +596,7 @@ public class BoardGuiController {
 		public void setDefender(Object defender) {
 			this.defender = defender;
 			setTargetSelected(true);
-			infoPanel.append("Target is set");
+			infoPanel.append("Target is set", null);
 		}
 
 		@Override
@@ -610,10 +609,11 @@ public class BoardGuiController {
 					e.printStackTrace();
 				}
 			}
-			infoPanel.append("Target Selected. Attack Thread stopped");
 			// TODO Add the attacker and defender to the attack object
+			// TODO Send the attack object to the server
+			infoPanel.append("Target Selected. Attack Thread stopped", null);
+			
 		}
-		
 		
 	}
 

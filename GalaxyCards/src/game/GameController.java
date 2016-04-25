@@ -182,7 +182,7 @@ public class GameController {
 
 	public void updateOpponentScrapYard(Card card) {
 		if (card instanceof ResourceCard){
-			InfoPanelGUI.append("scrapyard");
+			InfoPanelGUI.append("scrapyard", null);
 			PlayResourceCard move = new PlayResourceCard((ResourceCard)card);
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
 			clientController.writeMessage(message);

@@ -26,9 +26,9 @@ public class OpponentTargetMouseListener implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		if (event.getSource() instanceof HeroicSupport) {
-			boardController.setDefender(this);
+			boardController.setDefender(card);
 		} else if(event.getSource() instanceof HeroGUI) {
-			
+			boardController.setDefender(heroGui);
 		}
 	}
 
