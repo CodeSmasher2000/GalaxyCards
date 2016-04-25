@@ -89,7 +89,7 @@ public class TestPanel extends JPanel {
 			temp = deck.drawCard();
 			enemyDeck = deck;
 			System.out.println(enemyDeck.toString());
-			InfoPanelGUI.append(deck.toString() + "\n",null);
+			InfoPanelGUI.append(deck.toString() + "\n");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

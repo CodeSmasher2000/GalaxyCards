@@ -169,6 +169,12 @@ public class InfoPanelGUI extends JPanel {
 			}
 		});
 	}
+	
+	/**
+	 * Appends a set text to the editorPane together with the color of the text as an argument in UPPERCASE letters
+	 * @param txt
+	 * @param color
+	 */
 	public static synchronized void append(final String txt, String color) {
 		if(color == "RED") {
 			stringBuilder.append("<p1><FONT COLOR=");
