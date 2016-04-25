@@ -5,11 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-
-import Server.ServerController;
-
-import javax.swing.JOptionPane;
-
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import guiPacket.InfoPanelGUI;
@@ -100,14 +95,14 @@ public class Client {
 				controller.matchFound(message);
 			} else if(message.getCommand() == Commands.MATCH_PLAYCARD) {
 				controller.cardPlayed(message);
-			}else if(message.getCommand() == Commands.MATCH_UPDATE_HERO){
-				System.out.println("Hero values changed");
-				controller.heroValuesChanged(message);
 			} else if(message.getCommand() == Commands.MATCH_INIT_GAME) {
 				InfoPanelGUI.append("InitGame");
 				controller.initGame();
 			} else if(message.getCommand() == Commands.MATCH_DRAW_CARD) {
 				controller.opponentDrawCard();
+			}else if(message.getCommand() == Commands.MATCH_UPDATE_HERO){
+				System.out.println("Hero values changed");
+				controller.heroValuesChanged(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");

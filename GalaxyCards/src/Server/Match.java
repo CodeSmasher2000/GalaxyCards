@@ -111,12 +111,12 @@ public class Match implements Observer {
 			} else if (object instanceof PlayResourceCard) {
 				PlayResourceCard move = (PlayResourceCard) object;
 				player.playResourceCard(move);
+			} else if (object instanceof UpdateHeroValues) {
+				UpdateHeroValues move = (UpdateHeroValues) object;
+				player.updateHeroValues(move);
 			}
 		} else if (message.getCommand() == Commands.MATCH_DRAW_CARD) {
 			player.drawCard();
-		}else if (object instanceof UpdateHeroValues){
-			UpdateHeroValues move = (UpdateHeroValues)object;
-			player.updateHeroValues(move);
 		}
 	}
 
@@ -159,8 +159,8 @@ public class Match implements Observer {
 			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 			scrapYard.add(move.getCard());
 		}
-		
-		public void updateHeroValues(UpdateHeroValues move){
+
+		public void updateHeroValues(UpdateHeroValues move) {
 			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_HERO, this.name, move));
 		}
 
@@ -169,9 +169,5 @@ public class Match implements Observer {
 			sendMessageToOtherPlayer(this, message);
 		}
 	}
-	
-	
-	
-	
-	
+
 }

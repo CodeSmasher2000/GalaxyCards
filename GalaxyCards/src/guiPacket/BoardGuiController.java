@@ -377,8 +377,8 @@ public class BoardGuiController {
 	 *            : Card
 	 */
 	protected void addToPlayerScrapyard(Card card) {
-		playerScrapyard.addCard(cloneCard(card));
 		gameController.updateOpponentScrapYard(card);
+		playerScrapyard.addCard(cloneCard(card));
 		
 	}
 

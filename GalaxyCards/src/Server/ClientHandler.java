@@ -96,12 +96,11 @@ public class ClientHandler extends Observable implements Runnable {
 					setChanged();
 					notifyObservers(message);
 					break;
-<<<<<<< HEAD
 				case MATCH_UPDATE_HERO:
-					System.out.println("Clienthandler case...");
-=======
+					setChanged();
+					notifyObservers(message);
+					break;
 				case MATCH_DRAW_CARD:
->>>>>>> origin/master
 					setChanged();
 					notifyObservers(message);
 					break;
