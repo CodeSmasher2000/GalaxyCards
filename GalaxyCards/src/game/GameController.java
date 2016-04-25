@@ -42,9 +42,9 @@ public class GameController {
 		if (addResourceOK == true) {
 			updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
 					hero.getMaxResource());
-			PlayResourceCard move = new PlayResourceCard(card);
-			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
-			clientController.writeMessage(message);
+//			PlayResourceCard move = new PlayResourceCard(card);
+//			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
+//			clientController.writeMessage(message);
 		}
 	}
 	
@@ -61,7 +61,7 @@ public class GameController {
 			
 			// Amen Tjena
 			//Debugg
-			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server");
+			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server","GREEN");
 		}
 	}
 	
@@ -163,7 +163,7 @@ public class GameController {
 	}
 	
 	public void initGame() {
-		InfoPanelGUI.append("InitGame()");
+		InfoPanelGUI.append("InitGame()",null);
 		// Draw 7 Cards
 		for (int i = 0; i < 7; i++) {
 			drawCard();
@@ -182,6 +182,7 @@ public class GameController {
 
 	public void updateOpponentScrapYard(Card card) {
 		if (card instanceof ResourceCard){
+			InfoPanelGUI.append("scrapyard");
 			PlayResourceCard move = new PlayResourceCard((ResourceCard)card);
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
 			clientController.writeMessage(message);

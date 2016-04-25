@@ -10,7 +10,7 @@ import guiPacket.Card;
  * @author 13120dde
  *
  */
-public class Unit extends Card implements PlayCardsInterface, Serializable, Target{
+public class Unit extends Card implements PlayCardsInterface, Serializable, Target {
 
 	/**
 	 * 
@@ -20,6 +20,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	private final int PRICE;
 	private final String NAME, RARITY, IMAGE_NAME;
 	private boolean hasAbility;
+	private boolean tapped = true;
 	private String abilityText;
 	private int maxHp;
 
@@ -64,7 +65,29 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 		this.maxHp = defense;
 	}
 
-	
+	/**
+	 * Sets the booelan value tapped to true. Units and Heroic support cards
+	 * that are tapped cant interact this round.
+	 */
+	public void tap() {
+		tapped = true;
+	}
+
+	/**
+	 * Sets the boolean value tapped to false. Units and Heroic support cards
+	 * that are untapped can interact this round.
+	 */
+	public void untap() {
+		tapped = false;
+	}
+
+	/**
+	 * Returns the tapped state for this object.
+	 * @return : true/false
+	 */
+	public boolean getTap() {
+		return tapped;
+	}
 
 	/**
 	 * Returns the name of the image used by this card. Image's are located in
@@ -102,7 +125,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 		return hasAbility;
 	}
 
-	public void setAbilityText(String description){
+	public void setAbilityText(String description) {
 		super.setAbilityText(description);
 	}
 
@@ -125,7 +148,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	 */
 	public void setDefense(int amount) {
 		this.defense += amount;
-		
+
 		super.setDefense(this.defense);
 	}
 
@@ -149,7 +172,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	public int getAttack() {
 		return attack;
 	}
-	
+
 	public int getMaxHp() {
 		return maxHp;
 	}
@@ -159,10 +182,9 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	}
 
 	public String toString() {
-		return NAME + " - [Unit]: " + attack + "/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
+		return NAME + " - [Unit]: " + attack + "/" + defense + ". Rarity: " + RARITY + ". Price: " + PRICE
+				+ ". Has Ability: " + hasAbility;
 	}
-
-
 
 	@Override
 	public void heal(int amt) {
@@ -175,13 +197,10 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 		}
 	}
 
-
-
 	@Override
 	public void damage(int amt) {
 		setDefense(amt);
-		
+
 	}
-	
 
 }

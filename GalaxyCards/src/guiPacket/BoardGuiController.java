@@ -380,8 +380,8 @@ public class BoardGuiController {
 	 *            : Card
 	 */
 	protected void addToPlayerScrapyard(Card card) {
-		playerScrapyard.addCard(cloneCard(card));
 		gameController.updateOpponentScrapYard(card);
+		playerScrapyard.addCard(cloneCard(card));
 		
 	}
 
@@ -483,7 +483,7 @@ public class BoardGuiController {
 	private class LaneSelectThread extends Thread {
 
 		public LaneSelectThread() {
-			InfoPanelGUI.append("Lane select thread started...waiting for unput");
+			InfoPanelGUI.append("Lane select thread started...waiting for unput",null);
 			laneListener = new LaneSelectListener();
 			playerOffLane.addMouseListener(laneListener);
 			playerDefLane.addMouseListener(laneListener);
@@ -521,6 +521,8 @@ public class BoardGuiController {
 			laneSelected = false;
 			laneSelectThread = null;
 			InfoPanelGUI.append("Lane select thread stopped");
+			InfoPanelGUI.append("Lane select thread stopped",null);
+
 		}
 	}
 	
@@ -557,7 +559,7 @@ public class BoardGuiController {
 				setSelectedLane();
 			} catch (GuiContainerException e) {
 				// TODO Auto-generated catch block
-				InfoPanelGUI.append(e.getMessage());
+				InfoPanelGUI.append(e.getMessage(),"RED");
 				laneSelected = true;
 			} catch (InsufficientResourcesException e) {
 				// TODO Auto-generated catch block

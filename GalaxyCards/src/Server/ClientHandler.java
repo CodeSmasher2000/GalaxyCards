@@ -97,9 +97,9 @@ public class ClientHandler extends Observable implements Runnable {
 					notifyObservers(message);
 					break;
 				case MATCH_UPDATE_HERO:
-					System.out.println("Clienthandler case...");
 					setChanged();
 					notifyObservers(message);
+					break;
 				case MATCH_DRAW_CARD:
 					setChanged();
 					notifyObservers(message);
