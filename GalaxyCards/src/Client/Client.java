@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
+import enumMessage.Phase;
 import guiPacket.InfoPanelGUI;
 
 
@@ -103,6 +104,15 @@ public class Client {
 			}else if(message.getCommand() == Commands.MATCH_UPDATE_HERO){
 				System.out.println("Hero values changed");
 				controller.heroValuesChanged(message);
+			} else if(message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
+				// Set GameController to defense phase
+				controller.setPhase(Phase.DEFENDING);
+			} else if(message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
+				controller.setPhase(Phase.IDLE);
+			}
+			else if(message.getCommand() == Commands.MATCH_SET_PHASE) {
+				Phase phase = (Phase)message.getData();
+				controller.setPhase(phase);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");

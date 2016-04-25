@@ -33,7 +33,10 @@ public enum Commands  implements Serializable {
 	MATCH_UPDATE_HERO,
 	MATCH_PLAYCARD, 
 	MATCH_INIT_GAME,
-	MATCH_DRAW_CARD;
+	MATCH_DRAW_CARD,
+	MATCH_ATTACK_MOVE,
+	MATCH_DEFEND_MOVE,
+	MATCH_SET_PHASE;
 	
 	private int value;
 	private static final long serialVersionUID = 42L;

@@ -9,6 +9,7 @@ import Server.ClientHandler;
 import cards.Deck;
 import cards.Unit;
 import enumMessage.Commands;
+import enumMessage.Phase;
 import enumMessage.CommandMessage;
 import game.GameController;
 import game.Hero;
@@ -157,6 +158,10 @@ public class ClientController {
 	}
 	public void opponentDrawCard() {
 		gameController.opponentDrawCard();
+	}
+
+	public void setPhase(Phase phase) {
+		gameController.setPhase(phase);
 	}
 
 

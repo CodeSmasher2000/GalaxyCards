@@ -104,6 +104,14 @@ public class ClientHandler extends Observable implements Runnable {
 					setChanged();
 					notifyObservers(message);
 					break;
+				case MATCH_ATTACK_MOVE:
+					setChanged();
+					notifyObservers(message);
+					break;
+				case MATCH_DEFEND_MOVE:
+					setChanged();
+					notifyObservers(message);
+					break;
 				default:
 					break;
 				}

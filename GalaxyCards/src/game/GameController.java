@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 import Client.ClientController;
 import cards.HeroicSupport;
 import cards.ResourceCard;
@@ -8,6 +10,7 @@ import cards.Unit;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import enumMessage.Lanes;
+import enumMessage.Phase;
 import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.ResourcePlayedException;
@@ -24,6 +27,7 @@ public class GameController {
 	private Hero hero;
 	private BoardGuiController boardController;
 	private ClientController clientController;
+	private Phase phase;
 
 	public GameController(ClientController clientController) {
 		this.clientController=clientController;
@@ -195,6 +199,27 @@ public class GameController {
 		}if (card instanceof Tech){
 			
 		}
+	}
+	
+	public Phase getPhase() {
+		return this.phase;
+	}
+	
+	public void setPhase(Phase phase) {
+		switch (phase) {
+		case ATTACKING:
+			this.phase = Phase.ATTACKING;
+			break;
+		case DEFENDING:
+			this.phase = Phase.DEFENDING;
+			break;
+		case IDLE:
+			this.phase = Phase.IDLE;
+			break;
+		default:
+			break;
+		}
+		InfoPanelGUI.append("In " + phase, "BLUE");
 	}
 
 }

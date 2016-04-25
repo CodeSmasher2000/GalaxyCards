@@ -623,7 +623,6 @@ public class BoardGuiController {
 
 	public void setAttacker(Card card) {
 		attackSelectThread.setAttacker(card);
-		
 	}
 
 	public void setDefender(Object defender) {

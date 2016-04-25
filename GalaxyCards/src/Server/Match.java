@@ -11,6 +11,7 @@ import cards.HeroicSupport;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import enumMessage.Lanes;
+import enumMessage.Phase;
 import game.Hero;
 import guiPacket.Card;
 import move.PlayHeroicSupportCard;
@@ -68,13 +69,19 @@ public class Match implements Observer {
 		int playerToStart = rand.nextInt(2);
 		if (playerToStart == 0) {
 			attacking = player1;
+			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, 
+					"server", Phase.ATTACKING));
 			defensive = player2;
+			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE,
+					"server", Phase.IDLE));
 		} else {
 			attacking = player2;
+			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server",
+					Phase.ATTACKING));
 			defensive = player1;
+			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE,
+					"server", Phase.IDLE));
 		}
-
-		// Skicka till klient för att sätta rätt fas
 	}
 
 	public void sendMessageToOtherPlayer(Player player, CommandMessage message) {
@@ -117,6 +124,10 @@ public class Match implements Observer {
 			}
 		} else if (message.getCommand() == Commands.MATCH_DRAW_CARD) {
 			player.drawCard();
+		} else if(message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
+			sendMessageToOtherPlayer(player, message);
+		} else if(message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
+			sendMessageToOtherPlayer(player, message);
 		}
 	}
 
