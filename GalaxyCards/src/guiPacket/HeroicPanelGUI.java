@@ -172,6 +172,14 @@ public class HeroicPanelGUI extends JPanel {
 		}
 	}
 	
+	public void untap() {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			if (heroicUnits[i] != null) {
+				heroicUnits[i].untap();
+			}
+		}
+	}
+	
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);

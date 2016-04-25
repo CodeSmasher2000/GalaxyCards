@@ -26,7 +26,7 @@ import game.GameController;
 public class BoardGuiController {
 
 	private GameController gameController;
-	
+
 	private HandGUI playerHandGui;
 	private OpponentHandGUI opponentHandGui;
 	private HeroicPanelGUI playerHeroicGui, opponentHeroicGui;
@@ -42,7 +42,7 @@ public class BoardGuiController {
 	private LaneSelectListener laneListener;
 	private boolean laneSelected = false;
 	private LaneSelectThread laneSelectThread;
-	
+
 	private AttackThreadListener attackSelectThread;
 	private boolean targetSelected = false;
 
@@ -55,15 +55,21 @@ public class BoardGuiController {
 	// ********************************************************************
 
 	public BoardGuiController(GameController gameController) {
-		this.gameController=gameController;
+		this.gameController = gameController;
 	}
-	
-	//for debbugging, remove when testpanel is removed.
-	public GameController getGameController(){
+
+	// for debbugging, remove when testpanel is removed.
+	public GameController getGameController() {
 		return gameController;
 	}
-	
-	public void checkStatus(){
+
+	/**
+	 * Checks the defensive values of each unit and heroic support object placed
+	 * on board. If their's values are less than or equal to 0 the object will
+	 * be removed.
+	 * 
+	 */
+	public void checkStatus() {
 		opponentDefLane.checkStatus();
 		opponentOffLane.checkStatus();
 		playerDefLane.checkStatus();
@@ -71,9 +77,19 @@ public class BoardGuiController {
 		opponentHeroicGui.checkStatus();
 		playerHeroicGui.checkStatus();
 	}
+	
+	public void untapCards(){
+		opponentDefLane.untap();
+		opponentOffLane.untap();
+		playerDefLane.untap();
+		playerOffLane.untap();
+		opponentHeroicGui.untap();
+		playerHeroicGui.untap();
+	}
 
 	/**
 	 * Updates playerHeroGui when changes are made to life, shield or resource
+	 * 
 	 * @param life
 	 * @param energyShield
 	 * @param currentResource
@@ -83,13 +99,14 @@ public class BoardGuiController {
 		playerHeroGui.updateResourceBar(currentResource, maxResource);
 		playerHeroGui.updateShiledBar(energyShield);
 	}
-	
+
 	public void updateOpponentHeroGui(int life, int energyShield, int currentResource, int maxResource) {
 		opponentHeroGui.updateLifeBar(life);
 		opponentHeroGui.updateResourceBar(currentResource, maxResource);
 		opponentHeroGui.updateShiledBar(energyShield);
-	
+
 	}
+
 	/**
 	 * Attempts to place the Card object passed in as argument to the handGui
 	 * container. Throws exception if there is no more space for cards. Maximum
@@ -165,12 +182,13 @@ public class BoardGuiController {
 	public void opponentPlaysTech(Tech tech) {
 		// TODO
 	}
-	
+
 	/**
 	 * Updates the opponents Resource-pool when a resource is played.
+	 * 
 	 * @param resourceCard
 	 */
-	public void opponentPlaysResource(ResourceCard resourceCard) throws GuiContainerException{
+	public void opponentPlaysResource(ResourceCard resourceCard) throws GuiContainerException {
 		addToOpponentScrapyard(resourceCard);
 		opponentHandGui.playCard();
 	}
@@ -254,10 +272,10 @@ public class BoardGuiController {
 	 * @param heroGui
 	 */
 	protected void addHeroListener(HeroGUI heroGui, Persons ENUM) {
-		if(ENUM==Persons.PLAYER){
+		if (ENUM == Persons.PLAYER) {
 			this.playerHeroGui = heroGui;
-		}else{
-			this.opponentHeroGui= heroGui;
+		} else {
+			this.opponentHeroGui = heroGui;
 		}
 	}
 
@@ -324,13 +342,14 @@ public class BoardGuiController {
 	 * @param card
 	 * @throws GuiContainerException
 	 * @throws NoLaneSelectedException
-	 * @throws ResourcePlayedException 
-	 * @throws InsufficientResourcesException 
+	 * @throws ResourcePlayedException
+	 * @throws InsufficientResourcesException
 	 */
-	protected void playCard(Card card) throws GuiContainerException, NoLaneSelectedException, ResourcePlayedException, InsufficientResourcesException {
+	protected void playCard(Card card) throws GuiContainerException, NoLaneSelectedException, ResourcePlayedException,
+			InsufficientResourcesException {
 		if (card instanceof ResourceCard) {
 			ResourceCard temp = (ResourceCard) card;
-			playResourceCard((ResourceCard)cloneCard(temp));
+			playResourceCard((ResourceCard) cloneCard(temp));
 		}
 		// Do not use the cloneCard() method when playing unitCard... need a
 		// referense to the original object while waiting for lane-selection
@@ -389,9 +408,9 @@ public class BoardGuiController {
 	 *            : Card
 	 */
 	protected void addToPlayerScrapyard(Card card) {
-		gameController.updateOpponentScrapYard(card);
+//		gameController.updateOpponentScrapYard(card);
 		playerScrapyard.addCard(cloneCard(card));
-		
+
 	}
 
 	/**
@@ -404,7 +423,7 @@ public class BoardGuiController {
 		cardToShow = (Card) cloneCard(cardToShow);
 		infoPanel.showCard(cardToShow);
 	}
-	
+
 	protected int getAvaibleResources() {
 		return gameController.getAvaibleResources();
 	}
@@ -418,12 +437,13 @@ public class BoardGuiController {
 		playerScrapyard.addCard(card);
 	}
 
-	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException, InsufficientResourcesException {
+	private void playHeroicSupport(HeroicSupport cardToPlay)
+			throws GuiContainerException, InsufficientResourcesException {
 		gameController.playHeroicSupport(cardToPlay);
 		playerHeroicGui.addHeroicSupport(cardToPlay);
 	}
 
-	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException{
+	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException {
 		cardToPlay = (Unit) cloneCard(cardToPlay);
 		System.out.println(Thread.currentThread());
 		gameController.playUnit(cardToPlay, tempLane.getLaneType());
@@ -441,7 +461,8 @@ public class BoardGuiController {
 		// method.
 	}
 
-	private void setSelectedLane() throws GuiContainerException, InsufficientResourcesException, ResourcePlayedException {
+	private void setSelectedLane()
+			throws GuiContainerException, InsufficientResourcesException, ResourcePlayedException {
 		playUnitCard(tempUnit);
 		playerHandGui.playCard(tempUnit);
 		laneSelected = true;
@@ -465,9 +486,9 @@ public class BoardGuiController {
 			throw new NoLaneSelectedException("Thread for selecting lane started...waiting for input");
 		}
 	}
-	
+
 	public void startAttackThreadListner() {
-		if(attackSelectThread == null) {
+		if (attackSelectThread == null) {
 			attackSelectThread = new AttackThreadListener();
 			attackSelectThread = new AttackThreadListener();
 		}
@@ -533,7 +554,7 @@ public class BoardGuiController {
 
 		}
 	}
-	
+
 	private class LaneSelectListener implements MouseListener {
 
 		@Override
@@ -567,7 +588,7 @@ public class BoardGuiController {
 				setSelectedLane();
 			} catch (GuiContainerException e) {
 				// TODO Auto-generated catch block
-				InfoPanelGUI.append(e.getMessage(),"RED");
+				InfoPanelGUI.append(e.getMessage(), "RED");
 				laneSelected = true;
 			} catch (InsufficientResourcesException e) {
 				// TODO Auto-generated catch block
@@ -588,33 +609,35 @@ public class BoardGuiController {
 		}
 
 	}
+
 	/**
 	 * The thread waits for input from a player to get a target to attack
+	 * 
 	 * @author patriklarsson
 	 *
 	 */
 	private class AttackThreadListener extends Thread {
 		private Unit attacker;
 		private Object defender;
-		
+
 		public AttackThreadListener() {
-			InfoPanelGUI.append("Attack Thread Started", null);
+			InfoPanelGUI.append("Attack Thread Started");
 			this.start();
 		}
-		
+
 		public void setAttacker(Card card) {
 			this.attacker = (Unit) card;
 		}
-		
+
 		public void setDefender(Object defender) {
 			this.defender = defender;
 			setTargetSelected(true);
-			infoPanel.append("Target is set", null);
+			infoPanel.append("Target is set");
 		}
 
 		@Override
 		public void run() {
-			while(!isTargetSelected() || Thread.interrupted()) {
+			while (!isTargetSelected() || Thread.interrupted()) {
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
@@ -624,20 +647,20 @@ public class BoardGuiController {
 			}
 			// TODO Add the attacker and defender to the attack object
 			// TODO Send the attack object to the server
-			infoPanel.append("Target Selected. Attack Thread stopped", null);
-			
+			infoPanel.append("Target Selected. Attack Thread stopped");
+
 		}
-		
+
 	}
 
 	public void setAttacker(Card card) {
 		attackSelectThread.setAttacker(card);
-		
+
 	}
 
 	public void setDefender(Object defender) {
 		attackSelectThread.setDefender(defender);
-		
+
 	}
-	
+
 }

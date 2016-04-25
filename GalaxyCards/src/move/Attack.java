@@ -16,7 +16,7 @@ public class Attack {
 	private Object[] defensive = new Object[6];
 	private int index = 0;
 	
-	private void setOpponents(Unit attacker,Object defender) {
+	public void setOpponents(Unit attacker,Object defender) {
 			offensive[index] = attacker;
 			defensive[index] = defender;
 			index++;
@@ -24,7 +24,7 @@ public class Attack {
 			
 	}
 	
-	private void fight(){
+	public void fight(){
 		for(int index = this.index; index>0;index--) {
 			Unit attacker = (Unit) offensive[index];
 			int attackerAtt = attacker.getAttack();
@@ -60,8 +60,13 @@ public class Attack {
 			}
 		}
 	}
-	private void setDefender(Unit defender, int index) {
-		defensive[index] = defender;
+	public void Defend(Unit defender, Unit target) {
+		for(int i = 0; i<offensive.length; i++){
+			if(offensive[i]==target){
+				defensive[i]=(Unit)defender;
+			}
+		}
+	
 	}
 	
 	
