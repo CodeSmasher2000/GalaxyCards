@@ -135,7 +135,7 @@ public class HandGUI extends JPanel {
 	protected void addCard(Card card) throws GuiContainerException {
 		if (cardsOnHand >= 8) {
 			removeRandomCard();
-			InfoPanelGUI.append("You can only have 8 cards on hand. A random card was thrown to scrapyard");
+			InfoPanelGUI.append("You can only have 8 cards on hand. A random card was thrown to scrapyard","RED");
 		}
 		cards[cardsOnHand] = card;
 		boardController.addCardToHand(card);
@@ -177,7 +177,7 @@ public class HandGUI extends JPanel {
 						addCard(card1);
 					} catch (GuiContainerException e) {
 						System.err.println(e.getMessage() + " Error caused by the rearranging of cards on hand");
-						InfoPanelGUI.append(e.getMessage());
+						InfoPanelGUI.append(e.getMessage(),"RED");
 					}
 				}
 			}
@@ -238,13 +238,13 @@ public class HandGUI extends JPanel {
 					temp.removeMouseListener(listener);
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage());
+					InfoPanelGUI.append(e.getMessage(),"RED");
 				} catch (NoLaneSelectedException e) {
 					System.err.println(e.getMessage());
 				} catch (ResourcePlayedException e) {
-					InfoPanelGUI.append(e.getMessage());
+					InfoPanelGUI.append(e.getMessage(),"RED");
 				} catch (InsufficientResourcesException e) {
-					InfoPanelGUI.append(e.getMessage());
+					InfoPanelGUI.append(e.getMessage(),"RED");
 				} finally {
 					repaint();
 				}
@@ -260,18 +260,18 @@ public class HandGUI extends JPanel {
 						temp.removeMouseListener(listener);
 					} catch (GuiContainerException e) {
 						System.err.println(e.getMessage());
-						InfoPanelGUI.append(e.getMessage());
+						InfoPanelGUI.append(e.getMessage(),"RED");
 					} catch (NoLaneSelectedException e) {
 						System.err.println(e.getMessage());
 					} catch (ResourcePlayedException e) {
-						InfoPanelGUI.append(e.getMessage());
+						InfoPanelGUI.append(e.getMessage(),"RED");
 					} catch (InsufficientResourcesException e) {
-						InfoPanelGUI.append(e.getMessage());
+						InfoPanelGUI.append(e.getMessage(),"RED");
 					} finally {
 						repaint();
 					}
 				} else {
-					InfoPanelGUI.append("Insufficient resources");
+					InfoPanelGUI.append("Insufficient resources","RED");
 				}
 			}
 

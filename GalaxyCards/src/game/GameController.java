@@ -61,7 +61,7 @@ public class GameController {
 			
 			// Amen Tjena
 			//Debugg
-			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server");
+			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server","GREEN");
 		}
 	}
 	
@@ -163,7 +163,7 @@ public class GameController {
 	}
 	
 	public void initGame() {
-		InfoPanelGUI.append("InitGame()");
+		InfoPanelGUI.append("InitGame()",null);
 		// Draw 7 Cards
 		for (int i = 0; i < 7; i++) {
 			drawCard();

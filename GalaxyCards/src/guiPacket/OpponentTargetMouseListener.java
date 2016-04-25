@@ -59,11 +59,11 @@ public class OpponentTargetMouseListener implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent event) {
 		if (event.getSource() instanceof HeroGUI) {
-			 InfoPanelGUI.append(heroGui.toString());
+			 InfoPanelGUI.append(heroGui.toString(), null);
 		}
 		if (event.getSource() instanceof Card) {
-			InfoPanelGUI.append("Target: " + card.toString());
-			InfoPanelGUI.append(Integer.toString(System.identityHashCode(card)));
+			InfoPanelGUI.append("Target: " + card.toString(),"RED");
+			InfoPanelGUI.append(Integer.toString(System.identityHashCode(card)),"RED");
 		}
 	}
 

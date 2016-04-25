@@ -67,7 +67,7 @@ public class Hero implements Serializable {
 			return deck.drawCard();
 		} catch (EmptyDeckException e) {
 			dealDamage(incrementalDamage++);
-			InfoPanelGUI.append("For every round your hero takes incremental damage: " + incrementalDamage);
+			InfoPanelGUI.append("For every round your hero takes incremental damage: " + incrementalDamage,null);
 			return null;
 		}
 	}
