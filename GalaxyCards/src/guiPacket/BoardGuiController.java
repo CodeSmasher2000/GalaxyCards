@@ -29,7 +29,7 @@ public class BoardGuiController {
 	
 	private HandGUI playerHandGui;
 	private OpponentHandGUI opponentHandGui;
-	private HeroicPanelGUI heroicGui, opponentHeroicGui;
+	private HeroicPanelGUI playerHeroicGui, opponentHeroicGui;
 	private ScrapyardGUI playerScrapyard, opponentScrapyard;
 	private HeroGUI playerHeroGui, opponentHeroGui;
 	private UnitLanes playerDefLane;
@@ -61,6 +61,15 @@ public class BoardGuiController {
 	//for debbugging, remove when testpanel is removed.
 	public GameController getGameController(){
 		return gameController;
+	}
+	
+	public void checkStatus(){
+		opponentDefLane.checkStatus();
+		opponentOffLane.checkStatus();
+		playerDefLane.checkStatus();
+		playerOffLane.checkStatus();
+		opponentHeroicGui.checkStatus();
+		playerHeroicGui.checkStatus();
 	}
 
 	/**
@@ -232,7 +241,7 @@ public class BoardGuiController {
 	 */
 	protected void addHeroicPanelListener(HeroicPanelGUI heroicPanelGUI, Persons ENUM) {
 		if (ENUM == Persons.PLAYER) {
-			heroicGui = heroicPanelGUI;
+			playerHeroicGui = heroicPanelGUI;
 		}
 		if (ENUM == Persons.OPPONENT) {
 			opponentHeroicGui = heroicPanelGUI;
@@ -411,7 +420,7 @@ public class BoardGuiController {
 
 	private void playHeroicSupport(HeroicSupport cardToPlay) throws GuiContainerException, InsufficientResourcesException {
 		gameController.playHeroicSupport(cardToPlay);
-		heroicGui.addHeroicSupport(cardToPlay);
+		playerHeroicGui.addHeroicSupport(cardToPlay);
 	}
 
 	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException{
@@ -483,7 +492,7 @@ public class BoardGuiController {
 	private class LaneSelectThread extends Thread {
 
 		public LaneSelectThread() {
-			InfoPanelGUI.append("Lane select thread started...waiting for unput",null);
+			InfoPanelGUI.append("Lane select thread started...waiting for unput");
 			laneListener = new LaneSelectListener();
 			playerOffLane.addMouseListener(laneListener);
 			playerDefLane.addMouseListener(laneListener);
@@ -520,7 +529,7 @@ public class BoardGuiController {
 			laneListener = null;
 			laneSelected = false;
 			laneSelectThread = null;
-			InfoPanelGUI.append("Lane select thread stopped",null);
+			InfoPanelGUI.append("Lane select thread stopped");
 
 		}
 	}

@@ -158,6 +158,20 @@ public class HeroicPanelGUI extends JPanel {
 		return target;
 	}
 	
+	/**
+	 * Check the defensive value for each Heroic support in this lane. If the defensive
+	 * value is equal to or less than 0 then the unit object will get removed.
+	 */
+	public void checkStatus() {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			if (heroicUnits[i] != null) {
+				if (heroicUnits[i].getDefense() <= 0) {
+					removeHeroicSupport(heroicUnits[i]);
+				}
+			}
+		}
+	}
+	
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);

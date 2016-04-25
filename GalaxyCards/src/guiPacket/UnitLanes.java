@@ -178,4 +178,18 @@ public class UnitLanes extends JPanel {
 
 		return target;
 	}
+
+	/**
+	 * Check the defensive value for each unit in this lane. If the defensive
+	 * value is equal to or less than 0 then the unit object will get removed.
+	 */
+	public void checkStatus() {
+		for (int i = 0; i < units.length; i++) {
+			if (units[i] != null) {
+				if (units[i].getDefense() <= 0) {
+					removeUnit(units[i]);
+				}
+			}
+		}
+	}
 }

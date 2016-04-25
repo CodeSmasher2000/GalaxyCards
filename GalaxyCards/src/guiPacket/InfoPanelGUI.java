@@ -169,16 +169,7 @@ public class InfoPanelGUI extends JPanel {
 			}
 		});
 	}
-
-	/**
-	 * Appends text to the editorpane, previous rows are not removed.
-	 * 
-	 * @param txt
-	 * 
-	 */
 	public static synchronized void append(final String txt, String color) {
-		// SwingUtilities.invokeLater(new Runnable() {
-		// public void run() {
 		if(color == "RED") {
 			stringBuilder.append("<p1><FONT COLOR=");
 			stringBuilder.append("red");
@@ -195,11 +186,21 @@ public class InfoPanelGUI extends JPanel {
 			stringBuilder.append("<p3><FONT COLOR=blue SIZE=3 FACE=arial,helvetica,sans-serif>");
 			stringBuilder.append(txt + "</FONT></p3><br>");
 		}
-		else if(color == null) {
+		editorPane.setText(stringBuilder.toString());
+		
+	}
+
+	/**
+	 * Appends text to the editorpane, previous rows are not removed.
+	 * 
+	 * @param txt
+	 * 
+	 */
+	public static synchronized void append(final String txt) {
+		// SwingUtilities.invokeLater(new Runnable() {
+		// public void run() {
 		stringBuilder.append("<p4><FONT SIZE=3 FACE=arial,helvetica,sans-serif>");
 		stringBuilder.append(txt + "</FONT></p4><br>");
-		
-		}
 		editorPane.setText(stringBuilder.toString());
 		// }
 		// });
