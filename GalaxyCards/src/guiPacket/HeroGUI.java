@@ -38,11 +38,11 @@ public class HeroGUI extends JPanel {
 	private Border b2;
 
 	public HeroGUI(BoardGuiController boardController, Persons ENUM) {
-		this.boardController=boardController;
-		this.ENUM=ENUM;
-		
+		this.boardController = boardController;
+		this.ENUM = ENUM;
+
 		this.boardController.addHeroListener(this, ENUM);
-		
+
 		String heroName = boardController.getHeroName();
 		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
 		b2 = BorderFactory.createTitledBorder(null, heroName, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
@@ -52,10 +52,17 @@ public class HeroGUI extends JPanel {
 		setTooltips();
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setOpaque(false);
 		add(imagePanel);
 		add(resourceBar);
 		add(lifeBar);
 		add(shieldBar);
+
+		if (ENUM == Persons.PLAYER) {
+			addMouseListener(new PlayerTargetMouseListener(boardController));
+		} else {
+			addMouseListener(new OpponentTargetMouseListener(boardController));
+		}
 	}
 
 	private void setTooltips() {
@@ -145,5 +152,10 @@ public class HeroGUI extends JPanel {
 		}
 		shieldBar.setValue(newValue);
 		shieldBar.setString(newValue + " / " + "10");
+	}
+
+	public String toString() {
+		return (ENUM+" Hero life: " + lifeBar.getValue() + ", energy shield: " + shieldBar.getValue() + ", resources: "
+				+ resourceBar.getValue() + "/" + resourceBar.getMaximum());
 	}
 }

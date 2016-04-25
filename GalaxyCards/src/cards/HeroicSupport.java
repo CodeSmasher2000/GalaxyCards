@@ -22,6 +22,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	private final int PRICE;
 	private final String NAME, RARITY, IMAGE_NAME;
 	private boolean hasAbility;
+	private boolean tapped = true;
 	private int maxHp;
 
 	/**
@@ -62,12 +63,30 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		super.setDefense(this.defense);
 		this.maxHp = defense;
 	}
-	
-//	@Override
-//	public String toString() {
-//		return NAME + ", " + "HeroicSupport" + ", " + RARITY;
-//	}
 
+	/**
+	 * Sets the booelan value tapped to true. Units and Heroic support cards
+	 * that are tapped cant interact this round.
+	 */
+	public void tap() {
+		tapped = true;
+	}
+
+	/**
+	 * Sets the boolean value tapped to false. Units and Heroic support cards
+	 * that are untapped can interact this round.
+	 */
+	public void untap() {
+		tapped = false;
+	}
+
+	/**
+	 * Returns the tapped state for this object.
+	 * @return : true/false
+	 */
+	public boolean getTap() {
+		return tapped;
+	}
 
 	/**
 	 * Returns the name of the image used by this card. Image's are located in
