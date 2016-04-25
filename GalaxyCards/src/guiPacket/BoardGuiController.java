@@ -579,7 +579,11 @@ public class BoardGuiController {
 		}
 
 	}
-
+	/**
+	 * The thread waits for input from a player to get a target to attack
+	 * @author patriklarsson
+	 *
+	 */
 	private class AttackThreadListener extends Thread {
 		private Unit attacker;
 		private Object defender;
