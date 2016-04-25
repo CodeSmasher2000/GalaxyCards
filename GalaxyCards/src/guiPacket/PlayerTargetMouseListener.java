@@ -21,9 +21,12 @@ public class PlayerTargetMouseListener implements MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void mouseClicked(MouseEvent event) {
+		card = (Card) event.getSource();
+		if(card instanceof Unit) {
+			boardController.startAttackThreadListner();
+			boardController.setAttacker(card);
+		}
 	}
 
 	@Override
