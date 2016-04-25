@@ -483,7 +483,7 @@ public class BoardGuiController {
 	private class LaneSelectThread extends Thread {
 
 		public LaneSelectThread() {
-			InfoPanelGUI.append("Lane select thread started...waiting for unput",null);
+			InfoPanelGUI.append("Lane select thread started...waiting for unput");
 			laneListener = new LaneSelectListener();
 			playerOffLane.addMouseListener(laneListener);
 			playerDefLane.addMouseListener(laneListener);
@@ -520,7 +520,7 @@ public class BoardGuiController {
 			laneListener = null;
 			laneSelected = false;
 			laneSelectThread = null;
-			InfoPanelGUI.append("Lane select thread stopped",null);
+			InfoPanelGUI.append("Lane select thread stopped");
 
 		}
 	}

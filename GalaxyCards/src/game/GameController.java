@@ -163,7 +163,7 @@ public class GameController {
 	}
 	
 	public void initGame() {
-		InfoPanelGUI.append("InitGame()",null);
+		InfoPanelGUI.append("InitGame()");
 		// Draw 7 Cards
 		for (int i = 0; i < 7; i++) {
 			drawCard();
