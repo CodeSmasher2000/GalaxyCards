@@ -21,6 +21,8 @@ public class DefendingPhase {
 	}
 	
 	public void commitMove() {
+		// TODO: Message to Server.
+		// TODO: Set Phase to IDLE
 		
 	}
 }

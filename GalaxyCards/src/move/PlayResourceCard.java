@@ -14,6 +14,7 @@ public class PlayResourceCard implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private ResourceCard card;
+	private UpdateHeroValues updateHeroValues;
 	
 	public PlayResourceCard(ResourceCard card){
 		this.card=card;
@@ -24,5 +25,13 @@ public class PlayResourceCard implements Serializable {
 	}
 	public void setCard(ResourceCard card) {
 		this.card = card;
+	}
+
+	public UpdateHeroValues getUpdateHeroValues() {
+		return updateHeroValues;
+	}
+
+	public void setUpdateHeroValues(UpdateHeroValues updateHeroValues) {
+		this.updateHeroValues = updateHeroValues;
 	}
 }

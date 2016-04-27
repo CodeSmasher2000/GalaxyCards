@@ -99,18 +99,24 @@ public class Client {
 			} else if(message.getCommand() == Commands.MATCH_INIT_GAME) {
 				InfoPanelGUI.append("InitGame",null);
 				controller.initGame();
-			} else if(message.getCommand() == Commands.MATCH_DRAW_CARD) {
+			} else if(message.getCommand() == Commands.MATCH_FRIENDLY_DRAW_CARD) {
+				controller.friendlyDrawCard(message);
+			} else if(message.getCommand() == Commands.MATCH_OPPONENT_DRAW_CARD) {
 				controller.opponentDrawCard();
 			}else if(message.getCommand() == Commands.MATCH_UPDATE_HERO){
 				System.out.println("Hero values changed");
 				controller.heroValuesChanged(message);
+			} else if(message.getCommand() == Commands.MATCH_PLACE_CARD) {
+				System.out.println("In Placing Card");
+				controller.placeCard(message);
+			} else if(message.getCommand() == Commands.MATCH_NOT_VALID_MOVE) {
+				controller.notValidMove(message);
 			} else if(message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
 				// Set GameController to defense phase
 				controller.setPhase(Phase.DEFENDING);
 			} else if(message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
 				controller.setPhase(Phase.IDLE);
-			}
-			else if(message.getCommand() == Commands.MATCH_SET_PHASE) {
+			} else if(message.getCommand() == Commands.MATCH_SET_PHASE) {
 				Phase phase = (Phase)message.getData();
 				controller.setPhase(phase);
 			}

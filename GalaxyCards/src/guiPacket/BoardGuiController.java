@@ -177,6 +177,11 @@ public class BoardGuiController {
 	public void opponentPlaysTech(Tech tech) {
 		// TODO
 	}
+	
+	public void addToPlayerScrapYard(Card card) {
+		//TODO Ska förmodligen ändras
+		playerScrapyard.addCard(cloneCard(card));
+	}
 
 	/**
 	 * Updates the opponents Resource-pool when a resource is played.
@@ -340,7 +345,8 @@ public class BoardGuiController {
 	 * @throws ResourcePlayedException
 	 * @throws InsufficientResourcesException
 	 */
-	protected void playCard(Card card) throws GuiContainerException, NoLaneSelectedException, ResourcePlayedException,
+	//TODO Diskutera visbility
+	public void playCard(Card card) throws GuiContainerException, NoLaneSelectedException, ResourcePlayedException,
 			InsufficientResourcesException {
 		if (card instanceof ResourceCard) {
 			ResourceCard temp = (ResourceCard) card;
@@ -355,7 +361,8 @@ public class BoardGuiController {
 		}
 		if (card instanceof HeroicSupport) {
 			HeroicSupport temp = (HeroicSupport) card;
-			playHeroicSupport((HeroicSupport) cloneCard(temp));
+			gameController.playHeroicSupport((HeroicSupport)card);
+//			playHeroicSupport((HeroicSupport) cloneCard(temp));
 		}
 		if (card instanceof Tech) {
 			Tech temp = (Tech) card;
@@ -419,9 +426,9 @@ public class BoardGuiController {
 		infoPanel.showCard(cardToShow);
 	}
 
-	protected int getAvaibleResources() {
-		return gameController.getAvaibleResources();
-	}
+//	protected int getAvaibleResources() {
+//		return gameController.getAvaibleResources();
+//	}
 
 	// ***PRIVATE METHODS******************************************************
 	// *** Methods in this section are called within this class
@@ -429,13 +436,25 @@ public class BoardGuiController {
 
 	private void playResourceCard(ResourceCard card) throws ResourcePlayedException {
 		gameController.playResourceCard(card);
-		playerScrapyard.addCard(card);
 	}
 
 	private void playHeroicSupport(HeroicSupport cardToPlay)
 			throws GuiContainerException, InsufficientResourcesException {
 		gameController.playHeroicSupport(cardToPlay);
 		playerHeroicGui.addHeroicSupport(cardToPlay);
+	}
+	
+	/**
+	 * Metoden används sålänge för att innehålla den kod som behövs för att lägga till ett kort från gc.
+	 * @param toAdd
+	 */
+	public void addHeroicSupport(HeroicSupport toAdd) {
+		try {
+			playerHeroicGui.addHeroicSupport(toAdd);
+		} catch (GuiContainerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException {

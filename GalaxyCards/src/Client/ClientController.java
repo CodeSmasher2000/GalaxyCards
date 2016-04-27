@@ -7,16 +7,21 @@ import javax.swing.JOptionPane;
 
 import Server.ClientHandler;
 import cards.Deck;
+import cards.HeroicSupport;
+import cards.ResourceCard;
 import cards.Unit;
 import enumMessage.Commands;
 import enumMessage.Phase;
+import exceptionsPacket.GuiContainerException;
 import enumMessage.CommandMessage;
 import game.GameController;
 import game.Hero;
+import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayUnitCard;
+import move.UpdateHeroValues;
 
 
 /**
@@ -89,12 +94,6 @@ public class ClientController {
 	 */
 	public void setHero(CommandMessage message){
 		System.out.println("Set hero");
-		Deck deck = (Deck)message.getData();
-		Hero hero = new Hero(gameController);
-		hero.setDeck(deck);
-		gameController.setChosenHero(hero);
-		
-		
 	}
 	/**
 	 * Metod som frågar servern efter ett Hero-objekt.
@@ -137,7 +136,24 @@ public class ClientController {
 			gameController.opponentPlaysResourceCard(move);
 			InfoPanelGUI.append("opponent played resource",null);
 		}
-
+	}
+	/**
+	 * Recieves a message object and updates the gui with the corresponding move
+	 * @param message
+	 * 		A CommandMessage contating a a move to update the gui with
+	 */
+	public void placeCard(CommandMessage message) {
+		Object obj =  message.getData();
+		if (obj instanceof PlayHeroicSupportCard) {
+			PlayHeroicSupportCard move = (PlayHeroicSupportCard)obj;
+			gameController.addHeroicSupport(move.getCard());
+		} if(obj instanceof PlayResourceCard) {
+			PlayResourceCard move = (PlayResourceCard)obj;
+			UpdateHeroValues value = move.getUpdateHeroValues();
+			gameController.updatePlayerHeroGui(value.getLife(), value.getEnergyShield(),
+					value.getCurrentResource(), value.getMaxResource());
+			gameController.playResourceCardOk(move.getCard());
+		}
 	}
 	
 	/**
@@ -162,6 +178,12 @@ public class ClientController {
 
 	public void setPhase(Phase phase) {
 		gameController.setPhase(phase);
+	}
+	public void notValidMove(CommandMessage message) {
+		gameController.notValidMove((Exception)message.getData());
+	}
+	public void friendlyDrawCard(CommandMessage message) {
+		gameController.drawCardOk((Card)message.getData());
 	}
 
 

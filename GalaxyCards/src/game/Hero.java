@@ -1,5 +1,9 @@
 package game;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 
@@ -30,27 +34,39 @@ public class Hero implements Serializable {
 	private static final long serialVersionUID = -704227521994333558L;
 
 	private Deck deck;
-	private GameController gameController;
 	private String heroName = "Supreme Commander";
 	private int life, energyShield, maxResource, currentResource, incrementalDamage = 0;
 	private boolean resourceCardPlayedThisRound = false;
 
-	public Hero(GameController gameController) {
-		this.gameController = gameController;
+	public Hero() {
 		life = 20;
 		energyShield = 10;
 		maxResource = 0;
 		currentResource = 0;
+		this.deck = loadDeck();
 	}
 
-	public Hero(String heroName, GameController gameController) {
-		this(gameController);
+	public Hero(String heroName) {
 		this.heroName = heroName;
 		life = 20;
 		energyShield = 10;
 		maxResource = 0;
 		currentResource = 0;
+		loadDeck();
 	}
+	
+	public Deck loadDeck(){
+		File file = new File("files/decks/pattetest.dat");
+		try(
+			FileInputStream fin = new FileInputStream(file);
+			ObjectInputStream ois = new ObjectInputStream(fin)) {
+			return (Deck)ois.readObject();
+		} catch(ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		} return null;
+	}
+	
+	
 
 	public void setDeck(Deck deck) {
 		this.deck = deck;

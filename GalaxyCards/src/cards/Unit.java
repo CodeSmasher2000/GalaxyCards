@@ -212,16 +212,13 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 		this.id = id;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		Unit toCompare = (Unit)obj;
-		if (toCompare.getId() == getId()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	
-
+//	@Override
+//	public boolean equals(Object obj) {
+//		Unit toCompare = (Unit)obj;
+//		if (toCompare.getId() == getId()) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 }

@@ -15,6 +15,7 @@ import enumMessage.Lanes;
 import enumMessage.Phase;
 import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
+import exceptionsPacket.NoLaneSelectedException;
 import exceptionsPacket.ResourcePlayedException;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
@@ -32,7 +33,6 @@ import move.UpdateHeroValues;
  *
  */
 public class GameController {
-	private Hero hero;
 	private BoardGuiController boardController;
 	private ClientController clientController;
 	private Phase phase;
@@ -45,26 +45,22 @@ public class GameController {
 //		startNewGame();
 	}
 	
-	public void setChosenHero(Hero hero){
-		this.hero=hero;
-	}
 	/**
 	 * Sends to the server that the client has played a ResourceCard.
 	 * @param card
 	 * 			The ResourceCard that has been played.
 	 * @throws ResourcePlayedException
 	 */
-	public void playResourceCard(ResourceCard card) throws ResourcePlayedException {
-		boolean addResourceOK = hero.addResource();
-
-		if (addResourceOK == true) {
-			updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
-					hero.getMaxResource());
-			PlayResourceCard move = new PlayResourceCard(card);
-			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
-			clientController.writeMessage(message);
-		}
+	public void playResourceCard(ResourceCard card) {
+		// Skicka till server
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_PLAYCARD,
+				null,new PlayResourceCard(card)));
 	}
+	
+	public void playResourceCardOk(ResourceCard resourceCard) {
+		boardController.addToPlayerScrapYard(resourceCard);
+	}
+	
 	/**
 	 * Sends to the server that the client has played a Unit Card.
 	 * @param card
@@ -74,21 +70,15 @@ public class GameController {
 	 * @throws InsufficientResourcesException
 	 */
 	public void playUnit(Unit card, Lanes lane) throws InsufficientResourcesException {
-		if (useResources(card.getPrice())) {
-			// TODO Skicka till klient: card objektet samt Lanes lane.
-			// hero.getCurrentResources(). Klienten ska säga till motståndaren
-			// vilket kort som spelas och uppdatera
-			// opponentHeroGui.setCurrentResources(int newValue)
 			PlayUnitCard move = new PlayUnitCard(card,lane);			
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
-			
 			clientController.writeMessage(message);
-			
-			// Amen Tjena
-			//Debugg
-			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server","GREEN");
-		}
 	}
+	
+	public void playUnitOK(Unit card, Lanes lane) {
+		
+	}
+	
 	/**
 	 * Sends to the server that the client has played a HeroicSupport Card.
 	 * @param card
@@ -96,11 +86,13 @@ public class GameController {
 	 * @throws InsufficientResourcesException
 	 */
 	public void playHeroicSupport(HeroicSupport card) throws InsufficientResourcesException{
-		if(useResources(card.getPrice())){
 			PlayHeroicSupportCard move = new PlayHeroicSupportCard(card);
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD, null, move);
 			clientController.writeMessage(message);
-		}
+	}
+	
+	public void addHeroicSupport(HeroicSupport card) {
+		boardController.addHeroicSupport(card);
 	}
 	/**
 	 *  Sends to the server that the client has played a Tech Card.
@@ -109,46 +101,21 @@ public class GameController {
 	 * @throws InsufficientResourcesException
 	 */
 	public void playTech(Tech card) throws InsufficientResourcesException{
-		if(useResources(card.getPrice())){
-			//TODO Skicka till klient card objektet
-		}
+//		if(useResources(card.getPrice())){
+//			//TODO Skicka till klient card objektet
+//		}
 	}
 
-	public int getAvaibleResources() {
-		return hero.getCurrentResources();
-	}
-	public int getMaxResources(){
-		return hero.getMaxResource();
-	}
-	/**
-	 * Checks if the player has enough resources to play a card.
-	 * @param amount
-	 * 			Amount of resources that the player want to use.
-	 * @return
-	 * 		returns true if the player has enough resources to use.
-	 * @throws InsufficientResourcesException
-	 */
-	private boolean useResources(int amount) throws InsufficientResourcesException {
-		boolean useResourceOK = hero.useResource(amount);
 
-		if (useResourceOK == true) {
-			updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
-					hero.getMaxResource());
-			
-		}
-
-		return useResourceOK;
-	}
-
-	/**
-	 * Resets the players resources and untaps the cards.
-	 */
-	public void newRound() {
-		hero.resetResources();
-		updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(), hero.getMaxResource());
-		untapCards();
-		// TODO snacka med klient
-	}
+//	/**
+//	 * Resets the players resources and untaps the cards.
+//	 */
+//	public void newRound() {
+//		hero.resetResources();
+//		updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(), hero.getMaxResource());
+//		untapCards();
+//		// TODO snacka med klient
+//	}
 
 	/**
 	 * Asks boardcontroller to untap cards in the GUI.
@@ -164,12 +131,8 @@ public class GameController {
 	 * @param currentResource
 	 * @param maxResource
 	 */
-	private void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
+	public void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
 		boardController.updatePlayerHeroGui(life, energyShield, currentResource, maxResource);
-		UpdateHeroValues move = new UpdateHeroValues(life, energyShield, currentResource, maxResource);
-		CommandMessage message = new CommandMessage(Commands.MATCH_UPDATE_HERO ,null,move);
-		clientController.writeMessage(message);
-		
 	}
 	/**
 	 * Updates the opponents hero's GUI.
@@ -202,15 +165,18 @@ public class GameController {
 	}
 	
 	/**
-	 * Draws a card to the player. Sends message to the opponent that the player drew a card.
+	 * Draws a card to the player. Sends message to the opponent that the player draw a card.
 	 */
 	public void drawCard() {
-		Card card = hero.DrawCard();
+		// Skicka meddelande till server
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_DRAW_CARD, null));
+	}
+	
+	public void drawCardOk(Card card) {
 		try {
 			boardController.drawCard(card);
-			clientController.writeMessage(new CommandMessage(Commands.MATCH_DRAW_CARD,
-					null));
 		} catch (GuiContainerException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -332,6 +298,14 @@ public class GameController {
 
 	public Attack getAttack() {
 		return this.attack;
+	}
+	// DEBUG PURPOSE
+	public void newRound() {
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_NEW_ROUND, null));
+	}
+	
+	public void notValidMove(Exception e) {
+		InfoPanelGUI.append(e.getMessage());
 	}
 
 	public void commitMove(Attack attack2) {

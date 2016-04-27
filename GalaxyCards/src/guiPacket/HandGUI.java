@@ -18,6 +18,7 @@ import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
 import exceptionsPacket.ResourcePlayedException;
+import game.GameController;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
