@@ -23,6 +23,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	private boolean tapped = true;
 	private String abilityText;
 	private int maxHp;
+	private int id;
 
 	/**
 	 * Constructor instantiates this card with given arguments to configure its
@@ -202,5 +203,25 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 		setDefense(amt);
 
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Unit toCompare = (Unit)obj;
+		if (toCompare.getId() == getId()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 
 }

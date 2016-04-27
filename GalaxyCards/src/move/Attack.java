@@ -22,7 +22,6 @@ public class Attack implements Serializable {
 		offensive[index] = attacker;
 		defensive[index] = defender;
 		index++;
-
 	}
 
 	public void fight() {
@@ -55,6 +54,15 @@ public class Attack implements Serializable {
 
 			}
 		}
+	}
+	
+	public int getIndex(Unit unit) {
+		for (int i = 0; i < index; i++) {
+			if (unit.equals(offensive[i])) {
+				return i;
+			}
+		}
+		return-1;
 	}
 
 	public void setDefender(Unit defender, int index) {

@@ -21,7 +21,7 @@ import move.UpdateHeroValues;
 
 /**
  * This class contatins nessarsacry data and methods for storing data about a
- * match. It´s a thread since we
+ * match.
  * 
  * @author patriklarsson
  *

@@ -327,13 +327,17 @@ public class GameController {
 	 * Sends an attack or defense move to the other client.
 	 */
 	public void commitMove() {
-		clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
-				null,this.attack));
-		InfoPanelGUI.append("Move Commited", "BLUE");
+		
 	}
 
 	public Attack getAttack() {
 		return this.attack;
+	}
+
+	public void commitMove(Attack attack2) {
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
+				null,this.attack));
+		InfoPanelGUI.append("Move Commited", "BLUE");
 	}
 
 }
