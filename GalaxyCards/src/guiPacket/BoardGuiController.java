@@ -343,6 +343,7 @@ public class BoardGuiController {
 	protected void playCard(Card card) throws GuiContainerException, NoLaneSelectedException, ResourcePlayedException,
 			InsufficientResourcesException {
 		if (card instanceof ResourceCard) {
+			System.out.println("BoardGUIController playcard");
 			ResourceCard temp = (ResourceCard) card;
 			playResourceCard((ResourceCard) cloneCard(temp));
 		}

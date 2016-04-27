@@ -231,6 +231,7 @@ public class HandGUI extends JPanel {
 			if (temp instanceof ResourceCard) {
 
 				try {
+					System.out.println("HandGui mousepressed resourcecard");
 					boardController.playCard(temp);
 					temp = playCard(temp);
 					temp.setBorder(defaultBorder);

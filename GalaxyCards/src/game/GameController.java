@@ -64,6 +64,7 @@ public class GameController {
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
 			clientController.writeMessage(message);
 		}
+		System.out.println("GameController playResourceCard");
 	}
 	/**
 	 * Sends to the server that the client has played a Unit Card.
@@ -273,7 +274,7 @@ public class GameController {
 	 */
 	public void updateOpponentScrapYard(Card card) {
 		if (card instanceof ResourceCard){
-			InfoPanelGUI.append("scrapyard", null);
+			InfoPanelGUI.append("scrapyard");
 			PlayResourceCard move = new PlayResourceCard((ResourceCard)card);
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
 			clientController.writeMessage(message);
