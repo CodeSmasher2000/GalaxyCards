@@ -105,7 +105,7 @@ public class ServerController {
 	public void sendHero(ClientHandler clientHandler){
 		System.out.println("sendHero är kallad");
 		//The following code is only for test purpose
-		Deck deck = loadDeck("files/decks/TestServerDeck.dat");
+		Deck deck = loadDeck("files/decks/CheapDeck.dat");
 
 		CommandMessage commandMessage = new CommandMessage(Commands.GETHERO,"Server",deck);
 		clientHandler.writeMessage(commandMessage);

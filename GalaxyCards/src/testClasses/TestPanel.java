@@ -85,7 +85,7 @@ public class TestPanel extends JPanel {
 
 	private void loadDeck() {
 		try {
-			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("files/decks/padde.dat")));
+			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream("files/decks/CheapDeck.dat")));
 			deck = (Deck) ois.readObject();
 			deck.shuffle();
 			System.out.println(deck.toString());
