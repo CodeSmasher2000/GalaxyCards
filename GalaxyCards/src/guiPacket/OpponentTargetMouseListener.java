@@ -71,7 +71,8 @@ public class OpponentTargetMouseListener implements MouseListener {
 		}
 		
 		if (event.getSource() instanceof HeroicSupport) {
-			boardController.setDefender(card);
+//			boardController.setDefender(card);
+			boardController.setDefender((HeroicSupport)event.getSource());
 		}
 	}
 

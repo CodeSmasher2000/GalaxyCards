@@ -617,6 +617,7 @@ public class BoardGuiController {
 
 		public AttackThreadListener() {
 			InfoPanelGUI.append("Attack Thread Started");
+			targetSelected=false;
 		}
 
 		public void setAttacker(Card card) {
@@ -626,7 +627,7 @@ public class BoardGuiController {
 		public void setDefender(Object defender) {
 			this.defender = defender;
 			setTargetSelected(true);
-			infoPanel.append("Target is set");
+			InfoPanelGUI.append("Target is set");
 		}
 
 		@Override
@@ -642,7 +643,7 @@ public class BoardGuiController {
 			// TODO Add the attacker and defender to the attack object
 			Attack attack = gameController.getAttack();
 			attack.setOpponents(attacker, defender);
-			infoPanel.append("Target Selected. Attack Thread stopped", null);
+			InfoPanelGUI.append("Target Selected. Attack Thread stopped");
 			attackSelectThread = null;
 		}
 
