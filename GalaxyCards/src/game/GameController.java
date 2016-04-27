@@ -28,7 +28,7 @@ import move.UpdateHeroValues;
 
 /**This class manages the communication between the boardGui, hero and client classes.
  * 
- * @author 13120dde
+ * @author 13120dde, Jonatan, Patrik Larsson
  *
  */
 public class GameController {
@@ -48,7 +48,12 @@ public class GameController {
 	public void setChosenHero(Hero hero){
 		this.hero=hero;
 	}
-
+	/**
+	 * Sends to the server that the client has played a ResourceCard.
+	 * @param card
+	 * 			The ResourceCard that has been played.
+	 * @throws ResourcePlayedException
+	 */
 	public void playResourceCard(ResourceCard card) throws ResourcePlayedException {
 		boolean addResourceOK = hero.addResource();
 
@@ -60,7 +65,14 @@ public class GameController {
 			clientController.writeMessage(message);
 		}
 	}
-	
+	/**
+	 * Sends to the server that the client has played a Unit Card.
+	 * @param card
+	 * 			The card that has been played
+	 * @param lane
+	 * 			The lane the Unit Card has been placed on the board.
+	 * @throws InsufficientResourcesException
+	 */
 	public void playUnit(Unit card, Lanes lane) throws InsufficientResourcesException {
 		if (useResources(card.getPrice())) {
 			// TODO Skicka till klient: card objektet samt Lanes lane.
@@ -77,7 +89,12 @@ public class GameController {
 			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server","GREEN");
 		}
 	}
-	
+	/**
+	 * Sends to the server that the client has played a HeroicSupport Card.
+	 * @param card
+	 * 			The HeroicSupport card the client played.
+	 * @throws InsufficientResourcesException
+	 */
 	public void playHeroicSupport(HeroicSupport card) throws InsufficientResourcesException{
 		if(useResources(card.getPrice())){
 			PlayHeroicSupportCard move = new PlayHeroicSupportCard(card);
@@ -85,7 +102,12 @@ public class GameController {
 			clientController.writeMessage(message);
 		}
 	}
-	
+	/**
+	 *  Sends to the server that the client has played a Tech Card.
+	 * @param card
+	 * 			The tech card the client has played.
+	 * @throws InsufficientResourcesException
+	 */
 	public void playTech(Tech card) throws InsufficientResourcesException{
 		if(useResources(card.getPrice())){
 			//TODO Skicka till klient card objektet
@@ -98,19 +120,29 @@ public class GameController {
 	public int getMaxResources(){
 		return hero.getMaxResource();
 	}
-
+	/**
+	 * Checks if the player has enough resources to play a card.
+	 * @param amount
+	 * 			Amount of resources that the player want to use.
+	 * @return
+	 * 		returns true if the player has enough resources to use.
+	 * @throws InsufficientResourcesException
+	 */
 	private boolean useResources(int amount) throws InsufficientResourcesException {
 		boolean useResourceOK = hero.useResource(amount);
 
 		if (useResourceOK == true) {
 			updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
 					hero.getMaxResource());
-			// TODO skicka till klient
+			
 		}
 
 		return useResourceOK;
 	}
 
+	/**
+	 * Resets the players resources and untaps the cards.
+	 */
 	public void newRound() {
 		hero.resetResources();
 		updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(), hero.getMaxResource());
@@ -118,10 +150,20 @@ public class GameController {
 		// TODO snacka med klient
 	}
 
+	/**
+	 * Asks boardcontroller to untap cards in the GUI.
+	 */
 	private void untapCards() {
 		boardController.untapCards();
 	}
 
+	/**
+	 * Updates the players Hero Gui.
+	 * @param life
+	 * @param energyShield
+	 * @param currentResource
+	 * @param maxResource
+	 */
 	private void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
 		boardController.updatePlayerHeroGui(life, energyShield, currentResource, maxResource);
 		UpdateHeroValues move = new UpdateHeroValues(life, energyShield, currentResource, maxResource);
@@ -129,13 +171,23 @@ public class GameController {
 		clientController.writeMessage(message);
 		
 	}
-	
+	/**
+	 * Updates the opponents hero's GUI.
+	 * @param message
+	 * 				Message from server wich contains what to be updated.
+	 */
 	public void updateOpponentHero(CommandMessage message){
 		UpdateHeroValues opHero = (UpdateHeroValues) message.getData();
 		boardController.updateOpponentHeroGui(opHero.getLife(), opHero.getEnergyShield(), opHero.getCurrentResource(), opHero.getMaxResource());
 		
 	}
-	
+	/**
+	 * Updates the GUI when the opponent has played a unit card.
+	 * @param unit
+	 * 			Unit the opponent played.
+	 * @param lane
+	 * 			The lane it is placed in.
+	 */
 	public void opponentPlaysUnit(Unit unit, Lanes lane) {
 		try {
 			boardController.opponentPlaysUnit(unit, lane);
@@ -149,6 +201,9 @@ public class GameController {
 		new StartGameWindow(boardController);
 	}
 	
+	/**
+	 * Draws a card to the player. Sends message to the opponent that the player drew a card.
+	 */
 	public void drawCard() {
 		Card card = hero.DrawCard();
 		try {
@@ -156,11 +211,16 @@ public class GameController {
 			clientController.writeMessage(new CommandMessage(Commands.MATCH_DRAW_CARD,
 					null));
 		} catch (GuiContainerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	
+	/**
+	 * Updates the GUI when the oppponent plays a heroic support.
+	 * @param card
+	 * 			The heroic support the opponent played.
+	 */
 	public void opponentPlaysHeroic(HeroicSupport card) {
 		try {
 			boardController.opponentPlaysHeroicSupport(card);
@@ -170,6 +230,10 @@ public class GameController {
 		}
 	}
 	
+	/**
+	 * Updates the gui when opponent plays a resource card.
+	 * @param move
+	 */
 	public void opponentPlaysResourceCard(PlayResourceCard move){
 		try{
 			boardController.opponentPlaysResource(move.getCard());
@@ -179,6 +243,9 @@ public class GameController {
 		
 	}
 	
+	/**
+	 * Draws 7 cards when the game initializes.
+	 */
 	public void initGame() {
 		InfoPanelGUI.append("InitGame()");
 		// Draw 7 Cards
@@ -188,6 +255,9 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Updates the GUI when opponent draws a card.
+	 */
 	public void opponentDrawCard() {
 		try {
 			boardController.opponentDrawsCard();
@@ -197,6 +267,10 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Updates the opponents scrapyard in the GUI.
+	 * @param card
+	 */
 	public void updateOpponentScrapYard(Card card) {
 		if (card instanceof ResourceCard){
 			InfoPanelGUI.append("scrapyard", null);
@@ -218,6 +292,10 @@ public class GameController {
 		return this.phase;
 	}
 	
+	/**
+	 * Sets wich phase each player is in.
+	 * @param phase
+	 */
 	public void setPhase(Phase phase) {
 		switch (phase) {
 		case ATTACKING:
@@ -245,6 +323,9 @@ public class GameController {
 		boardController.checkStatus();
 	}
 
+	/**
+	 * Sends an attack or defense move to the other client.
+	 */
 	public void commitMove() {
 		clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
 				null,this.attack));
