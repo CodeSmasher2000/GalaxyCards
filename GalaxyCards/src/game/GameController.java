@@ -59,6 +59,7 @@ public class GameController {
 	
 	public void playResourceCardOk(ResourceCard resourceCard) {
 		boardController.addToPlayerScrapYard(resourceCard);
+		boardController.removeCardFromHand(resourceCard);
 	}
 	
 	/**

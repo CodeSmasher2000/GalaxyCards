@@ -156,7 +156,7 @@ public class HandGUI extends JPanel {
 	 * @param card
 	 * @return : card
 	 */
-	protected Card playCard(Card card) {
+	public Card removeCard(Card card) {
 
 		Card[] tempCards = new Card[8];
 		tempCards = cards;
@@ -233,7 +233,7 @@ public class HandGUI extends JPanel {
 
 				try {
 					boardController.playCard(temp);
-					temp = playCard(temp);
+//					temp = removeCard(temp);
 					temp.setBorder(defaultBorder);
 					// temp.shrink();
 					temp.removeMouseListener(listener);
@@ -250,30 +250,30 @@ public class HandGUI extends JPanel {
 					repaint();
 				}
 
-			} else {
-				if (temp.getPrice() <= boardController.getAvaibleResources()) {
-
-					try {
-						boardController.playCard(temp);
-						temp = playCard(temp);
-						temp.setBorder(defaultBorder);
-						// temp.shrink();
-						temp.removeMouseListener(listener);
-					} catch (GuiContainerException e) {
-						System.err.println(e.getMessage());
-						InfoPanelGUI.append(e.getMessage(),"RED");
-					} catch (NoLaneSelectedException e) {
-						System.err.println(e.getMessage());
-					} catch (ResourcePlayedException e) {
-						InfoPanelGUI.append(e.getMessage(),"RED");
-					} catch (InsufficientResourcesException e) {
-						InfoPanelGUI.append(e.getMessage(),"RED");
-					} finally {
-						repaint();
-					}
-				} else {
-					InfoPanelGUI.append("Insufficient resources","RED");
-				}
+//			} else {
+//				if (temp.getPrice() <= boardController.getAvaibleResources()) {
+//
+//					try {
+//						boardController.playCard(temp);
+//						temp = removeCard(temp);
+//						temp.setBorder(defaultBorder);
+//						// temp.shrink();
+//						temp.removeMouseListener(listener);
+//					} catch (GuiContainerException e) {
+//						System.err.println(e.getMessage());
+//						InfoPanelGUI.append(e.getMessage(),"RED");
+//					} catch (NoLaneSelectedException e) {
+//						System.err.println(e.getMessage());
+//					} catch (ResourcePlayedException e) {
+//						InfoPanelGUI.append(e.getMessage(),"RED");
+//					} catch (InsufficientResourcesException e) {
+//						InfoPanelGUI.append(e.getMessage(),"RED");
+//					} finally {
+//						repaint();
+//					}
+//				} else {
+//					InfoPanelGUI.append("Insufficient resources","RED");
+//				}
 			}
 
 		}

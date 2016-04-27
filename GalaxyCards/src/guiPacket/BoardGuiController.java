@@ -437,6 +437,10 @@ public class BoardGuiController {
 	private void playResourceCard(ResourceCard card) throws ResourcePlayedException {
 		gameController.playResourceCard(card);
 	}
+	
+	public void removeCardFromHand(Card card) {
+		playerHandGui.removeCard(card);
+	}
 
 	private void playHeroicSupport(HeroicSupport cardToPlay)
 			throws GuiContainerException, InsufficientResourcesException {
@@ -478,7 +482,7 @@ public class BoardGuiController {
 	private void setSelectedLane()
 			throws GuiContainerException, InsufficientResourcesException, ResourcePlayedException {
 		playUnitCard(tempUnit);
-		playerHandGui.playCard(tempUnit);
+		playerHandGui.removeCard(tempUnit);
 		laneSelected = true;
 	}
 
