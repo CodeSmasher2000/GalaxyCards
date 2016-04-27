@@ -136,17 +136,18 @@ public class TestPanel extends JPanel {
 				}
 			}
 			if (event.getSource() == testDraw) {
-				try {
-					System.out.println("Deck size: " + deck.getAmtOfCards());
-					boardController.drawCard(temp);
-					temp = deck.drawCard();
-				} catch (GuiContainerException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage(),"RED");
-				} catch (EmptyDeckException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage(),"RED");
-				}
+//				try {
+////					System.out.println("Deck size: " + deck.getAmtOfCards());
+////					boardController.drawCard(temp);
+////					temp = deck.drawCard();
+//				} catch (GuiContainerException e) {
+//					System.err.println(e.getMessage());
+//					InfoPanelGUI.append(e.getMessage(),"RED");
+//				} catch (EmptyDeckException e) {
+//					System.err.println(e.getMessage());
+//					InfoPanelGUI.append(e.getMessage(),"RED");
+//				}
+				gameController.drawCard();
 			}
 			if (event.getSource() == testOpponentDrawCard) {
 				try {

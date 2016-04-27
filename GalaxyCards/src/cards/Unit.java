@@ -204,14 +204,6 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 //	@Override
 //	public boolean equals(Object obj) {
 //		Unit toCompare = (Unit)obj;

@@ -35,6 +35,7 @@ public class Match implements Observer {
 	private ClientHandler user2;
 	private Player player1;
 	private Player player2;
+	private int idCounter = -1;
 
 	// Instance Variables for what player is in defensive och attacking.
 	private Player attacking;
@@ -261,6 +262,7 @@ public class Match implements Observer {
 			// Check if the hand is full
 			if (hand.size() < 8) {
 				Card card = hero.DrawCard();
+				card.setId(++idCounter);
 				hand.add(card);
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_FRIENDLY_DRAW_CARD, "Server",
 						card));
@@ -273,6 +275,12 @@ public class Match implements Observer {
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
 						"server", e));
 			}
+		}
+		
+		private void discardRandomCard() {
+			Random rand = new Random();
+			rand.nextInt(8);
+			
 		}
 	}
 

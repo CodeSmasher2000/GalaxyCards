@@ -70,14 +70,15 @@ public class GameController {
 	 * 			The lane the Unit Card has been placed on the board.
 	 * @throws InsufficientResourcesException
 	 */
-	public void playUnit(Unit card, Lanes lane) throws InsufficientResourcesException {
+	public void playUnit(Unit card, Lanes lane) {
 			PlayUnitCard move = new PlayUnitCard(card,lane);			
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
 			clientController.writeMessage(message);
 	}
 	
-	public void playUnitOK(Unit card, Lanes lane) {
-		
+	public void playUnitOK(Card card, Lanes lane) {
+		System.out.println();
+		boardController.addUnitCard((Unit)card, lane);
 	}
 	
 	/**

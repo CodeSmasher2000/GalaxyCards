@@ -147,12 +147,15 @@ public class ClientController {
 		if (obj instanceof PlayHeroicSupportCard) {
 			PlayHeroicSupportCard move = (PlayHeroicSupportCard)obj;
 			gameController.addHeroicSupport(move.getCard());
-		} if(obj instanceof PlayResourceCard) {
+		} else if(obj instanceof PlayResourceCard) {
 			PlayResourceCard move = (PlayResourceCard)obj;
 			UpdateHeroValues value = move.getUpdateHeroValues();
 			gameController.updatePlayerHeroGui(value.getLife(), value.getEnergyShield(),
 					value.getCurrentResource(), value.getMaxResource());
 			gameController.playResourceCardOk(move.getCard());
+		} else if(obj instanceof PlayUnitCard) {
+			PlayUnitCard move = (PlayUnitCard)obj;
+			gameController.playUnitOK(move.getCard(), move.getLane());
 		}
 	}
 	

@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import cards.ResourceCard;
+import cards.Unit;
 import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
@@ -157,7 +158,7 @@ public class HandGUI extends JPanel {
 	 * @return : card
 	 */
 	public Card removeCard(Card card) {
-
+		System.out.println("Jag anropas");
 		Card[] tempCards = new Card[8];
 		tempCards = cards;
 		cards = null;
@@ -172,7 +173,7 @@ public class HandGUI extends JPanel {
 		for (int i = 0; i < tempCards.length; i++) {
 			if (tempCards[i] != null) {
 				tempCards[i].removeMouseListener(listener);
-				if (tempCards[i] != card) {
+				if (!tempCards[i].equals(card)) {
 					Card card1 = tempCards[i];
 					try {
 						addCard(card1);
@@ -180,6 +181,8 @@ public class HandGUI extends JPanel {
 						System.err.println(e.getMessage() + " Error caused by the rearranging of cards on hand");
 						InfoPanelGUI.append(e.getMessage(),"RED");
 					}
+				} else {
+					System.out.println("Jag är här");
 				}
 			}
 		}
@@ -249,6 +252,7 @@ public class HandGUI extends JPanel {
 				} finally {
 					repaint();
 				}
+				
 
 //			} else {
 //				if (temp.getPrice() <= boardController.getAvaibleResources()) {
@@ -274,6 +278,23 @@ public class HandGUI extends JPanel {
 //				} else {
 //					InfoPanelGUI.append("Insufficient resources","RED");
 //				}
+			} else if (temp instanceof Unit) {
+				try {
+					boardController.playCard(temp);
+				} catch (GuiContainerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoLaneSelectedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ResourcePlayedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InsufficientResourcesException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 
 		}

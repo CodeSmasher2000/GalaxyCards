@@ -24,7 +24,6 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	private boolean hasAbility;
 	private boolean tapped = true;
 	private int maxHp;
-	private int id;
 
 	/**
 	 * Constructor instantiates this card with given arguments to configure its
@@ -182,16 +181,5 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 
 	public void setMaxHp(int maxHp) {
 		this.maxHp = maxHp;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
-	
+	}	
 }

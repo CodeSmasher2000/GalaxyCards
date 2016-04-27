@@ -381,25 +381,33 @@ public class BoardGuiController {
 	 * @return card : Card
 	 */
 	protected Card cloneCard(Card card) {
+		// TODO LÄGG TILL id från card
 		if (card instanceof ResourceCard) {
 			ResourceCard clonedCard = new ResourceCard();
+			clonedCard.setId(card.getId());
 			return clonedCard;
 		} else if (card instanceof HeroicSupport) {
 			HeroicSupport temp = (HeroicSupport) card;
 			HeroicSupport clonedCard = new HeroicSupport(temp.getName(), temp.getRarity(), temp.getImage(),
 					temp.hasAbility(), temp.getPrice(), temp.getDefense());
 			temp = null;
+			clonedCard.setId(card.getId());
 			return clonedCard;
 		} else if (card instanceof Tech) {
 			Tech temp = (Tech) card;
 			Tech clonedCard = new Tech(temp.getName(), temp.getRarity(), temp.getImage(), temp.getPrice());
+			clonedCard.setId(card.getId());
 			return clonedCard;
-		} else {
+		} else if(card instanceof Unit) {
 			Unit temp = (Unit) card;
 			Unit clonedCard = new Unit(temp.getName(), temp.getRarity(), temp.getImage(), temp.hasAbility(),
 					temp.getAttack(), temp.getDefense(), temp.getPrice());
+			clonedCard.setId(card.getId());
 			card = null;
 			return clonedCard;
+		}
+		else {
+			return null;
 		}
 	}
 
@@ -461,16 +469,35 @@ public class BoardGuiController {
 		}
 	}
 
-	private void playUnitCard(Unit cardToPlay) throws GuiContainerException, InsufficientResourcesException {
-		cardToPlay = (Unit) cloneCard(cardToPlay);
-		System.out.println(Thread.currentThread());
+	public void playUnitCard(Unit cardToPlay) throws GuiContainerException {
+//		cardToPlay = (Unit) cloneCard(cardToPlay);
+//		System.out.println(Thread.currentThread());
+//		cardToPlay.shrink();
+//		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
+//			playerDefLane.addUnit(cardToPlay);
+//		}
+//		if (tempLane.getLaneType() == Lanes.PLAYER_OFFENSIVE) {
+//			playerOffLane.addUnit(cardToPlay);
+//		}
 		gameController.playUnit(cardToPlay, tempLane.getLaneType());
-		cardToPlay.shrink();
-		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
-			playerDefLane.addUnit(cardToPlay);
-		}
-		if (tempLane.getLaneType() == Lanes.PLAYER_OFFENSIVE) {
-			playerOffLane.addUnit(cardToPlay);
+		
+	}
+	
+	public void addUnitCard(Unit UnitCardToAdd, Lanes lane) {
+		Unit card = (Unit)cloneCard(UnitCardToAdd);
+		card.shrink();
+		try {
+			if (lane == Lanes.PLAYER_DEFENSIVE) {
+				playerDefLane.addUnit(card);
+			} else if(lane == Lanes.PLAYER_OFFENSIVE) {
+				playerOffLane.addUnit(card);
+			} else if(lane == Lanes.ENEMY_DEFENSIVE) {
+				opponentDefLane.addUnit(card);
+			} else if(lane == Lanes.ENEMY_OFFENSIVE) {
+				opponentOffLane.addUnit(card);
+			}
+		} catch(GuiContainerException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -481,9 +508,10 @@ public class BoardGuiController {
 
 	private void setSelectedLane()
 			throws GuiContainerException, InsufficientResourcesException, ResourcePlayedException {
-		playUnitCard(tempUnit);
-		playerHandGui.removeCard(tempUnit);
+		
+//		playerHandGui.removeCard(tempUnit);
 		laneSelected = true;
+		playUnitCard(tempUnit);
 	}
 
 	/**
@@ -569,7 +597,8 @@ public class BoardGuiController {
 			laneSelected = false;
 			laneSelectThread = null;
 			InfoPanelGUI.append("Lane select thread stopped");
-
+			// TODO Ska den ligga här!?
+			
 		}
 	}
 

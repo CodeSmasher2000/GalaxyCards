@@ -57,6 +57,7 @@ public abstract class Card extends JPanel {
 	private JButton abilityButton;
 	private JTextArea abilityArea;
 	private Ability ability = null;
+	private int id;
 
 	private final String PICTURE_DIRECTORY = "files/pictures/";
 
@@ -379,6 +380,14 @@ public abstract class Card extends JPanel {
 		this.ability = ability;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	private class AbilityButtonListener implements ActionListener {
 
 		@Override
@@ -423,6 +432,14 @@ public abstract class Card extends JPanel {
 			// TODO Auto-generated method stub
 			
 		}
-		
 	}
+	
+		@Override
+		public boolean equals(Object obj) {
+			Card toCompare = (Card)obj;
+			if (toCompare.getId() == getId()) {
+				return true;
+			}
+			return false;
+		}
 }
