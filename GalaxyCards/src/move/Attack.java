@@ -26,7 +26,7 @@ public class Attack implements Serializable {
 	}
 
 	public void fight() {
-		for (int index = this.index; index > 0; index--) {
+		for (int index = this.index; index >= 0; index--) {
 			Unit attacker = (Unit) offensive[index];
 			int attackerAtt = attacker.getAttack();
 			int attackerDef = attacker.getDefense();

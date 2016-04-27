@@ -232,7 +232,7 @@ public class GameController {
 		default:
 			break;
 		}
-		InfoPanelGUI.append("In " + phase, "BLUE");
+//		InfoPanelGUI.append("In " + phase, "BLUE");
 	}
 
 	/**
