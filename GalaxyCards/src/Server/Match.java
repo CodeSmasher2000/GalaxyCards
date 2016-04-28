@@ -9,6 +9,7 @@ import java.util.Random;
 
 import cards.HeroicSupport;
 import cards.ResourceCard;
+import cards.Tech;
 import cards.Unit;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
@@ -21,6 +22,7 @@ import game.Hero;
 import guiPacket.Card;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
+import move.PlayTechCard;
 import move.PlayUnitCard;
 import move.UpdateHeroValues;
 
@@ -162,7 +164,11 @@ public class Match implements Observer {
 			} else if (object instanceof PlayResourceCard) {
 				PlayResourceCard move = (PlayResourceCard) object;
 				player.playResourceCard(move);
-			} else if (object instanceof UpdateHeroValues) {
+			} else if (object instanceof PlayTechCard) {
+				PlayTechCard move = (PlayTechCard) object;
+				player.playTechCard(move.getCard());
+			}
+			else if (object instanceof UpdateHeroValues) {
 				UpdateHeroValues move = (UpdateHeroValues) object;
 				player.updateHeroValues(move);
 			}
@@ -210,6 +216,7 @@ public class Match implements Observer {
 			try {
 				hero.useResource(move.getCard().getPrice());
 				HeroicSupportLane.add(move.getCard());
+				hand.remove(move.getCard());
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
 			} catch (InsufficientResourcesException e) {
@@ -229,7 +236,7 @@ public class Match implements Observer {
 				CommandMessage message = new CommandMessage(Commands.MATCH_PLACE_CARD,
 						"Server", move);
 				sendMessageToPlayer(this, message);
-				
+				hand.remove(move.getCard());
 				// Send to the other client
 				message = new CommandMessage(Commands.MATCH_PLAYCARD, "Server",
 						move);
@@ -238,6 +245,7 @@ public class Match implements Observer {
 				// Send Response to client that made move
 				CommandMessage message = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "Server",
 						e);
+				sendMessageToPlayer(this, message);
 			}
 			
 		}
@@ -249,6 +257,7 @@ public class Match implements Observer {
 				move.setUpdateHeroValues(new UpdateHeroValues(hero.getLife(),
 						hero.getEnergyShield(), hero.getCurrentResources(),
 						hero.getMaxResource()));
+				updateHeroValues(move.getUpdateHeroValues());
 				hand.remove(card);
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move) );
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
@@ -260,9 +269,33 @@ public class Match implements Observer {
 			}
 
 		}
-
+		
+		public void playTechCard(Tech card) {
+			
+			try{
+				hero.useResource(card.getPrice());
+				addCardToScrapYard(card);
+				hand.remove(card);
+				//Send to player who initatied move
+				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD,
+						"Server", card));
+				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, "Server", card));
+			} catch (InsufficientResourcesException e) {
+				CommandMessage error = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
+						"Server", e);
+				sendMessageToPlayer(this, error);
+			}
+		}
+		
+		/**
+		 * Anropas när hjätarnas värde uppdateras
+		 * 
+		 * @param move
+		 */
 		public void updateHeroValues(UpdateHeroValues move) {
-			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_HERO, this.name, move));
+			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_OPPONENT_HERO, this.name, move));
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_FRIENDLY_HERO, this.name, move));
+			
 		}
 
 		public void drawCard() {
@@ -277,7 +310,7 @@ public class Match implements Observer {
 						card));
 				
 			} else {
-				//TODO Discard a card
+				discardRandomCard();
 				FullHandException e = new FullHandException("Hand is full can´t draw new card");
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
 						"server", e));
@@ -285,21 +318,31 @@ public class Match implements Observer {
 		}
 		
 		private void discardRandomCard() {
+			// Calculates the card to discard
 			Random rand = new Random();
-			rand.nextInt(8);
+			int i = rand.nextInt(hand.size());
+			Card card = removeCardFromHand(hand.get(i));
 			
+			// Send messages to the clients
+			CommandMessage message = new CommandMessage(Commands.MATCH_REMOVE_CARD, "server", card );
+			sendMessageToPlayer(this, message);
+			message = new CommandMessage(Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD,"server", card);
+			sendMessageToOtherPlayer(this, message);
 		}
+		
 		/**
-		 * Utility method that removes the card from hand
+		 * Utility method that removes the card from hand and adds to playerScrapyard
 		 */
-		private void removeCardFromHand(Card cardToRemove) {
+		private Card removeCardFromHand(Card cardToRemove) {
 			for (int i = 0; i < hand.size(); i++) {
 				if (cardToRemove.equals(hand.get(i))) {
 					hand.remove(i);
-					return;
+					addCardToScrapYard(cardToRemove);
+					return cardToRemove;
 				}
 			}
 			System.out.println("RemoveCardFromHand: Something went wrong");
+			return null;
 		}
 		
 		/**

@@ -24,6 +24,7 @@ import guiPacket.StartGameWindow;
 import move.Attack;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
+import move.PlayTechCard;
 import move.PlayUnitCard;
 import move.UpdateHeroValues;
 
@@ -79,6 +80,7 @@ public class GameController {
 	public void playUnitOK(Card card, Lanes lane) {
 		System.out.println();
 		boardController.addUnitCard((Unit)card, lane);
+		boardController.removeCardFromHand(card);
 	}
 	
 	/**
@@ -93,8 +95,10 @@ public class GameController {
 			clientController.writeMessage(message);
 	}
 	
-	public void addHeroicSupport(HeroicSupport card) {
+	public void playHeroicSupportOk(HeroicSupport card) {
 		boardController.addHeroicSupport(card);
+		boardController.removeCardFromHand(card);
+		InfoPanelGUI.append("In playHeroicSupportOk");
 	}
 	/**
 	 *  Sends to the server that the client has played a Tech Card.
@@ -103,9 +107,9 @@ public class GameController {
 	 * @throws InsufficientResourcesException
 	 */
 	public void playTech(Tech card) throws InsufficientResourcesException{
-//		if(useResources(card.getPrice())){
-//			//TODO Skicka till klient card objektet
-//		}
+		PlayTechCard move = new PlayTechCard(card);
+		CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD, null, move);
+		clientController.writeMessage(message);
 	}
 
 
@@ -302,18 +306,33 @@ public class GameController {
 		return this.attack;
 	}
 	// DEBUG PURPOSE
-	public void newRound() {
+	public void newround() {
 		clientController.writeMessage(new CommandMessage(Commands.MATCH_NEW_ROUND, null));
 	}
 	
 	public void notValidMove(Exception e) {
 		InfoPanelGUI.append(e.getMessage());
 	}
+	
+	public void discardCard(Card card){
+		boardController.removeCardFromHand(card);
+		boardController.addToPlayerScrapYard(card);
+	}
 
 	public void commitMove(Attack attack2) {
 		clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
 				null,this.attack));
 		InfoPanelGUI.append("Move Commited", "BLUE");
+	}
+
+	public void opponeentPlaysTech(Tech card) {
+		updateOpponentScrapYard(card);
+		
+	}
+
+	public void playTechOk(Tech card) {
+		boardController.addToPlayerScrapYard(card);
+		
 	}
 
 }
