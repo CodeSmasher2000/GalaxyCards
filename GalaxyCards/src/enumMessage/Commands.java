@@ -23,8 +23,8 @@ public enum Commands  implements Serializable {
 //	MATCHMAKING_START(7),
 //	MATCH_PLAYCARD(8);
 	LOGIN,
-	OK,
-	NOTOK,
+	LOGIN_OK,
+	LOGIN_NOTOK,
 	DISCONNECT,
 	GETHERO,
 	MATCHMAKING_MATCH_FOUND,

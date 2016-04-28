@@ -34,6 +34,11 @@ public class ClientController {
 	private String activeUser;
 	private GameController gameController= new GameController(this);
 	private ClientGUI clientGUI;
+	private boolean loginOK = false;
+	
+	public ClientController(ClientGUI clientGUi){
+		this.clientGUI=clientGUi;
+	}
 	
 	public void setClient(Client client) {
 		this.client = client;
@@ -70,18 +75,18 @@ public class ClientController {
 	 * Metod som låter användaren skriva in användarnamn och skickar det till server.
 	 */
 	public synchronized void login(){
-		
-		boolean login = false;
-		while(login !=true){
-			activeUser = JOptionPane.showInputDialog("Enter your username: ");
-			CommandMessage loginMsg = new CommandMessage(Commands.LOGIN,activeUser);
-			client.sendMessage(loginMsg);
-			CommandMessage response = client.readMessage();
-			if(response.getCommand()==Commands.OK){
-				login = true;
-			}else {
-				System.out.println("Username already in use. Enter a new one");
-			}
+		activeUser = clientGUI.getUsername();
+		CommandMessage loginMsg = new CommandMessage(Commands.LOGIN,activeUser);
+		client.sendMessage(loginMsg);	
+	
+	}
+	
+	public void loginAnswer(CommandMessage response){
+		if(response.getCommand()==Commands.LOGIN_OK){
+			loginOK = true;
+			clientGUI.appendTextArea("\nWelcome " + activeUser + "!");
+		}else {
+			clientGUI.appendTextArea("\nUsername is already in use, enter a new one");
 		}
 	}
 	

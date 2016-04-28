@@ -85,9 +85,9 @@ public class Client {
 		try {
 			CommandMessage message = (CommandMessage)ois.readObject();
 			message.toString();
-			if(message.getCommand()==Commands.LOGIN){
+			if(message.getCommand()==Commands.LOGIN_OK ||message.getCommand() == Commands.LOGIN_NOTOK){
 				System.out.println("Login");
-				controller.login();
+				controller.loginAnswer(message);
 			}else if(message.getCommand()==Commands.GETHERO){
 				System.out.println("GetHero");
 				controller.setHero(message);
@@ -140,7 +140,6 @@ public class Client {
 		@Override
 		public void run() {
 			System.out.println("Klient: Ansluten Till Server");
-			controller.login();
 				while (!socket.isClosed()) {
 					listenForMessage();
 				}

@@ -46,11 +46,11 @@ public class ServerController {
 	 */
 	public void login(String userName, ClientHandler clientHandler){
 		if(userMap.containsKey(userName)){
-			CommandMessage loginFalse = new CommandMessage(Commands.NOTOK,"Server");
+			CommandMessage loginFalse = new CommandMessage(Commands.LOGIN_NOTOK,"Server");
 			clientHandler.writeMessage(loginFalse);
 			System.out.println("Login fail, enter new username");
 		}else{
-			CommandMessage loginOK = new CommandMessage(Commands.OK,"Server");
+			CommandMessage loginOK = new CommandMessage(Commands.LOGIN_OK,"Server");
 			clientHandler.writeMessage(loginOK);
 			clientHandler.setActiveUser(userName);
 			userMap.put(userName, clientHandler);
