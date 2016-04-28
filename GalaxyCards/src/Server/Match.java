@@ -9,6 +9,7 @@ import java.util.Random;
 
 import cards.HeroicSupport;
 import cards.ResourceCard;
+import cards.Unit;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import enumMessage.Lanes;
@@ -36,6 +37,7 @@ public class Match implements Observer {
 	private Player player1;
 	private Player player2;
 	private int idCounter = -1;
+	
 
 	// Instance Variables for what player is in defensive och attacking.
 	private Player attacking;
@@ -62,8 +64,6 @@ public class Match implements Observer {
 	}
 
 	public void initGamePhase() {
-		// Vänta på meddelande från båda klienter att de har fått upp fönstret
-
 		// Both players should 7 draw cards
 		for (int i = 0; i < 7; i++) {
 			player1.drawCard();
@@ -198,7 +198,13 @@ public class Match implements Observer {
 			this.name = clientHandler.getActiveUser();
 			// TODO Ask the client for what hero it plays with
 		}
-
+		
+		/**
+		 * The method checks if the the playHeroicSupport move is valid and sends a response to the client.
+		 * 
+		 * @param move
+		 * 		A PlayHeroicSupportCard object
+		 */
 		public void playHeroicSupport(PlayHeroicSupportCard move) {
 			// TODO: Check if move is valid
 			try {
@@ -214,7 +220,7 @@ public class Match implements Observer {
 			}
 	
 		}
-
+		
 		public void playUnitCard(PlayUnitCard move) {
 			// TODO: Check if move is valid.
 			try {
@@ -227,6 +233,7 @@ public class Match implements Observer {
 				// Send to the other client
 				message = new CommandMessage(Commands.MATCH_PLAYCARD, "Server",
 						move);
+				sendMessageToOtherPlayer(this, message);
 			} catch (InsufficientResourcesException e) {
 				// Send Response to client that made move
 				CommandMessage message = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "Server",
@@ -270,7 +277,7 @@ public class Match implements Observer {
 						card));
 				
 			} else {
-				// TODO Add to the scrapyard.
+				//TODO Discard a card
 				FullHandException e = new FullHandException("Hand is full can´t draw new card");
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
 						"server", e));
@@ -281,6 +288,30 @@ public class Match implements Observer {
 			Random rand = new Random();
 			rand.nextInt(8);
 			
+		}
+		/**
+		 * Utility method that removes the card from hand
+		 */
+		private void removeCardFromHand(Card cardToRemove) {
+			for (int i = 0; i < hand.size(); i++) {
+				if (cardToRemove.equals(hand.get(i))) {
+					hand.remove(i);
+					return;
+				}
+			}
+			System.out.println("RemoveCardFromHand: Something went wrong");
+		}
+		
+		/**
+		 * Adds a card to the scrapyard. If there is more than 5 cards in the
+		 * scrapyard it removes the first.
+		 * @param cardToAdd
+		 */
+		private void addCardToScrapYard(Card cardToAdd) {
+			if (scrapYard.size() == 5) {
+				scrapYard.remove(0);
+			}
+			scrapYard.add(cardToAdd);
 		}
 	}
 
