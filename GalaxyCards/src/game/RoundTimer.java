@@ -22,18 +22,19 @@ public class RoundTimer {
 		public void run() {
 			if(roundCountdown > 0) {
 				toolkit.beep();
-				//InfoPanelGUI.append(roundCountdown + "seconds remaing to make a move", "RED");
-				System.out.println(roundCountdown + "seconds remaing to make a move");
+				InfoPanelGUI.append(roundCountdown + "seconds remaing to make a move", "RED");
+				//System.out.println(roundCountdown + "seconds remaing to make a move");
 				roundCountdown--;
 			}
 			else {
+				InfoPanelGUI.append("Round ended", "RED");
 				//TODO end round
 				timer.cancel();
 			}
 		}
 	}
-	public static void main(String[] args) {
-		System.out.println("Timer startad");
-		new RoundTimer();
-	}
+//	public static void main(String[] args) {
+//		System.out.println("Timer startad");
+//		new RoundTimer();
+//	}
 }
