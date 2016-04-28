@@ -17,6 +17,7 @@ import enumMessage.Lanes;
 import enumMessage.Phase;
 import exceptionsPacket.FullHandException;
 import exceptionsPacket.InsufficientResourcesException;
+import exceptionsPacket.NotValidMove;
 import exceptionsPacket.ResourcePlayedException;
 import game.Hero;
 import guiPacket.Card;
@@ -123,6 +124,13 @@ public class Match implements Observer {
 		}
 	}
 	
+
+	private void untapCards() {
+		// We need to know what phase we are in.
+		// If in defeding phase untap defense cards and tap offensive cards
+		// IF in attaking phase untap offesnive cards and tap defensive cards
+	}
+	
 	/**
 	 * This method sends the message to the player that invokes this method
 	 * @param player
@@ -183,10 +191,13 @@ public class Match implements Observer {
 		}
 	}
 
+
 	/**
-	 * Contatins three lists representing the differnet lanes in a gameboard
-	 * 
-	 * @author patriklarsson
+	 * This class stores the information about a players state in the match. The class have a list for HeroicSupportLane, DefensiveLane, and
+	 * Offensive lane. Also uses a Hero object. And has a list for the scrapyard. Contatins methods for the different moves a player can
+	 * make in a game.	
+	 *
+	 * @author Patrik Larsson
 	 *
 	 */
 	private class Player {
@@ -197,29 +208,36 @@ public class Match implements Observer {
 		private Hero hero = new Hero();
 		private List<Card> hand = new LinkedList<Card>();
 		private List<Card> scrapYard = new ArrayList<Card>();
-		private ClientHandler clientHandler;
-
+		
+		/**
+		 * Gives a player a name from the clientHandler
+		 * @param clientHandler
+		 * 		The clienthandler to get the name from
+		 */
 		public Player(ClientHandler clientHandler) {
-			this.clientHandler = clientHandler;
 			this.name = clientHandler.getActiveUser();
 			// TODO Ask the client for what hero it plays with
 		}
 		
+
 		/**
-		 * The method checks if the the playHeroicSupport move is valid and sends a response to the client.
-		 * 
+		 * Tries to play a heroicsupport card and if there allready is two heroic support cards on the board for the player or if
+		 * the player dosént have enought resources a error message is sent back otherwise a message with the move is sent back to
+		 * the client and to the other player aswell.
 		 * @param move
-		 * 		A PlayHeroicSupportCard object
+		 * 		The move the client wants to make
 		 */
 		public void playHeroicSupport(PlayHeroicSupportCard move) {
-			// TODO: Check if move is valid
 			try {
 				hero.useResource(move.getCard().getPrice());
+				if (HeroicSupportLane.size() >= 2) {
+					throw new NotValidMove("You allready have two heroic support cards");
+				}
 				HeroicSupportLane.add(move.getCard());
 				hand.remove(move.getCard());
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
-			} catch (InsufficientResourcesException e) {
+			} catch (InsufficientResourcesException | NotValidMove e) {
 				CommandMessage commandMessage = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
 						"Server", e);
 				sendMessageToPlayer(this, commandMessage);
@@ -228,28 +246,56 @@ public class Match implements Observer {
 	
 		}
 		
+		/**
+		 * Is invoked when a player wants to play a Unit card. If to move is succeded the move is sent to both clients that is connected
+		 * to the match. If it´s not the client that iniated the move gets a error message back. 
+		 * @param move
+		 * 		A object containg both the card and the lane it should be placed int.
+		 */
 		public void playUnitCard(PlayUnitCard move) {
-			// TODO: Check if move is valid.
 			try {
 				hero.useResource(move.getCard().getPrice());
+				// Updates the Gui with the new values
+				updateHeroValues(new UpdateHeroValues(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
+						hero.getMaxResource()));
+				
+				// Do The Move server side
+				if (move.getLane() == Lanes.PLAYER_OFFENSIVE) {
+					if (offensiveLane.size() >= 6) {
+						throw new NotValidMove("Offensive lane is full");
+					}
+					this.offensiveLane.add(move.getCard());
+				} else if(move.getLane() == Lanes.PLAYER_DEFENSIVE) {
+					if (defensiveLane.size() >= 6) {
+						throw new NotValidMove("Defensive lane is full");
+					}
+					this.defensiveLane.add(move.getCard());
+				}
+				hand.remove(move.getCard());
+				// Tap the card
+				
 				// Send to the client that made the move
 				CommandMessage message = new CommandMessage(Commands.MATCH_PLACE_CARD,
 						"Server", move);
 				sendMessageToPlayer(this, message);
-				hand.remove(move.getCard());
+				
 				// Send to the other client
 				message = new CommandMessage(Commands.MATCH_PLAYCARD, "Server",
 						move);
 				sendMessageToOtherPlayer(this, message);
-			} catch (InsufficientResourcesException e) {
-				// Send Response to client that made move
+			} catch (InsufficientResourcesException | NotValidMove e) {
+				// Sends error message back to the client
 				CommandMessage message = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "Server",
 						e);
 				sendMessageToPlayer(this, message);
 			}
 			
 		}
-
+		
+		/**
+		 * Tries to add a resource point to the hero. If sucesseds it uppdates the heroValues on both clients and removes the card from the hand
+		 * @param move
+		 */
 		public void playResourceCard(PlayResourceCard move) {
 			ResourceCard card = move.getCard();
 			try {
@@ -297,12 +343,16 @@ public class Match implements Observer {
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_FRIENDLY_HERO, this.name, move));
 			
 		}
-
+		/**
+		 * Tries to draw a card and add it to the hand. IF the hand is full discards one random card and adds the new one.
+		 */
 		public void drawCard() {
+			// Draw the card
+			Card card = hero.DrawCard();
+			card.setId(++idCounter);
+			
 			// Check if the hand is full
-			if (hand.size() < 8) {
-				Card card = hero.DrawCard();
-				card.setId(++idCounter);
+			if (hand.size() < 8) {	
 				hand.add(card);
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_FRIENDLY_DRAW_CARD, "Server",
 						card));
@@ -314,6 +364,8 @@ public class Match implements Observer {
 				FullHandException e = new FullHandException("Hand is full can´t draw new card");
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
 						"server", e));
+				// Should still add the new card to the hand
+				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_FRIENDLY_DRAW_CARD, "Server", card));
 			}
 		}
 		

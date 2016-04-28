@@ -94,8 +94,6 @@ public class ClientGUI extends JPanel {
 		tfUsername.setPreferredSize(new Dimension(150,30));
 		pnlUsername.add(tfUsername);
 		pnlUsername.add(btnEnter);
-		
-		
 	}
 	
 	
