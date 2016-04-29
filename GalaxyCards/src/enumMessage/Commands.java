@@ -41,7 +41,8 @@ public enum Commands  implements Serializable {
 	MATCH_SET_PHASE,
 	MATCH_NOT_VALID_MOVE,
 	MATCH_PLACE_CARD,
-	MATCH_NEW_ROUND;
+	MATCH_NEW_ROUND,
+	MATCH_REMOVE_CARD, MATCH_ADD_TO_OPPONET_SCRAPYARD, MATCH_UPDATE_OPPONENT_HERO, MATCH_UPDATE_FRIENDLY_HERO;
 	
 	private int value;
 	private static final long serialVersionUID = 42L;

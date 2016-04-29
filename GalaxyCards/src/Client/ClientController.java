@@ -20,6 +20,7 @@ import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
+import move.PlayTechCard;
 import move.PlayUnitCard;
 import move.UpdateHeroValues;
 
@@ -140,6 +141,9 @@ public class ClientController {
 			PlayResourceCard move = (PlayResourceCard)data;
 			gameController.opponentPlaysResourceCard(move);
 			InfoPanelGUI.append("opponent played resource",null);
+		} else if(data instanceof PlayTechCard) {
+			PlayTechCard move = (PlayTechCard)data;
+			gameController.opponeentPlaysTech(move.getCard());
 		}
 	}
 	/**
@@ -151,7 +155,7 @@ public class ClientController {
 		Object obj =  message.getData();
 		if (obj instanceof PlayHeroicSupportCard) {
 			PlayHeroicSupportCard move = (PlayHeroicSupportCard)obj;
-			gameController.addHeroicSupport(move.getCard());
+			gameController.playHeroicSupportOk(move.getCard());
 		} else if(obj instanceof PlayResourceCard) {
 			PlayResourceCard move = (PlayResourceCard)obj;
 			UpdateHeroValues value = move.getUpdateHeroValues();
@@ -161,6 +165,9 @@ public class ClientController {
 		} else if(obj instanceof PlayUnitCard) {
 			PlayUnitCard move = (PlayUnitCard)obj;
 			gameController.playUnitOK(move.getCard(), move.getLane());
+		} else if(obj instanceof PlayTechCard) {
+			PlayTechCard move = (PlayTechCard)obj;
+			gameController.playTechOk(move.getCard());
 		}
 	}
 	
@@ -176,7 +183,7 @@ public class ClientController {
 		//		controller.initGame(friendly, enemy);
 		//TODO Unpack data in message and send to controller
 	}
-	public void heroValuesChanged(CommandMessage message) {
+	public void opponentValuesChanged(CommandMessage message) {
 		gameController.updateOpponentHero(message);
 		System.out.println("Clientcontroller hero values...");
 	}
@@ -192,6 +199,19 @@ public class ClientController {
 	}
 	public void friendlyDrawCard(CommandMessage message) {
 		gameController.drawCardOk((Card)message.getData());
+	}
+	public void discardCard(CommandMessage message) {
+		gameController.discardCard((Card)message.getData());
+		
+	}
+	public void addToOpponentScrapYard(CommandMessage message) {
+		gameController.updateOpponentScrapYard((Card)message.getData());
+		
+	}
+	public void playerHeroValuesChanged(CommandMessage message) {
+		UpdateHeroValues values = (UpdateHeroValues)message.getData();
+		gameController.updatePlayerHeroGui(values.getLife(), values.getEnergyShield(), values.getCurrentResource(), values.getMaxResource());
+		
 	}
 
 

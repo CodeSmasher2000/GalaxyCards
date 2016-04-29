@@ -103,9 +103,11 @@ public class Client {
 				controller.friendlyDrawCard(message);
 			} else if(message.getCommand() == Commands.MATCH_OPPONENT_DRAW_CARD) {
 				controller.opponentDrawCard();
-			}else if(message.getCommand() == Commands.MATCH_UPDATE_HERO){
+			}else if(message.getCommand() == Commands.MATCH_UPDATE_FRIENDLY_HERO){
 				System.out.println("Hero values changed");
-				controller.heroValuesChanged(message);
+				controller.playerHeroValuesChanged(message);
+			} else if(message.getCommand() == Commands.MATCH_UPDATE_OPPONENT_HERO) {
+				controller.opponentValuesChanged(message);
 			} else if(message.getCommand() == Commands.MATCH_PLACE_CARD) {
 				System.out.println("In Placing Card");
 				controller.placeCard(message);
@@ -119,6 +121,10 @@ public class Client {
 			} else if(message.getCommand() == Commands.MATCH_SET_PHASE) {
 				Phase phase = (Phase)message.getData();
 				controller.setPhase(phase);
+			} else if(message.getCommand() == Commands.MATCH_REMOVE_CARD) {
+				controller.discardCard(message);
+			} else if(message.getCommand() == Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD) {
+				controller.addToOpponentScrapYard(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");

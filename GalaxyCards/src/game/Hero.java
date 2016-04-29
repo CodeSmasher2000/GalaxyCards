@@ -56,7 +56,9 @@ public class Hero implements Serializable {
 	}
 	
 	public Deck loadDeck(){
+
 		File file = new File("files/decks/29april.dat");
+
 		try(
 			FileInputStream fin = new FileInputStream(file);
 			ObjectInputStream ois = new ObjectInputStream(fin)) {

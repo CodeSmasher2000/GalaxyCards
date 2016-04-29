@@ -13,6 +13,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Unit;
 import exceptionsPacket.GuiContainerException;
@@ -278,7 +279,7 @@ public class HandGUI extends JPanel {
 //				} else {
 //					InfoPanelGUI.append("Insufficient resources","RED");
 //				}
-			} else if (temp instanceof Unit) {
+			} else {
 				try {
 					boardController.playCard(temp);
 				} catch (GuiContainerException e) {
@@ -294,7 +295,6 @@ public class HandGUI extends JPanel {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			}
 
 		}

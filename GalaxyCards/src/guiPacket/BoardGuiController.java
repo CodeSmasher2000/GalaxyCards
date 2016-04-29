@@ -361,8 +361,7 @@ public class BoardGuiController {
 		}
 		if (card instanceof HeroicSupport) {
 			HeroicSupport temp = (HeroicSupport) card;
-			gameController.playHeroicSupport((HeroicSupport)card);
-//			playHeroicSupport((HeroicSupport) cloneCard(temp));
+			playHeroicSupport((HeroicSupport)cloneCard(temp));
 		}
 		if (card instanceof Tech) {
 			Tech temp = (Tech) card;
@@ -453,7 +452,7 @@ public class BoardGuiController {
 	private void playHeroicSupport(HeroicSupport cardToPlay)
 			throws GuiContainerException, InsufficientResourcesException {
 		gameController.playHeroicSupport(cardToPlay);
-		playerHeroicGui.addHeroicSupport(cardToPlay);
+//		playerHeroicGui.addHeroicSupport(cardToPlay);
 	}
 	
 	/**
@@ -502,8 +501,12 @@ public class BoardGuiController {
 	}
 
 	private void playTech(Tech cloneCard) {
-		// TODO Figure out how to use abilities before implementing more to this
-		// method.
+		try {
+			gameController.playTech(cloneCard);
+		} catch (InsufficientResourcesException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void setSelectedLane()
