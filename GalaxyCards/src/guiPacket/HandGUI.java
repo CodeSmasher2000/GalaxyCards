@@ -240,7 +240,7 @@ public class HandGUI extends JPanel {
 //					temp = removeCard(temp);
 					temp.setBorder(defaultBorder);
 					// temp.shrink();
-					temp.removeMouseListener(listener);
+//					temp.removeMouseListener(listener);
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
 					InfoPanelGUI.append(e.getMessage(),"RED");
