@@ -235,10 +235,12 @@ public class Match implements Observer {
 				if (HeroicSupportLane.size() >= 2) {
 					throw new NotValidMove("You allready have two heroic support cards");
 				}
+				
 				HeroicSupportLane.add(move.getCard());
 				hand.remove(move.getCard());
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
+				updateHeroValues();
 			} catch (InsufficientResourcesException | NotValidMove e) {
 				CommandMessage commandMessage = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
 						"Server", e);
