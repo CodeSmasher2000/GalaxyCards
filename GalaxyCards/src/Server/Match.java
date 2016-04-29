@@ -99,6 +99,8 @@ public class Match implements Observer {
 		// RESET HERO RESOURCES
 		player1.hero.resetResources();
 		player2.hero.resetResources();
+		player1.updateHeroValues();
+		player2.updateHeroValues();
 		
 		// EACH PLAYER DRAW 1 CARD
 		player1.hero.DrawCard();
@@ -178,7 +180,7 @@ public class Match implements Observer {
 			}
 			else if (object instanceof UpdateHeroValues) {
 				UpdateHeroValues move = (UpdateHeroValues) object;
-				player.updateHeroValues(move);
+				player.updateHeroValues();
 			}
 		} else if (message.getCommand() == Commands.MATCH_DRAW_CARD) {
 			player.drawCard();
@@ -256,8 +258,7 @@ public class Match implements Observer {
 			try {
 				hero.useResource(move.getCard().getPrice());
 				// Updates the Gui with the new values
-				updateHeroValues(new UpdateHeroValues(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
-						hero.getMaxResource()));
+				updateHeroValues();
 				
 				// Do The Move server side
 				if (move.getLane() == Lanes.PLAYER_OFFENSIVE) {
@@ -303,7 +304,7 @@ public class Match implements Observer {
 				move.setUpdateHeroValues(new UpdateHeroValues(hero.getLife(),
 						hero.getEnergyShield(), hero.getCurrentResources(),
 						hero.getMaxResource()));
-				updateHeroValues(move.getUpdateHeroValues());
+				updateHeroValues();
 				hand.remove(card);
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move) );
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
@@ -338,7 +339,9 @@ public class Match implements Observer {
 		 * 
 		 * @param move
 		 */
-		public void updateHeroValues(UpdateHeroValues move) {
+		public void updateHeroValues() {
+			UpdateHeroValues move = new UpdateHeroValues(hero.getLife(), hero.getEnergyShield(),
+					hero.getCurrentResources(), hero.getMaxResource());
 			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_OPPONENT_HERO, this.name, move));
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_FRIENDLY_HERO, this.name, move));
 			

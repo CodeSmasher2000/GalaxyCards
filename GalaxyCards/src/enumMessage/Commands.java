@@ -13,15 +13,6 @@ import java.io.Serializable;
 	 */
 public enum Commands  implements Serializable {
 
-//	LOGIN(0),
-//	OK (1),
-//	NOTOK (2),
-//	DISCONNECT(3),
-//	GETHERO(4),
-//	MATCHMAKING_MATCH_FOUND(5),
-//	MATCHMAKING_STOP(6),
-//	MATCHMAKING_START(7),
-//	MATCH_PLAYCARD(8);
 	LOGIN,
 	LOGIN_OK,
 	LOGIN_NOTOK,
