@@ -44,6 +44,7 @@ public class Hero implements Serializable {
 		maxResource = 0;
 		currentResource = 0;
 		this.deck = loadDeck();
+		deck.shuffle();
 	}
 
 	public Hero(String heroName) {

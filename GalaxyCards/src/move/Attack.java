@@ -58,7 +58,7 @@ public class Attack implements Serializable {
 	
 	public int getIndex(Unit unit) {
 		for (int i = 0; i < index; i++) {
-			if (unit.equals(offensive[i])) {
+			if (unit.compareTo(offensive[i])== 0) {
 				return i;
 			}
 		}

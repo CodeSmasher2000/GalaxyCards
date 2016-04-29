@@ -387,7 +387,7 @@ public class Match implements Observer {
 		 */
 		private Card removeCardFromHand(Card cardToRemove) {
 			for (int i = 0; i < hand.size(); i++) {
-				if (cardToRemove.equals(hand.get(i))) {
+				if (cardToRemove.compareTo(hand.get(i))==0) {
 					hand.remove(i);
 					addCardToScrapYard(cardToRemove);
 					return cardToRemove;

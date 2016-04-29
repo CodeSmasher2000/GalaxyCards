@@ -41,7 +41,7 @@ import cards.Unit;
 // TODO enlarge() does not work.
 // TODO use ability when button is pressed
 
-public abstract class Card extends JPanel {
+public abstract class Card extends JPanel implements Comparable<Card>{
 
 	
 	/**
@@ -434,12 +434,16 @@ public abstract class Card extends JPanel {
 		}
 	}
 	
+		
+
 		@Override
-		public boolean equals(Object obj) {
-			Card toCompare = (Card)obj;
-			if (toCompare.getId() == getId()) {
-				return true;
+		public int compareTo(Card o) {
+			if(o.getId() > this.id){
+				return -1;
+			}else if(o.getId()<this.id){
+				return 1;
 			}
-			return false;
+			return 0;
 		}
+		
 }

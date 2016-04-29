@@ -174,7 +174,7 @@ public class HandGUI extends JPanel {
 		for (int i = 0; i < tempCards.length; i++) {
 			if (tempCards[i] != null) {
 				tempCards[i].removeMouseListener(listener);
-				if (!tempCards[i].equals(card)) {
+				if (!(tempCards[i].compareTo(card)==0) ){
 					Card card1 = tempCards[i];
 					try {
 						addCard(card1);
