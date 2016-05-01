@@ -40,7 +40,6 @@ public class Match implements Observer {
 	private Player player1;
 	private Player player2;
 	private int idCounter = -1;
-	
 
 	// Instance Variables for what player is in defensive och attacking.
 	private Player attacking;
@@ -78,45 +77,59 @@ public class Match implements Observer {
 		int playerToStart = rand.nextInt(2);
 		if (playerToStart == 0) {
 			attacking = player1;
-			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, 
-					"server", Phase.ATTACKING));
+			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.ATTACKING));
 			defensive = player2;
-			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE,
-					"server", Phase.IDLE));
+			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.IDLE));
 		} else {
 			attacking = player2;
-			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server",
-					Phase.ATTACKING));
+			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.ATTACKING));
 			defensive = player1;
-			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE,
-					"server", Phase.IDLE));
+			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.IDLE));
 		}
 	}
-	
+
+	/**
+	 * Swaps the players phases. The one what was in Attakcing will be defending
+	 * and the other way.
+	 */
+	private void swapPhases() {
+		Player temp = attacking;
+		attacking = defensive;
+		temp = attacking;
+		
+		// Taps and untaps the correct lanes
+		attacking.tapDefensiveLane();
+		attacking.untapOffensiveLane();
+		defensive.tapOffensiveLane();
+		defensive.untapDefensiveLane();
+	}
+
 	public void newRound() {
 		// TODO: SWAP PHASES
-		
+		swapPhases();
+
 		// RESET HERO RESOURCES
 		player1.hero.resetResources();
 		player2.hero.resetResources();
 		player1.updateHeroValues();
 		player2.updateHeroValues();
-		
+
 		// EACH PLAYER DRAW 1 CARD
 		player1.hero.DrawCard();
 		player2.hero.DrawCard();
-		
+
 		// TODO: UNTAP CARDS
-		
+
 	}
-	
+
 	/**
-	 * This method sends the message to the other player that invokes this method
+	 * This method sends the message to the other player that invokes this
+	 * method
 	 * 
 	 * @param player
-	 * 		The player object the trades
+	 *            The player object the trades
 	 * @param message
-	 * 		The message
+	 *            The message
 	 */
 	public void sendMessageToOtherPlayer(Player player, CommandMessage message) {
 		if (player.equals(player1)) {
@@ -125,20 +138,14 @@ public class Match implements Observer {
 			user1.writeMessage(message);
 		}
 	}
-	
 
-	private void untapCards() {
-		// We need to know what phase we are in.
-		// If in defeding phase untap defense cards and tap offensive cards
-		// IF in attaking phase untap offesnive cards and tap defensive cards
-	}
-	
 	/**
 	 * This method sends the message to the player that invokes this method
+	 * 
 	 * @param player
-	 * 		A refernce to the player method
+	 *            A refernce to the player method
 	 * @param message
-	 * 		The message to send
+	 *            The message to send
 	 */
 	public void sendMessageToPlayer(Player player, CommandMessage message) {
 		if (player.equals(player1)) {
@@ -177,27 +184,26 @@ public class Match implements Observer {
 			} else if (object instanceof PlayTechCard) {
 				PlayTechCard move = (PlayTechCard) object;
 				player.playTechCard(move.getCard());
-			}
-			else if (object instanceof UpdateHeroValues) {
+			} else if (object instanceof UpdateHeroValues) {
 				UpdateHeroValues move = (UpdateHeroValues) object;
 				player.updateHeroValues();
 			}
 		} else if (message.getCommand() == Commands.MATCH_DRAW_CARD) {
 			player.drawCard();
-		} else if(message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
+		} else if (message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
 			sendMessageToOtherPlayer(player, message);
-		} else if(message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
+		} else if (message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
 			sendMessageToOtherPlayer(player, message);
-		} else if(message.getCommand() == Commands.MATCH_NEW_ROUND) {
+		} else if (message.getCommand() == Commands.MATCH_NEW_ROUND) {
 			newRound();
 		}
 	}
 
-
 	/**
-	 * This class stores the information about a players state in the match. The class have a list for HeroicSupportLane, DefensiveLane, and
-	 * Offensive lane. Also uses a Hero object. And has a list for the scrapyard. Contatins methods for the different moves a player can
-	 * make in a game.	
+	 * This class stores the information about a players state in the match. The
+	 * class have a list for HeroicSupportLane, DefensiveLane, and Offensive
+	 * lane. Also uses a Hero object. And has a list for the scrapyard.
+	 * Contatins methods for the different moves a player can make in a game.
 	 *
 	 * @author Patrik Larsson
 	 *
@@ -210,24 +216,103 @@ public class Match implements Observer {
 		private Hero hero = new Hero();
 		private List<Card> hand = new LinkedList<Card>();
 		private List<Card> scrapYard = new ArrayList<Card>();
-		
+
 		/**
 		 * Gives a player a name from the clientHandler
+		 * 
 		 * @param clientHandler
-		 * 		The clienthandler to get the name from
+		 *            The clienthandler to get the name from
 		 */
 		public Player(ClientHandler clientHandler) {
 			this.name = clientHandler.getActiveUser();
 			// TODO Ask the client for what hero it plays with
 		}
-		
 
 		/**
-		 * Tries to play a heroicsupport card and if there allready is two heroic support cards on the board for the player or if
-		 * the player dosént have enought resources a error message is sent back otherwise a message with the move is sent back to
-		 * the client and to the other player aswell.
+		 * Sets a specific card to tapped and send messages to the clients to
+		 * update thier guis
+		 * 
+		 * @param card
+		 *            The card to tap
+		 */
+		public void tapCard(Card card) {
+			boolean cardFound = false;
+			if (card instanceof HeroicSupport) {
+				for (int i = 0; i < HeroicSupportLane.size() & !cardFound; i++) {
+					if (HeroicSupportLane.get(i).compareTo(card) == 0) {
+						((HeroicSupport) card).tap();
+						// TODO Send message to clients that this card is tapped
+					}
+				}
+
+			} else if (card instanceof Unit) {
+				// TODO Check if the card is in defensive lane, or offensivelane
+				for (int i = 0; i < offensiveLane.size() & !cardFound; i++) {
+					if (card.compareTo(offensiveLane.get(i)) == 0) {
+						((Unit) card).tap();
+						cardFound = true;
+					}
+				}
+
+				for (int i = 0; i < defensiveLane.size() & !cardFound; i++) {
+					if (defensiveLane.get(i).compareTo(card) == 0) {
+						((Unit) card).tap();
+						cardFound = true;
+					}
+				}
+			}
+		}
+		
+		/**
+		 * Untaps a specifc card and send messages to the clients to update
+		 * their guis
+		 * 
+		 * @param card
+		 *            The card to untap
+		 */
+		public void untapCard(Card card) {
+			boolean cardFound = false;
+			if (card instanceof HeroicSupport) {
+				for (int i = 0; i < HeroicSupportLane.size() & !cardFound; i++) {
+					if (HeroicSupportLane.get(i).compareTo(card) == 0) {
+						((HeroicSupport) card).untap();
+						cardFound = true;
+						// TODO Send message to clients that this card is
+						// untapped
+					}
+				}
+
+			} else if (card instanceof Unit) {
+				// TODO Check if the card is in defensive lane, or offensivelane
+				for (int i = 0; i < offensiveLane.size() & !cardFound; i++) {
+					if (card.compareTo(offensiveLane.get(i)) == 0) {
+						((Unit) card).tap();
+						cardFound = true;
+						// TODO Send message to the clients that this card is
+						// untapped
+					}
+				}
+
+				for (int i = 0; i < defensiveLane.size() & !cardFound; i++) {
+					if (defensiveLane.get(i).compareTo(card) == 0) {
+						((Unit) card).tap();
+						cardFound = true;
+						// TODO Send message eto the clients that this card is
+						// untapped
+					}
+				}
+			}
+		}
+
+		/**
+		 * Tries to play a heroicsupport card and if there allready is two
+		 * heroic support cards on the board for the player or if the player
+		 * dosént have enought resources a error message is sent back otherwise
+		 * a message with the move is sent back to the client and to the other
+		 * player aswell.
+		 * 
 		 * @param move
-		 * 		The move the client wants to make
+		 *            The move the client wants to make
 		 */
 		public void playHeroicSupport(PlayHeroicSupportCard move) {
 			try {
@@ -235,40 +320,43 @@ public class Match implements Observer {
 				if (HeroicSupportLane.size() >= 2) {
 					throw new NotValidMove("You allready have two heroic support cards");
 				}
-				
+
 				HeroicSupportLane.add(move.getCard());
 				hand.remove(move.getCard());
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
 				updateHeroValues();
 			} catch (InsufficientResourcesException | NotValidMove e) {
-				CommandMessage commandMessage = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
-						"Server", e);
+				CommandMessage commandMessage = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "Server", e);
 				sendMessageToPlayer(this, commandMessage);
 				e.printStackTrace();
 			}
-	
+
 		}
-		
+
 		/**
-		 * Is invoked when a player wants to play a Unit card. If to move is succeded the move is sent to both clients that is connected
-		 * to the match. If it´s not the client that iniated the move gets a error message back. 
+		 * Is invoked when a player wants to play a Unit card. If to move is
+		 * succeded the move is sent to both clients that is connected to the
+		 * match. If it´s not the client that iniated the move gets a error
+		 * message back.
+		 * 
 		 * @param move
-		 * 		A object containg both the card and the lane it should be placed int.
+		 *            A object containg both the card and the lane it should be
+		 *            placed int.
 		 */
 		public void playUnitCard(PlayUnitCard move) {
 			try {
 				hero.useResource(move.getCard().getPrice());
 				// Updates the Gui with the new values
 				updateHeroValues();
-				
+
 				// Do The Move server side
 				if (move.getLane() == Lanes.PLAYER_OFFENSIVE) {
 					if (offensiveLane.size() >= 6) {
 						throw new NotValidMove("Offensive lane is full");
 					}
 					this.offensiveLane.add(move.getCard());
-				} else if(move.getLane() == Lanes.PLAYER_DEFENSIVE) {
+				} else if (move.getLane() == Lanes.PLAYER_DEFENSIVE) {
 					if (defensiveLane.size() >= 6) {
 						throw new NotValidMove("Defensive lane is full");
 					}
@@ -276,66 +364,62 @@ public class Match implements Observer {
 				}
 				hand.remove(move.getCard());
 				// Tap the card
-				
+
 				// Send to the client that made the move
-				CommandMessage message = new CommandMessage(Commands.MATCH_PLACE_CARD,
-						"Server", move);
+				CommandMessage message = new CommandMessage(Commands.MATCH_PLACE_CARD, "Server", move);
 				sendMessageToPlayer(this, message);
-				
+
 				// Send to the other client
-				message = new CommandMessage(Commands.MATCH_PLAYCARD, "Server",
-						move);
+				message = new CommandMessage(Commands.MATCH_PLAYCARD, "Server", move);
 				sendMessageToOtherPlayer(this, message);
 			} catch (InsufficientResourcesException | NotValidMove e) {
 				// Sends error message back to the client
-				CommandMessage message = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "Server",
-						e);
+				CommandMessage message = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "Server", e);
 				sendMessageToPlayer(this, message);
 			}
-			
+
 		}
-		
+
 		/**
-		 * Tries to add a resource point to the hero. If sucesseds it uppdates the heroValues on both clients and removes the card from the hand
+		 * Tries to add a resource point to the hero. If sucesseds it uppdates
+		 * the heroValues on both clients and removes the card from the hand
+		 * 
 		 * @param move
 		 */
 		public void playResourceCard(PlayResourceCard move) {
 			ResourceCard card = move.getCard();
 			try {
 				hero.addResource();
-				move.setUpdateHeroValues(new UpdateHeroValues(hero.getLife(),
-						hero.getEnergyShield(), hero.getCurrentResources(),
-						hero.getMaxResource()));
+				move.setUpdateHeroValues(new UpdateHeroValues(hero.getLife(), hero.getEnergyShield(),
+						hero.getCurrentResources(), hero.getMaxResource()));
 				updateHeroValues();
 				hand.remove(card);
-				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move) );
+				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
-				
+
 				scrapYard.add(move.getCard());
 			} catch (ResourcePlayedException e) {
-				CommandMessage error = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "server",e);
+				CommandMessage error = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "server", e);
 				sendMessageToPlayer(this, error);
 			}
 
 		}
-		
+
 		public void playTechCard(Tech card) {
-			
-			try{
+
+			try {
 				hero.useResource(card.getPrice());
 				addCardToScrapYard(card);
 				hand.remove(card);
-				//Send to player who initatied move
-				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD,
-						"Server", card));
+				// Send to player who initatied move
+				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, "Server", card));
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, "Server", card));
 			} catch (InsufficientResourcesException e) {
-				CommandMessage error = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
-						"Server", e);
+				CommandMessage error = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "Server", e);
 				sendMessageToPlayer(this, error);
 			}
 		}
-		
+
 		/**
 		 * Anropas när hjätarnas värde uppdateras
 		 * 
@@ -346,53 +430,53 @@ public class Match implements Observer {
 					hero.getCurrentResources(), hero.getMaxResource());
 			sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_OPPONENT_HERO, this.name, move));
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_UPDATE_FRIENDLY_HERO, this.name, move));
-			
+
 		}
+
 		/**
-		 * Tries to draw a card and add it to the hand. IF the hand is full discards one random card and adds the new one.
+		 * Tries to draw a card and add it to the hand. IF the hand is full
+		 * discards one random card and adds the new one.
 		 */
 		public void drawCard() {
 			// Draw the card
 			Card card = hero.DrawCard();
 			card.setId(++idCounter);
-			
+
 			// Check if the hand is full
-			if (hand.size() < 8) {	
+			if (hand.size() < 8) {
 				hand.add(card);
-				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_FRIENDLY_DRAW_CARD, "Server",
-						card));
-				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_OPPONENT_DRAW_CARD, "Server",
-						card));
-				
+				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_FRIENDLY_DRAW_CARD, "Server", card));
+				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_OPPONENT_DRAW_CARD, "Server", card));
+
 			} else {
 				discardRandomCard();
 				FullHandException e = new FullHandException("Hand is full can´t draw new card");
-				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_NOT_VALID_MOVE,
-						"server", e));
+				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "server", e));
 				// Should still add the new card to the hand
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_FRIENDLY_DRAW_CARD, "Server", card));
 			}
 		}
-		
+
 		private void discardRandomCard() {
 			// Calculates the card to discard
 			Random rand = new Random();
 			int i = rand.nextInt(hand.size());
 			Card card = removeCardFromHand(hand.get(i));
-			
+
 			// Send messages to the clients
-			CommandMessage message = new CommandMessage(Commands.MATCH_REMOVE_CARD, "server", card );
+			CommandMessage message = new CommandMessage(Commands.MATCH_REMOVE_CARD, "server", card);
 			sendMessageToPlayer(this, message);
-			message = new CommandMessage(Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD,"server", card);
+			message = new CommandMessage(Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD, "server", card);
 			sendMessageToOtherPlayer(this, message);
 		}
-		
+
 		/**
-		 * Utility method that removes the card from hand and adds to playerScrapyard
+		 * Utility method that removes the card from hand and adds to
+		 * playerScrapyard
 		 */
 		private Card removeCardFromHand(Card cardToRemove) {
 			for (int i = 0; i < hand.size(); i++) {
-				if (cardToRemove.compareTo(hand.get(i))==0) {
+				if (cardToRemove.compareTo(hand.get(i)) == 0) {
 					hand.remove(i);
 					addCardToScrapYard(cardToRemove);
 					return cardToRemove;
@@ -401,10 +485,11 @@ public class Match implements Observer {
 			System.out.println("RemoveCardFromHand: Something went wrong");
 			return null;
 		}
-		
+
 		/**
 		 * Adds a card to the scrapyard. If there is more than 5 cards in the
 		 * scrapyard it removes the first.
+		 * 
 		 * @param cardToAdd
 		 */
 		private void addCardToScrapYard(Card cardToAdd) {
@@ -412,6 +497,46 @@ public class Match implements Observer {
 				scrapYard.remove(0);
 			}
 			scrapYard.add(cardToAdd);
+		}
+		
+		/**
+		 * Taps the units in offensiveLane
+		 */
+		public void tapOffensiveLane() {
+			for (int i = 0; i < offensiveLane.size(); i++) {
+				Unit card = (Unit)offensiveLane.get(i);
+				card.tap();
+			}
+		}
+		
+		/**
+		 * Untaps the units in OffensiveLane
+		 */
+		public void untapOffensiveLane() {
+			for (int i = 0; i < offensiveLane.size(); i++) {
+				Unit card = (Unit)offensiveLane.get(i);
+				card.untap();
+			}
+		}
+		
+		/**
+		 * Untaps the units in defensive lane
+		 */
+		public void untapDefensiveLane() {
+			for (int i = 0; i < defensiveLane.size(); i++) {
+				Unit card = (Unit)defensiveLane.get(i);
+				card.untap();
+			}
+		}
+		
+		/**
+		 * Taps theh units in defensive lane.
+		 */
+		public void tapDefensiveLane() {
+			for (int i = 0; i < defensiveLane.size(); i++) {
+				Unit card = (Unit)defensiveLane.get(i);
+				card.tap();
+			}
 		}
 	}
 
