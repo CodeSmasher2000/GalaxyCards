@@ -106,7 +106,7 @@ public class Match implements Observer {
 
 	public void newRound() {
 		// TODO: SWAP PHASES
-		swapPhases();
+		// swapPhases();
 
 		// RESET HERO RESOURCES
 		player1.hero.resetResources();
@@ -118,10 +118,15 @@ public class Match implements Observer {
 		player1.hero.DrawCard();
 		player2.hero.DrawCard();
 
-		// TODO: UNTAP CARDS
-
+		// TODO : UNTAP CARDS
+		swapPhases();
 	}
-
+	
+	public void newPhase() {
+		// TODO : Send message to client that a new phase begun
+		// TODO : Untap cards in correct lane.
+	}
+	
 	/**
 	 * This method sends the message to the other player that invokes this
 	 * method
@@ -539,18 +544,22 @@ public class Match implements Observer {
 		
 		public void untapCardInDefensiveLane(int index) {
 			((Unit)defensiveLane.get(index)).untap();
+			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE UNTAPPED
 		}
 		
 		public void untapCardInOffensiveLane(int index) {
 			((Unit)offensiveLane.get(index)).untap();
+			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE UNTAPPED
 		}
 		
 		public void TapCardInOffensiveLane(int index) {
 			((Unit)offensiveLane.get(index)).tap();
+			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
 		}
 		
 		public void TapCardInDefensiveLane(int index) {
 			((Unit)defensiveLane.get(index)).untap();
+			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
 		}
 		
 	}
