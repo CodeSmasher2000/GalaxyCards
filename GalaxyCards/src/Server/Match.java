@@ -95,8 +95,8 @@ public class Match implements Observer {
 	private void swapPhases() {
 		Player temp = attacking;
 		attacking = defensive;
-		temp = attacking;
-		
+		defensive = temp;
+
 		// Taps and untaps the correct lanes
 		attacking.tapDefensiveLane();
 		attacking.untapOffensiveLane();
@@ -262,7 +262,7 @@ public class Match implements Observer {
 				}
 			}
 		}
-		
+
 		/**
 		 * Untaps a specifc card and send messages to the clients to update
 		 * their guis
@@ -479,6 +479,7 @@ public class Match implements Observer {
 				if (cardToRemove.compareTo(hand.get(i)) == 0) {
 					hand.remove(i);
 					addCardToScrapYard(cardToRemove);
+					// TODO SEND MESSAGES TO CLIENT THAT A CARD SHOULD BE REMOVED
 					return cardToRemove;
 				}
 			}
@@ -497,47 +498,61 @@ public class Match implements Observer {
 				scrapYard.remove(0);
 			}
 			scrapYard.add(cardToAdd);
+			// TODO Send message to clients to update GUI
 		}
-		
+
 		/**
 		 * Taps the units in offensiveLane
 		 */
 		public void tapOffensiveLane() {
 			for (int i = 0; i < offensiveLane.size(); i++) {
-				Unit card = (Unit)offensiveLane.get(i);
-				card.tap();
+				TapCardInOffensiveLane(i);
 			}
 		}
-		
+
 		/**
 		 * Untaps the units in OffensiveLane
 		 */
 		public void untapOffensiveLane() {
 			for (int i = 0; i < offensiveLane.size(); i++) {
-				Unit card = (Unit)offensiveLane.get(i);
-				card.untap();
+				untapCardInOffensiveLane(i);
 			}
 		}
-		
+
 		/**
 		 * Untaps the units in defensive lane
 		 */
 		public void untapDefensiveLane() {
 			for (int i = 0; i < defensiveLane.size(); i++) {
-				Unit card = (Unit)defensiveLane.get(i);
-				card.untap();
+				untapCardInDefensiveLane(i);
 			}
 		}
-		
+
 		/**
-		 * Taps theh units in defensive lane.
+		 * Taps the units in defensive lane.
 		 */
 		public void tapDefensiveLane() {
 			for (int i = 0; i < defensiveLane.size(); i++) {
-				Unit card = (Unit)defensiveLane.get(i);
-				card.tap();
+				TapCardInDefensiveLane(i);
 			}
 		}
+		
+		public void untapCardInDefensiveLane(int index) {
+			((Unit)defensiveLane.get(index)).untap();
+		}
+		
+		public void untapCardInOffensiveLane(int index) {
+			((Unit)offensiveLane.get(index)).untap();
+		}
+		
+		public void TapCardInOffensiveLane(int index) {
+			((Unit)offensiveLane.get(index)).tap();
+		}
+		
+		public void TapCardInDefensiveLane(int index) {
+			((Unit)defensiveLane.get(index)).untap();
+		}
+		
 	}
 
 }
