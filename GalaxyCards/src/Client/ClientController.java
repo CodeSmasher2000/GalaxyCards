@@ -18,6 +18,7 @@ import game.GameController;
 import game.Hero;
 import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
+import move.Attack;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayTechCard;
@@ -212,6 +213,17 @@ public class ClientController {
 		UpdateHeroValues values = (UpdateHeroValues)message.getData();
 		gameController.updatePlayerHeroGui(values.getLife(), values.getEnergyShield(), values.getCurrentResource(), values.getMaxResource());
 		
+	}
+	
+	/**
+	 * Is invoked when server sets the client into defensive phase. Unpacks
+	 * the message and sends it to the gameController
+	 * @param message
+	 * 		The message to unpack
+	 */
+	public void setDefendingPhase(CommandMessage message) {
+		Attack attack = (Attack) message.getData();
+		gameController.DefendingPhase(attack);
 	}
 
 

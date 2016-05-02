@@ -112,11 +112,13 @@ public class Match implements Observer {
 		defensive.tapOffensiveLane();
 		defensive.untapDefensiveLane();
 	}
-
+	
+	/**
+	 * Sets the player in defensive phase to Attacking, Resets both heroers
+	 * resoruces and lets both players draw a card.
+	 */
 	public void newRound() {
 		defensive.setPhase(Phase.ATTACKING);
-		// TODO : SWAP PHASES
-		// swapPhases();
 
 		// RESET HERO RESOURCES
 		player1.hero.resetResources();
@@ -130,11 +132,6 @@ public class Match implements Observer {
 
 		// TODO : UNTAP CARDS
 		swapPhases();
-	}
-
-	public void newPhase() {
-		// TODO : Send message to client that a new phase begun
-		// TODO : Untap cards in correct lane.
 	}
 
 	/**
@@ -324,14 +321,31 @@ public class Match implements Observer {
 		 */
 		public void setPhase(Phase phase) {
 			if (phase == Phase.ATTACKING) {
-				attacking = this;
+				attackPhase(phase);
 			} else if (phase == Phase.DEFENDING) {
-				defensive = this;
+				defendPhase(phase);
 			} else if (phase == Phase.IDLE) {
-				idle = this;
+				idlePhase(phase);
 			}
+			
+		}
+		
+		public void attackPhase(Phase phase) {
+			attacking = this;
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", phase));
 		}
+		
+		public void defendPhase(Phase phase) {
+			defensive = this;
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", phase));
+		}
+		
+		public void idlePhase(Phase phase) {
+			idle = this;
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", phase));
+		}
+		
+		
 
 		/**
 		 * Tries to play a heroicsupport card and if there allready is two

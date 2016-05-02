@@ -274,7 +274,7 @@ public class GameController {
 			this.phase = Phase.ATTACKING;
 			break;
 		case DEFENDING:
-			this.phase = Phase.DEFENDING;
+//			this.phase = Phase.DEFENDING;
 			break;
 		case IDLE:
 			this.phase = Phase.IDLE;
@@ -282,7 +282,14 @@ public class GameController {
 		default:
 			break;
 		}
-//		InfoPanelGUI.append("In " + phase, "BLUE");
+		
+	}
+	
+	public void DefendingPhase(Attack attack) {
+		this.phase = Phase.DEFENDING;
+		InfoPanelGUI.append("In " + phase);
+		InfoPanelGUI.append(attack.toString());
+		// TODO : Start a thread in boardController to wait for input
 	}
 
 	/**
@@ -296,10 +303,10 @@ public class GameController {
 	}
 
 	/**
-	 * Sends an attack or defense move to the other client.
+	 * Sends a attack move object to the server.
 	 */
 	public void commitMove() {
-		
+		commitMove(attack);
 	}
 
 	public Attack getAttack() {
