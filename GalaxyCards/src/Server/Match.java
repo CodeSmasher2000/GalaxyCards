@@ -102,11 +102,11 @@ public class Match implements Observer {
 	 * and the other way.
 	 */
 	private void swapPhases() {
-		Player temp = attacking;
-		attacking = defensive;
-		defensive = temp;
-
-		// Taps and untaps the correct lanes
+//		Player temp = attacking;
+//		attacking = defensive;
+//		defensive = temp;
+//
+//		// Taps and untaps the correct lanes
 		attacking.tapDefensiveLane();
 		attacking.untapOffensiveLane();
 		defensive.tapOffensiveLane();
@@ -150,10 +150,9 @@ public class Match implements Observer {
 		defensive.defend(attack);
 	}
 
-	public void commitDefendMove(Attack attack) {
-		// TODO : FIGHT!
-		// TODO :
-		// TODO : NEW ROUND
+	public void commitDefenseMove(Attack attack) {
+		fight(attack);
+		newRound();
 	}
 
 	public void fight(Attack attack) {
@@ -265,13 +264,13 @@ public class Match implements Observer {
 			} else if (object instanceof UpdateHeroValues) {
 				UpdateHeroValues move = (UpdateHeroValues) object;
 				player.updateHeroValues();
-			}
+			} else if (message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
+				commitAttackMove((Attack)message.getData());
+			} else if (message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
+				commitDefenseMove((Attack)message.getData());
+			} 
 		} else if (message.getCommand() == Commands.MATCH_DRAW_CARD) {
 			player.drawCard();
-		} else if (message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
-			sendMessageToOtherPlayer(player, message);
-		} else if (message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
-			sendMessageToOtherPlayer(player, message);
 		} else if (message.getCommand() == Commands.MATCH_NEW_ROUND) {
 			newRound();
 		}
@@ -660,11 +659,6 @@ public class Match implements Observer {
 		public void TapCardInDefensiveLane(int index) {
 			((Unit) defensiveLane.get(index)).untap();
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
-		}
-
-		public void commitDefenseMove(Attack attack) {
-			fight(attack);
-			newRound();
 		}
 
 		public void updateTarget(Target target) {
