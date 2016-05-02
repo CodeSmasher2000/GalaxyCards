@@ -64,7 +64,11 @@ public class Match implements Observer {
 		player2 = new Player(user2);
 		initGamePhase();
 	}
-
+	
+	/**
+	 * Sets up the game to it´s inital state. Send messages to the two clients
+	 * to draw 7 cards. And then decides who should be in what phase.
+	 */
 	public void initGamePhase() {
 		// Both players should 7 draw cards
 		for (int i = 0; i < 7; i++) {
@@ -105,7 +109,7 @@ public class Match implements Observer {
 	}
 
 	public void newRound() {
-		// TODO: SWAP PHASES
+		// TODO : SWAP PHASES
 		// swapPhases();
 
 		// RESET HERO RESOURCES
@@ -234,82 +238,6 @@ public class Match implements Observer {
 		}
 
 		/**
-		 * Sets a specific card to tapped and send messages to the clients to
-		 * update thier guis
-		 * 
-		 * @param card
-		 *            The card to tap
-		 */
-		public void tapCard(Card card) {
-			boolean cardFound = false;
-			if (card instanceof HeroicSupport) {
-				for (int i = 0; i < HeroicSupportLane.size() & !cardFound; i++) {
-					if (HeroicSupportLane.get(i).compareTo(card) == 0) {
-						((HeroicSupport) card).tap();
-						// TODO Send message to clients that this card is tapped
-					}
-				}
-
-			} else if (card instanceof Unit) {
-				// TODO Check if the card is in defensive lane, or offensivelane
-				for (int i = 0; i < offensiveLane.size() & !cardFound; i++) {
-					if (card.compareTo(offensiveLane.get(i)) == 0) {
-						((Unit) card).tap();
-						cardFound = true;
-					}
-				}
-
-				for (int i = 0; i < defensiveLane.size() & !cardFound; i++) {
-					if (defensiveLane.get(i).compareTo(card) == 0) {
-						((Unit) card).tap();
-						cardFound = true;
-					}
-				}
-			}
-		}
-
-		/**
-		 * Untaps a specifc card and send messages to the clients to update
-		 * their guis
-		 * 
-		 * @param card
-		 *            The card to untap
-		 */
-		public void untapCard(Card card) {
-			boolean cardFound = false;
-			if (card instanceof HeroicSupport) {
-				for (int i = 0; i < HeroicSupportLane.size() & !cardFound; i++) {
-					if (HeroicSupportLane.get(i).compareTo(card) == 0) {
-						((HeroicSupport) card).untap();
-						cardFound = true;
-						// TODO Send message to clients that this card is
-						// untapped
-					}
-				}
-
-			} else if (card instanceof Unit) {
-				// TODO Check if the card is in defensive lane, or offensivelane
-				for (int i = 0; i < offensiveLane.size() & !cardFound; i++) {
-					if (card.compareTo(offensiveLane.get(i)) == 0) {
-						((Unit) card).tap();
-						cardFound = true;
-						// TODO Send message to the clients that this card is
-						// untapped
-					}
-				}
-
-				for (int i = 0; i < defensiveLane.size() & !cardFound; i++) {
-					if (defensiveLane.get(i).compareTo(card) == 0) {
-						((Unit) card).tap();
-						cardFound = true;
-						// TODO Send message eto the clients that this card is
-						// untapped
-					}
-				}
-			}
-		}
-
-		/**
 		 * Tries to play a heroicsupport card and if there allready is two
 		 * heroic support cards on the board for the player or if the player
 		 * dosént have enought resources a error message is sent back otherwise
@@ -368,7 +296,6 @@ public class Match implements Observer {
 					this.defensiveLane.add(move.getCard());
 				}
 				hand.remove(move.getCard());
-				// Tap the card
 
 				// Send to the client that made the move
 				CommandMessage message = new CommandMessage(Commands.MATCH_PLACE_CARD, "Server", move);
@@ -507,6 +434,81 @@ public class Match implements Observer {
 		}
 
 		/**
+		 * Untaps a specifc card and send messages to the clients to update
+		 * their guis
+		 * 
+		 * @param card
+		 *            The card to untap
+		 */
+		public void untapCard(Card card) {
+			boolean cardFound = false;
+			if (card instanceof HeroicSupport) {
+				for (int i = 0; i < HeroicSupportLane.size() & !cardFound; i++) {
+					if (HeroicSupportLane.get(i).compareTo(card) == 0) {
+						((HeroicSupport) card).untap();
+						cardFound = true;
+						// TODO Send message to clients that this card is
+						// untapped
+					}
+				}
+		
+			} else if (card instanceof Unit) {
+				// TODO Check if the card is in defensive lane, or offensivelane
+				for (int i = 0; i < offensiveLane.size() & !cardFound; i++) {
+					if (card.compareTo(offensiveLane.get(i)) == 0) {
+						((Unit) card).tap();
+						cardFound = true;
+						// TODO Send message to the clients that this card is
+						// untapped
+					}
+				}
+		
+				for (int i = 0; i < defensiveLane.size() & !cardFound; i++) {
+					if (defensiveLane.get(i).compareTo(card) == 0) {
+						((Unit) card).tap();
+						cardFound = true;
+						// TODO Send message eto the clients that this card is
+						// untapped
+					}
+				}
+			}
+		}
+
+		/**
+		 * Sets a specific card to tapped and send messages to the clients to
+		 * update thier guis
+		 * 
+		 * @param card
+		 *            The card to tap
+		 */
+		public void tapCard(Card card) {
+			boolean cardFound = false;
+			if (card instanceof HeroicSupport) {
+				for (int i = 0; i < HeroicSupportLane.size() & !cardFound; i++) {
+					if (HeroicSupportLane.get(i).compareTo(card) == 0) {
+						((HeroicSupport) card).tap();
+						// TODO Send message to clients that this card is tapped
+					}
+				}
+		
+			} else if (card instanceof Unit) {
+				for (int i = 0; i < offensiveLane.size() & !cardFound; i++) {
+					if (card.compareTo(offensiveLane.get(i)) == 0) {
+						((Unit) card).tap();
+						cardFound = true;
+					}
+				}
+		
+				for (int i = 0; i < defensiveLane.size() & !cardFound; i++) {
+					if (defensiveLane.get(i).compareTo(card) == 0) {
+						((Unit) card).tap();
+						cardFound = true;
+					}
+				}
+			}
+		}
+
+		/**
 		 * Taps the units in offensiveLane
 		 */
 		public void tapOffensiveLane() {
@@ -562,6 +564,16 @@ public class Match implements Observer {
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
 		}
 		
+		/**
+		 * Is called when a commit attack message is recived from a client.
+		 */
+		public void commitAttackMove() {
+			
+		}
+		
+		public void commitDefenseMove() {
+			
+		}
 	}
 
 }
