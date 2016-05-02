@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import cards.HeroicSupport;
+import cards.Unit;
 import enumMessage.Persons;
 import exceptionsPacket.GuiContainerException;
 
@@ -37,20 +38,20 @@ public class HeroicPanelGUI extends JPanel {
 	private HeroicSupport[] heroicUnits = new HeroicSupport[2];
 	private BoardGuiController boardController;
 	private Persons ENUM;
-	
+
 	private OpponentTargetMouseListener opponentListener;
 	private PlayerTargetMouseListener playerListener;
-	
+
 	private ImageIcon background;
 
 	public HeroicPanelGUI(BoardGuiController boardController, Persons ENUM) {
-		this.ENUM=ENUM;
-		if(ENUM==Persons.PLAYER){
+		this.ENUM = ENUM;
+		if (ENUM == Persons.PLAYER) {
 			background = new ImageIcon("files/pictures/heroicPanelTexture2.jpg");
-		}else{
+		} else {
 			background = new ImageIcon("files/pictures/heroicPanelTexture.jpg");
 		}
-		
+
 		this.boardController = boardController;
 		playerListener = new PlayerTargetMouseListener(boardController);
 		opponentListener = new OpponentTargetMouseListener(boardController);
@@ -97,14 +98,15 @@ public class HeroicPanelGUI extends JPanel {
 
 		for (int i = 0; i < heroicUnits.length; i++) {
 			if (heroicUnits[i] == null) {
+//				heroicSupport.setPersonEnum(ENUM);
 				heroicUnits[i] = heroicSupport;
 				heroicUnits[i].setBounds(0, 10, heroicUnits[i].getPreferredSize().width,
 						heroicUnits[i].getPreferredSize().height);
-				//if ENUM is player or opponent add different listener
-				if(ENUM==Persons.PLAYER){
+				// if ENUM is player or opponent add different listener
+				if (ENUM == Persons.PLAYER) {
 					heroicUnits[i].addMouseListener(playerListener);
 				}
-				if(ENUM==Persons.OPPONENT){
+				if (ENUM == Persons.OPPONENT) {
 					heroicUnits[i].addMouseListener(opponentListener);
 				}
 				okToPlace = true;
@@ -147,9 +149,9 @@ public class HeroicPanelGUI extends JPanel {
 					heroicPane2.remove(heroicUnits[i]);
 					repaint();
 				}
-				if(ENUM==Persons.OPPONENT){
+				if (ENUM == Persons.OPPONENT) {
 					boardController.addToOpponentScrapyard(heroicUnits[i]);
-				}else{
+				} else {
 					boardController.addToPlayerScrapyard(heroicUnits[i]);
 				}
 			}
@@ -157,10 +159,11 @@ public class HeroicPanelGUI extends JPanel {
 
 		return target;
 	}
-	
+
 	/**
-	 * Check the defensive value for each Heroic support in this lane. If the defensive
-	 * value is equal to or less than 0 then the unit object will get removed.
+	 * Check the defensive value for each Heroic support in this lane. If the
+	 * defensive value is equal to or less than 0 then the unit object will get
+	 * removed.
 	 */
 	public void checkStatus() {
 		for (int i = 0; i < heroicUnits.length; i++) {
@@ -171,15 +174,71 @@ public class HeroicPanelGUI extends JPanel {
 			}
 		}
 	}
-	
-	public void untap() {
+
+	/**
+	 * Untaps all cards held in this container.
+	 * 
+	 */
+	public void untapAllInLane() {
 		for (int i = 0; i < heroicUnits.length; i++) {
 			if (heroicUnits[i] != null) {
 				heroicUnits[i].untap();
+				String[] unitName = heroicUnits[i].toString().split(" ");
+				InfoPanelGUI.append(unitName[0] + " is tapped: " + heroicUnits[i].getTap());
 			}
 		}
 	}
-	
+
+	/**
+	 * Taps all cards held in this container.
+	 */
+	public void tapAllInLane() {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			if (heroicUnits[i] != null) {
+				heroicUnits[i].tap();
+				String[] unitName = heroicUnits[i].toString().split(" ");
+				InfoPanelGUI.append(unitName[0] + " is tapped: " + heroicUnits[i].getTap());
+			}
+		}
+
+	}
+
+	/**
+	 * Taps the card with the same id as argument.
+	 * 
+	 * @param cardId
+	 *            : int
+	 */
+	public void tapCard(int cardId) {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			if (heroicUnits[i] != null) {
+				if (heroicUnits[i].getId() == cardId) {
+					heroicUnits[i].tap();
+					String[] unitName = heroicUnits[i].toString().split(" ");
+					InfoPanelGUI.append(unitName[0] + " is tapped: " + heroicUnits[i].getTap());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Untaps the card with the same id as argument.
+	 * 
+	 * @param cardId
+	 *            : int
+	 */
+	public void untapCard(int cardId) {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			if (heroicUnits[i] != null) {
+				if (heroicUnits[i].getId() == cardId) {
+					heroicUnits[i].untap();
+					String[] unitName = heroicUnits[i].toString().split(" ");
+					InfoPanelGUI.append(unitName[0] + " is tapped: " + heroicUnits[i].getTap());
+				}
+			}
+		}
+	}
+
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);

@@ -130,6 +130,7 @@ public class UnitLanes extends JPanel {
 		int stepdir = 1;
 		for (int q = 0; q < steps; q++, index += stepdir * q, stepdir = -stepdir) {
 			if (units[index] == null) {
+//				unit.setLaneEnum(ENUM);
 				units[index] = unit;
 				units[index].setBounds(0, 0, units[index].getPreferredSize().width,
 						units[index].getPreferredSize().height);
@@ -197,11 +198,69 @@ public class UnitLanes extends JPanel {
 	 * Untaps all cards held in this container.
 	 * 
 	 */
-	public void untap() {
+	public void untapAllInLane() {
 		for (int i = 0; i < units.length; i++) {
 			if (units[i] != null) {
 				units[i].untap();
+				String[] unitName = units[i].toString().split(" ");
+				InfoPanelGUI.append(unitName[0] + " is tapped: " + units[i].getTap());
 			}
 		}
+	}
+
+	/**
+	 * Taps all cards held in this container.
+	 */
+	public void tapAllInLane() {
+		for (int i = 0; i < units.length; i++) {
+			if (units[i] != null) {
+				units[i].tap();
+				String[] unitName = units[i].toString().split(" ");
+				InfoPanelGUI.append(unitName[0] + " is tapped: " + units[i].getTap());
+			}
+		}
+
+	}
+
+	/**
+	 * Taps the card with the same id as argument.
+	 * 
+	 * @param cardId
+	 *            : int
+	 */
+	public boolean tapCard(int cardId) {
+		boolean cardFound = false;
+		for (int i = 0; i < units.length; i++) {
+			if (units[i] != null) {
+				if (units[i].getId() == cardId) {
+					units[i].tap();
+					cardFound=true;
+					String[] unitName = units[i].toString().split(" ");
+					InfoPanelGUI.append(unitName[0] + " is tapped: " + units[i].getTap());
+				}
+			}
+		}
+		return cardFound;
+	}
+
+	/**
+	 * Untaps the card with the same id as the argument.
+	 * 
+	 * @param cardId
+	 *            : int
+	 */
+	public boolean untapCard(int cardId) {
+		boolean cardFound = false;
+		for (int i = 0; i < units.length; i++) {
+			if (units[i] != null) {
+				if (units[i].getId() == cardId) {
+					units[i].untap();
+					cardFound = true;
+					String[] unitName = units[i].toString().split(" ");
+					InfoPanelGUI.append(unitName[0] + " is tapped: " + units[i].getTap());
+				}
+			}
+		}
+		return cardFound;
 	}
 }

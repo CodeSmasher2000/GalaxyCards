@@ -26,6 +26,7 @@ import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayTechCard;
 import move.PlayUnitCard;
+import move.TapUntapCard;
 import move.UpdateHeroValues;
 
 /**
@@ -66,7 +67,7 @@ public class Match implements Observer {
 		player2 = new Player(user2);
 		initGamePhase();
 	}
-	
+
 	/**
 	 * Sets up the game to it´s inital state. Send messages to the two clients
 	 * to draw 7 cards. And then decides who should be in what phase.
@@ -127,26 +128,26 @@ public class Match implements Observer {
 		// TODO : UNTAP CARDS
 		swapPhases();
 	}
-	
+
 	public void newPhase() {
 		// TODO : Send message to client that a new phase begun
 		// TODO : Untap cards in correct lane.
 	}
-	
+
 	/**
 	 * Is called when a commit attack message is recived from a client.
 	 */
 	public void commitAttackMove(Attack attack) {
-		
+
 		// SET THE IDLE PLAYER TO DEFENDINGs
 		idle.setPhase(Phase.DEFENDING);
 		// SET THE ATTACKING PLAYER TO IDLE
 		attacking.setPhase(Phase.IDLE);
-		
+
 		// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
-		defensive.defend(attack);
+//		defensive.defend(attack);
 	}
-	
+
 	/**
 	 * This method sends the message to the other player that invokes this
 	 * method
@@ -226,7 +227,7 @@ public class Match implements Observer {
 
 	/**
 	 * This class stores the information about a players state in the match. The
-	 * class have a list for HeroicSupportLane, DefensiveLane, and Offensive
+	 * class have a list for heroicSupportLane, DefensiveLane, and Offensive
 	 * lane. Also uses a Hero object. And has a list for the scrapyard.
 	 * Contatins methods for the different moves a player can make in a game.
 	 *
@@ -235,9 +236,9 @@ public class Match implements Observer {
 	 */
 	private class Player {
 		private String name;
-		private List<HeroicSupport> HeroicSupportLane = new LinkedList<HeroicSupport>();
-		private List<Card> defensiveLane = new LinkedList<Card>();
-		private List<Card> offensiveLane = new LinkedList<Card>();
+		private List<HeroicSupport> heroicSupportLane = new LinkedList<HeroicSupport>();
+		private List<Unit> defensiveLane = new LinkedList<Unit>();
+		private List<Unit> offensiveLane = new LinkedList<Unit>();
 		private Hero hero = new Hero();
 		private List<Card> hand = new LinkedList<Card>();
 		private List<Card> scrapYard = new ArrayList<Card>();
@@ -271,11 +272,11 @@ public class Match implements Observer {
 		public void playHeroicSupport(PlayHeroicSupportCard move) {
 			try {
 				hero.useResource(move.getCard().getPrice());
-				if (HeroicSupportLane.size() >= 2) {
+				if (heroicSupportLane.size() >= 2) {
 					throw new NotValidMove("You allready have two heroic support cards");
 				}
-
-				HeroicSupportLane.add(move.getCard());
+				move.getCard().setLanesEnum(Lanes.PLAYER_HEROIC);
+				heroicSupportLane.add(move.getCard());
 				hand.remove(move.getCard());
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
@@ -303,18 +304,22 @@ public class Match implements Observer {
 				hero.useResource(move.getCard().getPrice());
 				// Updates the Gui with the new values
 				updateHeroValues();
-
+				Unit tempCard = (Unit)move.getCard();
 				// Do The Move server side
 				if (move.getLane() == Lanes.PLAYER_OFFENSIVE) {
 					if (offensiveLane.size() >= 6) {
 						throw new NotValidMove("Offensive lane is full");
 					}
-					this.offensiveLane.add(move.getCard());
+					tempCard.setLaneEnum(Lanes.PLAYER_OFFENSIVE);
+					this.offensiveLane.add(tempCard);
+//					this.offensiveLane.add((Unit) move.getCard());
 				} else if (move.getLane() == Lanes.PLAYER_DEFENSIVE) {
 					if (defensiveLane.size() >= 6) {
 						throw new NotValidMove("Defensive lane is full");
 					}
-					this.defensiveLane.add(move.getCard());
+					tempCard.setLaneEnum(Lanes.PLAYER_DEFENSIVE);
+					this.defensiveLane.add(tempCard);
+//					this.defensiveLane.add((Unit) move.getCard());
 				}
 				hand.remove(move.getCard());
 
@@ -432,7 +437,8 @@ public class Match implements Observer {
 				if (cardToRemove.compareTo(hand.get(i)) == 0) {
 					hand.remove(i);
 					addCardToScrapYard(cardToRemove);
-					// TODO SEND MESSAGES TO CLIENT THAT A CARD SHOULD BE REMOVED
+					// TODO SEND MESSAGES TO CLIENT THAT A CARD SHOULD BE
+					// REMOVED
 					return cardToRemove;
 				}
 			}
@@ -463,35 +469,37 @@ public class Match implements Observer {
 		 */
 		public void untapCard(Card card) {
 			boolean cardFound = false;
+			Card tempCard = null;
 			if (card instanceof HeroicSupport) {
-				for (int i = 0; i < HeroicSupportLane.size() & !cardFound; i++) {
-					if (HeroicSupportLane.get(i).compareTo(card) == 0) {
-						((HeroicSupport) card).untap();
+				for (int i = 0; i < heroicSupportLane.size() & !cardFound; i++) {
+					if (heroicSupportLane.get(i).compareTo(card) == 0) {
+						heroicSupportLane.get(i).untap();
+						tempCard = heroicSupportLane.get(i);
 						cardFound = true;
-						// TODO Send message to clients that this card is
-						// untapped
 					}
 				}
-		
+
 			} else if (card instanceof Unit) {
 				// TODO Check if the card is in defensive lane, or offensivelane
 				for (int i = 0; i < offensiveLane.size() & !cardFound; i++) {
 					if (card.compareTo(offensiveLane.get(i)) == 0) {
-						((Unit) card).tap();
+						offensiveLane.get(i).untap();
+						tempCard = offensiveLane.get(i);
 						cardFound = true;
-						// TODO Send message to the clients that this card is
-						// untapped
 					}
 				}
-		
+
 				for (int i = 0; i < defensiveLane.size() & !cardFound; i++) {
 					if (defensiveLane.get(i).compareTo(card) == 0) {
-						((Unit) card).tap();
+						defensiveLane.get(i).untap();
+						tempCard = defensiveLane.get(i);
 						cardFound = true;
-						// TODO Send message eto the clients that this card is
-						// untapped
 					}
 				}
+			}
+			
+			if(tempCard!=null){
+				sendTappedMessage(tempCard, Commands.MATCH_UNTAP_CARD);
 			}
 		}
 
@@ -504,29 +512,61 @@ public class Match implements Observer {
 		 */
 		public void tapCard(Card card) {
 			boolean cardFound = false;
+			Card tempCard = null;
+
 			if (card instanceof HeroicSupport) {
-				for (int i = 0; i < HeroicSupportLane.size() & !cardFound; i++) {
-					if (HeroicSupportLane.get(i).compareTo(card) == 0) {
-						((HeroicSupport) card).tap();
-						// TODO Send message to clients that this card is tapped
+				for (int i = 0; i < heroicSupportLane.size() & !cardFound; i++) {
+					if (heroicSupportLane.get(i).compareTo(card) == 0) {
+						heroicSupportLane.get(i).tap();
+						tempCard = heroicSupportLane.get(i);
 					}
 				}
-		
+
 			} else if (card instanceof Unit) {
 				for (int i = 0; i < offensiveLane.size() & !cardFound; i++) {
 					if (card.compareTo(offensiveLane.get(i)) == 0) {
-						((Unit) card).tap();
+						(offensiveLane.get(i)).tap();
+						tempCard = offensiveLane.get(i);
 						cardFound = true;
 					}
 				}
-		
+
 				for (int i = 0; i < defensiveLane.size() & !cardFound; i++) {
 					if (defensiveLane.get(i).compareTo(card) == 0) {
-						((Unit) card).tap();
+						(defensiveLane.get(i)).tap();
+						tempCard = defensiveLane.get(i);
 						cardFound = true;
+
 					}
 				}
 			}
+
+			if (tempCard != null) {
+				sendTappedMessage(tempCard, Commands.MATCH_TAP_CARD);
+			}
+		}
+
+		private void sendTappedMessage(Card tempCard, Commands command) {
+			Lanes ENUM = null, MIRRORED_ENUM = null;
+
+			if (tempCard instanceof HeroicSupport) {
+				ENUM = ((HeroicSupport) tempCard).getLanesEnum();
+			}
+			if (tempCard instanceof Unit) {
+				ENUM = ((Unit) tempCard).getLaneEnum();
+			}
+			if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+				MIRRORED_ENUM = Lanes.ENEMY_DEFENSIVE;
+			}
+			if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+				MIRRORED_ENUM = Lanes.ENEMY_OFFENSIVE;
+			}
+			if (ENUM == Lanes.PLAYER_HEROIC) {
+				MIRRORED_ENUM = Lanes.ENEMY_HEROIC;
+			}
+			
+			sendMessageToPlayer(this, new CommandMessage(command, "server", new TapUntapCard(tempCard.getId(), ENUM)));
+			sendMessageToOtherPlayer(this, new CommandMessage(command, "server", new TapUntapCard(tempCard.getId(), MIRRORED_ENUM)));
 		}
 
 		/**
@@ -536,6 +576,10 @@ public class Match implements Observer {
 			for (int i = 0; i < offensiveLane.size(); i++) {
 				TapCardInOffensiveLane(i);
 			}
+			sendMessageToPlayer(this,
+					new CommandMessage(Commands.MATCH_TAP_ALL_IN_LANE, "server", Lanes.PLAYER_OFFENSIVE));
+			sendMessageToOtherPlayer(this,
+					new CommandMessage(Commands.MATCH_TAP_ALL_IN_LANE, "server", Lanes.ENEMY_OFFENSIVE));
 		}
 
 		/**
@@ -545,6 +589,10 @@ public class Match implements Observer {
 			for (int i = 0; i < offensiveLane.size(); i++) {
 				untapCardInOffensiveLane(i);
 			}
+			sendMessageToPlayer(this,
+					new CommandMessage(Commands.MATCH_UNTAP_ALL_IN_LANE, "server", Lanes.PLAYER_OFFENSIVE));
+			sendMessageToOtherPlayer(this,
+					new CommandMessage(Commands.MATCH_UNTAP_ALL_IN_LANE, "server", Lanes.ENEMY_OFFENSIVE));
 		}
 
 		/**
@@ -554,6 +602,10 @@ public class Match implements Observer {
 			for (int i = 0; i < defensiveLane.size(); i++) {
 				untapCardInDefensiveLane(i);
 			}
+			sendMessageToPlayer(this,
+					new CommandMessage(Commands.MATCH_UNTAP_ALL_IN_LANE, "server", Lanes.PLAYER_DEFENSIVE));
+			sendMessageToOtherPlayer(this,
+					new CommandMessage(Commands.MATCH_UNTAP_ALL_IN_LANE, "server", Lanes.ENEMY_DEFENSIVE));
 		}
 
 		/**
@@ -563,32 +615,35 @@ public class Match implements Observer {
 			for (int i = 0; i < defensiveLane.size(); i++) {
 				TapCardInDefensiveLane(i);
 			}
+			sendMessageToPlayer(this,
+					new CommandMessage(Commands.MATCH_TAP_ALL_IN_LANE, "server", Lanes.PLAYER_DEFENSIVE));
+			sendMessageToOtherPlayer(this,
+					new CommandMessage(Commands.MATCH_TAP_ALL_IN_LANE, "server", Lanes.ENEMY_DEFENSIVE));
+
 		}
-		
+
 		public void untapCardInDefensiveLane(int index) {
-			((Unit)defensiveLane.get(index)).untap();
+			((Unit) defensiveLane.get(index)).untap();
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE UNTAPPED
 		}
-		
+
 		public void untapCardInOffensiveLane(int index) {
-			((Unit)offensiveLane.get(index)).untap();
+			((Unit) offensiveLane.get(index)).untap();
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE UNTAPPED
 		}
-		
+
 		public void TapCardInOffensiveLane(int index) {
-			((Unit)offensiveLane.get(index)).tap();
+			((Unit) offensiveLane.get(index)).tap();
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
 		}
-		
+
 		public void TapCardInDefensiveLane(int index) {
-			((Unit)defensiveLane.get(index)).untap();
+			((Unit) defensiveLane.get(index)).untap();
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
 		}
-		
-		
-		
+
 		public void commitDefenseMove() {
-			
+
 		}
 	}
 

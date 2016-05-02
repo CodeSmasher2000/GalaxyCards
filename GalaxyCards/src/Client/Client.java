@@ -125,6 +125,14 @@ public class Client {
 				controller.discardCard(message);
 			} else if(message.getCommand() == Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD) {
 				controller.addToOpponentScrapYard(message);
+			} else if(message.getCommand() == Commands.MATCH_TAP_ALL_IN_LANE){
+				controller.tapAllInLane(message);
+			} else if(message.getCommand() == Commands.MATCH_UNTAP_ALL_IN_LANE){
+				controller.untapAllInLane(message);
+			} else if(message.getCommand() == Commands.MATCH_TAP_CARD){
+				controller.tapCard(message);
+			} else if(message.getCommand()== Commands.MATCH_UNTAP_CARD){
+				controller.untapCard(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");

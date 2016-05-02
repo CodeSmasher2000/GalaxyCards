@@ -23,11 +23,11 @@ public class PlayerTargetMouseListener implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent event) {
 
-//		card = (Card) event.getSource();
-//		if(card instanceof Unit) {
-//			boardController.startAttackThreadListner();
-//			boardController.setAttacker(card);
-//		}
+		// card = (Card) event.getSource();
+		// if(card instanceof Unit) {
+		// boardController.startAttackThreadListner();
+		// boardController.setAttacker(card);
+		// }
 	}
 
 	@Override
@@ -43,8 +43,8 @@ public class PlayerTargetMouseListener implements MouseListener {
 		}
 		if (event.getSource() instanceof HeroGUI) {
 			heroGui = (HeroGUI) event.getSource();
-//			heroDefaultBorder=heroGui.getBorder();
-//			heroGui.setBorder(highlightB);
+			// heroDefaultBorder=heroGui.getBorder();
+			// heroGui.setBorder(highlightB);
 		}
 
 	}
@@ -55,7 +55,7 @@ public class PlayerTargetMouseListener implements MouseListener {
 			card.setBorder(cardDefaultBorder);
 		}
 		if (event.getSource() instanceof HeroGUI) {
-//			heroGui.setBorder(heroDefaultBorder);
+			// heroGui.setBorder(heroDefaultBorder);
 		}
 
 	}
@@ -65,19 +65,24 @@ public class PlayerTargetMouseListener implements MouseListener {
 		if (event.getSource() instanceof Card) {
 			card = (Card) event.getSource();
 			if (card instanceof Unit) {
-				boardController.startAttackThreadListner();
-				boardController.setAttacker(card);
+				if (((Unit) card).getTap()) {
+					InfoPanelGUI.append("The card is tapped, can't attack.");
+				} else {
+					boardController.startAttackThreadListner();
+					boardController.setAttacker(card);
+				}
 			}
 			if (card instanceof HeroicSupport) {
-				InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ");
+				if(((HeroicSupport) card).getTap()){
+					InfoPanelGUI.append("The card is tapped, can't use ability.");
+				}else{
+					InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ");
+				}
 			}
 		}
-		if(event.getSource() instanceof HeroGUI){
+		if (event.getSource() instanceof HeroGUI) {
 			InfoPanelGUI.append(heroGui.toString(), null);
-		
-		}
-		if(card instanceof HeroicSupport){
-			InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ","YELLOW");
+
 		}
 	}
 

@@ -3,6 +3,7 @@ package cards;
 import java.io.Serializable;
 
 import abilities.Ability;
+import enumMessage.Lanes;
 import guiPacket.Card;
 
 /**
@@ -24,6 +25,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	private String abilityText;
 	private int maxHp;
 	private int id;
+	private Lanes ENUM;
 
 	/**
 	 * Constructor instantiates this card with given arguments to configure its
@@ -84,6 +86,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 
 	/**
 	 * Returns the tapped state for this object.
+	 * 
 	 * @return : true/false
 	 */
 	public boolean getTap() {
@@ -204,13 +207,33 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 
 	}
 
-//	@Override
-//	public boolean equals(Object obj) {
-//		Unit toCompare = (Unit)obj;
-//		if (toCompare.getId() == getId()) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}
+	/**
+	 * Sets the enum that represents on which lane this cardobject is placed.
+	 * This method is called upon whenever this card is being played and placed
+	 * on the gameboard.
+	 * 
+	 * @param ENUM
+	 *            : Lane
+	 */
+	public void setLaneEnum(Lanes ENUM) {
+		this.ENUM = ENUM;
+	}
+
+	/**
+	 * Gets the lane enum which represent which lane this cardobject is placed on.
+	 * @return ENUM : Lanes
+	 */
+	public Lanes getLaneEnum() {
+		return ENUM;
+	}
+
+	// @Override
+	// public boolean equals(Object obj) {
+	// Unit toCompare = (Unit)obj;
+	// if (toCompare.getId() == getId()) {
+	// return true;
+	// } else {
+	// return false;
+	// }
+	// }
 }

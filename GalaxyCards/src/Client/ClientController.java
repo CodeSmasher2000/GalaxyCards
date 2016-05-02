@@ -1,27 +1,18 @@
 package Client;
 
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
-
-
-import Server.ClientHandler;
-import cards.Deck;
-import cards.HeroicSupport;
-import cards.ResourceCard;
 import cards.Unit;
-import enumMessage.Commands;
-import enumMessage.Phase;
-import exceptionsPacket.GuiContainerException;
 import enumMessage.CommandMessage;
+import enumMessage.Commands;
+import enumMessage.Lanes;
+import enumMessage.Phase;
 import game.GameController;
-import game.Hero;
 import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayTechCard;
 import move.PlayUnitCard;
+import move.TapUntapCard;
 import move.UpdateHeroValues;
 
 
@@ -213,7 +204,38 @@ public class ClientController {
 		gameController.updatePlayerHeroGui(values.getLife(), values.getEnergyShield(), values.getCurrentResource(), values.getMaxResource());
 		
 	}
+	
+	public void tapCard(CommandMessage message){
+//		if (message.getData() instanceof TapUntapCard){
+			TapUntapCard temp = (TapUntapCard)message.getData();
+			gameController.tapCard(temp.getId(), temp.getENUM());
+//		}
+	}
 
+	public void untapCard(CommandMessage message){
+		TapUntapCard temp = (TapUntapCard)message.getData();
+		gameController.untapCard(temp.getId(), temp.getENUM());
+	}
+	
+	/**
+	 * Taps all cards in the specified lane passed in as argument
+	 * 
+	 * @param ENUM : Lanes
+	 */
+	public void tapAllInLane(CommandMessage message){
+		Lanes temp = (Lanes)message.getData();
+		gameController.tapAllInLane(temp);
+	}
+	
+	/**
+	 * Untaps all cards in the specified lane passed in as argument
+	 * 
+	 * @param ENUM : Lanes
+	 */
+	public void untapAllInLane(CommandMessage message){
+		Lanes temp = (Lanes)message.getData();
+		gameController.untapAllInLane(temp);
+	}
 
 	
 }

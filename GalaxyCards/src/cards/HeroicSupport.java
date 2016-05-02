@@ -2,9 +2,8 @@ package cards;
 
 import java.io.Serializable;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
+import enumMessage.Lanes;
+import enumMessage.Persons;
 import guiPacket.Card;
 
 /**
@@ -24,6 +23,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	private boolean hasAbility;
 	private boolean tapped = true;
 	private int maxHp;
+	private Lanes ENUM;
 
 	/**
 	 * Constructor instantiates this card with given arguments to configure its
@@ -82,6 +82,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 
 	/**
 	 * Returns the tapped state for this object.
+	 * 
 	 * @return : true/false
 	 */
 	public boolean getTap() {
@@ -123,8 +124,8 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	public boolean hasAbility() {
 		return hasAbility;
 	}
-	
-	public void setAbilityText(String description){
+
+	public void setAbilityText(String description) {
 		super.setAbilityText(description);
 	}
 
@@ -154,16 +155,16 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		this.defense += amount;
 	}
 
-
-//	/**
-//	 * Returns a String with the description of this card.
-//	 * 
-//	 * @return : String
-//	 */
-//	public String toString() {
-//		return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " + IMAGE_NAME + ", Defense: " + defense
-//				+ ", Price: " + price + ", Has ability:" + hasAbility;
-//	}
+	// /**
+	// * Returns a String with the description of this card.
+	// *
+	// * @return : String
+	// */
+	// public String toString() {
+	// return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " +
+	// IMAGE_NAME + ", Defense: " + defense
+	// + ", Price: " + price + ", Has ability:" + hasAbility;
+	// }
 
 	/**
 	 * Returns a String with the description of this card.
@@ -171,15 +172,37 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 * @return : String
 	 */
 	public String toString() {
-		return NAME + " - [Heroic Support]: "  + "0/" + defense +". Rarity: "+RARITY+ ". Price: "+PRICE+". Has Ability: "+hasAbility;
-	
+		return NAME + " - [Heroic Support]: " + "0/" + defense + ". Rarity: " + RARITY + ". Price: " + PRICE
+				+ ". Has Ability: " + hasAbility;
+
 	}
-	
+
 	public int getMaxHp() {
 		return maxHp;
 	}
 
 	public void setMaxHp(int maxHp) {
 		this.maxHp = maxHp;
-	}	
+	}
+
+	/**
+	 * Sets the enum that represent who this cardobject belongs to. This method
+	 * is called upon whenever this card is being played and placed on the
+	 * gameboard.
+	 * 
+	 * @param eNUM
+	 *            : Persons
+	 */
+	public void setLanesEnum(Lanes ENUM) {
+		this.ENUM = ENUM;
+	}
+
+	/**
+	 * Gets the enunm that represent who this cardobject belongs to.
+	 * 
+	 * @return ENUM : Persons
+	 */
+	public Lanes getLanesEnum() {
+		return ENUM;
+	}
 }

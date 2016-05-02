@@ -123,12 +123,6 @@ public class GameController {
 //		// TODO snacka med klient
 //	}
 
-	/**
-	 * Asks boardcontroller to untap cards in the GUI.
-	 */
-	private void untapCards() {
-		boardController.untapCards();
-	}
 
 	/**
 	 * Updates the players Hero Gui.
@@ -333,6 +327,32 @@ public class GameController {
 	public void playTechOk(Tech card) {
 		boardController.addToPlayerScrapYard(card);
 		
+	}
+
+	public void tapCard(int cardId, Lanes ENUM) {
+		boardController.tapCard(cardId, ENUM);
+	}
+
+	public void untapCard(int cardId, Lanes ENUM) {
+		boardController.untapCard(cardId, ENUM);
+	}
+
+	/**
+	 * Taps all cards in the specified lane passed in as argument
+	 * 
+	 * @param ENUM : Lanes
+	 */
+	public void tapAllInLane(Lanes ENUM) {
+		boardController.tapAllInLane(ENUM);
+	}
+
+	/**
+	 * Untaps all cards in the specified lane passed in as argument
+	 * 
+	 * @param ENUM : Lanes
+	 */
+	public void untapAllInLane(Lanes ENUM) {
+		boardController.untapAllInLane(ENUM);
 	}
 
 }

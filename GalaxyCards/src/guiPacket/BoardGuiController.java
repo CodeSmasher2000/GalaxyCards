@@ -43,7 +43,7 @@ public class BoardGuiController {
 	private LaneSelectListener laneListener;
 	private boolean laneSelected = false;
 	private LaneSelectThread laneSelectThread;
-	
+
 	private AttackThreadListener attackSelectThread;
 	private boolean targetSelected = false;
 
@@ -56,30 +56,21 @@ public class BoardGuiController {
 	// ********************************************************************
 
 	public BoardGuiController(GameController gameController) {
-		this.gameController=gameController;
+		this.gameController = gameController;
 	}
-	
-	//for debbugging, remove when testpanel is removed.
-	public GameController getGameController(){
+
+	// for debbugging, remove when testpanel is removed.
+	public GameController getGameController() {
 		return gameController;
 	}
-	
-	public void checkStatus(){
+
+	public void checkStatus() {
 		opponentDefLane.checkStatus();
 		opponentOffLane.checkStatus();
 		playerDefLane.checkStatus();
 		playerOffLane.checkStatus();
 		opponentHeroicGui.checkStatus();
 		playerHeroicGui.checkStatus();
-	}
-	
-	public void untapCards(){
-		opponentDefLane.untap();
-		opponentOffLane.untap();
-		playerDefLane.untap();
-		playerOffLane.untap();
-		opponentHeroicGui.untap();
-		playerHeroicGui.untap();
 	}
 
 	/**
@@ -177,9 +168,9 @@ public class BoardGuiController {
 	public void opponentPlaysTech(Tech tech) {
 		// TODO
 	}
-	
+
 	public void addToPlayerScrapYard(Card card) {
-		//TODO Ska förmodligen ändras
+		// TODO Ska förmodligen ändras
 		playerScrapyard.addCard(cloneCard(card));
 	}
 
@@ -345,7 +336,7 @@ public class BoardGuiController {
 	 * @throws ResourcePlayedException
 	 * @throws InsufficientResourcesException
 	 */
-	//TODO Diskutera visbility
+	// TODO Diskutera visbility
 	public void playCard(Card card) throws GuiContainerException, NoLaneSelectedException, ResourcePlayedException,
 			InsufficientResourcesException {
 		if (card instanceof ResourceCard) {
@@ -361,7 +352,7 @@ public class BoardGuiController {
 		}
 		if (card instanceof HeroicSupport) {
 			HeroicSupport temp = (HeroicSupport) card;
-			playHeroicSupport((HeroicSupport)cloneCard(temp));
+			playHeroicSupport((HeroicSupport) cloneCard(temp));
 		}
 		if (card instanceof Tech) {
 			Tech temp = (Tech) card;
@@ -397,15 +388,14 @@ public class BoardGuiController {
 			Tech clonedCard = new Tech(temp.getName(), temp.getRarity(), temp.getImage(), temp.getPrice());
 			clonedCard.setId(card.getId());
 			return clonedCard;
-		} else if(card instanceof Unit) {
+		} else if (card instanceof Unit) {
 			Unit temp = (Unit) card;
 			Unit clonedCard = new Unit(temp.getName(), temp.getRarity(), temp.getImage(), temp.hasAbility(),
 					temp.getAttack(), temp.getDefense(), temp.getPrice());
 			clonedCard.setId(card.getId());
 			card = null;
 			return clonedCard;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
@@ -417,7 +407,7 @@ public class BoardGuiController {
 	 *            : Card
 	 */
 	protected void addToPlayerScrapyard(Card card) {
-//		gameController.updateOpponentScrapYard(card);
+		// gameController.updateOpponentScrapYard(card);
 		playerScrapyard.addCard(cloneCard(card));
 
 	}
@@ -433,9 +423,9 @@ public class BoardGuiController {
 		infoPanel.showCard(cardToShow);
 	}
 
-//	protected int getAvaibleResources() {
-//		return gameController.getAvaibleResources();
-//	}
+	// protected int getAvaibleResources() {
+	// return gameController.getAvaibleResources();
+	// }
 
 	// ***PRIVATE METHODS******************************************************
 	// *** Methods in this section are called within this class
@@ -444,7 +434,7 @@ public class BoardGuiController {
 	private void playResourceCard(ResourceCard card) throws ResourcePlayedException {
 		gameController.playResourceCard(card);
 	}
-	
+
 	public void removeCardFromHand(Card card) {
 		playerHandGui.removeCard(card);
 	}
@@ -452,11 +442,13 @@ public class BoardGuiController {
 	private void playHeroicSupport(HeroicSupport cardToPlay)
 			throws GuiContainerException, InsufficientResourcesException {
 		gameController.playHeroicSupport(cardToPlay);
-//		playerHeroicGui.addHeroicSupport(cardToPlay);
+		// playerHeroicGui.addHeroicSupport(cardToPlay);
 	}
-	
+
 	/**
-	 * Metoden används sålänge för att innehålla den kod som behövs för att lägga till ett kort från gc.
+	 * Metoden används sålänge för att innehålla den kod som behövs för att
+	 * lägga till ett kort från gc.
+	 * 
 	 * @param toAdd
 	 */
 	public void addHeroicSupport(HeroicSupport toAdd) {
@@ -469,33 +461,33 @@ public class BoardGuiController {
 	}
 
 	public void playUnitCard(Unit cardToPlay) throws GuiContainerException {
-//		cardToPlay = (Unit) cloneCard(cardToPlay);
-//		System.out.println(Thread.currentThread());
-//		cardToPlay.shrink();
-//		if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
-//			playerDefLane.addUnit(cardToPlay);
-//		}
-//		if (tempLane.getLaneType() == Lanes.PLAYER_OFFENSIVE) {
-//			playerOffLane.addUnit(cardToPlay);
-//		}
+		// cardToPlay = (Unit) cloneCard(cardToPlay);
+		// System.out.println(Thread.currentThread());
+		// cardToPlay.shrink();
+		// if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
+		// playerDefLane.addUnit(cardToPlay);
+		// }
+		// if (tempLane.getLaneType() == Lanes.PLAYER_OFFENSIVE) {
+		// playerOffLane.addUnit(cardToPlay);
+		// }
 		gameController.playUnit(cardToPlay, tempLane.getLaneType());
-		
+
 	}
-	
+
 	public void addUnitCard(Unit UnitCardToAdd, Lanes lane) {
-		Unit card = (Unit)cloneCard(UnitCardToAdd);
+		Unit card = (Unit) cloneCard(UnitCardToAdd);
 		card.shrink();
 		try {
 			if (lane == Lanes.PLAYER_DEFENSIVE) {
 				playerDefLane.addUnit(card);
-			} else if(lane == Lanes.PLAYER_OFFENSIVE) {
+			} else if (lane == Lanes.PLAYER_OFFENSIVE) {
 				playerOffLane.addUnit(card);
-			} else if(lane == Lanes.ENEMY_DEFENSIVE) {
+			} else if (lane == Lanes.ENEMY_DEFENSIVE) {
 				opponentDefLane.addUnit(card);
-			} else if(lane == Lanes.ENEMY_OFFENSIVE) {
+			} else if (lane == Lanes.ENEMY_OFFENSIVE) {
 				opponentOffLane.addUnit(card);
 			}
-		} catch(GuiContainerException e) {
+		} catch (GuiContainerException e) {
 			e.printStackTrace();
 		}
 	}
@@ -511,8 +503,8 @@ public class BoardGuiController {
 
 	private void setSelectedLane()
 			throws GuiContainerException, InsufficientResourcesException, ResourcePlayedException {
-		
-//		playerHandGui.removeCard(tempUnit);
+
+		// playerHandGui.removeCard(tempUnit);
 		laneSelected = true;
 		playUnitCard(tempUnit);
 	}
@@ -601,7 +593,7 @@ public class BoardGuiController {
 			laneSelectThread = null;
 			InfoPanelGUI.append("Lane select thread stopped");
 			// TODO Ska den ligga här!?
-			
+
 		}
 	}
 
@@ -672,7 +664,7 @@ public class BoardGuiController {
 
 		public AttackThreadListener() {
 			InfoPanelGUI.append("Attack Thread Started");
-			targetSelected=false;
+			targetSelected = false;
 		}
 
 		public void setAttacker(Card card) {
@@ -711,5 +703,89 @@ public class BoardGuiController {
 	public void setDefender(Object defender) {
 		attackSelectThread.setDefender(defender);
 	}
-	
+
+	public void tapCard(int cardId, Lanes ENUM) {
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			playerOffLane.tapCard(cardId);
+		}
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			playerDefLane.tapCard(cardId);
+		}
+		if (ENUM == Lanes.PLAYER_HEROIC) {
+			playerHeroicGui.tapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
+			opponentOffLane.tapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
+			opponentDefLane.tapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_HEROIC) {
+			opponentHeroicGui.tapCard(cardId);
+		}
+	}
+
+	public void untapCard(int cardId, Lanes ENUM) {
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			playerOffLane.untapCard(cardId);
+		}
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			playerDefLane.untapCard(cardId);
+		}
+		if (ENUM == Lanes.PLAYER_HEROIC) {
+			playerHeroicGui.untapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
+			opponentOffLane.untapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
+			opponentDefLane.untapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_HEROIC) {
+			opponentHeroicGui.untapCard(cardId);
+		}
+
+	}
+
+	/**
+	 * Taps all cards in the specified lane passed in as argument.
+	 * 
+	 * @param ENUM
+	 *            : Lanes
+	 */
+	public void tapAllInLane(Lanes ENUM) {
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			playerOffLane.tapAllInLane();
+		}
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			playerDefLane.tapAllInLane();
+		}
+		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
+			opponentOffLane.tapAllInLane();
+		}
+		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
+			opponentDefLane.tapAllInLane();
+		}
+	}
+
+	/**
+	 * Untaps all cards in the specified lane passed in as argument
+	 * 
+	 * @param ENUM
+	 *            : Lanes
+	 */
+	public void untapAllInLane(Lanes ENUM) {
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			playerOffLane.untapAllInLane();
+		}
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			playerDefLane.untapAllInLane();
+		}
+		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
+			opponentOffLane.untapAllInLane();
+		}
+		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
+			opponentDefLane.untapAllInLane();
+		}
+	}
 }
