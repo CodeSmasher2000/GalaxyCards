@@ -84,38 +84,15 @@ public class Match implements Observer {
 		Random rand = new Random();
 		int playerToStart = rand.nextInt(2);
 		if (playerToStart == 0) {
-			attacking = player1;
-			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.ATTACKING));
-			defensive = player2;
-			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.IDLE));
+			player1.setAttackPhase();
+			player2.setIdlePhase();
 		} else {
-			attacking = player2;
-			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.ATTACKING));
-			defensive = player1;
-			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.IDLE));
+			player2.setAttackPhase();
+			player1.setIdlePhase();
 		}
 	}
 
-	/**
-	 * Swaps the players phases. The one what was in Attakcing will be defending
-	 * and the other way.
-	 */
-	private void swapPhases() {
-		Player temp = attacking;
-		attacking = defensive;
-		defensive = temp;
-
-		// Taps and untaps the correct lanes
-		attacking.tapDefensiveLane();
-		attacking.untapOffensiveLane();
-		defensive.tapOffensiveLane();
-		defensive.untapDefensiveLane();
-	}
-
 	public void newRound() {
-		// TODO : SWAP PHASES
-		// swapPhases();
-
 		// RESET HERO RESOURCES
 		player1.hero.resetResources();
 		player2.hero.resetResources();
@@ -126,13 +103,8 @@ public class Match implements Observer {
 		player1.hero.DrawCard();
 		player2.hero.DrawCard();
 
-		// TODO : UNTAP CARDS
-		swapPhases();
-	}
-
-	public void newPhase() {
-		// TODO : Send message to client that a new phase begun
-		// TODO : Untap cards in correct lane.
+		// Sets defensive player to attacker
+		defensive.setAttackPhase();
 	}
 
 	/**
@@ -179,6 +151,50 @@ public class Match implements Observer {
 			user1.writeMessage(message);
 		} else if (player.equals(player2)) {
 			user2.writeMessage(message);
+		}
+	}
+	
+	public void fight(Attack attack) {
+		for (int i = 0; i < attack.getLength(); i++) {
+			boolean attackingCardFound = false;
+			boolean defenderFound = false;
+			int defender = attack.getDefender(i);
+			int attacker = attack.getAttacker(i);
+			Unit attackCard = null;
+			Target target = null;
+
+			// Tries to found the card that is attacking
+			for (int j = 0; j < attacking.offensiveLane.size() & attackingCardFound; j++) {
+				if (attacking.offensiveLane.get(j).getId() == attacker) {
+					attackingCardFound = true;
+					attackCard = (Unit) attacking.offensiveLane.get(j);
+				}
+			}
+
+			// Tries to find the defedning card
+			if (defender > 0) {
+				for (int j = 0; j < defensive.defensiveLane.size() & defenderFound; j++) {
+					if (defensive.defensiveLane.get(j).getId() == defender) {
+						defenderFound = true;
+						target = (Unit) defensive.defensiveLane.get(j);
+					}
+				}
+				for (int j = 0; j < defensive.heroicSupportLane.size() & defenderFound; j++) {
+					if (defensive.heroicSupportLane.get(j).getId() == defender) {
+						defenderFound = true;
+						target = defensive.heroicSupportLane.get(j);
+					}
+				}
+			} else if (defensive.hero.getId() == defender) {
+				target = defensive.hero;
+			}
+
+			// DO THE FIGHT
+			// TODO : CHECK IF TARGET IS DEAD
+			target.damage(attackCard.getAttack());
+			attackCard.damage(target.getDamage());
+			defensive.updateTarget(target);
+			idle.updateTarget(attackCard);
 		}
 	}
 
@@ -641,6 +657,36 @@ public class Match implements Observer {
 		public void TapCardInDefensiveLane(int index) {
 			((Unit) defensiveLane.get(index)).untap();
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
+		}
+		
+		/**
+		 * This method should be called to set a player to a correct state for attking.
+		 */
+		public void setAttackPhase() {
+			attacking = this;
+			this.phase = Phase.ATTACKING;
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
+			untapOffensiveLane();
+			tapDefensiveLane();
+		}
+		
+		/**
+		 * This methods sets th player object to the correct phase and disables nessasary cards
+		 */
+		public void setDefendPhase() {
+			defensive = this;
+			this.phase = Phase.DEFENDING;
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
+			untapDefensiveLane();
+			tapOffensiveLane();
+		}
+		
+		public void setIdlePhase() {
+			idle = this;
+			this.phase = Phase.IDLE;
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
+			tapOffensiveLane();
+			tapDefensiveLane();
 		}
 
 
