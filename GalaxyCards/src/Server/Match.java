@@ -21,6 +21,7 @@ import exceptionsPacket.NotValidMove;
 import exceptionsPacket.ResourcePlayedException;
 import game.Hero;
 import guiPacket.Card;
+import move.Attack;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayTechCard;
@@ -44,6 +45,7 @@ public class Match implements Observer {
 	// Instance Variables for what player is in defensive och attacking.
 	private Player attacking;
 	private Player defensive;
+	private Player idle;
 
 	/**
 	 * The constructor sets up a Match object with two clientHandlers that are
@@ -76,7 +78,7 @@ public class Match implements Observer {
 			player2.drawCard();
 		}
 
-		// Avgör vem som ska börja
+		// Decides who should start
 		Random rand = new Random();
 		int playerToStart = rand.nextInt(2);
 		if (playerToStart == 0) {
@@ -129,6 +131,20 @@ public class Match implements Observer {
 	public void newPhase() {
 		// TODO : Send message to client that a new phase begun
 		// TODO : Untap cards in correct lane.
+	}
+	
+	/**
+	 * Is called when a commit attack message is recived from a client.
+	 */
+	public void commitAttackMove(Attack attack) {
+		
+		// SET THE IDLE PLAYER TO DEFENDINGs
+		idle.setPhase(Phase.DEFENDING);
+		// SET THE ATTACKING PLAYER TO IDLE
+		attacking.setPhase(Phase.IDLE);
+		
+		// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
+		defensive.defend(attack);
 	}
 	
 	/**
@@ -225,6 +241,7 @@ public class Match implements Observer {
 		private Hero hero = new Hero();
 		private List<Card> hand = new LinkedList<Card>();
 		private List<Card> scrapYard = new ArrayList<Card>();
+		private Phase phase;
 
 		/**
 		 * Gives a player a name from the clientHandler
@@ -235,6 +252,10 @@ public class Match implements Observer {
 		public Player(ClientHandler clientHandler) {
 			this.name = clientHandler.getActiveUser();
 			// TODO Ask the client for what hero it plays with
+		}
+
+		public void setPhase(Phase phase) {
+			this.phase = phase;
 		}
 
 		/**
@@ -564,12 +585,7 @@ public class Match implements Observer {
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
 		}
 		
-		/**
-		 * Is called when a commit attack message is recived from a client.
-		 */
-		public void commitAttackMove() {
-			
-		}
+		
 		
 		public void commitDefenseMove() {
 			
