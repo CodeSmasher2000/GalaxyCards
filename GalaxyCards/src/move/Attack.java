@@ -87,6 +87,10 @@ public class Attack implements Serializable {
 //		}
 //		return-1;
 //	}
+	
+	public int getLength() {
+		return this.index;
+	}
 
 	public void setDefender(int defender, int index) {
 		defensive[index] = defender;

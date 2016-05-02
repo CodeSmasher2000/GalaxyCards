@@ -12,7 +12,7 @@ import guiPacket.Card;
  * @author 13120dde
  *
  */
-public class HeroicSupport extends Card implements PlayCardsInterface, Serializable {
+public class HeroicSupport extends Card implements PlayCardsInterface, Serializable, Target {
 
 	/**
 	 * 
@@ -181,5 +181,23 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 
 	public void setMaxHp(int maxHp) {
 		this.maxHp = maxHp;
+	}
+
+	@Override
+	public void damage(int amt) {
+		this.defense -= amt;
+	}
+
+	@Override
+	public int getDamage() {
+		return 0;
+	}
+
+	@Override
+	public boolean isDead() {
+		if (defense <= 0) {
+			return true;
+		}
+		return false;
 	}	
 }

@@ -188,20 +188,22 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	}
 
 	@Override
-	public void heal(int amt) {
-		for (int i = 0; i < amt; i++) {
-			if (getDefense() < maxHp) {
-				setDefense(+1);
-			} else {
-				break;
-			}
-		}
-	}
-
-	@Override
 	public void damage(int amt) {
 		setDefense(amt);
 
+	}
+
+	@Override
+	public int getDamage() {
+		return this.attack;
+	}
+
+	@Override
+	public boolean isDead() {
+		if (defense <= 0) {
+			return true;
+		}
+		return false;
 	}
 
 //	@Override

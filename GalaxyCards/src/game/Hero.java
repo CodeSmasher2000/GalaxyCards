@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 
 import cards.Deck;
+import cards.Target;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.InsufficientShieldException;
 import exceptionsPacket.ResourcePlayedException;
@@ -26,7 +27,7 @@ import guiPacket.InfoPanelGUI;
  *
  */
 
-public class Hero implements Serializable {
+public class Hero implements Serializable, Target {
 
 	/**
 	 * 
@@ -230,5 +231,38 @@ public class Hero implements Serializable {
 	public String toString() {
 		return "[ " + heroName + " ] Life: " + life + "Energyshield: " + energyShield + " Resources: " + currentResource
 				+ " / " + maxResource;
+	}
+
+	@Override
+	public void damage(int amt) {
+		dealDamage(amt);
+	}
+
+	@Override
+	public int getId() {
+		return this.id;
+	}
+
+	public int setId(int id) {
+		return this.id = id;
+	}
+
+	@Override
+	public int getDamage() {
+		return 0;
+	}
+	
+	@Override
+	public int getDefense() {
+		return life;
+		
+	}
+
+	@Override
+	public boolean isDead() {
+		if (life <= 0) {
+			return true;
+		}
+		return false;
 	}
 }
