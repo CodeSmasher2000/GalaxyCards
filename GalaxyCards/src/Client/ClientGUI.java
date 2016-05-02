@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -37,12 +38,13 @@ public class ClientGUI extends JPanel {
 	private JPanel pnlConnect = new JPanel();
 	private JPanel pnlUsername = new JPanel();
 	private JTextArea txtArea = new JTextArea();
-	private Font txtFont = new Font("Comic Sans MS", Font.BOLD,16);
+	private Font txtFont = new Font("Comic Sans MS", Font.BOLD,22);
 	private JButton btnFindMatch = new JButton("Search Match");
 	private JButton btnConnect = new JButton("Connect to Server");
 	private JButton btnEnter = new JButton("Enter");
 	private JTextField tfUsername = new JTextField("Enter username");
 	private JTextField tfIp = new JTextField("localhost");
+	public JButton btnDisconnect = new JButton("Disconnect");
 	
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
 	private ClientController clientController;
@@ -51,12 +53,11 @@ public class ClientGUI extends JPanel {
 	public ClientGUI(){
 		setPreferredSize(new Dimension(1000,800));
 		setLayout(new BorderLayout());
-		
 		initComponents();
 		add(txtArea,BorderLayout.CENTER);
 		add(pnlUser,BorderLayout.SOUTH);
-		pnlUser.add(pnlUsername, BorderLayout.NORTH);
-		pnlUser.add(pnlConnect, BorderLayout.WEST);
+		pnlUser.add(pnlConnect, BorderLayout.NORTH);
+		pnlUser.add(pnlUsername, BorderLayout.WEST);
 		pnlUser.add(pnlMatch,BorderLayout.EAST);
 //		music.clientMusic();
 		ButtonListener btnListener = new ButtonListener();
@@ -66,6 +67,8 @@ public class ClientGUI extends JPanel {
 		btnFindMatch.addActionListener(btnListener);
 		btnConnect.addActionListener(btnListener);
 		btnEnter.addActionListener(btnListener);
+		btnDisconnect.addActionListener(btnListener);
+		
 	}
 	/**
 	 * Initializes the graphic components.
@@ -77,23 +80,27 @@ public class ClientGUI extends JPanel {
 		txtArea.setFont(txtFont);
 		txtArea.setForeground(Color.WHITE);
 		pnlUser.setBackground(Color.BLACK);
-		pnlUser.setPreferredSize(new Dimension(1190,135));
-		pnlConnect.setPreferredSize(new Dimension(495,50));
+		pnlUser.setPreferredSize(new Dimension(995,135));
+		pnlConnect.setPreferredSize(new Dimension(993,70));
 		pnlConnect.setBackground(Color.CYAN);
 		pnlConnect.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 2));
 		tfIp.setPreferredSize(new Dimension(150,30));
 		pnlConnect.add(tfIp);
 		pnlConnect.add(btnConnect);
+		pnlConnect.add(btnDisconnect);
+		btnDisconnect.setEnabled(false);
 		pnlMatch.setPreferredSize(new Dimension(495,50));
 		pnlMatch.setBackground(Color.CYAN);
 		pnlMatch.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 2));
 		pnlMatch.add(btnFindMatch);
-		pnlUsername.setPreferredSize(new Dimension(1100,70));
+		btnFindMatch.setEnabled(false);
+		pnlUsername.setPreferredSize(new Dimension(495,50));
 		pnlUsername.setBackground(Color.CYAN);
 		pnlUsername.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 2));
 		tfUsername.setPreferredSize(new Dimension(150,30));
 		pnlUsername.add(tfUsername);
 		pnlUsername.add(btnEnter);
+		btnEnter.setEnabled(false);
 	}
 	
 	
@@ -125,6 +132,10 @@ public class ClientGUI extends JPanel {
 		return username;
 	}
 	
+	public void exit(){
+		this.exit();
+	}
+	
 	
 	/**
 	 * Draws the background with a chosen picture.
@@ -135,6 +146,7 @@ public class ClientGUI extends JPanel {
 
 		super.paintComponent(g);
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
+
 	}
 	
 	private class MouseList implements MouseListener{
@@ -183,9 +195,17 @@ public class ClientGUI extends JPanel {
 				clientController.startMatchMaking();
 			}else if( e.getSource()==btnConnect){
 				clientConnect();
+				btnEnter.setEnabled(true);
+				btnConnect.setEnabled(false);
+				btnDisconnect.setEnabled(true);
 				txtArea.append("\n Connected to server");
 			}else if(e.getSource() == btnEnter){
 				clientController.login();
+				btnFindMatch.setEnabled(true);
+				btnEnter.setEnabled(false);
+				
+			}else if(e.getSource()==btnDisconnect){
+				clientController.disconnect();
 			}
 			
 		}
