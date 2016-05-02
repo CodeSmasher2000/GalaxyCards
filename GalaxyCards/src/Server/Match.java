@@ -330,18 +330,31 @@ public class Match implements Observer {
 			
 		}
 		
+		/**
+		 * Sets the current phase of the player to attacking and taps and untaps
+		 * the lanes.
+		 * @param phase
+		 * 		Phases.ATTACK
+		 */
 		public void attackPhase(Phase phase) {
 			attacking = this;
+			untapOffensiveLane();
+			tapDefensiveLane();
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", phase));
+			
 		}
 		
 		public void defendPhase(Phase phase) {
 			defensive = this;
+			untapDefensiveLane();
+			tapOffensiveLane();
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", phase));
 		}
 		
 		public void idlePhase(Phase phase) {
 			idle = this;
+			tapOffensiveLane();
+			tapDefensiveLane();
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", phase));
 		}
 		
