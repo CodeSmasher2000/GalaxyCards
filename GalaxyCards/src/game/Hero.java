@@ -37,14 +37,15 @@ public class Hero implements Serializable {
 	private String heroName = "Supreme Commander";
 	private int life, energyShield, maxResource, currentResource, incrementalDamage = 0;
 	private boolean resourceCardPlayedThisRound = false;
-
-	public Hero() {
+	private int id;
+	public Hero(int id) {
 		life = 20;
 		energyShield = 10;
 		maxResource = 0;
 		currentResource = 0;
 		this.deck = loadDeck();
 		deck.shuffle();
+		this.id = id;
 	}
 
 	public Hero(String heroName) {

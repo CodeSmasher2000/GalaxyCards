@@ -19,6 +19,7 @@ import exceptionsPacket.FullHandException;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NotValidMove;
 import exceptionsPacket.ResourcePlayedException;
+import game.DefendingPhase;
 import game.Hero;
 import guiPacket.Card;
 import move.Attack;
@@ -40,7 +41,8 @@ public class Match implements Observer {
 	private ClientHandler user2;
 	private Player player1;
 	private Player player2;
-	private int idCounter = -1;
+	private int idCounter = 0;
+	private int heroCounter = -2;
 
 	// Instance Variables for what player is in defensive och attacking.
 	private Player attacking;
@@ -84,12 +86,12 @@ public class Match implements Observer {
 		if (playerToStart == 0) {
 			attacking = player1;
 			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.ATTACKING));
-			defensive = player2;
+			idle = player2;
 			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.IDLE));
 		} else {
 			attacking = player2;
 			user2.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.ATTACKING));
-			defensive = player1;
+			idle = player1;
 			user1.writeMessage(new CommandMessage(Commands.MATCH_SET_PHASE, "server", Phase.IDLE));
 		}
 	}
@@ -111,6 +113,7 @@ public class Match implements Observer {
 	}
 
 	public void newRound() {
+		defensive.setPhase(Phase.ATTACKING);
 		// TODO : SWAP PHASES
 		// swapPhases();
 
@@ -137,7 +140,6 @@ public class Match implements Observer {
 	 * Is called when a commit attack message is recived from a client.
 	 */
 	public void commitAttackMove(Attack attack) {
-		
 		// SET THE IDLE PLAYER TO DEFENDINGs
 		idle.setPhase(Phase.DEFENDING);
 		// SET THE ATTACKING PLAYER TO IDLE
@@ -145,6 +147,16 @@ public class Match implements Observer {
 		
 		// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
 		defensive.defend(attack);
+	}
+	
+	public void commitDefendMove(Attack attack) {
+		// TODO : FIGHT!
+		// TODO : 
+		// TODO : NEW ROUND
+	}
+	
+	public void fight(Attack attack) {
+		
 	}
 	
 	/**
@@ -238,7 +250,7 @@ public class Match implements Observer {
 		private List<HeroicSupport> HeroicSupportLane = new LinkedList<HeroicSupport>();
 		private List<Card> defensiveLane = new LinkedList<Card>();
 		private List<Card> offensiveLane = new LinkedList<Card>();
-		private Hero hero = new Hero();
+		private Hero hero = new Hero(heroCounter++);
 		private List<Card> hand = new LinkedList<Card>();
 		private List<Card> scrapYard = new ArrayList<Card>();
 		private Phase phase;
@@ -251,11 +263,32 @@ public class Match implements Observer {
 		 */
 		public Player(ClientHandler clientHandler) {
 			this.name = clientHandler.getActiveUser();
-			// TODO Ask the client for what hero it plays with
+		}
+		
+		/**
+		 * Asks the player for a defeing move
+		 * @param attack
+		 * 		The attack object to modifys
+		 */
+		public void defend(Attack attack) {
+			// Send the move to the client
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_DEFEND_MOVE, "Server", attack));
 		}
 
+		/**
+		 * Sets a player to a phase and sends a message to update the client
+		 * @param phase
+		 * 		The phase to set.
+		 */
 		public void setPhase(Phase phase) {
-			this.phase = phase;
+			if (phase == Phase.ATTACKING) {
+				attacking = this;
+			} else if (phase == Phase.DEFENDING) {
+				defensive = this;
+			} else if (phase == Phase.IDLE) {
+				idle = this;
+			}
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", phase));
 		}
 
 		/**
