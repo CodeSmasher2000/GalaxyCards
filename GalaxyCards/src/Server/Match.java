@@ -9,6 +9,7 @@ import java.util.Random;
 
 import cards.HeroicSupport;
 import cards.ResourceCard;
+import cards.Target;
 import cards.Tech;
 import cards.Unit;
 import enumMessage.CommandMessage;
@@ -239,7 +240,7 @@ public class Match implements Observer {
 		private List<HeroicSupport> heroicSupportLane = new LinkedList<HeroicSupport>();
 		private List<Unit> defensiveLane = new LinkedList<Unit>();
 		private List<Unit> offensiveLane = new LinkedList<Unit>();
-		private Hero hero = new Hero();
+		private Hero hero = new Hero(idCounter++);
 		private List<Card> hand = new LinkedList<Card>();
 		private List<Card> scrapYard = new ArrayList<Card>();
 		private Phase phase;
@@ -642,8 +643,33 @@ public class Match implements Observer {
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
 		}
 
-		public void commitDefenseMove() {
 
+		public void updateTarget(Target target) {
+			if (target instanceof HeroicSupport || target instanceof Unit) {
+				CommandMessage message = new CommandMessage(Commands.MATCH_UPDATECARD, "Server", target);
+				sendMessageToPlayer(player1, message);
+				sendMessageToPlayer(player2, message);
+				if (target.isDead()) {
+					heroicSupportLane.remove(target);
+				}
+			} else if(target instanceof Unit) {
+				CommandMessage message = new CommandMessage(Commands.MATCH_UPDATECARD, "Server", target);
+				sendMessageToPlayer(player1, message);
+				sendMessageToPlayer(player2, message);
+				if (target.isDead()) {
+					if (defensiveLane.contains(target)) {
+						defensiveLane.remove(target);
+					} else if (defensiveLane.contains(target)) {
+						defensiveLane.remove(target);
+					} 
+				}
+			} else if (target instanceof Hero) {
+				if (target.equals(player1.hero)) {
+					player1.updateHeroValues();
+				} else if (target.equals(player2)) {
+					player2.updateHeroValues();
+				}
+			}
 		}
 	}
 

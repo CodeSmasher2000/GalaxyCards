@@ -8,5 +8,8 @@ package cards;
  */
 public interface Target {
 	public void damage(int amt);
-	public void heal(int amt);
+	public int getId();
+	public int getDamage();
+	public int getDefense();
+	public boolean isDead();
 }

@@ -114,10 +114,10 @@ public class Client {
 			} else if(message.getCommand() == Commands.MATCH_NOT_VALID_MOVE) {
 				controller.notValidMove(message);
 			} else if(message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
-				// Set GameController to defense phase
-				controller.setPhase(Phase.DEFENDING);
+				// Set Game Controller to attack
+				controller.setPhase(Phase.ATTACKING);
 			} else if(message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
-				controller.setPhase(Phase.IDLE);
+				controller.setDefendingPhase(message);
 			} else if(message.getCommand() == Commands.MATCH_SET_PHASE) {
 				Phase phase = (Phase)message.getData();
 				controller.setPhase(phase);

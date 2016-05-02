@@ -8,6 +8,7 @@ import enumMessage.Phase;
 import game.GameController;
 import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
+import move.Attack;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
 import move.PlayTechCard;
@@ -76,9 +77,9 @@ public class ClientController {
 	public void loginAnswer(CommandMessage response){
 		if(response.getCommand()==Commands.LOGIN_OK){
 			loginOK = true;
-			clientGUI.appendTextArea(" \nWelcome " + activeUser + "!");
+			clientGUI.appendTextArea("\n Welcome " + activeUser + "!");
 		}else {
-			clientGUI.appendTextArea(" \nUsername is already in use, enter a new one");
+			clientGUI.appendTextArea("\n Username is already in use, enter a new one");
 		}
 	}
 	
@@ -210,6 +211,16 @@ public class ClientController {
 			TapUntapCard temp = (TapUntapCard)message.getData();
 			gameController.tapCard(temp.getId(), temp.getENUM());
 //		}
+	}
+	/**
+	 * Is invoked when server sets the client into defensive phase. Unpacks
+	 * the message and sends it to the gameController
+	 * @param message
+	 * 		The message to unpack
+	 */
+	public void setDefendingPhase(CommandMessage message) {
+		Attack attack = (Attack) message.getData();
+		gameController.DefendingPhase(attack);
 	}
 
 	public void untapCard(CommandMessage message){

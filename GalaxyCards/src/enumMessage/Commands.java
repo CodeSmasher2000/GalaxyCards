@@ -40,7 +40,8 @@ public enum Commands  implements Serializable {
 	MATCH_TAP_CARD,
 	MATCH_UNTAP_CARD,
 	MATCH_TAP_ALL_IN_LANE,
-	MATCH_UNTAP_ALL_IN_LANE;
+	MATCH_UNTAP_ALL_IN_LANE,
+	MATCH_UPDATECARD;
 	
 	private int value;
 	private static final long serialVersionUID = 42L;
