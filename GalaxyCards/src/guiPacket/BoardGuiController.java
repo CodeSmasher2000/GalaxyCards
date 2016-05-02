@@ -697,7 +697,10 @@ public class BoardGuiController {
 			}
 			// TODO Add the attacker and defender to the attack object
 			Attack attack = gameController.getAttack();
-			attack.setOpponents(attacker, defender);
+			if (defender instanceof Unit || defender instanceof HeroicSupport ) {
+				attack.setOpponents(attacker.getId(),((Card) defender).getId());
+			}
+			
 			InfoPanelGUI.append("Target Selected. Attack Thread stopped");
 			attackSelectThread = null;
 		}
