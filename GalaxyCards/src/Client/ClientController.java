@@ -220,7 +220,7 @@ public class ClientController {
 	 */
 	public void setDefendingPhase(CommandMessage message) {
 		Attack attack = (Attack) message.getData();
-		gameController.DefendingPhase(attack);
+		gameController.doDefendMove(attack);
 	}
 
 	public void untapCard(CommandMessage message){

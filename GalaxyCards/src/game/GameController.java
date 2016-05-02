@@ -268,7 +268,7 @@ public class GameController {
 			this.phase = Phase.ATTACKING;
 			break;
 		case DEFENDING:
-//			this.phase = Phase.DEFENDING;
+			this.phase = Phase.DEFENDING;
 			break;
 		case IDLE:
 			this.phase = Phase.IDLE;
@@ -276,14 +276,22 @@ public class GameController {
 		default:
 			break;
 		}
-		
+		InfoPanelGUI.append("Phase: " + phase);
 	}
 	
-	public void DefendingPhase(Attack attack) {
+	public void doDefendMove(Attack attack) {
 		this.phase = Phase.DEFENDING;
 		InfoPanelGUI.append("In " + phase);
 		InfoPanelGUI.append(attack.toString());
 		// TODO : Start a thread in boardController to wait for input
+	}
+	
+	public void AttackingPhase() {
+		
+	}
+	
+	public void moveRecieved() {
+		
 	}
 
 	/**
@@ -306,6 +314,7 @@ public class GameController {
 	public Attack getAttack() {
 		return this.attack;
 	}
+	
 	// DEBUG PURPOSE
 	public void newround() {
 		clientController.writeMessage(new CommandMessage(Commands.MATCH_NEW_ROUND, null));

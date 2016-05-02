@@ -105,20 +105,20 @@ public class Match implements Observer {
 
 		// Sets defensive player to attacker
 		defensive.setAttackPhase();
+		idle.setIdlePhase();
 	}
 
 	/**
 	 * Is called when a commit attack message is recived from a client.
 	 */
 	public void commitAttackMove(Attack attack) {
-
-		// SET THE IDLE PLAYER TO DEFENDINGs
+		// SET THE IDLE PLAYER TO DEFENDING
 		idle.setPhase(Phase.DEFENDING);
 		// SET THE ATTACKING PLAYER TO IDLE
 		attacking.setPhase(Phase.IDLE);
 
 		// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
-//		defensive.defend(attack);
+		defensive.defend(attack);
 	}
 
 	/**
@@ -272,6 +272,17 @@ public class Match implements Observer {
 			// TODO Ask the client for what hero it plays with
 		}
 
+		/**
+		 * Asks the player for a defeing move
+		 * 
+		 * @param attack
+		 *            The attack object to modifys
+		 */
+		public void defend(Attack attack) {
+			// Send the move to the client
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_DEFEND_MOVE, "Server", attack));
+		}
+		
 		public void setPhase(Phase phase) {
 			this.phase = phase;
 		}
