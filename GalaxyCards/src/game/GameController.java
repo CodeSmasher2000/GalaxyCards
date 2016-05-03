@@ -59,7 +59,7 @@ public class GameController {
 	}
 	
 	public void playResourceCardOk(ResourceCard resourceCard) {
-		boardController.addToPlayerScrapYard(resourceCard);
+//		boardController.addToPlayerScrapYard(resourceCard);
 		boardController.removeCardFromHand(resourceCard);
 	}
 	
@@ -238,20 +238,7 @@ public class GameController {
 	 * @param card
 	 */
 	public void updateOpponentScrapYard(Card card) {
-		if (card instanceof ResourceCard){
-			InfoPanelGUI.append("scrapyard", null);
-			PlayResourceCard move = new PlayResourceCard((ResourceCard)card);
-			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
-			clientController.writeMessage(message);
-		} 
-		if(card instanceof HeroicSupport){
-			
-		}
-		if(card instanceof Unit){
-			
-		}if (card instanceof Tech){
-			
-		}
+		boardController.addToOpponentScrapyard(card);
 	}
 	
 	public Phase getPhase() {
@@ -369,6 +356,10 @@ public class GameController {
 	 */
 	public void untapAllInLane(Lanes ENUM) {
 		boardController.untapAllInLane(ENUM);
+	}
+
+	public void updateScarpyard(Card card) {
+		boardController.addToPlayerScrapYard(card);
 	}
 
 }

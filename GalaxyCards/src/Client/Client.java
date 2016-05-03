@@ -133,6 +133,8 @@ public class Client {
 				controller.tapCard(message);
 			} else if(message.getCommand()== Commands.MATCH_UNTAP_CARD){
 				controller.untapCard(message);
+			} else if(message.getCommand() == Commands.MATCH_ADD_TO_SCRAPYARD) {
+				controller.addToScrapYard(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");

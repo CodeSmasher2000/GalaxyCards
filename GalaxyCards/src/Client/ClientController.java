@@ -248,5 +248,12 @@ public class ClientController {
 		gameController.untapAllInLane(temp);
 	}
 
+	public void addToScrapYard(CommandMessage message) {
+		// unpacks the message
+		Card card = (Card) message.getData();
+		gameController.updateScarpyard(card);
+		
+	}
+
 	
 }

@@ -383,8 +383,8 @@ public class Match implements Observer {
 				hand.remove(card);
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
-
-				scrapYard.add(move.getCard());
+//				scrapYard.add(move.getCard());
+				addCardToScrapYard(move.getCard());
 			} catch (ResourcePlayedException e) {
 				CommandMessage error = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "server", e);
 				sendMessageToPlayer(this, error);
@@ -465,9 +465,9 @@ public class Match implements Observer {
 			for (int i = 0; i < hand.size(); i++) {
 				if (cardToRemove.compareTo(hand.get(i)) == 0) {
 					hand.remove(i);
-					addCardToScrapYard(cardToRemove);
-					// TODO SEND MESSAGES TO CLIENT THAT A CARD SHOULD BE
-					// REMOVED
+					if (cardToRemove instanceof Tech || cardToRemove instanceof ResourceCard) {
+						addCardToScrapYard(cardToRemove);
+					}
 					return cardToRemove;
 				}
 			}
@@ -487,6 +487,10 @@ public class Match implements Observer {
 			}
 			scrapYard.add(cardToAdd);
 			// TODO Send message to clients to update GUI
+			CommandMessage message = new CommandMessage(Commands.MATCH_ADD_TO_SCRAPYARD, "Server",cardToAdd);
+			sendMessageToPlayer(this, message);
+			message = new CommandMessage(Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD, "Server", cardToAdd);
+			sendMessageToOtherPlayer(this, message);
 		}
 
 		/**

@@ -180,7 +180,7 @@ public class BoardGuiController {
 	 * @param resourceCard
 	 */
 	public void opponentPlaysResource(ResourceCard resourceCard) throws GuiContainerException {
-		addToOpponentScrapyard(resourceCard);
+//		addToOpponentScrapyard(resourceCard);
 		opponentHandGui.playCard();
 	}
 
