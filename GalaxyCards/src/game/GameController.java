@@ -264,16 +264,8 @@ public class GameController {
 	public void doDefendMove(Attack attack) {
 		this.phase = Phase.DEFENDING;
 		InfoPanelGUI.append("In " + phase);
-		InfoPanelGUI.append(attack.toString());
-		// TODO : Start a thread in boardController to wait for input
-	}
-	
-	public void AttackingPhase() {
-		
-	}
-	
-	public void moveRecieved() {
-		
+		this.attack = attack;
+		InfoPanelGUI.append(this.attack.toString());
 	}
 
 	/**
@@ -356,6 +348,12 @@ public class GameController {
 
 	public void updateScarpyard(Card card) {
 		boardController.addToPlayerScrapYard(card);
+	}
+
+	public void doAttackMove() {
+		this.attack = new Attack();
+		this.phase = Phase.ATTACKING;
+		InfoPanelGUI.append("In Attack phase");
 	}
 
 }

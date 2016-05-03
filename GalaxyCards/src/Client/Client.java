@@ -115,7 +115,7 @@ public class Client {
 				controller.notValidMove(message);
 			} else if(message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
 				// Set Game Controller to attack
-				controller.setPhase(Phase.ATTACKING);
+				controller.setAttackPhase();
 			} else if(message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
 				controller.setDefendingPhase(message);
 			} else if(message.getCommand() == Commands.MATCH_SET_PHASE) {

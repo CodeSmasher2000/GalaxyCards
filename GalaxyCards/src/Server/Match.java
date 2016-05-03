@@ -691,7 +691,7 @@ public class Match implements Observer {
 		public void setAttackPhase() {
 			attacking = this;
 			this.phase = Phase.ATTACKING;
-			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
+			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_ATTACK_MOVE, "Server", this.phase));
 			untapOffensiveLane();
 			tapDefensiveLane();
 			this.hero.resetResources();

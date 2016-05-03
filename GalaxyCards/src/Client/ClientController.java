@@ -255,5 +255,10 @@ public class ClientController {
 		
 	}
 
+	public void setAttackPhase() {
+		gameController.doAttackMove();
+		
+	}
+
 	
 }
