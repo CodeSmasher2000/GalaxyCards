@@ -79,21 +79,21 @@ public class Match implements Observer {
 		int playerToStart = rand.nextInt(2);
 		if (playerToStart == 0) {
 			player1.setAttackPhase();
-			player2.setDefendPhase();
-//			player2.setIdlePhase();
+//			player2.setDefendPhase();
+			player2.setIdlePhase();
 		} else {
 			player2.setAttackPhase();
-			player1.setDefendPhase();
-//			player1.setIdlePhase();
+//			player1.setDefendPhase();
+			player1.setIdlePhase();
 		}
 		
 		// Both players should 7 draw cards
 		for (int i = 0; i < 7; i++) {
 			if (i == 6) {
-				defensive.drawCard();
+				idle.drawCard();
 			} else {
 				attacking.drawCard();
-				defensive.drawCard();
+				idle.drawCard();
 			}
 			
 		}
@@ -112,11 +112,12 @@ public class Match implements Observer {
 	/**
 	 * Is called when a commit attack message is recived from a client.
 	 */
-	public void commitAttackMove(Attack attack) {
+	public void commitAttackMove(CommandMessage message) {
+		Attack attack = (Attack) message.getData();
 		// SET THE IDLE PLAYER TO DEFENDING
-		idle.setPhase(Phase.DEFENDING);
+		idle.setDefendPhase();;
 		// SET THE ATTACKING PLAYER TO IDLE
-		attacking.setPhase(Phase.IDLE);
+		attacking.setIdlePhase();
 
 		// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
 		defensive.defend(attack);
@@ -232,16 +233,24 @@ public class Match implements Observer {
 				UpdateHeroValues move = (UpdateHeroValues) object;
 				player.updateHeroValues();
 			}
+			else if (message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
+//				sendMessageToOtherPlayer(player, message);
+				commitAttackMove(message);
+			} else if (message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
+				commitDefendMove(message);
+			}
 		} else if (message.getCommand() == Commands.MATCH_DRAW_CARD) {
 			player.drawCard();
-		} else if (message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
-			sendMessageToOtherPlayer(player, message);
-		} else if (message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
-			//TODO attackMoveRecieved()
-			sendMessageToOtherPlayer(player, message);
-		} else if (message.getCommand() == Commands.MATCH_NEW_ROUND) {
+		}  else if (message.getCommand() == Commands.MATCH_NEW_ROUND) {
 			newRound();
 		}
+	}
+
+	private void commitDefendMove(CommandMessage message) {
+		Attack attack = (Attack)message.getData();
+		fight(attack);
+		attacking.setIdlePhase();
+		defensive.setAttackPhase();	
 	}
 
 	/**
@@ -685,7 +694,6 @@ public class Match implements Observer {
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
 			untapOffensiveLane();
 			tapDefensiveLane();
-			// TODO : RESET HERO RESOURCES
 			this.hero.resetResources();
 			drawCard();
 			this.updateHeroValues();
