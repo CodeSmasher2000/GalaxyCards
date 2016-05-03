@@ -74,38 +74,39 @@ public class Match implements Observer {
 	 * to draw 7 cards. And then decides who should be in what phase.
 	 */
 	public void initGamePhase() {
-		// Both players should 7 draw cards
-		for (int i = 0; i < 7; i++) {
-			player1.drawCard();
-			player2.drawCard();
-		}
-
 		// Decides who should start
 		Random rand = new Random();
 		int playerToStart = rand.nextInt(2);
 		if (playerToStart == 0) {
 			player1.setAttackPhase();
-			player2.setIdlePhase();
+			player2.setDefendPhase();
+//			player2.setIdlePhase();
 		} else {
 			player2.setAttackPhase();
-			player1.setIdlePhase();
+			player1.setDefendPhase();
+//			player1.setIdlePhase();
 		}
+		
+		// Both players should 7 draw cards
+		for (int i = 0; i < 7; i++) {
+			if (i == 6) {
+				defensive.drawCard();
+			} else {
+				attacking.drawCard();
+				defensive.drawCard();
+			}
+			
+		}
+
+	
 	}
 
 	public void newRound() {
-		// RESET HERO RESOURCES
-		player1.hero.resetResources();
-		player2.hero.resetResources();
-		player1.updateHeroValues();
-		player2.updateHeroValues();
-
-		// EACH PLAYER DRAW 1 CARD
-		player1.hero.DrawCard();
-		player2.hero.DrawCard();
-
 		// Sets defensive player to attacker
-		defensive.setAttackPhase();
-		idle.setIdlePhase();
+		Player temp = defensive;
+		attacking.setDefendPhase();
+		temp.setAttackPhase();
+		//		idle.setIdlePhase();
 	}
 
 	/**
@@ -679,6 +680,12 @@ public class Match implements Observer {
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
 			untapOffensiveLane();
 			tapDefensiveLane();
+			// TODO : RESET HERO RESOURCES
+			this.hero.resetResources();
+			drawCard();
+			this.updateHeroValues();
+			
+			
 		}
 		
 		/**
