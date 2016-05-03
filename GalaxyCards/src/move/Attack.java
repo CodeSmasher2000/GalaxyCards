@@ -35,6 +35,15 @@ public class Attack implements Serializable {
 		return offensive[index];
 	}
 	
+	public int getAttacersIndex(int cardId){
+		for(int i = 0 ; i<= index; i++){
+			if(offensive[i]==cardId){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	/**
 	 * Returns a Object of a defender in the defender array
 	 * @param index
@@ -103,6 +112,15 @@ public class Attack implements Serializable {
 			}
 		}
 
+	}
+	
+	public String toString(){
+		String message="Attacker  ||  Target";
+		for(int i = 0; i<index; i++){
+			message=message+"\n"+offensive[i]+" || "+defensive[i];
+		}
+		
+		return message;
 	}
 
 }

@@ -10,6 +10,7 @@ import cards.Tech;
 import cards.Unit;
 import enumMessage.Lanes;
 import enumMessage.Persons;
+import enumMessage.Phase;
 import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
@@ -40,12 +41,15 @@ public class BoardGuiController {
 	private Persons ENUM;
 
 	private InfoPanelGUI infoPanel;
+	
 	private LaneSelectListener laneListener;
-	private boolean laneSelected = false;
 	private LaneSelectThread laneSelectThread;
-
 	private AttackThreadListener attackSelectThread;
+	private DefendThreadListener defendSelectThread;
+	
 	private boolean targetSelected = false;
+	private boolean defendingTargetSelected = false;
+	private boolean laneSelected = false;
 
 	private UnitLanes tempLane;
 	private Unit tempUnit;
@@ -180,7 +184,7 @@ public class BoardGuiController {
 	 * @param resourceCard
 	 */
 	public void opponentPlaysResource(ResourceCard resourceCard) throws GuiContainerException {
-//		addToOpponentScrapyard(resourceCard);
+		// addToOpponentScrapyard(resourceCard);
 		opponentHandGui.playCard();
 	}
 
@@ -535,6 +539,14 @@ public class BoardGuiController {
 		}
 	}
 
+	public void startDefendThreadListener(Card card) {
+		setDefendingTargetSelected(false);
+		if(defendSelectThread == null){
+			defendSelectThread = new DefendThreadListener((Unit) card);
+			defendSelectThread.start();
+		}
+	}
+
 	public boolean isTargetSelected() {
 		return targetSelected;
 	}
@@ -595,6 +607,119 @@ public class BoardGuiController {
 			// TODO Ska den ligga här!?
 
 		}
+	}
+
+	public void setAttacker(Card card) {
+		attackSelectThread.setAttacker(card);
+	}
+
+	public void setDefender(Object defender) {
+		attackSelectThread.setDefender(defender);
+	}
+	
+	public void changeAttackersTarget(Unit attacker){
+		defendSelectThread.changeAttackersTarget(attacker);
+	}
+
+	public void tapCard(int cardId, Lanes ENUM) {
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			playerOffLane.tapCard(cardId);
+		}
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			playerDefLane.tapCard(cardId);
+		}
+		if (ENUM == Lanes.PLAYER_HEROIC) {
+			playerHeroicGui.tapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
+			opponentOffLane.tapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
+			opponentDefLane.tapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_HEROIC) {
+			opponentHeroicGui.tapCard(cardId);
+		}
+	}
+
+	public void untapCard(int cardId, Lanes ENUM) {
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			playerOffLane.untapCard(cardId);
+		}
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			playerDefLane.untapCard(cardId);
+		}
+		if (ENUM == Lanes.PLAYER_HEROIC) {
+			playerHeroicGui.untapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
+			opponentOffLane.untapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
+			opponentDefLane.untapCard(cardId);
+		}
+		if (ENUM == Lanes.ENEMY_HEROIC) {
+			opponentHeroicGui.untapCard(cardId);
+		}
+
+	}
+
+	/**
+	 * Taps all cards in the specified lane passed in as argument.
+	 * 
+	 * @param ENUM
+	 *            : Lanes
+	 */
+	public void tapAllInLane(Lanes ENUM) {
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			playerOffLane.tapAllInLane();
+		}
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			playerDefLane.tapAllInLane();
+		}
+		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
+			opponentOffLane.tapAllInLane();
+		}
+		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
+			opponentDefLane.tapAllInLane();
+		}
+	}
+
+	/**
+	 * Untaps all cards in the specified lane passed in as argument
+	 * 
+	 * @param ENUM
+	 *            : Lanes
+	 */
+	public void untapAllInLane(Lanes ENUM) {
+		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
+			playerOffLane.untapAllInLane();
+		}
+		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
+			playerDefLane.untapAllInLane();
+		}
+		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
+			opponentOffLane.untapAllInLane();
+		}
+		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
+			opponentDefLane.untapAllInLane();
+		}
+	}
+
+	public boolean getDefendingTargetSelected() {
+		return defendingTargetSelected;
+	}
+
+	public void setDefendingTargetSelected(boolean defendingTargetSelected) {
+		this.defendingTargetSelected = defendingTargetSelected;
+	}
+
+	public Phase getPhase() {
+		return gameController.getPhase();
+	}
+	
+	public Attack getAttackObject(){
+		return gameController.getAttack();
 	}
 
 	private class LaneSelectListener implements MouseListener {
@@ -689,106 +814,47 @@ public class BoardGuiController {
 			}
 			// TODO Add the attacker and defender to the attack object
 			Attack attack = gameController.getAttack();
-			if (defender instanceof Unit || defender instanceof HeroicSupport ) {
-				attack.setOpponents(attacker.getId(),((Card) defender).getId());
+			if (defender instanceof Unit || defender instanceof HeroicSupport) {
+				attack.setOpponents(attacker.getId(), ((Card) defender).getId());
 			}
-			
+
 			InfoPanelGUI.append("Target Selected. Attack Thread stopped");
 			attackSelectThread = null;
 		}
 
 	}
 
-	public void setAttacker(Card card) {
-		attackSelectThread.setAttacker(card);
-	}
+	private class DefendThreadListener extends Thread {
+		private Unit defender;
 
-	public void setDefender(Object defender) {
-		attackSelectThread.setDefender(defender);
-	}
-
-	public void tapCard(int cardId, Lanes ENUM) {
-		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
-			playerOffLane.tapCard(cardId);
-		}
-		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
-			playerDefLane.tapCard(cardId);
-		}
-		if (ENUM == Lanes.PLAYER_HEROIC) {
-			playerHeroicGui.tapCard(cardId);
-		}
-		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
-			opponentOffLane.tapCard(cardId);
-		}
-		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
-			opponentDefLane.tapCard(cardId);
-		}
-		if (ENUM == Lanes.ENEMY_HEROIC) {
-			opponentHeroicGui.tapCard(cardId);
-		}
-	}
-
-	public void untapCard(int cardId, Lanes ENUM) {
-		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
-			playerOffLane.untapCard(cardId);
-		}
-		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
-			playerDefLane.untapCard(cardId);
-		}
-		if (ENUM == Lanes.PLAYER_HEROIC) {
-			playerHeroicGui.untapCard(cardId);
-		}
-		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
-			opponentOffLane.untapCard(cardId);
-		}
-		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
-			opponentDefLane.untapCard(cardId);
-		}
-		if (ENUM == Lanes.ENEMY_HEROIC) {
-			opponentHeroicGui.untapCard(cardId);
+		public DefendThreadListener(Unit defender) {
+			this.defender = defender;
+			InfoPanelGUI.append("Defend thread started... waiting for target.");
 		}
 
-	}
+		public void changeAttackersTarget(Unit attacker) {
+			
+			int i = gameController.getAttack().getAttacersIndex(attacker.getId());
+			if (i==-1){
+				InfoPanelGUI.append("Incorrect target.");
+			}else{
+				gameController.getAttack().setDefender(defender.getId(), i);
+			}
+			setDefendingTargetSelected(true);
+		}
 
-	/**
-	 * Taps all cards in the specified lane passed in as argument.
-	 * 
-	 * @param ENUM
-	 *            : Lanes
-	 */
-	public void tapAllInLane(Lanes ENUM) {
-		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
-			playerOffLane.tapAllInLane();
+		public void run() {
+			while (!getDefendingTargetSelected() || Thread.interrupted()) {
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			InfoPanelGUI.append("Target changed, commit defense or choose more defenders.");
+			defendSelectThread=null;
 		}
-		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
-			playerDefLane.tapAllInLane();
-		}
-		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
-			opponentOffLane.tapAllInLane();
-		}
-		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
-			opponentDefLane.tapAllInLane();
-		}
-	}
 
-	/**
-	 * Untaps all cards in the specified lane passed in as argument
-	 * 
-	 * @param ENUM
-	 *            : Lanes
-	 */
-	public void untapAllInLane(Lanes ENUM) {
-		if (ENUM == Lanes.PLAYER_OFFENSIVE) {
-			playerOffLane.untapAllInLane();
-		}
-		if (ENUM == Lanes.PLAYER_DEFENSIVE) {
-			playerDefLane.untapAllInLane();
-		}
-		if (ENUM == Lanes.ENEMY_OFFENSIVE) {
-			opponentOffLane.untapAllInLane();
-		}
-		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
-			opponentDefLane.untapAllInLane();
-		}
 	}
 }

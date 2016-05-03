@@ -8,6 +8,7 @@ import javax.swing.border.Border;
 
 import cards.HeroicSupport;
 import cards.Unit;
+import enumMessage.Lanes;
 
 public class OpponentTargetMouseListener implements MouseListener {
 
@@ -73,6 +74,9 @@ public class OpponentTargetMouseListener implements MouseListener {
 		if (event.getSource() instanceof HeroicSupport) {
 //			boardController.setDefender(card);
 			boardController.setDefender((HeroicSupport)event.getSource());
+		}
+		if(event.getSource() instanceof Unit && (((Unit)event.getSource()).getLaneEnum()==Lanes.ENEMY_OFFENSIVE)){
+			boardController.changeAttackersTarget((Unit)event.getSource());
 		}
 	}
 

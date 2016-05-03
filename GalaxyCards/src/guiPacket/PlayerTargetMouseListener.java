@@ -8,6 +8,8 @@ import javax.swing.border.Border;
 
 import cards.HeroicSupport;
 import cards.Unit;
+import enumMessage.Lanes;
+import enumMessage.Phase;
 
 public class PlayerTargetMouseListener implements MouseListener {
 	private Card card;
@@ -62,27 +64,47 @@ public class PlayerTargetMouseListener implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		if (event.getSource() instanceof Card) {
-			card = (Card) event.getSource();
-			if (card instanceof Unit) {
-				if (((Unit) card).getTap()) {
-					InfoPanelGUI.append("The card is tapped, can't attack.");
+
+		if (boardController.getPhase() == Phase.DEFENDING) {
+			if (event.getSource() instanceof Unit) {
+				card = (Unit) event.getSource();
+
+				if (((Unit) card).getLaneEnum() == Lanes.PLAYER_DEFENSIVE) {
+					if (((Unit) card).getTap() == false) {
+						boardController.startDefendThreadListener(card);
+					} else {
+						InfoPanelGUI.append("This unit is tapped, can't defend.");
+					}
+
 				} else {
-					boardController.startAttackThreadListner();
-					boardController.setAttacker(card);
-				}
-			}
-			if (card instanceof HeroicSupport) {
-				if(((HeroicSupport) card).getTap()){
-					InfoPanelGUI.append("The card is tapped, can't use ability.");
-				}else{
-					InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ");
+					InfoPanelGUI.append("This unit is not in defensive lane, can't defend");
 				}
 			}
 		}
-		if (event.getSource() instanceof HeroGUI) {
-			InfoPanelGUI.append(heroGui.toString(), null);
 
+		if (boardController.getPhase() == Phase.ATTACKING) {
+
+			if (event.getSource() instanceof Card) {
+				card = (Card) event.getSource();
+				if (card instanceof Unit) {
+					if (((Unit) card).getTap()) {
+						InfoPanelGUI.append("The card is tapped, can't attack.");
+					} else {
+						boardController.startAttackThreadListner();
+						boardController.setAttacker(card);
+					}
+				}
+				if (card instanceof HeroicSupport) {
+					if (((HeroicSupport) card).getTap()) {
+						InfoPanelGUI.append("The card is tapped, can't use ability.");
+					} else {
+						InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ");
+					}
+				}
+			}
+			if (event.getSource() instanceof HeroGUI) {
+				InfoPanelGUI.append(heroGui.toString(), null);
+			}
 		}
 	}
 

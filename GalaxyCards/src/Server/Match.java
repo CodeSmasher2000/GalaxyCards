@@ -237,6 +237,7 @@ public class Match implements Observer {
 		} else if (message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
 			sendMessageToOtherPlayer(player, message);
 		} else if (message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
+			//TODO attackMoveRecieved()
 			sendMessageToOtherPlayer(player, message);
 		} else if (message.getCommand() == Commands.MATCH_NEW_ROUND) {
 			newRound();

@@ -1,9 +1,5 @@
 package game;
 
-import java.awt.Color;
-
-import javax.sound.midi.MidiDevice.Info;
-
 import Client.ClientController;
 import cards.HeroicSupport;
 import cards.ResourceCard;
@@ -15,7 +11,6 @@ import enumMessage.Lanes;
 import enumMessage.Phase;
 import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
-import exceptionsPacket.NoLaneSelectedException;
 import exceptionsPacket.ResourcePlayedException;
 import guiPacket.BoardGuiController;
 import guiPacket.Card;
@@ -294,9 +289,6 @@ public class GameController {
 	/**
 	 * Sends a attack move object to the server.
 	 */
-	public void commitMove() {
-		commitMove(attack);
-	}
 
 	public Attack getAttack() {
 		return this.attack;
@@ -316,10 +308,14 @@ public class GameController {
 		boardController.addToPlayerScrapYard(card);
 	}
 
-	public void commitMove(Attack attack2) {
-		clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
-				null,this.attack));
-		InfoPanelGUI.append("Move Commited", "BLUE");
+	public void commitMove() {
+		if(getPhase()==Phase.ATTACKING){
+			clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
+					null,this.attack));
+			InfoPanelGUI.append("Move Commited", "BLUE");
+		}if(getPhase()==Phase.DEFENDING){
+			clientController.writeMessage(new CommandMessage(Commands.MATCH_DEFEND_MOVE, null, this.attack));
+		}
 	}
 
 	public void opponeentPlaysTech(Tech card) {
