@@ -115,7 +115,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 		lbImage = new JLabel();
 		lbImage.setAlignmentX(SwingConstants.CENTER);
 		lbImage.setBorder(BorderFactory.createLoweredBevelBorder());
-		lbImage.setIcon(new ImageIcon(ClassLoader.getSystemResource("pictures/test.jpg")));
+//		lbImage.setIcon(new ImageIcon(ClassLoader.getSystemResource("pictures/test.jpg")));
 
 		// Card type
 		lbType = new JLabel("  TYPE  ");

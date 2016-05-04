@@ -61,7 +61,7 @@ public class OpponentHandGUI extends JPanel {
 	public void drawCard() throws GuiContainerException {
 		if (cardsOnHand < 8) {
 			JLabel card = new JLabel();
-			icon = new ImageIcon(PATH);
+			icon = new ImageIcon(ClassLoader.getSystemResource(PATH));
 			card.setIcon(icon);
 			card.setBounds(horizontalPosition, 20, icon.getIconWidth(), icon.getIconHeight());
 			cards[cardsOnHand] = card;
