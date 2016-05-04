@@ -151,7 +151,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	 * negative value is passed in, defense decreases.
 	 */
 	public void setDefense(int amount) {
-		this.defense += amount;
+		this.defense = amount;
 		super.setDefense(this.defense);
 	}
 

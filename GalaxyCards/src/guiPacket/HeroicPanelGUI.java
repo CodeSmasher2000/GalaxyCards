@@ -249,9 +249,8 @@ public class HeroicPanelGUI extends JPanel {
 		for (int i = 0; i < heroicUnits.length; i++) {
 			// TODO : Change null check?
 			if (heroicUnits[i] != null) {
-				HeroicSupport hcSupport = heroicUnits[i];
-				if (hcSupport.getId() == cardToUpdate.getId()) {
-					hcSupport.setDefense(cardToUpdate.getDefense());
+				if (heroicUnits[i].getId() == cardToUpdate.getId()) {
+					heroicUnits[i].setDefense(cardToUpdate.getDefense());
 					return true;
 				} 
 			}

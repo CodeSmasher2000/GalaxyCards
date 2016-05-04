@@ -152,7 +152,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 * negative value is passed in, defense decreases.
 	 */
 	public void setDefense(int amount) {
-		this.defense += amount;
+		this.defense = amount;
 		super.setDefense(this.defense);
 	}
 
