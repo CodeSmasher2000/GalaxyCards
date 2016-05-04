@@ -26,7 +26,7 @@ import enumMessage.Persons;
 // BoardGuiContorller.
 
 public class HeroGUI extends JPanel {
-	private final String PICTURE_DIRECTORY = "files/pictures/";
+	private final String PICTURE_DIRECTORY = "pictures/";
 	private JLabel imageLabel;
 	private JPanel imagePanel;
 	private JProgressBar lifeBar, shieldBar, resourceBar;

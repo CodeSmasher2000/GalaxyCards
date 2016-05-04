@@ -47,9 +47,9 @@ public class HeroicPanelGUI extends JPanel {
 	public HeroicPanelGUI(BoardGuiController boardController, Persons ENUM) {
 		this.ENUM = ENUM;
 		if (ENUM == Persons.PLAYER) {
-			background = new ImageIcon(ClassLoader.getSystemResource("files/pictures/heroicPanelTexture2.jpg"));
+			background = new ImageIcon(ClassLoader.getSystemResource("pictures/heroicPanelTexture2.jpg"));
 		} else {
-			background = new ImageIcon(ClassLoader.getSystemResource("files/pictures/heroicPanelTexture.jpg"));
+			background = new ImageIcon(ClassLoader.getSystemResource("pictures/heroicPanelTexture.jpg"));
 		}
 
 		this.boardController = boardController;

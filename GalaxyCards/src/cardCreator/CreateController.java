@@ -25,7 +25,7 @@ import guiPacket.Card;
 public class CreateController {
 	private Deck activeDeck = new Deck();
 	private CreateGui gui;
-	private final String DECKPATH = "files/decks/";
+	private final String DECKPATH = "decks/";
 	
 	public void setGui(CreateGui gui) {
 		this.gui = gui;

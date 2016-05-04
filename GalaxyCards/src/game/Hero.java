@@ -62,7 +62,7 @@ public class Hero implements Serializable, Target {
 	
 	public Deck loadDeck(){
 
-		InputStream is = (ClassLoader.getSystemResourceAsStream("files/decks/debugWinV1.dat"));
+		InputStream is = (ClassLoader.getSystemResourceAsStream("decks/debugWinV1.dat"));
 
 		try(
 			ObjectInputStream ois = new ObjectInputStream(is)) {

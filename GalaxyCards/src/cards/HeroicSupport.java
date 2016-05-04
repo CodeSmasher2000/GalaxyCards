@@ -30,7 +30,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 * visuals by calling upon it's parent's methods. The rarity argument must
 	 * be "common", "rare" or "legendary" (not case sensitive and no
 	 * whitespace). The imageName argument must match the image's name and the
-	 * imagefile must be in files/pictures directory.
+	 * imagefile must be in pictures directory.
 	 * 
 	 * 
 	 * @param name
@@ -91,7 +91,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 
 	/**
 	 * Returns the name of the image used by this card. Image's are located in
-	 * files/pictures directory.
+	 * pictures directory.
 	 * 
 	 * @return IMAGE_NAME : String
 	 */

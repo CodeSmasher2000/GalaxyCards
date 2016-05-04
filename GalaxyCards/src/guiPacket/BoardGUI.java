@@ -34,7 +34,7 @@ public class BoardGUI extends JPanel {
 	private ScrapyardGUI playerScrapyard, opponentScrapyard;
 	private ScrapyardPanel scrapyards;
 
-	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
+	private ImageIcon background = new ImageIcon(ClassLoader.getSystemResource("pictures/playfieldBG.jpg"));
 
 	public BoardGUI(BoardGuiController boardController) {
 		this.boardController = boardController;

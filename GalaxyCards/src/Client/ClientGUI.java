@@ -46,7 +46,7 @@ public class ClientGUI extends JPanel {
 	private JTextField tfIp = new JTextField("localhost");
 	public JButton btnDisconnect = new JButton("Disconnect");
 	
-	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
+	private ImageIcon background = new ImageIcon(ClassLoader.getSystemResource("pictures/playfieldBG.jpg"));
 	private ClientController clientController;
 //	private BackgroundMusic music = new BackgroundMusic();
 	

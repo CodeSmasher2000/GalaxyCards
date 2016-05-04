@@ -59,7 +59,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 	private Ability ability = null;
 	private int id;
 
-	private final String PICTURE_DIRECTORY = "files/pictures/";
+	private final String PICTURE_DIRECTORY = "pictures/";
 
 	public Card() {
 		frameColor = Color.BLACK;
@@ -91,7 +91,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 
 	private void initiateButtons() {
 		abilityButton = new JButton();
-		abilityButton.setIcon(new ImageIcon(ClassLoader.getSystemResource("files/pictures/ability.jpg")));
+		abilityButton.setIcon(new ImageIcon(ClassLoader.getSystemResource("pictures/ability.jpg")));
 		abilityButton.setOpaque(true);
 		abilityButton.setPreferredSize(new Dimension(15, 15));
 		abilityButton.addActionListener(new AbilityButtonListener());
@@ -115,7 +115,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 		lbImage = new JLabel();
 		lbImage.setAlignmentX(SwingConstants.CENTER);
 		lbImage.setBorder(BorderFactory.createLoweredBevelBorder());
-		lbImage.setIcon(new ImageIcon(ClassLoader.getSystemResource("files/pictures/test.jpg")));
+		lbImage.setIcon(new ImageIcon(ClassLoader.getSystemResource("pictures/test.jpg")));
 
 		// Card type
 		lbType = new JLabel("  TYPE  ");
@@ -191,7 +191,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 	 * Method that sets the image of the card. The parameters passed in as
 	 * arguments is the name of the picture. The picture need to be in .JPG
 	 * format and need to be in the following directory:
-	 * GalaxyCards/files/pictures/cardImages/
+	 * GalaxyCards/pictures/cardImages/
 	 * 
 	 * @param imageName
 	 */

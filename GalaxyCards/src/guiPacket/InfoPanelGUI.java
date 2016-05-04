@@ -44,7 +44,7 @@ public class InfoPanelGUI extends JPanel {
 
 	private Border b1 = BorderFactory.createEmptyBorder(0, 10, 0, 10);
 
-	private ImageIcon background = new ImageIcon(ClassLoader.getSystemResource("files/pictures/infoPanelTexture.jpg"));
+	private ImageIcon background = new ImageIcon(ClassLoader.getSystemResource("pictures/infoPanelTexture.jpg"));
 
 	private TestPanel testPanel;
 

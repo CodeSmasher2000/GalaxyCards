@@ -48,7 +48,7 @@ public class HandGUI extends JPanel {
 	private HandMouseListener listener = new HandMouseListener();
 	private BoardGuiController boardController;
 
-	private ImageIcon background = new ImageIcon(ClassLoader.getSystemResource("files/pictures/handPanelTexturePlayer.jpg"));
+	private ImageIcon background = new ImageIcon(ClassLoader.getSystemResource("pictures/handPanelTexturePlayer.jpg"));
 
 	private Card[] cards = new Card[8];
 

@@ -29,8 +29,8 @@ public class OpponentHandGUI extends JPanel {
 	private ImageIcon icon;
 	private JLayeredPane layeredPane;
 
-	private final String PATH = "files/pictures/CardBackside.jpg";
-	private ImageIcon background = new ImageIcon(ClassLoader.getSystemResource("files/pictures/handPanelTextureOpponent.jpg"));
+	private final String PATH = "pictures/CardBackside.jpg";
+	private ImageIcon background = new ImageIcon(ClassLoader.getSystemResource("pictures/handPanelTextureOpponent.jpg"));
 
 	public OpponentHandGUI(BoardGuiController boardController) {
 		this.boardController = boardController;

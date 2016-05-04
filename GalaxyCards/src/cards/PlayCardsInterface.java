@@ -4,7 +4,7 @@ public interface PlayCardsInterface {
 	
 	/**
 	 * Returns the name of the image used by this card. Image's are located in
-	 * files/pictures directory.
+	 * pictures directory.
 	 * 
 	 * @return IMAGE_NAME : String
 	 */
