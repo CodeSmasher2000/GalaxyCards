@@ -1,0 +1,5 @@
+1. Starta ServerController för att starta en server.
+2. Starta 2 st ClientGUI för att skapa 2 st klienter.
+3. I ClientGUI skriv in den IP som server är hostad på.
+4. Skriv in användarnamn och sök sedan efter match.
+5. Man kan bara spela ut kort för tillfället så ha låga förväntningar!!
