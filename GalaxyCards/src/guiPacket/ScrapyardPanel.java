@@ -16,7 +16,7 @@ public class ScrapyardPanel extends JPanel {
 	private ScrapyardGUI opponent;
 	
 	private JPanel label, container;
-	private ImageIcon background = new ImageIcon("files/pictures/historyPanelTexture.jpg");
+	private ImageIcon background = new ImageIcon(ClassLoader.getSystemResource("files/pictures/historyPanelTexture.jpg"));
 	
 	public ScrapyardPanel(ScrapyardGUI playerScrapyard, ScrapyardGUI opponentScrapyard){
 		

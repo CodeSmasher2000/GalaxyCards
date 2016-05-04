@@ -65,7 +65,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 		frameColor = Color.BLACK;
 		border = BorderFactory.createMatteBorder(1, 1, 3, 1, frameColor);
 
-		cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
+		cardBG1 = new ImageIcon(ClassLoader.getSystemResource(PICTURE_DIRECTORY + "CardFrontBG.jpg"));
 //		setBackground();
 		initiateLabels();
 		initiateButtons();
@@ -91,7 +91,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 
 	private void initiateButtons() {
 		abilityButton = new JButton();
-		abilityButton.setIcon(new ImageIcon("files/pictures/ability.jpg"));
+		abilityButton.setIcon(new ImageIcon(ClassLoader.getSystemResource("files/pictures/ability.jpg")));
 		abilityButton.setOpaque(true);
 		abilityButton.setPreferredSize(new Dimension(15, 15));
 		abilityButton.addActionListener(new AbilityButtonListener());
@@ -115,7 +115,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 		lbImage = new JLabel();
 		lbImage.setAlignmentX(SwingConstants.CENTER);
 		lbImage.setBorder(BorderFactory.createLoweredBevelBorder());
-		lbImage.setIcon(new ImageIcon("files/pictures/test.jpg"));
+		lbImage.setIcon(new ImageIcon(ClassLoader.getSystemResource("files/pictures/test.jpg")));
 
 		// Card type
 		lbType = new JLabel("  TYPE  ");
@@ -196,7 +196,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 	 * @param imageName
 	 */
 	public void setImage(String imageName) {
-		lbImage.setIcon(new ImageIcon(PICTURE_DIRECTORY + imageName + ".jpg"));
+		lbImage.setIcon(new ImageIcon(ClassLoader.getSystemResource(PICTURE_DIRECTORY + imageName + ".jpg")));
 	}
 
 	/**
@@ -211,11 +211,11 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 	 */
 	public String setRarity(String rarity) {
 		if (rarity.equalsIgnoreCase("common")) {
-			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY + "rarityCommon.jpg"));
+			lbRarity.setIcon(new ImageIcon(ClassLoader.getSystemResource(PICTURE_DIRECTORY + "rarityCommon.jpg")));
 		} else if (rarity.equalsIgnoreCase("rare")) {
-			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY + "rarityRare.jpg"));
+			lbRarity.setIcon(new ImageIcon(ClassLoader.getSystemResource(PICTURE_DIRECTORY + "rarityRare.jpg")));
 		} else if (rarity.equalsIgnoreCase("legendary")) {
-			lbRarity.setIcon(new ImageIcon(PICTURE_DIRECTORY + "rarityLegendary.jpg"));
+			lbRarity.setIcon(new ImageIcon(ClassLoader.getSystemResource(PICTURE_DIRECTORY + "rarityLegendary.jpg")));
 		} else {
 			rarity = "unknown rarity, check spelling & whitespace";
 		}

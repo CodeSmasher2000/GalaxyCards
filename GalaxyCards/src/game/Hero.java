@@ -1,8 +1,10 @@
 package game;
 
+import java.awt.im.InputContext;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
@@ -60,11 +62,10 @@ public class Hero implements Serializable, Target {
 	
 	public Deck loadDeck(){
 
-		File file = new File("files/decks/debugWinV1.dat");
+		InputStream is = (ClassLoader.getSystemResourceAsStream("files/decks/debugWinV1.dat"));
 
 		try(
-			FileInputStream fin = new FileInputStream(file);
-			ObjectInputStream ois = new ObjectInputStream(fin)) {
+			ObjectInputStream ois = new ObjectInputStream(is)) {
 			return (Deck)ois.readObject();
 		} catch(ClassNotFoundException | IOException e) {
 			e.printStackTrace();

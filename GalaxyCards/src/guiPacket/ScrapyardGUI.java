@@ -51,9 +51,9 @@ public class ScrapyardGUI extends JPanel {
 		this.boardController = boardController;
 		this.ENUM = ENUM;
 		if (ENUM == Persons.PLAYER) {
-			background = new ImageIcon("files/pictures/scrapPanelPlayer.jpg");
+			background = new ImageIcon(ClassLoader.getSystemResource("files/pictures/scrapPanelPlayer.jpg"));
 		} else {
-			background = new ImageIcon("files/pictures/scrapPanelOpponent.jpg");
+			background = new ImageIcon(ClassLoader.getSystemResource("files/pictures/scrapPanelOpponent.jpg"));
 		}
 		boardController.addScrapyardListener(this, ENUM);
 		initiateLayeredPane();

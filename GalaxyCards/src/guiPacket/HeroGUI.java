@@ -74,7 +74,7 @@ public class HeroGUI extends JPanel {
 	}
 
 	private void initiateImage() {
-		heroImage = new ImageIcon(PICTURE_DIRECTORY + "Hero1" + ".jpg");
+		heroImage = new ImageIcon(ClassLoader.getSystemResource(PICTURE_DIRECTORY + "Hero1" + ".jpg"));
 		imageLabel = new JLabel();
 		imageLabel.setIcon(heroImage);
 		imageLabel.setBorder(BorderFactory.createCompoundBorder(b1, b2));
