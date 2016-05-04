@@ -153,6 +153,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 */
 	public void setDefense(int amount) {
 		this.defense += amount;
+		super.setDefense(this.defense);
 	}
 
 	// /**
@@ -205,6 +206,12 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	public Lanes getLanesEnum() {
 		return ENUM;
 	}
+	
+	public void updateHp(int currentHp) {
+		this.defense = currentHp;
+		super.setDefense(currentHp);
+	}
+	
 	@Override
 	public void damage(int amt) {
 		this.defense -= amt;

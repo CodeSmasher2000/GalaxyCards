@@ -356,4 +356,8 @@ public class GameController {
 		InfoPanelGUI.append("In Attack phase");
 	}
 
+	public void updateCard(Card cardUpdate) {
+		boardController.updateCard(cardUpdate);
+	}
+
 }

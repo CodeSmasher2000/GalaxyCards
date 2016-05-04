@@ -135,6 +135,8 @@ public class Client {
 				controller.untapCard(message);
 			} else if(message.getCommand() == Commands.MATCH_ADD_TO_SCRAPYARD) {
 				controller.addToScrapYard(message);
+			} else if(message.getCommand() == Commands.MATCH_UPDATECARD) {
+				controller.updateCard(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");

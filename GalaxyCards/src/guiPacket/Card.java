@@ -433,9 +433,6 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 			
 		}
 	}
-	
-		
-
 		@Override
 		public int compareTo(Card o) {
 			if(o.getId() > this.id){

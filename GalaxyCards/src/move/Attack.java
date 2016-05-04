@@ -53,7 +53,7 @@ public class Attack implements Serializable {
 	 * 		HeroicSupport or Hero.
 	 */
 	public int getDefender(int index) {
-		return offensive[index];
+		return defensive[index];
 	}
 
 //	public void fight() {

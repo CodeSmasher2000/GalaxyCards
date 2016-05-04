@@ -166,7 +166,7 @@ public class Match implements Observer {
 			Target target = null;
 
 			// Tries to found the card that is attacking
-			for (int j = 0; j < attacking.offensiveLane.size() & attackingCardFound; j++) {
+			for (int j = 0; j < attacking.offensiveLane.size() & !attackingCardFound; j++) {
 				if (attacking.offensiveLane.get(j).getId() == attacker) {
 					attackingCardFound = true;
 					attackCard = (Unit) attacking.offensiveLane.get(j);
@@ -175,13 +175,13 @@ public class Match implements Observer {
 
 			// Tries to find the defedning card
 			if (defender > 0) {
-				for (int j = 0; j < defensive.defensiveLane.size() & defenderFound; j++) {
+				for (int j = 0; j < defensive.defensiveLane.size() & !defenderFound; j++) {
 					if (defensive.defensiveLane.get(j).getId() == defender) {
 						defenderFound = true;
 						target = (Unit) defensive.defensiveLane.get(j);
 					}
 				}
-				for (int j = 0; j < defensive.heroicSupportLane.size() & defenderFound; j++) {
+				for (int j = 0; j < defensive.heroicSupportLane.size() & !defenderFound; j++) {
 					if (defensive.heroicSupportLane.get(j).getId() == defender) {
 						defenderFound = true;
 						target = defensive.heroicSupportLane.get(j);

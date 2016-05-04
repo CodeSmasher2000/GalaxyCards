@@ -260,5 +260,10 @@ public class ClientController {
 		
 	}
 
+	public void updateCard(CommandMessage message) {
+		Card cardUpdate = (Card)message.getData();
+		gameController.updateCard(cardUpdate);
+	}
+
 	
 }

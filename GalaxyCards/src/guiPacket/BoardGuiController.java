@@ -94,7 +94,6 @@ public class BoardGuiController {
 		opponentHeroGui.updateLifeBar(life);
 		opponentHeroGui.updateResourceBar(currentResource, maxResource);
 		opponentHeroGui.updateShiledBar(energyShield);
-
 	}
 
 	/**
@@ -856,5 +855,28 @@ public class BoardGuiController {
 			defendSelectThread=null;
 		}
 
+	}
+	
+	public void updateCard(Card cardToUpdate) {
+		// TODO : FIX THE UNIT CARD METHOD
+		
+//		if (cardToUpdate instanceof Unit) {
+//			if (playerDefLane.updateCard((Unit) cardToUpdate))
+//				return;
+//			if (playerOffLane.updateCard((Unit) cardToUpdate))
+//				return;
+//			if (opponentDefLane.updateCard((Unit) cardToUpdate))
+//				return;
+//			if (opponentOffLane.updateCard((Unit) cardToUpdate))
+//				return;
+		if (cardToUpdate instanceof HeroicSupport) {
+			if (opponentHeroicGui.updateCard((HeroicSupport) cardToUpdate)) {
+				return;
+			}
+			if (playerHeroicGui.updateCard((HeroicSupport) cardToUpdate)) {
+				return;
+			}
+		}
+		InfoPanelGUI.append("Update Card : Something went wrong");
 	}
 }

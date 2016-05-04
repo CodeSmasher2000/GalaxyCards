@@ -152,7 +152,6 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	 */
 	public void setDefense(int amount) {
 		this.defense += amount;
-
 		super.setDefense(this.defense);
 	}
 
@@ -227,6 +226,11 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	 */
 	public Lanes getLaneEnum() {
 		return ENUM;
+	}
+	
+	public void updateHp(int currentHp) {
+		this.defense = currentHp;
+		super.setDefense(currentHp);
 	}
 
 	// @Override

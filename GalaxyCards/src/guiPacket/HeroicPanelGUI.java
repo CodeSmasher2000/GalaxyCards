@@ -244,4 +244,18 @@ public class HeroicPanelGUI extends JPanel {
 		super.paintComponent(g);
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 	}
+
+	public boolean updateCard(HeroicSupport cardToUpdate) {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			// TODO : Change null check?
+			if (heroicUnits[i] != null) {
+				HeroicSupport hcSupport = heroicUnits[i];
+				if (hcSupport.getId() == cardToUpdate.getId()) {
+					hcSupport.setDefense(cardToUpdate.getDefense());
+					return true;
+				} 
+			}
+		}
+		return false;
+	}
 }

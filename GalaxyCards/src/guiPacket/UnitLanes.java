@@ -130,7 +130,7 @@ public class UnitLanes extends JPanel {
 		int stepdir = 1;
 		for (int q = 0; q < steps; q++, index += stepdir * q, stepdir = -stepdir) {
 			if (units[index] == null) {
-//				unit.setLaneEnum(ENUM);
+				// unit.setLaneEnum(ENUM);
 				units[index] = unit;
 				units[index].setBounds(0, 0, units[index].getPreferredSize().width,
 						units[index].getPreferredSize().height);
@@ -234,7 +234,7 @@ public class UnitLanes extends JPanel {
 			if (units[i] != null) {
 				if (units[i].getId() == cardId) {
 					units[i].tap();
-					cardFound=true;
+					cardFound = true;
 					String[] unitName = units[i].toString().split(" ");
 					InfoPanelGUI.append(unitName[0] + " is tapped: " + units[i].getTap());
 				}
@@ -262,5 +262,20 @@ public class UnitLanes extends JPanel {
 			}
 		}
 		return cardFound;
+	}
+
+	public boolean updateCard(Unit cardToUpdate) {
+		for (int i = 0; i < units.length; i++) {
+			// TODO : FIND OTHER WAY THAN NULL CHECK!?
+			if (units[i] != null) {
+				Unit card = units[i];
+				if (card.getId() == cardToUpdate.getId()) {
+					card.setDefense(cardToUpdate.getDefense());
+					card.setAttack(cardToUpdate.getAttack());
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
