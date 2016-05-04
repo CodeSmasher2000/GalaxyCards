@@ -80,6 +80,13 @@ public class PlayerTargetMouseListener implements MouseListener {
 					InfoPanelGUI.append("This unit is not in defensive lane, can't defend");
 				}
 			}
+			if (card instanceof HeroicSupport) {
+				if (((HeroicSupport) card).getTap()) {
+					InfoPanelGUI.append("The card is tapped, can't use ability.");
+				} else {
+					InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ");
+				}
+			}
 		}
 
 		if (boardController.getPhase() == Phase.ATTACKING) {
@@ -87,11 +94,15 @@ public class PlayerTargetMouseListener implements MouseListener {
 			if (event.getSource() instanceof Card) {
 				card = (Card) event.getSource();
 				if (card instanceof Unit) {
-					if (((Unit) card).getTap()) {
-						InfoPanelGUI.append("The card is tapped, can't attack.");
-					} else {
-						boardController.startAttackThreadListner();
-						boardController.setAttacker(card);
+					if (((Unit) card).getLaneEnum() == Lanes.PLAYER_OFFENSIVE) {
+						if (((Unit) card).getTap()==false) {
+							boardController.startAttackThreadListner();
+							boardController.setAttacker(card);
+						} else {
+							InfoPanelGUI.append("The card is tapped, can't attack.");
+						}
+					}else{
+						InfoPanelGUI.append("Invalid move: can't attack with units in defensive lane");
 					}
 				}
 				if (card instanceof HeroicSupport) {
@@ -102,9 +113,14 @@ public class PlayerTargetMouseListener implements MouseListener {
 					}
 				}
 			}
+			
 			if (event.getSource() instanceof HeroGUI) {
 				InfoPanelGUI.append(heroGui.toString(), null);
 			}
+		}
+		
+		if(boardController.getPhase()==Phase.IDLE){
+			InfoPanelGUI.append(event.getSource().toString());
 		}
 	}
 

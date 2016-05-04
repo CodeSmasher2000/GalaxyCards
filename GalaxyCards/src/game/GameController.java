@@ -73,7 +73,6 @@ public class GameController {
 	}
 	
 	public void playUnitOK(Card card, Lanes lane) {
-		System.out.println();
 		boardController.addUnitCard((Unit)card, lane);
 		boardController.removeCardFromHand(card);
 	}
@@ -265,6 +264,7 @@ public class GameController {
 		this.phase = Phase.DEFENDING;
 		InfoPanelGUI.append("In " + phase);
 		this.attack = attack;
+		//TODO REMOVE
 		InfoPanelGUI.append(this.attack.toString());
 	}
 

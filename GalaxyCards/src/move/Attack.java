@@ -44,6 +44,13 @@ public class Attack implements Serializable {
 		return -1;
 	}
 	
+	public boolean hasAttackers(){
+		if(index>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	/**
 	 * Returns a Object of a defender in the defender array
 	 * @param index

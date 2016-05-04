@@ -130,7 +130,7 @@ public class UnitLanes extends JPanel {
 		int stepdir = 1;
 		for (int q = 0; q < steps; q++, index += stepdir * q, stepdir = -stepdir) {
 			if (units[index] == null) {
-				// unit.setLaneEnum(ENUM);
+//				 unit.setLaneEnum(ENUM);
 				units[index] = unit;
 				units[index].setBounds(0, 0, units[index].getPreferredSize().width,
 						units[index].getPreferredSize().height);

@@ -114,13 +114,27 @@ public class Match implements Observer {
 	 */
 	public void commitAttackMove(CommandMessage message) {
 		Attack attack = (Attack) message.getData();
-		// SET THE IDLE PLAYER TO DEFENDING
-		idle.setDefendPhase();;
-		// SET THE ATTACKING PLAYER TO IDLE
-		attacking.setIdlePhase();
+//		// SET THE IDLE PLAYER TO DEFENDING
+//		idle.setDefendPhase();;
+//		// SET THE ATTACKING PLAYER TO IDLE
+//		attacking.setIdlePhase();
+//
+//		// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
+//		defensive.defend(attack);
+		
+		if(attack.hasAttackers()){
+			// SET THE IDLE PLAYER TO DEFENDING
+			idle.setDefendPhase();;
+			// SET THE ATTACKING PLAYER TO IDLE
+			attacking.setIdlePhase();
 
-		// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
-		defensive.defend(attack);
+			// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
+			defensive.defend(attack);
+		}else{
+			idle.setDefendPhase();
+			attacking.setIdlePhase();
+			defensive.setAttackPhase();
+		}
 	}
 
 	/**
@@ -637,7 +651,16 @@ public class Match implements Observer {
 			sendMessageToOtherPlayer(this,
 					new CommandMessage(Commands.MATCH_UNTAP_ALL_IN_LANE, "server", Lanes.ENEMY_OFFENSIVE));
 		}
-
+		
+		public void untapHeroicLane(){
+			for(int i = 0; i<heroicSupportLane.size(); i++){
+				untapHeroicSupportLane(i);
+			}
+			sendMessageToPlayer(this,
+					new CommandMessage(Commands.MATCH_UNTAP_ALL_IN_LANE, "server", Lanes.PLAYER_HEROIC));
+			sendMessageToOtherPlayer(this,
+					new CommandMessage(Commands.MATCH_UNTAP_ALL_IN_LANE, "server", Lanes.ENEMY_HEROIC));
+		}
 		/**
 		 * Untaps the units in defensive lane
 		 */
@@ -663,6 +686,10 @@ public class Match implements Observer {
 			sendMessageToOtherPlayer(this,
 					new CommandMessage(Commands.MATCH_TAP_ALL_IN_LANE, "server", Lanes.ENEMY_DEFENSIVE));
 
+		}
+		
+		public void untapHeroicSupportLane(int index){
+			heroicSupportLane.get(index).untap();
 		}
 
 		public void untapCardInDefensiveLane(int index) {
@@ -693,7 +720,10 @@ public class Match implements Observer {
 			this.phase = Phase.ATTACKING;
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_ATTACK_MOVE, "Server", this.phase));
 			untapOffensiveLane();
-			tapDefensiveLane();
+			untapHeroicLane();
+//			tapDefensiveLane();
+			untapDefensiveLane();
+			
 			this.hero.resetResources();
 			drawCard();
 			this.updateHeroValues();
@@ -708,16 +738,16 @@ public class Match implements Observer {
 			defensive = this;
 			this.phase = Phase.DEFENDING;
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
-			untapDefensiveLane();
-			tapOffensiveLane();
+//			untapDefensiveLane();
+//			tapOffensiveLane();
 		}
 		
 		public void setIdlePhase() {
 			idle = this;
 			this.phase = Phase.IDLE;
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
-			tapOffensiveLane();
-			tapDefensiveLane();
+//			tapOffensiveLane();
+//			tapDefensiveLane();
 		}
 
 

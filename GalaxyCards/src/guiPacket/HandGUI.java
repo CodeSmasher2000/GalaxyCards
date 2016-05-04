@@ -15,12 +15,13 @@ import javax.swing.border.Border;
 
 import cards.HeroicSupport;
 import cards.ResourceCard;
+import cards.Tech;
 import cards.Unit;
+import enumMessage.Phase;
 import exceptionsPacket.GuiContainerException;
 import exceptionsPacket.InsufficientResourcesException;
 import exceptionsPacket.NoLaneSelectedException;
 import exceptionsPacket.ResourcePlayedException;
-import game.GameController;
 
 /**
  * GUI klass that represents a hand with held cards. Initially the panel is
@@ -36,6 +37,8 @@ import game.GameController;
  * @author 13120dde
  *
  */
+
+//TODO refactor. the try/cath in mousepressed is probably redundant.
 
 public class HandGUI extends JPanel {
 
@@ -138,7 +141,7 @@ public class HandGUI extends JPanel {
 	protected void addCard(Card card) throws GuiContainerException {
 		if (cardsOnHand >= 8) {
 			removeRandomCard();
-			InfoPanelGUI.append("You can only have 8 cards on hand. A random card was thrown to scrapyard","RED");
+			InfoPanelGUI.append("You can only have 8 cards on hand. A random card was thrown to scrapyard", "RED");
 		}
 		cards[cardsOnHand] = card;
 		boardController.addCardToHand(card);
@@ -174,13 +177,13 @@ public class HandGUI extends JPanel {
 		for (int i = 0; i < tempCards.length; i++) {
 			if (tempCards[i] != null) {
 				tempCards[i].removeMouseListener(listener);
-				if (!(tempCards[i].compareTo(card)==0) ){
+				if (!(tempCards[i].compareTo(card) == 0)) {
 					Card card1 = tempCards[i];
 					try {
 						addCard(card1);
 					} catch (GuiContainerException e) {
 						System.err.println(e.getMessage() + " Error caused by the rearranging of cards on hand");
-						InfoPanelGUI.append(e.getMessage(),"RED");
+						InfoPanelGUI.append(e.getMessage(), "RED");
 					}
 				} else {
 					System.out.println("Jag är här");
@@ -233,67 +236,67 @@ public class HandGUI extends JPanel {
 
 		@Override
 		public void mousePressed(MouseEvent event) {
+
 			if (temp instanceof ResourceCard) {
+				if (boardController.getPhase() == Phase.ATTACKING) {
 
-				try {
-					boardController.playCard(temp);
-//					temp = removeCard(temp);
-					temp.setBorder(defaultBorder);
-					// temp.shrink();
-//					temp.removeMouseListener(listener);
-				} catch (GuiContainerException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage(),"RED");
-				} catch (NoLaneSelectedException e) {
-					System.err.println(e.getMessage());
-				} catch (ResourcePlayedException e) {
-					InfoPanelGUI.append(e.getMessage(),"RED");
-				} catch (InsufficientResourcesException e) {
-					InfoPanelGUI.append(e.getMessage(),"RED");
-				} finally {
-					repaint();
+					try {
+						boardController.playCard(temp);
+						// temp = removeCard(temp);
+						temp.setBorder(defaultBorder);
+						// temp.shrink();
+						// temp.removeMouseListener(listener);
+					} catch (GuiContainerException e) {
+						System.err.println(e.getMessage());
+						InfoPanelGUI.append(e.getMessage(), "RED");
+					} catch (NoLaneSelectedException e) {
+						System.err.println(e.getMessage());
+					} catch (ResourcePlayedException e) {
+						InfoPanelGUI.append(e.getMessage(), "RED");
+					} catch (InsufficientResourcesException e) {
+						InfoPanelGUI.append(e.getMessage(), "RED");
+					} finally {
+						repaint();
+					}
+				} else {
+					InfoPanelGUI.append("Invalid move: you can only play resource cards on your own trun.");
 				}
-				
 
-//			} else {
-//				if (temp.getPrice() <= boardController.getAvaibleResources()) {
-//
-//					try {
-//						boardController.playCard(temp);
-//						temp = removeCard(temp);
-//						temp.setBorder(defaultBorder);
-//						// temp.shrink();
-//						temp.removeMouseListener(listener);
-//					} catch (GuiContainerException e) {
-//						System.err.println(e.getMessage());
-//						InfoPanelGUI.append(e.getMessage(),"RED");
-//					} catch (NoLaneSelectedException e) {
-//						System.err.println(e.getMessage());
-//					} catch (ResourcePlayedException e) {
-//						InfoPanelGUI.append(e.getMessage(),"RED");
-//					} catch (InsufficientResourcesException e) {
-//						InfoPanelGUI.append(e.getMessage(),"RED");
-//					} finally {
-//						repaint();
-//					}
-//				} else {
-//					InfoPanelGUI.append("Insufficient resources","RED");
-//				}
-			} else {
-				try {
-					boardController.playCard(temp);
-				} catch (GuiContainerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoLaneSelectedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ResourcePlayedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InsufficientResourcesException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			}
+			if (temp instanceof Unit || temp instanceof HeroicSupport) {
+				if (boardController.getPhase() == Phase.ATTACKING) {
+
+					try {
+						boardController.playCard(temp);
+					} catch (GuiContainerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (NoLaneSelectedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ResourcePlayedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InsufficientResourcesException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					InfoPanelGUI.append("Invalid move: you can only play Units on your own turn");
+				}
+			}
+			
+			if(temp instanceof Tech){
+				if(boardController.getPhase()==Phase.ATTACKING || boardController.getPhase()==Phase.DEFENDING){
+					try {
+						boardController.playCard(temp);
+					} catch (GuiContainerException | NoLaneSelectedException | ResourcePlayedException
+							| InsufficientResourcesException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					InfoPanelGUI.append("Invalid move: you can only play tech on your own turn or when defending");
 				}
 			}
 

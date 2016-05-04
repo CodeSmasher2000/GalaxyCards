@@ -9,6 +9,7 @@ import javax.swing.border.Border;
 import cards.HeroicSupport;
 import cards.Unit;
 import enumMessage.Lanes;
+import enumMessage.Phase;
 
 public class OpponentTargetMouseListener implements MouseListener {
 
@@ -26,11 +27,6 @@ public class OpponentTargetMouseListener implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-//		if (event.getSource() instanceof HeroicSupport) {
-//			boardController.setDefender(card);
-//		} else if(event.getSource() instanceof HeroGUI) {
-//			boardController.setDefender(heroGui);
-//		}
 	}
 
 	@Override
@@ -62,22 +58,36 @@ public class OpponentTargetMouseListener implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		if (event.getSource() instanceof HeroGUI) {
-			 InfoPanelGUI.append(heroGui.toString());
-			 boardController.setDefender(heroGui); // TODO: This needs to be changed to the hero gui.
+		if(boardController.getPhase()==Phase.DEFENDING){
+			if(boardController.getDefendThreadStarted()){
+				if(event.getSource() instanceof Unit && (((Unit)event.getSource()).getLaneEnum()==Lanes.ENEMY_OFFENSIVE)){
+					boardController.changeAttackersTarget((Unit)event.getSource());
+				}else{
+					InfoPanelGUI.append("Invalid target, this unit is not attacking.");
+					boardController.setDefendingTargetSelected(true);
+				}
+			}else{
+				InfoPanelGUI.append(event.getSource().toString());
+			}
 		}
-		if (event.getSource() instanceof Card) {
-			InfoPanelGUI.append("Target: " + card.toString(),"RED");
-			InfoPanelGUI.append(Integer.toString(System.identityHashCode(card)),"RED");
+		if(boardController.getPhase()==Phase.ATTACKING){
+			if (boardController.getAttackThreadStarted()){
+				if (event.getSource() instanceof HeroGUI) {
+					boardController.setDefender(heroGui); // TODO: This needs to be changed to the hero gui.
+				}else if (event.getSource() instanceof HeroicSupport) {
+					boardController.setDefender((HeroicSupport)event.getSource());
+				}else{
+					InfoPanelGUI.append("Invalid target, you can only attack opponent's hero or heroic supports");
+					boardController.setTargetSelected(true);
+				}
+			}else{
+				InfoPanelGUI.append(event.getSource().toString());
+			}
+		}
+		if(boardController.getPhase()==Phase.IDLE){
+			InfoPanelGUI.append(event.getSource().toString());
 		}
 		
-		if (event.getSource() instanceof HeroicSupport) {
-//			boardController.setDefender(card);
-			boardController.setDefender((HeroicSupport)event.getSource());
-		}
-		if(event.getSource() instanceof Unit && (((Unit)event.getSource()).getLaneEnum()==Lanes.ENEMY_OFFENSIVE)){
-			boardController.changeAttackersTarget((Unit)event.getSource());
-		}
 	}
 
 	@Override

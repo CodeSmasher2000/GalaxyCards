@@ -41,12 +41,12 @@ public class BoardGuiController {
 	private Persons ENUM;
 
 	private InfoPanelGUI infoPanel;
-	
+
 	private LaneSelectListener laneListener;
 	private LaneSelectThread laneSelectThread;
 	private AttackThreadListener attackSelectThread;
 	private DefendThreadListener defendSelectThread;
-	
+
 	private boolean targetSelected = false;
 	private boolean defendingTargetSelected = false;
 	private boolean laneSelected = false;
@@ -374,7 +374,6 @@ public class BoardGuiController {
 	 * @return card : Card
 	 */
 	protected Card cloneCard(Card card) {
-		// TODO LÄGG TILL id från card
 		if (card instanceof ResourceCard) {
 			ResourceCard clonedCard = new ResourceCard();
 			clonedCard.setId(card.getId());
@@ -383,8 +382,9 @@ public class BoardGuiController {
 			HeroicSupport temp = (HeroicSupport) card;
 			HeroicSupport clonedCard = new HeroicSupport(temp.getName(), temp.getRarity(), temp.getImage(),
 					temp.hasAbility(), temp.getPrice(), temp.getDefense());
-			temp = null;
 			clonedCard.setId(card.getId());
+			clonedCard.setLanesEnum(temp.getLanesEnum());
+			temp = null;
 			return clonedCard;
 		} else if (card instanceof Tech) {
 			Tech temp = (Tech) card;
@@ -396,7 +396,9 @@ public class BoardGuiController {
 			Unit clonedCard = new Unit(temp.getName(), temp.getRarity(), temp.getImage(), temp.hasAbility(),
 					temp.getAttack(), temp.getDefense(), temp.getPrice());
 			clonedCard.setId(card.getId());
+			clonedCard.setLaneEnum(temp.getLaneEnum());
 			card = null;
+			temp = null;
 			return clonedCard;
 		} else {
 			return null;
@@ -538,11 +540,27 @@ public class BoardGuiController {
 		}
 	}
 
+	protected boolean getAttackThreadStarted() {
+		if (attackSelectThread == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	public void startDefendThreadListener(Card card) {
 		setDefendingTargetSelected(false);
-		if(defendSelectThread == null){
+		if (defendSelectThread == null) {
 			defendSelectThread = new DefendThreadListener((Unit) card);
 			defendSelectThread.start();
+		}
+	}
+
+	protected boolean getDefendThreadStarted() {
+		if (defendSelectThread == null) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 
@@ -615,8 +633,8 @@ public class BoardGuiController {
 	public void setDefender(Object defender) {
 		attackSelectThread.setDefender(defender);
 	}
-	
-	public void changeAttackersTarget(Unit attacker){
+
+	public void changeAttackersTarget(Unit attacker) {
 		defendSelectThread.changeAttackersTarget(attacker);
 	}
 
@@ -703,6 +721,12 @@ public class BoardGuiController {
 		if (ENUM == Lanes.ENEMY_DEFENSIVE) {
 			opponentDefLane.untapAllInLane();
 		}
+		if (ENUM == Lanes.PLAYER_HEROIC) {
+			playerHeroicGui.untapAllInLane();
+		}
+		if (ENUM == Lanes.ENEMY_HEROIC) {
+			opponentHeroicGui.untapAllInLane();
+		}
 	}
 
 	public boolean getDefendingTargetSelected() {
@@ -716,8 +740,8 @@ public class BoardGuiController {
 	public Phase getPhase() {
 		return gameController.getPhase();
 	}
-	
-	public Attack getAttackObject(){
+
+	public Attack getAttackObject() {
 		return gameController.getAttack();
 	}
 
@@ -832,11 +856,11 @@ public class BoardGuiController {
 		}
 
 		public void changeAttackersTarget(Unit attacker) {
-			
+
 			int i = gameController.getAttack().getAttacersIndex(attacker.getId());
-			if (i==-1){
-				InfoPanelGUI.append("Incorrect target.");
-			}else{
+			if (i == -1) {
+				InfoPanelGUI.append("Invalid target, this unit is not attacking.");
+			} else {
 				gameController.getAttack().setDefender(defender.getId(), i);
 			}
 			setDefendingTargetSelected(true);
@@ -852,23 +876,23 @@ public class BoardGuiController {
 				}
 			}
 			InfoPanelGUI.append("Target changed, commit defense or choose more defenders.");
-			defendSelectThread=null;
+			defendSelectThread = null;
 		}
 
 	}
-	
+
 	public void updateCard(Card cardToUpdate) {
 		// TODO : FIX THE UNIT CARD METHOD
-		
-//		if (cardToUpdate instanceof Unit) {
-//			if (playerDefLane.updateCard((Unit) cardToUpdate))
-//				return;
-//			if (playerOffLane.updateCard((Unit) cardToUpdate))
-//				return;
-//			if (opponentDefLane.updateCard((Unit) cardToUpdate))
-//				return;
-//			if (opponentOffLane.updateCard((Unit) cardToUpdate))
-//				return;
+
+		// if (cardToUpdate instanceof Unit) {
+		// if (playerDefLane.updateCard((Unit) cardToUpdate))
+		// return;
+		// if (playerOffLane.updateCard((Unit) cardToUpdate))
+		// return;
+		// if (opponentDefLane.updateCard((Unit) cardToUpdate))
+		// return;
+		// if (opponentOffLane.updateCard((Unit) cardToUpdate))
+		// return;
 		if (cardToUpdate instanceof HeroicSupport) {
 			if (opponentHeroicGui.updateCard((HeroicSupport) cardToUpdate)) {
 				return;

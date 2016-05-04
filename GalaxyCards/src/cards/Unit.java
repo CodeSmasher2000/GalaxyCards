@@ -185,8 +185,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	}
 
 	public String toString() {
-		return NAME + " - [Unit]: " + attack + "/" + defense + ". Rarity: " + RARITY + ". Price: " + PRICE
-				+ ". Has Ability: " + hasAbility;
+		return NAME + " - [Unit]: " + attack + "/" + defense + ". Tapped: "+getTap();
 	}
 
 	@Override

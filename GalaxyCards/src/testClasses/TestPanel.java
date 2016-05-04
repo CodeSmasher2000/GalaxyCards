@@ -189,8 +189,6 @@ public class TestPanel extends JPanel {
 				}
 			}
 			if(event.getSource() == btnCommit) {
-				InfoPanelGUI.append(boardController.getPhase().toString());
-				InfoPanelGUI.append(boardController.getAttackObject().toString());
 				gameController.commitMove();
 			}
 		}
