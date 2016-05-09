@@ -10,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import cards.Unit;
@@ -51,24 +52,32 @@ public class UnitLanes extends JPanel {
 		opponentListener = new OpponentTargetMouseListener(boardController);
 		this.ENUM = ENUM;
 		this.nbrOfElements = nbrOfElements;
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		boardController.addLaneListener(this, ENUM);
 		units = new Unit[nbrOfElements];
-		layerArray = new JLayeredPane[nbrOfElements];
-
-		this.add(Box.createHorizontalStrut(10));
-
-		for (int i = 0; i < nbrOfElements; i++) {
-			layerArray[i] = new JLayeredPane();
-			layerArray[i].setLayout(null);
-			layerArray[i].setPreferredSize(new Dimension(156, 150));
-
-			this.add(Box.createHorizontalGlue());
-			this.add(layerArray[i]);
-			this.add(Box.createHorizontalGlue());
-			this.add(Box.createHorizontalStrut(10));
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				setLayout(new BoxLayout(UnitLanes.this, BoxLayout.X_AXIS));
+				layerArray = new JLayeredPane[nbrOfElements];
+				
+				add(Box.createHorizontalStrut(10));
+				
+				for (int i = 0; i < nbrOfElements; i++) {
+					layerArray[i] = new JLayeredPane();
+					layerArray[i].setLayout(null);
+					layerArray[i].setPreferredSize(new Dimension(156, 150));
+					
+					add(Box.createHorizontalGlue());
+					add(layerArray[i]);
+					add(Box.createHorizontalGlue());
+					add(Box.createHorizontalStrut(10));
+				}
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	/**
@@ -118,15 +127,16 @@ public class UnitLanes extends JPanel {
 	 * @return : boolean
 	 * @throws GuiContainerException
 	 */
-	public boolean addUnit(Unit unit) throws GuiContainerException {
-
-		boolean okToPlace = false;
-
-		int endIndex = units.length - 1;
-		int startIndex = 0;
-
-		int steps = (endIndex + 1 - startIndex);
-		int index = (startIndex + endIndex) >> 1;
+	public void addUnit(Unit unit) throws GuiContainerException {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				int endIndex = units.length - 1;
+				int startIndex = 0;
+				
+				int steps = (endIndex + 1 - startIndex);
+				int index = (startIndex + endIndex) >> 1;
 		int stepdir = 1;
 		for (int q = 0; q < steps; q++, index += stepdir * q, stepdir = -stepdir) {
 			if (units[index] == null) {
@@ -139,16 +149,15 @@ public class UnitLanes extends JPanel {
 				} else {
 					units[index].addMouseListener(playerListener);
 				}
-				okToPlace = true;
 				layerArray[index].add(units[index], new Integer(0));
 				layerArray[index].setBorder(null);
 				break;
 			}
 		}
-		if (!okToPlace) {
-			throw new GuiContainerException("You can only have 6 units per lane");
-		}
-		return okToPlace;
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	/**

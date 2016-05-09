@@ -132,7 +132,7 @@ public class ClientController {
 		}else if (data instanceof PlayResourceCard){
 			PlayResourceCard move = (PlayResourceCard)data;
 			gameController.opponentPlaysResourceCard(move);
-			InfoPanelGUI.append("opponent played resource",null);
+			InfoPanelGUI.append("opponent played resource");
 		} else if(data instanceof PlayTechCard) {
 			PlayTechCard move = (PlayTechCard)data;
 			gameController.opponeentPlaysTech(move.getCard());

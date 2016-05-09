@@ -11,6 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import cards.HeroicSupport;
@@ -57,16 +58,23 @@ public class HeroicPanelGUI extends JPanel {
 		opponentListener = new OpponentTargetMouseListener(boardController);
 		boardController.addHeroicPanelListener(this, ENUM);
 
-		initiateLayeredPanes();
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.add(Box.createHorizontalStrut(5));
-		this.add(Box.createHorizontalGlue());
-		this.add(heroicPane1);
-		this.add(Box.createHorizontalStrut(5));
-		this.add(Box.createHorizontalGlue());
-		this.add(heroicPane2);
-		this.add(Box.createHorizontalGlue());
-		this.add(Box.createHorizontalStrut(5));
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				initiateLayeredPanes();
+				setLayout(new BoxLayout(HeroicPanelGUI.this, BoxLayout.X_AXIS));
+				add(Box.createHorizontalStrut(5));
+				add(Box.createHorizontalGlue());
+				add(heroicPane1);
+				add(Box.createHorizontalStrut(5));
+				add(Box.createHorizontalGlue());
+				add(heroicPane2);
+				add(Box.createHorizontalGlue());
+				add(Box.createHorizontalStrut(5));
+				
+			}
+		});
 	}
 
 	private void initiateLayeredPanes() {
@@ -92,43 +100,50 @@ public class HeroicPanelGUI extends JPanel {
 	 * @return boolean
 	 * @throws GuiContainerException
 	 */
-	protected boolean addHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
+	protected void addHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
+//		boolean okToPlace = false;
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				for (int i = 0; i < heroicUnits.length; i++) {
+					if (heroicUnits[i] == null) {
+//						heroicSupport.setPersonEnum(ENUM);
+						heroicUnits[i] = heroicSupport;
+						heroicUnits[i].setBounds(0, 10, heroicUnits[i].getPreferredSize().width,
+								heroicUnits[i].getPreferredSize().height);
+						// if ENUM is player or opponent add different listener
+						if (ENUM == Persons.PLAYER) {
+							heroicUnits[i].addMouseListener(playerListener);
+						}
+						if (ENUM == Persons.OPPONENT) {
+							heroicUnits[i].addMouseListener(opponentListener);
+						}
+//						okToPlace = true;
+						if (i == 0) {
+							heroicPane1.add(heroicUnits[i], new Integer(0));
+							heroicPane1.setBorder(null);
+							heroicPane1.repaint();
 
-		boolean okToPlace = false;
+						} else {
+							heroicPane2.add(heroicUnits[i], new Integer(0));
+							heroicPane2.setBorder(null);
+							heroicPane2.repaint();
+						}
 
-		for (int i = 0; i < heroicUnits.length; i++) {
-			if (heroicUnits[i] == null) {
-//				heroicSupport.setPersonEnum(ENUM);
-				heroicUnits[i] = heroicSupport;
-				heroicUnits[i].setBounds(0, 10, heroicUnits[i].getPreferredSize().width,
-						heroicUnits[i].getPreferredSize().height);
-				// if ENUM is player or opponent add different listener
-				if (ENUM == Persons.PLAYER) {
-					heroicUnits[i].addMouseListener(playerListener);
+						break;
+					}
 				}
-				if (ENUM == Persons.OPPONENT) {
-					heroicUnits[i].addMouseListener(opponentListener);
-				}
-				okToPlace = true;
-				if (i == 0) {
-					heroicPane1.add(heroicUnits[i], new Integer(0));
-					heroicPane1.setBorder(null);
-					heroicPane1.repaint();
-
-				} else {
-					heroicPane2.add(heroicUnits[i], new Integer(0));
-					heroicPane2.setBorder(null);
-					heroicPane2.repaint();
-				}
-
-				break;
 			}
-		}
+		});
 
-		if (!okToPlace) {
-			throw new GuiContainerException("You can only have 2 Heroic Support cards in play");
-		}
-		return okToPlace;
+		
+
+//		if (!okToPlace) {
+//			throw new GuiContainerException("You can only have 2 Heroic Support cards in play");
+//		}
+//		return okToPlace;
 	}
 
 	/**
@@ -140,22 +155,29 @@ public class HeroicPanelGUI extends JPanel {
 	 * @return target : HeroicSupport
 	 */
 	protected HeroicSupport removeHeroicSupport(HeroicSupport target) {
-		for (int i = 0; i < heroicUnits.length; i++) {
-			if (heroicUnits[i] == target) {
-				if (i == 0) {
-					heroicPane1.remove(heroicUnits[i]);
-					heroicPane1.repaint();
-				} else {
-					heroicPane2.remove(heroicUnits[i]);
-					repaint();
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				for (int i = 0; i < heroicUnits.length; i++) {
+					if (heroicUnits[i] == target) {
+						if (i == 0) {
+							heroicPane1.remove(heroicUnits[i]);
+							heroicPane1.repaint();
+						} else {
+							heroicPane2.remove(heroicUnits[i]);
+							repaint();
+						}
+						if (ENUM == Persons.OPPONENT) {
+							boardController.addToOpponentScrapyard(heroicUnits[i]);
+						} else {
+							boardController.addToPlayerScrapyard(heroicUnits[i]);
+						}
+					}
 				}
-				if (ENUM == Persons.OPPONENT) {
-					boardController.addToOpponentScrapyard(heroicUnits[i]);
-				} else {
-					boardController.addToPlayerScrapyard(heroicUnits[i]);
-				}
+				
 			}
-		}
+		});
 
 		return target;
 	}

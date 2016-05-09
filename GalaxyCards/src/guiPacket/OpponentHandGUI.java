@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import exceptionsPacket.GuiContainerException;
 
@@ -36,10 +37,16 @@ public class OpponentHandGUI extends JPanel {
 		this.boardController = boardController;
 		boardController.addOpponentHandListener(this);
 
-		initiateLayeredPane();
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.add(layeredPane);
-		this.setOpaque(false);
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				initiateLayeredPane();
+				setLayout(new BoxLayout(OpponentHandGUI.this, BoxLayout.X_AXIS));
+				add(layeredPane);
+				setOpaque(false);
+			}
+		});
 
 	}
 
@@ -59,18 +66,27 @@ public class OpponentHandGUI extends JPanel {
 	 * @throws GuiContainerException
 	 */
 	public void drawCard() throws GuiContainerException {
-		if (cardsOnHand < 8) {
-			JLabel card = new JLabel();
-			icon = new ImageIcon(PATH);
-			card.setIcon(icon);
-			card.setBounds(horizontalPosition, 20, icon.getIconWidth(), icon.getIconHeight());
-			cards[cardsOnHand] = card;
-			layeredPane.add(card, new Integer(cardsOnHand));
-			horizontalPosition += 80;
-			cardsOnHand++;
-		} else {
-			throw new GuiContainerException("Opponent can only have 8 cards in hand");
-		}
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				if (cardsOnHand < 8) {
+					JLabel card = new JLabel();
+					icon = new ImageIcon(PATH);
+					card.setIcon(icon);
+					card.setBounds(horizontalPosition, 20, icon.getIconWidth(), icon.getIconHeight());
+					cards[cardsOnHand] = card;
+					layeredPane.add(card, new Integer(cardsOnHand));
+					horizontalPosition += 80;
+					cardsOnHand++;
+					// } else {
+					// throw new GuiContainerException("Opponent can only have 8
+					// cards in hand");
+				}
+
+			}
+		});
 	}
 
 	/**
@@ -80,15 +96,24 @@ public class OpponentHandGUI extends JPanel {
 	 * @throws GuiContainerException
 	 */
 	public void playCard() throws GuiContainerException {
-		if (cardsOnHand > 0) {
-			layeredPane.remove(0);
-			layeredPane.validate();
-			layeredPane.repaint();
-			horizontalPosition -= 80;
-			cardsOnHand--;
-		} else {
-			throw new GuiContainerException("Opponents hand is empty");
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if (cardsOnHand > 0) {
+					layeredPane.remove(0);
+					layeredPane.validate();
+					layeredPane.repaint();
+					horizontalPosition -= 80;
+					cardsOnHand--;
+					// } else {
+					// throw new GuiContainerException("Opponents hand is
+					// empty");
+					// }
+				}
+			}
+		});
 
 	}
 

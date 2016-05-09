@@ -778,7 +778,7 @@ public class BoardGuiController {
 				setSelectedLane();
 			} catch (GuiContainerException e) {
 				// TODO Auto-generated catch block
-				InfoPanelGUI.append(e.getMessage(), "RED");
+				InfoPanelGUI.append(e.getMessage());
 				laneSelected = true;
 			} catch (InsufficientResourcesException e) {
 				// TODO Auto-generated catch block

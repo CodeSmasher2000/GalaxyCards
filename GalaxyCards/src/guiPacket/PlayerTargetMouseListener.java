@@ -115,7 +115,7 @@ public class PlayerTargetMouseListener implements MouseListener {
 			}
 			
 			if (event.getSource() instanceof HeroGUI) {
-				InfoPanelGUI.append(heroGui.toString(), null);
+				InfoPanelGUI.append(heroGui.toString());
 			}
 		}
 		

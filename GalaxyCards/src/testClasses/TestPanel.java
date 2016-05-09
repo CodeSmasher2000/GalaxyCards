@@ -97,12 +97,12 @@ public class TestPanel extends JPanel {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			InfoPanelGUI.append(e.getMessage(),"RED");
+			InfoPanelGUI.append(e.getMessage());
 		} catch (ClassNotFoundException e) {
-			InfoPanelGUI.append(e.getMessage(),"RED");
+			InfoPanelGUI.append(e.getMessage());
 			e.printStackTrace();
 		} catch (EmptyDeckException e) {
-			InfoPanelGUI.append(e.getMessage(),"RED");
+			InfoPanelGUI.append(e.getMessage());
 			e.printStackTrace();
 		} finally {
 			try {
@@ -155,7 +155,7 @@ public class TestPanel extends JPanel {
 				} catch (GuiContainerException e) {
 					// TODO Auto-generated catch block
 					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage(),"RED");
+					InfoPanelGUI.append(e.getMessage());
 				}
 			}
 			if (event.getSource() == testOpponentPlayCard) {
@@ -181,11 +181,11 @@ public class TestPanel extends JPanel {
 					
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage(),"RED");
+					InfoPanelGUI.append(e.getMessage());
 				} catch (EmptyDeckException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					InfoPanelGUI.append(e.getMessage(),"RED");
+					InfoPanelGUI.append(e.getMessage());
 				}
 			}
 			if(event.getSource() == btnCommit) {

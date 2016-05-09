@@ -304,7 +304,7 @@ public class GameController {
 		if(getPhase()==Phase.ATTACKING){
 			clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
 					null,this.attack));
-			InfoPanelGUI.append("Move Commited", "BLUE");
+			InfoPanelGUI.append("Move Commited");
 		}if(getPhase()==Phase.DEFENDING){
 			clientController.writeMessage(new CommandMessage(Commands.MATCH_DEFEND_MOVE, null, this.attack));
 		}

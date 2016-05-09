@@ -213,7 +213,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	
 	@Override
 	public void damage(int amt) {
-		this.defense -= amt;
+		setDefense(this.defense-amt);
 	}
 
 	@Override

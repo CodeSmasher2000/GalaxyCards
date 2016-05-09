@@ -56,21 +56,29 @@ public class InfoPanelGUI extends JPanel {
 		boardController.addInfoPanelListener(this);
 		testPanel = new TestPanel(boardController);
 
-		customizeCardPanel();
-		customizeEditorPanel();
-		customizeEditorPane();
+		SwingUtilities.invokeLater(new Runnable() {
 
-		// FOR DEBUGGING
-		// showPanelBorders();
-		midEmpty.setOpaque(false);
-		midEmpty.add(testPanel);
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				customizeCardPanel();
+				customizeEditorPanel();
+				customizeEditorPane();
 
-		this.setLayout(new GridLayout(3, 1));
-		// this.setOpaque(false);
-		this.add(cardPanel2);
-		this.add(midEmpty);
-		this.add(twPanel2);
-		this.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+				// FOR DEBUGGING
+				// showPanelBorders();
+				midEmpty.setOpaque(false);
+				midEmpty.add(testPanel);
+
+				setLayout(new GridLayout(3, 1));
+				// this.setOpaque(false);
+				add(cardPanel2);
+				add(midEmpty);
+				add(twPanel2);
+				setBorder(BorderFactory.createLineBorder(Color.WHITE));
+
+			}
+		});
 
 	}
 
@@ -146,11 +154,17 @@ public class InfoPanelGUI extends JPanel {
 	 *            - the card to show
 	 */
 	protected void showCard(Card cardToShow) {
-		cardContainer.removeAll();
-		cardToShow.setBorder(CustomGui.highlightBorder);
-		cardContainer.setPreferredSize(
-				new Dimension(cardToShow.getPreferredSize().width, cardToShow.getPreferredSize().height));
-		cardContainer.add(cardToShow);
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				cardContainer.removeAll();
+				cardToShow.setBorder(CustomGui.highlightBorder);
+				cardContainer.setPreferredSize(
+						new Dimension(cardToShow.getPreferredSize().width, cardToShow.getPreferredSize().height));
+				cardContainer.add(cardToShow);
+			}
+		});
 
 	}
 
@@ -165,35 +179,35 @@ public class InfoPanelGUI extends JPanel {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				stringBuilder = new StringBuilder(pre);
-				append(txt,null);
+				append(txt);
 			}
 		});
 	}
-	
+
 	/**
-	 * Appends a set text to the editorPane together with the color of the text as an argument in UPPERCASE letters
+	 * Appends a set text to the editorPane together with the color of the text
+	 * as an argument in UPPERCASE letters
+	 * 
 	 * @param txt
 	 * @param color
 	 */
 	public static synchronized void append(final String txt, String color) {
-		if(color == "RED") {
+		if (color == "RED") {
 			stringBuilder.append("<p1><FONT COLOR=");
 			stringBuilder.append("red");
 			stringBuilder.append(" SIZE=3 FACE=arial,helvetica,sans-serif>");
 			stringBuilder.append(txt + "</FONT></p1><br>");
-				
-		}
-		else if(color == "GREEN") {
+
+		} else if (color == "GREEN") {
 			stringBuilder.append("<p2><FONT COLOR=green SIZE=3 FACE=arial,helvetica,sans-serif>");
 			stringBuilder.append(txt + "</FONT></p2><br>");
-			
-		}
-		else if(color == "BLUE") {
+
+		} else if (color == "BLUE") {
 			stringBuilder.append("<p3><FONT COLOR=blue SIZE=3 FACE=arial,helvetica,sans-serif>");
 			stringBuilder.append(txt + "</FONT></p3><br>");
 		}
 		editorPane.setText(stringBuilder.toString());
-		
+
 	}
 
 	/**
@@ -203,13 +217,13 @@ public class InfoPanelGUI extends JPanel {
 	 * 
 	 */
 	public static synchronized void append(final String txt) {
-		// SwingUtilities.invokeLater(new Runnable() {
-		// public void run() {
-		stringBuilder.append("<p4><FONT SIZE=3 FACE=arial,helvetica,sans-serif>");
-		stringBuilder.append(txt + "</FONT></p4><br>");
-		editorPane.setText(stringBuilder.toString());
-		// }
-		// });
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				stringBuilder.append("<p4><FONT SIZE=3 FACE=arial,helvetica,sans-serif>");
+				stringBuilder.append(txt + "</FONT></p4><br>");
+				editorPane.setText(stringBuilder.toString());
+			}
+		});
 	}
 
 	@Override

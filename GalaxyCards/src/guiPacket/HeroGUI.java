@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
@@ -47,16 +48,23 @@ public class HeroGUI extends JPanel {
 		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
 		b2 = BorderFactory.createTitledBorder(null, heroName, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
 
-		initiateBars();
-		initiateImage();
-		setTooltips();
+		SwingUtilities.invokeLater(new Runnable() {
 
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.setOpaque(false);
-		add(imagePanel);
-		add(resourceBar);
-		add(lifeBar);
-		add(shieldBar);
+			@Override
+			public void run() {
+				initiateBars();
+				initiateImage();
+				setTooltips();
+
+				setLayout(new BoxLayout(HeroGUI.this, BoxLayout.Y_AXIS));
+				setOpaque(false);
+				add(imagePanel);
+				add(resourceBar);
+				add(lifeBar);
+				add(shieldBar);
+
+			}
+		});
 
 		if (ENUM == Persons.PLAYER) {
 			addMouseListener(new PlayerTargetMouseListener(boardController));
@@ -155,7 +163,7 @@ public class HeroGUI extends JPanel {
 	}
 
 	public String toString() {
-		return (ENUM+" Hero life: " + lifeBar.getValue() + ", energy shield: " + shieldBar.getValue() + ", resources: "
-				+ resourceBar.getValue() + "/" + resourceBar.getMaximum());
+		return (ENUM + " Hero life: " + lifeBar.getValue() + ", energy shield: " + shieldBar.getValue()
+				+ ", resources: " + resourceBar.getValue() + "/" + resourceBar.getMaximum());
 	}
 }

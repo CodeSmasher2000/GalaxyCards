@@ -11,6 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import cards.HeroicSupport;
@@ -62,10 +63,16 @@ public class HandGUI extends JPanel {
 		this.boardController = boardController;
 		boardController.addHandPanelListener(this);
 
-		initiateLayeredPane();
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		this.add(layeredPane);
-		this.setOpaque(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				initiateLayeredPane();
+				setLayout(new BoxLayout(HandGUI.this, BoxLayout.PAGE_AXIS));
+				add(layeredPane);
+				setOpaque(true);
+			}
+		});
 	}
 
 	/**
@@ -139,17 +146,24 @@ public class HandGUI extends JPanel {
 	 * @throws GuiContainerException
 	 */
 	protected void addCard(Card card) throws GuiContainerException {
-		if (cardsOnHand >= 8) {
-			removeRandomCard();
-			InfoPanelGUI.append("You can only have 8 cards on hand. A random card was thrown to scrapyard", "RED");
-		}
-		cards[cardsOnHand] = card;
-		boardController.addCardToHand(card);
-		card.setBounds(horizontalPosition, 10, card.getPreferredSize().width, card.getPreferredSize().height);
-		card.addMouseListener(listener);
-		layeredPane.add(card, new Integer(cardsOnHand));
-		horizontalPosition += 80;
-		cardsOnHand++;
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (cardsOnHand >= 8) {
+					removeRandomCard();
+					InfoPanelGUI.append("You can only have 8 cards on hand. A random card was thrown to scrapyard");
+				}
+				cards[cardsOnHand] = card;
+				boardController.addCardToHand(card);
+				card.setBounds(horizontalPosition, 10, card.getPreferredSize().width, card.getPreferredSize().height);
+				card.addMouseListener(listener);
+				layeredPane.add(card, new Integer(cardsOnHand));
+				horizontalPosition += 80;
+				cardsOnHand++;
+				
+			}
+		});
 	}
 
 	/**
@@ -168,11 +182,17 @@ public class HandGUI extends JPanel {
 		cards = null;
 		cards = new Card[8];
 
-		layeredPane.removeAll();
-		horizontalPosition = 10;
-		cardsOnHand = 0;
-		layeredPane.repaint();
-		layeredPane.validate();
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				layeredPane.removeAll();
+				horizontalPosition = 10;
+				cardsOnHand = 0;
+				layeredPane.repaint();
+				layeredPane.validate();
+			}
+		});
 
 		for (int i = 0; i < tempCards.length; i++) {
 			if (tempCards[i] != null) {
@@ -183,7 +203,7 @@ public class HandGUI extends JPanel {
 						addCard(card1);
 					} catch (GuiContainerException e) {
 						System.err.println(e.getMessage() + " Error caused by the rearranging of cards on hand");
-						InfoPanelGUI.append(e.getMessage(), "RED");
+						InfoPanelGUI.append(e.getMessage());
 					}
 				} else {
 					System.out.println("Jag är här");
@@ -219,19 +239,31 @@ public class HandGUI extends JPanel {
 
 		@Override
 		public void mouseEntered(MouseEvent event) {
-			temp = (Card) event.getSource();
-			cardOriginalLayer = layeredPane.getLayer(temp);
-			layeredPane.setLayer(temp, Integer.MAX_VALUE);
-			temp.setBounds(temp.getX(), 1, temp.getPreferredSize().width, temp.getPreferredSize().height);
-			defaultBorder = temp.getBorder();
-			temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					temp = (Card) event.getSource();
+					cardOriginalLayer = layeredPane.getLayer(temp);
+					layeredPane.setLayer(temp, Integer.MAX_VALUE);
+					temp.setBounds(temp.getX(), 1, temp.getPreferredSize().width, temp.getPreferredSize().height);
+					defaultBorder = temp.getBorder();
+					temp.setBorder(BorderFactory.createCompoundBorder(highlightB, defaultBorder));
+				}
+			});
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			layeredPane.setLayer(temp, cardOriginalLayer);
-			temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
-			temp.setBorder(defaultBorder);
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					layeredPane.setLayer(temp, cardOriginalLayer);
+					temp.setBounds(temp.getX(), 10, temp.getPreferredSize().width, temp.getPreferredSize().height);
+					temp.setBorder(defaultBorder);
+				}
+			});
 		}
 
 		@Override
@@ -248,13 +280,13 @@ public class HandGUI extends JPanel {
 						// temp.removeMouseListener(listener);
 					} catch (GuiContainerException e) {
 						System.err.println(e.getMessage());
-						InfoPanelGUI.append(e.getMessage(), "RED");
+						InfoPanelGUI.append(e.getMessage());
 					} catch (NoLaneSelectedException e) {
 						System.err.println(e.getMessage());
 					} catch (ResourcePlayedException e) {
-						InfoPanelGUI.append(e.getMessage(), "RED");
+						InfoPanelGUI.append(e.getMessage());
 					} catch (InsufficientResourcesException e) {
-						InfoPanelGUI.append(e.getMessage(), "RED");
+						InfoPanelGUI.append(e.getMessage());
 					} finally {
 						repaint();
 					}

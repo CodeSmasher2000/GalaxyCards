@@ -11,6 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import enumMessage.Persons;
@@ -56,10 +57,18 @@ public class ScrapyardGUI extends JPanel {
 			background = new ImageIcon("files/pictures/scrapPanelOpponent.jpg");
 		}
 		boardController.addScrapyardListener(this, ENUM);
-		initiateLayeredPane();
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(layeredPane);
-		this.setOpaque(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				initiateLayeredPane();
+				setLayout(new BoxLayout(ScrapyardGUI.this, BoxLayout.Y_AXIS));
+				add(layeredPane);
+				setOpaque(true);
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 	}
 
@@ -90,17 +99,25 @@ public class ScrapyardGUI extends JPanel {
 	 *            : Card
 	 */
 	protected void addCard(Card card) {
-		if (cardsInScrapyard < 5) {
-			card.setBounds(5, verticalPosition, card.getPreferredSize().width, card.getPreferredSize().height);
-			card.addMouseListener(mouseListener);
-			layeredPane.add(card, new Integer(cardsInScrapyard));
-			buffer[cardsInScrapyard] = card;
-			verticalPosition += 60;
-			cardsInScrapyard++;
-		} else {
-			removeCard();
-			addCard(card);
-		}
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					if (cardsInScrapyard < 5) {
+						card.setBounds(5, verticalPosition, card.getPreferredSize().width, card.getPreferredSize().height);
+						card.addMouseListener(mouseListener);
+						layeredPane.add(card, new Integer(cardsInScrapyard));
+						buffer[cardsInScrapyard] = card;
+						verticalPosition += 60;
+						cardsInScrapyard++;
+					} else {
+						//			removeCard();
+						addCard(card);
+					}
+					
+				}
+			});
 	}
 
 	private void removeCard() {

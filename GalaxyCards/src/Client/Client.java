@@ -97,7 +97,7 @@ public class Client {
 			} else if(message.getCommand() == Commands.MATCH_PLAYCARD) {
 				controller.cardPlayed(message);
 			} else if(message.getCommand() == Commands.MATCH_INIT_GAME) {
-				InfoPanelGUI.append("InitGame",null);
+				InfoPanelGUI.append("InitGame");
 				controller.initGame();
 			} else if(message.getCommand() == Commands.MATCH_FRIENDLY_DRAW_CARD) {
 				controller.friendlyDrawCard(message);

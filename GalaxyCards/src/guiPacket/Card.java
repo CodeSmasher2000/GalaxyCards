@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import abilities.Ability;
@@ -41,15 +42,14 @@ import cards.Unit;
 // TODO enlarge() does not work.
 // TODO use ability when button is pressed
 
-public abstract class Card extends JPanel implements Comparable<Card>{
+public abstract class Card extends JPanel implements Comparable<Card> {
 
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1980215199928750709L;
 	private ImageIcon cardBG1;
-//	private Image cardBG;
+	// private Image cardBG;
 	private JPanel topPanel, imgPanel, typePanel, attributesPanel;
 	private JLabel lbName, lbPrice, lbImage, lbType, lbRarity, lbAttack, lbDefense;
 	private Color frameColor;
@@ -66,21 +66,27 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 		border = BorderFactory.createMatteBorder(1, 1, 3, 1, frameColor);
 
 		cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
-//		setBackground();
-		initiateLabels();
-		initiateButtons();
-		initiatePanels();
-		setToolTips();
 
-		this.setBorder(BorderFactory.createLineBorder(frameColor, 3, false));
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+//		SwingUtilities.invokeLater(new Runnable() {
+//			@Override
+//			public void run() {
+				initiateLabels();
+				initiateButtons();
+				initiatePanels();
+				setToolTips();
 
-		this.add(topPanel);
-		this.add(imgPanel);
-		this.add(typePanel);
-		this.add(abilityArea);
-		this.add(Box.createVerticalStrut(2));
-		this.add(attributesPanel);
+				setBorder(BorderFactory.createLineBorder(frameColor, 3, false));
+				setLayout(new BoxLayout(Card.this, BoxLayout.Y_AXIS));
+
+				add(topPanel);
+				add(imgPanel);
+				add(typePanel);
+				add(abilityArea);
+				add(Box.createVerticalStrut(2));
+				add(attributesPanel);
+
+//			}
+//		});
 	}
 
 	private void setToolTips() {
@@ -251,7 +257,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 	public void setPrice(int price) {
 		lbPrice.setText("  " + price + "  ");
 	}
-	
+
 	public int getPrice() {
 		return Integer.parseInt(lbPrice.getText());
 	}
@@ -286,8 +292,8 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 		abilityArea.setText(text);
 		abilityButton.setToolTipText(abilityArea.getText());
 	}
-	
-	public String getAbilityText(){
+
+	public String getAbilityText() {
 		return abilityArea.getText();
 	}
 
@@ -303,7 +309,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 	public void setType(Card card) {
 		if (card instanceof ResourceCard) {
 			lbType.setText("Resource");
-//			attributesPanel.setVisible(false);
+			// attributesPanel.setVisible(false);
 			lbDefense.setText("Can play 1 / round");
 			lbAttack.setVisible(false);
 			lbPrice.setVisible(false);
@@ -317,7 +323,7 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 		}
 		if (card instanceof Tech) {
 			lbType.setText("Tech");
-//			attributesPanel.setVisible(false);
+			// attributesPanel.setVisible(false);
 			lbAttack.setVisible(false);
 			lbDefense.setText("Target / AOE");
 
@@ -335,16 +341,16 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 
 	// Loads a image from a directory and sets it as background for the main
 	// containter Card klass.
-//	private void setBackground() {
-//		File directory = new File(PICTURE_DIRECTORY + "CardFrontBG.jpg");
-//		cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
-//		try {
-//			cardBG1.setImage(ImageIO.read(directory));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	// private void setBackground() {
+	// File directory = new File(PICTURE_DIRECTORY + "CardFrontBG.jpg");
+	// cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
+	// try {
+	// cardBG1.setImage(ImageIO.read(directory));
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
 
 	/**
 	 * Shows all the card's attributes by setting its various panels visible.
@@ -394,19 +400,19 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == abilityButton) {
 				JOptionPane.showMessageDialog(null, "WIP! abilities funktionalitet implementeras vid sprint 2.");
-//				ability.useAbility();
+				// ability.useAbility();
 			}
 
 		}
 
 	}
-	
-	private class MouseOverButtonListener implements MouseListener{
+
+	private class MouseOverButtonListener implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -424,23 +430,24 @@ public abstract class Card extends JPanel implements Comparable<Card>{
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
-		@Override
-		public int compareTo(Card o) {
-			if(o.getId() > this.id){
-				return -1;
-			}else if(o.getId()<this.id){
-				return 1;
-			}
-			return 0;
+
+	@Override
+	public int compareTo(Card o) {
+		if (o.getId() > this.id) {
+			return -1;
+		} else if (o.getId() < this.id) {
+			return 1;
 		}
-		
+		return 0;
+	}
+
 }

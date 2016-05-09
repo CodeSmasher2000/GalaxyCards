@@ -10,11 +10,14 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import enumMessage.Lanes;
 import enumMessage.Persons;
+
 /**
- * Class that sets the layout for the board gui and holds the various custom gui elements.
+ * Class that sets the layout for the board gui and holds the various custom gui
+ * elements.
  * 
  * @author 13120dde
  *
@@ -38,25 +41,31 @@ public class BoardGUI extends JPanel {
 
 	public BoardGUI(BoardGuiController boardController) {
 		this.boardController = boardController;
-		// initiateTestElements();
-		initiateGuiElements();
-		initiateContainers();
-		configurePlayerPanel();
-		configureOpponentPanel();
-		configurePlayfield();
-		configureScrapPanel();
-		configureInfoPanel();
 
-		middlePanel.setLayout(new BorderLayout());
-		middlePanel.add(playFieldPanel, BorderLayout.CENTER);
-		middlePanel.add(opponentPanel, BorderLayout.NORTH);
-		middlePanel.add(playerPanel, BorderLayout.SOUTH);
-		middlePanel.setOpaque(false);
-		this.setLayout(new BorderLayout());
-		this.add(middlePanel, BorderLayout.CENTER);
-		this.add(scrapyardPanel2, BorderLayout.WEST);
-		this.add(infoPanel, BorderLayout.EAST);
-		this.setOpaque(false);
+		// initiateTestElements();
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+
+				initiateGuiElements();
+				initiateContainers();
+				configurePlayerPanel();
+				configureOpponentPanel();
+				configurePlayfield();
+				configureScrapPanel();
+				configureInfoPanel();
+
+				middlePanel.setLayout(new BorderLayout());
+				middlePanel.add(playFieldPanel, BorderLayout.CENTER);
+				middlePanel.add(opponentPanel, BorderLayout.NORTH);
+				middlePanel.add(playerPanel, BorderLayout.SOUTH);
+				middlePanel.setOpaque(false);
+				setLayout(new BorderLayout());
+				add(middlePanel, BorderLayout.CENTER);
+				add(scrapyardPanel2, BorderLayout.WEST);
+				add(infoPanel, BorderLayout.EAST);
+				setOpaque(false);
+			}
+		});
 	}
 
 	private void initiateGuiElements() {

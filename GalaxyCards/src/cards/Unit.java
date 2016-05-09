@@ -190,7 +190,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 
 	@Override
 	public void damage(int amt) {
-		setDefense(amt);
+		setDefense(this.defense-amt);
 
 	}
 
