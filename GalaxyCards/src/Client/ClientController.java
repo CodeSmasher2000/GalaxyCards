@@ -78,6 +78,7 @@ public class ClientController {
 		if(response.getCommand()==Commands.LOGIN_OK){
 			loginOK = true;
 			clientGUI.appendTextArea("\n Welcome " + activeUser + "!");
+			clientGUI.disableEnterBtn();
 		}else {
 			clientGUI.appendTextArea("\n Username is already in use, enter a new one");
 		}

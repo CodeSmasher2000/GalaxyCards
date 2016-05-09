@@ -186,6 +186,10 @@ public class ClientGUI extends JPanel {
 		}
 	}
 	
+	public void disableEnterBtn(){
+		btnEnter.setEnabled(false);
+	}
+	
 	private class ButtonListener implements ActionListener{
 
 		@Override
@@ -203,7 +207,7 @@ public class ClientGUI extends JPanel {
 			}else if(e.getSource() == btnEnter){
 				clientController.login();
 				btnFindMatch.setEnabled(true);
-				btnEnter.setEnabled(false);
+				
 				
 			}else if(e.getSource()==btnDisconnect){
 				clientController.disconnect();
