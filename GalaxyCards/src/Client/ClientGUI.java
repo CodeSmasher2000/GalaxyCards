@@ -48,7 +48,7 @@ public class ClientGUI extends JPanel {
 	
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
 	private ClientController clientController;
-//	private BackgroundMusic music = new BackgroundMusic();
+	private BackgroundMusic music = new BackgroundMusic();
 	
 	public ClientGUI(){
 		setPreferredSize(new Dimension(1000,800));
@@ -68,6 +68,7 @@ public class ClientGUI extends JPanel {
 		btnConnect.addActionListener(btnListener);
 		btnEnter.addActionListener(btnListener);
 		btnDisconnect.addActionListener(btnListener);
+		
 		
 	}
 	/**
@@ -221,6 +222,8 @@ public class ClientGUI extends JPanel {
 				frame.add( new ClientGUI() );
 				frame.pack();
 				frame.setVisible(true);
+				
+				
 			}
 		});
 		
