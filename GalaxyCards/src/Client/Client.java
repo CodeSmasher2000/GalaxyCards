@@ -8,6 +8,7 @@ import java.net.Socket;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import enumMessage.Phase;
+import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 
 
@@ -71,6 +72,7 @@ public class Client {
 		try {
 			oos.writeObject(cmdMessage);
 			oos.flush();
+			oos.reset();
 		} catch (IOException e) {
 			
 			e.printStackTrace();
@@ -137,6 +139,7 @@ public class Client {
 				controller.addToScrapYard(message);
 			} else if(message.getCommand() == Commands.MATCH_UPDATECARD) {
 				controller.updateCard(message);
+				System.out.println((Card)message.getData());
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");
