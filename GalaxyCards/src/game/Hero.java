@@ -60,7 +60,7 @@ public class Hero implements Serializable, Target {
 	
 	public Deck loadDeck(){
 
-		File file = new File("files/decks/debugWinV1.dat");
+		File file = new File("files/decks/TestDeckVMAY10.dat");
 
 		try(
 			FileInputStream fin = new FileInputStream(file);

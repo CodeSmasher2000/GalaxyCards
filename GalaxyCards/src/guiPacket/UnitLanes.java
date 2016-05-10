@@ -56,26 +56,26 @@ public class UnitLanes extends JPanel {
 		boardController.addLaneListener(this, ENUM);
 		units = new Unit[nbrOfElements];
 		SwingUtilities.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				setLayout(new BoxLayout(UnitLanes.this, BoxLayout.X_AXIS));
 				layerArray = new JLayeredPane[nbrOfElements];
-				
+
 				add(Box.createHorizontalStrut(10));
-				
+
 				for (int i = 0; i < nbrOfElements; i++) {
 					layerArray[i] = new JLayeredPane();
 					layerArray[i].setLayout(null);
 					layerArray[i].setPreferredSize(new Dimension(156, 150));
-					
+
 					add(Box.createHorizontalGlue());
 					add(layerArray[i]);
 					add(Box.createHorizontalGlue());
 					add(Box.createHorizontalStrut(10));
 				}
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 	}
@@ -129,33 +129,33 @@ public class UnitLanes extends JPanel {
 	 */
 	public void addUnit(Unit unit) throws GuiContainerException {
 		SwingUtilities.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				int endIndex = units.length - 1;
 				int startIndex = 0;
-				
+
 				int steps = (endIndex + 1 - startIndex);
 				int index = (startIndex + endIndex) >> 1;
-		int stepdir = 1;
-		for (int q = 0; q < steps; q++, index += stepdir * q, stepdir = -stepdir) {
-			if (units[index] == null) {
-//				 unit.setLaneEnum(ENUM);
-				units[index] = unit;
-				units[index].setBounds(0, 0, units[index].getPreferredSize().width,
-						units[index].getPreferredSize().height);
-				if (ENUM == Lanes.ENEMY_DEFENSIVE || ENUM == Lanes.ENEMY_OFFENSIVE) {
-					units[index].addMouseListener(opponentListener);
-				} else {
-					units[index].addMouseListener(playerListener);
+				int stepdir = 1;
+				for (int q = 0; q < steps; q++, index += stepdir * q, stepdir = -stepdir) {
+					if (units[index] == null) {
+						unit.setLaneEnum(ENUM);
+						units[index] = unit;
+						units[index].setBounds(0, 0, units[index].getPreferredSize().width,
+								units[index].getPreferredSize().height);
+						if (ENUM == Lanes.ENEMY_DEFENSIVE || ENUM == Lanes.ENEMY_OFFENSIVE) {
+							units[index].addMouseListener(opponentListener);
+						} else {
+							units[index].addMouseListener(playerListener);
+						}
+						layerArray[index].add(units[index], new Integer(0));
+						layerArray[index].setBorder(null);
+						break;
+					}
 				}
-				layerArray[index].add(units[index], new Integer(0));
-				layerArray[index].setBorder(null);
-				break;
-			}
-		}
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 	}
@@ -281,10 +281,12 @@ public class UnitLanes extends JPanel {
 				if (card.getId() == cardToUpdate.getId()) {
 					card.setDefense(cardToUpdate.getDefense());
 					card.setAttack(cardToUpdate.getAttack());
+					checkStatus();
 					return true;
 				}
 			}
 		}
+		
 		return false;
 	}
 }
