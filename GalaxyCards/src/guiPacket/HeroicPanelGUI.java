@@ -109,7 +109,7 @@ public class HeroicPanelGUI extends JPanel {
 				// TODO Auto-generated method stub
 				for (int i = 0; i < heroicUnits.length; i++) {
 					if (heroicUnits[i] == null) {
-						heroicSupport.setPersonEnum(ENUM);
+//						heroicSupport.setPersonEnum(ENUM);
 						heroicUnits[i] = heroicSupport;
 						heroicUnits[i].setBounds(0, 10, heroicUnits[i].getPreferredSize().width,
 								heroicUnits[i].getPreferredSize().height);

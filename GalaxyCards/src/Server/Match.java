@@ -71,8 +71,10 @@ public class Match implements Observer {
         sendMessageToPlayer(player2, new CommandMessage(Commands.SET_ENEMY_HEROID, "Server", player1.hero.getId()));
 
         // Player 2
-        sendMessageToPlayer(player1, new CommandMessage(Commands.SET_ENEMY_HEROID, "Server", player2.hero.getId()));
         sendMessageToPlayer(player2, new CommandMessage(Commands.SET_FRIENDLY_HEROID, "Server", player2.hero.getId()));
+        sendMessageToPlayer(player1, new CommandMessage(Commands.SET_ENEMY_HEROID, "Server", player2.hero.getId()));
+        
+        idCounter = 0;
     }
 
 	/**
@@ -209,10 +211,9 @@ public class Match implements Observer {
 						target = defensive.heroicSupportLane.get(j);
 					}
 				}
-			} else if (defensive.hero.getId() == defender) {
+			} else {
 				target = defensive.hero;
 			}
-
 			// DO THE FIGHT
 			// TODO : CHECK IF TARGET IS DEAD
 			target.damage(attackCard.getAttack());

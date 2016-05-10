@@ -73,7 +73,14 @@ public class OpponentTargetMouseListener implements MouseListener {
 		if(boardController.getPhase()==Phase.ATTACKING){
 			if (boardController.getAttackThreadStarted()){
 				if (event.getSource() instanceof HeroGUI) {
-					boardController.setDefender(heroGui); // TODO: This needs to be changed to the hero gui.
+					HeroGUI hero = (HeroGUI)event.getSource();
+					// Kontrollerar om hjälten är firendly
+					if (hero.getId() == boardController.getFriendlyHeroId()) {
+						InfoPanelGUI.append("Invalid taget, you cannot attack your own hero", "RED");
+					} else if(hero.getId() == boardController.getOpponetHeroId()) {
+						boardController.setDefender(hero.getId());
+					}
+					boardController.setDefender(heroGui.getId()); // TODO: This needs to be changed to the hero gui.
 				}else if (event.getSource() instanceof HeroicSupport) {
 					boardController.setDefender((HeroicSupport)event.getSource());
 				}else{

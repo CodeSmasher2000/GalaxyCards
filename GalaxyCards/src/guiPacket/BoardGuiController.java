@@ -736,6 +736,14 @@ public class BoardGuiController {
 			opponentHeroicGui.untapAllInLane();
 		}
 	}
+	
+	public int getFriendlyHeroId() {
+		return playerHeroGui.getId();
+	}
+	
+	public int getOpponetHeroId() {
+		return opponentHeroGui.getId();
+	}
 
 	public boolean getDefendingTargetSelected() {
 		return defendingTargetSelected;
@@ -847,6 +855,8 @@ public class BoardGuiController {
 			Attack attack = gameController.getAttack();
 			if (defender instanceof Unit || defender instanceof HeroicSupport) {
 				attack.setOpponents(attacker.getId(), ((Card) defender).getId());
+			} else {
+				attack.setOpponents(attacker.getId(), (int) defender);
 			}
 
 			InfoPanelGUI.append("Target Selected. Attack Thread stopped");
