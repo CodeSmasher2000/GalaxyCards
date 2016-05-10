@@ -219,6 +219,14 @@ public class Match implements Observer {
 			attackCard.damage(target.getDamage());
 			defensive.updateTarget(target);
 			idle.updateTarget(attackCard);
+			
+			if(target instanceof Hero && ((Hero) target).getLife()<=0){
+				/*
+				 * Send message to both players Winner / looser
+				 * remove observers in clienthandler
+				 * close clientgui and open the menu.
+				 */
+			}
 		}
 	}
 
