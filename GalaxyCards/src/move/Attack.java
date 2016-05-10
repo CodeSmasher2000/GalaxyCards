@@ -5,6 +5,7 @@ import java.io.Serializable;
 import cards.HeroicSupport;
 import cards.Unit;
 import guiPacket.HeroGUI;
+import guiPacket.InfoPanelGUI;
 
 /**
  * 
