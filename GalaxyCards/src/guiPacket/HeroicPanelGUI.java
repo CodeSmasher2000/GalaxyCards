@@ -273,6 +273,7 @@ public class HeroicPanelGUI extends JPanel {
 			if (heroicUnits[i] != null) {
 				if (heroicUnits[i].getId() == cardToUpdate.getId()) {
 					heroicUnits[i].setDefense(cardToUpdate.getDefense());
+					checkStatus();
 					return true;
 				} 
 			}
