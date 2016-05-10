@@ -14,17 +14,12 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-
 import Audio.BackgroundMusic;
-import Server.Server;
-import game.GameController;
-import guiPacket.BoardGuiController;
+
 /**
  * Class which starts a client connection to the server and
  *  sets up a GUI for the client.
