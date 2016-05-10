@@ -1,6 +1,6 @@
 package abilities;
 
-import game.Rules;
+
 
 public class Damage implements Ability {
 

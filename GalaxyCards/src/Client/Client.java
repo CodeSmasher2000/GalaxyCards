@@ -1,4 +1,4 @@
-﻿package Client;
+package Client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,6 +8,7 @@ import java.net.Socket;
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
 import enumMessage.Phase;
+import guiPacket.Card;
 import guiPacket.InfoPanelGUI;
 
 
@@ -33,12 +34,12 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		this.listener = new Listener();
 		this.listener.start();
-		
+
 	}
-	
+
 	/**
 	 *Metod som avbryter Listener-tråden och stänger klientens socket.
 	 */
@@ -50,7 +51,7 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public CommandMessage readMessage() {
 		try {
 			CommandMessage respone =  (CommandMessage)ois.readObject();
@@ -61,24 +62,25 @@ public class Client {
 		return null;
 	}
 
-	
+
 	/**
-	 * Skickar CommandMessages 
+	 * Skickar CommandMessages
 	 * @param cmdMessage
 	 * 			Meddelande som ska skickas
-	 */			
+	 */
 	public void sendMessage(CommandMessage cmdMessage){
 		try {
 			oos.writeObject(cmdMessage);
 			oos.flush();
+			oos.reset();
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Metod som lyssnar efter CommandMessage från servern. Beroende på vilket command som finns 
+	 * Metod som lyssnar efter CommandMessage från servern. Beroende på vilket command som finns
 	 *  i meddelandet anropas olika metoder.
 	 */
 	public void listenForMessage(){
@@ -137,18 +139,19 @@ public class Client {
 				controller.addToScrapYard(message);
 			} else if(message.getCommand() == Commands.MATCH_UPDATECARD) {
 				controller.updateCard(message);
+				System.out.println((Card)message.getData());
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");
 			e.printStackTrace();
 		}
 	}
-	
+
 //	public void setClientController(ClientController controller) {
 //		this.controller = controller;
 //		controller.setClient(this);
 //	}
-	
+
 	/**
 	 * Klass som ärver Thread. Låter klienten logga in och lyssnar sedan efter meddelanden från servern.
 	 * @author Jonte
@@ -163,7 +166,7 @@ public class Client {
 				}
 		}
 	}
-	
-	
-	
+
+
+
 }

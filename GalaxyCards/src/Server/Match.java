@@ -1,11 +1,5 @@
 package Server;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Random;
 
 import cards.HeroicSupport;
 import cards.ResourceCard;
@@ -29,6 +23,8 @@ import move.PlayTechCard;
 import move.PlayUnitCard;
 import move.TapUntapCard;
 import move.UpdateHeroValues;
+
+import java.util.*;
 
 /**
  * This class contatins nessarsacry data and methods for storing data about a
