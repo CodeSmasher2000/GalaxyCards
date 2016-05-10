@@ -38,7 +38,7 @@ public class Match implements Observer {
 	private ClientHandler user2;
 	private Player player1;
 	private Player player2;
-	private int idCounter = -1;
+	private int idCounter = -2;
 
 	// Instance Variables for what player is in defensive och attacking.
 	private Player attacking;
@@ -65,13 +65,25 @@ public class Match implements Observer {
 		initGamePhase();
 	}
 
+    private void setHeroid() {
+        // Player 1
+        sendMessageToPlayer(player1, new CommandMessage(Commands.SET_FRIENDLY_HEROID,"Server", player1.hero.getId()));
+        sendMessageToPlayer(player2, new CommandMessage(Commands.SET_ENEMY_HEROID, "Server", player1.hero.getId()));
+
+        // Player 2
+        sendMessageToPlayer(player1, new CommandMessage(Commands.SET_ENEMY_HEROID, "Server", player2.hero.getId()));
+        sendMessageToPlayer(player2, new CommandMessage(Commands.SET_FRIENDLY_HEROID, "Server", player2.hero.getId()));
+    }
+
 	/**
 	 * Sets up the game to it´s inital state. Send messages to the two clients
 	 * to draw 7 cards. And then decides who should be in what phase.
 	 */
 	public void initGamePhase() {
+        setHeroid();
 		// Decides who should start
 		Random rand = new Random();
+		// TODO : Set hero id's
 		int playerToStart = rand.nextInt(2);
 		if (playerToStart == 0) {
 			player1.setAttackPhase();
@@ -290,7 +302,6 @@ public class Match implements Observer {
 		 */
 		public Player(ClientHandler clientHandler) {
 			this.name = clientHandler.getActiveUser();
-			// TODO Ask the client for what hero it plays with
 		}
 
 		/**

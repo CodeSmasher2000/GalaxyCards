@@ -34,6 +34,7 @@ public class HeroGUI extends JPanel {
 	private ImageIcon heroImage;
 	private transient BoardGuiController boardController;
 	private Persons ENUM;
+    private int id;
 
 	private Border b1;
 	private Border b2;
@@ -166,4 +167,13 @@ public class HeroGUI extends JPanel {
 		return (ENUM + " Hero life: " + lifeBar.getValue() + ", energy shield: " + shieldBar.getValue()
 				+ ", resources: " + resourceBar.getValue() + "/" + resourceBar.getMaximum());
 	}
+
+	public void setId(int id) {
+        this.id = id;
+        InfoPanelGUI.append("Hjälte id satt till: " + this.getId());
+	}
+
+    public int getId() {
+        return id;
+    }
 }

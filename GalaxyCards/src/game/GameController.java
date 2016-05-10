@@ -356,8 +356,15 @@ public class GameController {
 		InfoPanelGUI.append("In Attack phase");
 	}
 
-	public void updateCard(Card cardUpdate) {
-		boardController.updateCard(cardUpdate);
-	}
+    public void updateCard(Card cardUpdate) {
+        boardController.updateCard(cardUpdate);
+    }
 
+    public void setFriendlyHeroId(int id) {
+        boardController.setFriendlyHeroId(id);
+    }
+
+	public void setEnemyHeroId(int id) {
+        boardController.setEnemyHeroId(id);
+    }
 }

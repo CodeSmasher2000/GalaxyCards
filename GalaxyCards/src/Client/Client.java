@@ -140,6 +140,10 @@ public class Client {
 			} else if(message.getCommand() == Commands.MATCH_UPDATECARD) {
 				controller.updateCard(message);
 				System.out.println((Card)message.getData());
+			} else if(message.getCommand() == Commands.SET_ENEMY_HEROID) {
+                controller.setFriendlyHeroId(message);
+			} else if (message.getCommand() == Commands.SET_FRIENDLY_HEROID) {
+                controller.setEnemyHeroId(message);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			System.out.println("User Disconnected");

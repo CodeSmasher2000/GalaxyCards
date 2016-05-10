@@ -572,7 +572,15 @@ public class BoardGuiController {
 		this.targetSelected = targetSelected;
 	}
 
-	/**
+	public void setFriendlyHeroId(int id) {
+		this.playerHeroGui.setId(id);
+	}
+
+    public void setEnemyHeroId(int id) {
+        this.opponentHeroGui.setId(id);
+    }
+
+    /**
 	 * A thread that waits for player input when selecting a lane to play unit
 	 * cards on. Instantiates a mouselistener that gets connected to the
 	 * lanePanels that unit objects can be placed in.

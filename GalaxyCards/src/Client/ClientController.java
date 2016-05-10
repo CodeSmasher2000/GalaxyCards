@@ -266,5 +266,15 @@ public class ClientController {
 		gameController.updateCard(cardUpdate);
 	}
 
-	
+
+	public void setFriendlyHeroId(CommandMessage message) {
+        // Unpack the message
+        int id = (Integer)message.getData();
+		gameController.setFriendlyHeroId(id);
+	}
+
+	public void setEnemyHeroId(CommandMessage message) {
+        int id = (Integer)message.getData();
+        gameController.setEnemyHeroId(id);
+	}
 }

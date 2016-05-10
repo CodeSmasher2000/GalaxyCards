@@ -93,7 +93,6 @@ public class CreateController {
 	
 	/**
 	 * Reads a deck from a dat file and sets the activeDeck to the read deck
-	 * @param filename The name of the file with the deck
 	 */
 	public void readDeckFromFile() {
 		// TODO Ersätt denna kod
