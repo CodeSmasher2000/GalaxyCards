@@ -1,6 +1,6 @@
 package abilities;
 
-import game.Rules;
+
 
 /**
  * Created by patriklarsson on 03/04/16.
@@ -17,7 +17,7 @@ public class DrawCard implements Ability {
     @Override
     public void useAbility() {
         for (int i = 0; i < cardsToDraw; i++) {
-        	Rules.getInstance().drawCard();
+//        	Rules.getInstance().drawCard();
 		}
     }
 
