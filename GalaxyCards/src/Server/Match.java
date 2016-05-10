@@ -344,7 +344,10 @@ public class Match implements Observer {
 				}
 				move.getCard().setLanesEnum(Lanes.PLAYER_HEROIC);
 				heroicSupportLane.add(move.getCard());
-				hand.remove(move.getCard());
+				System.out.println(" Innan, playheroicSupport, handstorlek: " + hand.size()); // för debugg syfte
+//				hand.remove(move.getCard());
+				removeCardFromHand(move.getCard());
+				System.out.println(" Efter, playheroicSupport, handstorlek: " + hand.size()); // för debugg syfte
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
 				updateHeroValues();
@@ -388,7 +391,10 @@ public class Match implements Observer {
 					this.defensiveLane.add(tempCard);
 					// this.defensiveLane.add((Unit) move.getCard());
 				}
-				hand.remove(move.getCard());
+				System.out.println(" Innan, playUnitCard, handstorlek: " + hand.size()); // för debugg syfte
+//				hand.remove(move.getCard());
+				removeCardFromHand(move.getCard());
+				System.out.println(" Efter, playUnitCard, handstorlek: " + hand.size()); // för debugg syfte
 
 				// Send to the client that made the move
 				CommandMessage message = new CommandMessage(Commands.MATCH_PLACE_CARD, "Server", move);
@@ -418,7 +424,11 @@ public class Match implements Observer {
 				move.setUpdateHeroValues(new UpdateHeroValues(hero.getLife(), hero.getEnergyShield(),
 						hero.getCurrentResources(), hero.getMaxResource()));
 				updateHeroValues();
-				hand.remove(card);
+				System.out.println(" Innan, playResourceCard, handstorlek: " + hand.size()); // för debugg syfte
+
+				removeCardFromHand(move.getCard());
+				System.out.println(" Efter, playResourceCard, handstorlek: " + hand.size()); // för debugg syfte
+
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 				// scrapYard.add(move.getCard());
@@ -435,7 +445,7 @@ public class Match implements Observer {
 			try {
 				hero.useResource(card.getPrice());
 				addCardToScrapYard(card);
-				hand.remove(card);
+				removeCardFromHand(card);
 				// Send to player who initatied move
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, "Server", card));
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, "Server", card));
@@ -487,12 +497,13 @@ public class Match implements Observer {
 			Random rand = new Random();
 			int i = rand.nextInt(hand.size());
 			Card card = removeCardFromHand(hand.get(i));
+			addCardToScrapYard(card);
 
 			// Send messages to the clients
 			CommandMessage message = new CommandMessage(Commands.MATCH_REMOVE_CARD, "server", card);
 			sendMessageToPlayer(this, message);
-			message = new CommandMessage(Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD, "server", card);
-			sendMessageToOtherPlayer(this, message);
+//			message = new CommandMessage(Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD, "server", card);
+//			sendMessageToOtherPlayer(this, message);
 		}
 
 		/**
@@ -502,10 +513,7 @@ public class Match implements Observer {
 		private Card removeCardFromHand(Card cardToRemove) {
 			for (int i = 0; i < hand.size(); i++) {
 				if (cardToRemove.compareTo(hand.get(i)) == 0) {
-					hand.remove(i);
-					if (cardToRemove instanceof Tech || cardToRemove instanceof ResourceCard) {
-						addCardToScrapYard(cardToRemove);
-					}
+					hand.remove(i);					
 					return cardToRemove;
 				}
 			}

@@ -297,7 +297,7 @@ public class GameController {
 	
 	public void discardCard(Card card){
 		boardController.removeCardFromHand(card);
-		boardController.addToPlayerScrapYard(card);
+//		boardController.addToPlayerScrapYard(card);
 	}
 
 	public void commitMove() {
