@@ -1,6 +1,5 @@
 package Server;
 
-
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Target;
@@ -65,38 +64,38 @@ public class Match implements Observer {
 		initGamePhase();
 	}
 
-    private void setHeroid() {
-        // Player 1
-        sendMessageToPlayer(player1, new CommandMessage(Commands.SET_FRIENDLY_HEROID,"Server", player1.hero.getId()));
-        sendMessageToPlayer(player2, new CommandMessage(Commands.SET_ENEMY_HEROID, "Server", player1.hero.getId()));
+	private void setHeroid() {
+		// Player 1
+		sendMessageToPlayer(player1, new CommandMessage(Commands.SET_FRIENDLY_HEROID, "Server", player1.hero.getId()));
+		sendMessageToPlayer(player2, new CommandMessage(Commands.SET_ENEMY_HEROID, "Server", player1.hero.getId()));
 
-        // Player 2
-        sendMessageToPlayer(player2, new CommandMessage(Commands.SET_FRIENDLY_HEROID, "Server", player2.hero.getId()));
-        sendMessageToPlayer(player1, new CommandMessage(Commands.SET_ENEMY_HEROID, "Server", player2.hero.getId()));
-        
-        idCounter = 0;
-    }
+		// Player 2
+		sendMessageToPlayer(player2, new CommandMessage(Commands.SET_FRIENDLY_HEROID, "Server", player2.hero.getId()));
+		sendMessageToPlayer(player1, new CommandMessage(Commands.SET_ENEMY_HEROID, "Server", player2.hero.getId()));
+
+		idCounter = 0;
+	}
 
 	/**
 	 * Sets up the game to it´s inital state. Send messages to the two clients
 	 * to draw 7 cards. And then decides who should be in what phase.
 	 */
 	public void initGamePhase() {
-        setHeroid();
+		setHeroid();
 		// Decides who should start
 		Random rand = new Random();
 		// TODO : Set hero id's
 		int playerToStart = rand.nextInt(2);
 		if (playerToStart == 0) {
 			player1.setAttackPhase();
-//			player2.setDefendPhase();
+			// player2.setDefendPhase();
 			player2.setIdlePhase();
 		} else {
 			player2.setAttackPhase();
-//			player1.setDefendPhase();
+			// player1.setDefendPhase();
 			player1.setIdlePhase();
 		}
-		
+
 		// Both players should 7 draw cards
 		for (int i = 0; i < 7; i++) {
 			if (i == 6) {
@@ -105,10 +104,9 @@ public class Match implements Observer {
 				attacking.drawCard();
 				idle.drawCard();
 			}
-			
+
 		}
 
-	
 	}
 
 	public void newRound() {
@@ -116,7 +114,7 @@ public class Match implements Observer {
 		Player temp = defensive;
 		attacking.setDefendPhase();
 		temp.setAttackPhase();
-		//		idle.setIdlePhase();
+		// idle.setIdlePhase();
 	}
 
 	/**
@@ -124,23 +122,24 @@ public class Match implements Observer {
 	 */
 	public void commitAttackMove(CommandMessage message) {
 		Attack attack = (Attack) message.getData();
-//		// SET THE IDLE PLAYER TO DEFENDING
-//		idle.setDefendPhase();;
-//		// SET THE ATTACKING PLAYER TO IDLE
-//		attacking.setIdlePhase();
-//
-//		// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
-//		defensive.defend(attack);
-		
-		if(attack.hasAttackers()){
+		// // SET THE IDLE PLAYER TO DEFENDING
+		// idle.setDefendPhase();;
+		// // SET THE ATTACKING PLAYER TO IDLE
+		// attacking.setIdlePhase();
+		//
+		// // TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
+		// defensive.defend(attack);
+
+		if (attack.hasAttackers()) {
 			// SET THE IDLE PLAYER TO DEFENDING
-			idle.setDefendPhase();;
+			idle.setDefendPhase();
+			;
 			// SET THE ATTACKING PLAYER TO IDLE
 			attacking.setIdlePhase();
 
 			// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
 			defensive.defend(attack);
-		}else{
+		} else {
 			idle.setDefendPhase();
 			attacking.setIdlePhase();
 			defensive.setAttackPhase();
@@ -179,7 +178,7 @@ public class Match implements Observer {
 			user2.writeMessage(message);
 		}
 	}
-	
+
 	public void fight(Attack attack) {
 		for (int i = 0; i < attack.getLength(); i++) {
 			boolean attackingCardFound = false;
@@ -255,25 +254,24 @@ public class Match implements Observer {
 			} else if (object instanceof UpdateHeroValues) {
 				UpdateHeroValues move = (UpdateHeroValues) object;
 				player.updateHeroValues();
-			}
-			else if (message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
-//				sendMessageToOtherPlayer(player, message);
+			} else if (message.getCommand() == Commands.MATCH_ATTACK_MOVE) {
+				// sendMessageToOtherPlayer(player, message);
 				commitAttackMove(message);
 			} else if (message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
 				commitDefendMove(message);
 			}
 		} else if (message.getCommand() == Commands.MATCH_DRAW_CARD) {
 			player.drawCard();
-		}  else if (message.getCommand() == Commands.MATCH_NEW_ROUND) {
+		} else if (message.getCommand() == Commands.MATCH_NEW_ROUND) {
 			newRound();
 		}
 	}
 
 	private void commitDefendMove(CommandMessage message) {
-		Attack attack = (Attack)message.getData();
+		Attack attack = (Attack) message.getData();
 		fight(attack);
 		attacking.setIdlePhase();
-		defensive.setAttackPhase();	
+		defensive.setAttackPhase();
 	}
 
 	/**
@@ -315,7 +313,7 @@ public class Match implements Observer {
 			// Send the move to the client
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_DEFEND_MOVE, "Server", attack));
 		}
-		
+
 		public void setPhase(Phase phase) {
 			this.phase = phase;
 		}
@@ -365,7 +363,7 @@ public class Match implements Observer {
 				hero.useResource(move.getCard().getPrice());
 				// Updates the Gui with the new values
 				updateHeroValues();
-				Unit tempCard = (Unit)move.getCard();
+				Unit tempCard = (Unit) move.getCard();
 				// Do The Move server side
 				if (move.getLane() == Lanes.PLAYER_OFFENSIVE) {
 					if (offensiveLane.size() >= 6) {
@@ -373,14 +371,14 @@ public class Match implements Observer {
 					}
 					tempCard.setLaneEnum(Lanes.PLAYER_OFFENSIVE);
 					this.offensiveLane.add(tempCard);
-//					this.offensiveLane.add((Unit) move.getCard());
+					// this.offensiveLane.add((Unit) move.getCard());
 				} else if (move.getLane() == Lanes.PLAYER_DEFENSIVE) {
 					if (defensiveLane.size() >= 6) {
 						throw new NotValidMove("Defensive lane is full");
 					}
 					tempCard.setLaneEnum(Lanes.PLAYER_DEFENSIVE);
 					this.defensiveLane.add(tempCard);
-//					this.defensiveLane.add((Unit) move.getCard());
+					// this.defensiveLane.add((Unit) move.getCard());
 				}
 				hand.remove(move.getCard());
 
@@ -415,7 +413,7 @@ public class Match implements Observer {
 				hand.remove(card);
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
-//				scrapYard.add(move.getCard());
+				// scrapYard.add(move.getCard());
 				addCardToScrapYard(move.getCard());
 			} catch (ResourcePlayedException e) {
 				CommandMessage error = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "server", e);
@@ -519,7 +517,7 @@ public class Match implements Observer {
 			}
 			scrapYard.add(cardToAdd);
 			// TODO Send message to clients to update GUI
-			CommandMessage message = new CommandMessage(Commands.MATCH_ADD_TO_SCRAPYARD, "Server",cardToAdd);
+			CommandMessage message = new CommandMessage(Commands.MATCH_ADD_TO_SCRAPYARD, "Server", cardToAdd);
 			sendMessageToPlayer(this, message);
 			message = new CommandMessage(Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD, "Server", cardToAdd);
 			sendMessageToOtherPlayer(this, message);
@@ -562,8 +560,8 @@ public class Match implements Observer {
 					}
 				}
 			}
-			
-			if(tempCard!=null){
+
+			if (tempCard != null) {
 				sendTappedMessage(tempCard, Commands.MATCH_UNTAP_CARD);
 			}
 		}
@@ -629,9 +627,10 @@ public class Match implements Observer {
 			if (ENUM == Lanes.PLAYER_HEROIC) {
 				MIRRORED_ENUM = Lanes.ENEMY_HEROIC;
 			}
-			
+
 			sendMessageToPlayer(this, new CommandMessage(command, "server", new TapUntapCard(tempCard.getId(), ENUM)));
-			sendMessageToOtherPlayer(this, new CommandMessage(command, "server", new TapUntapCard(tempCard.getId(), MIRRORED_ENUM)));
+			sendMessageToOtherPlayer(this,
+					new CommandMessage(command, "server", new TapUntapCard(tempCard.getId(), MIRRORED_ENUM)));
 		}
 
 		/**
@@ -659,9 +658,9 @@ public class Match implements Observer {
 			sendMessageToOtherPlayer(this,
 					new CommandMessage(Commands.MATCH_UNTAP_ALL_IN_LANE, "server", Lanes.ENEMY_OFFENSIVE));
 		}
-		
-		public void untapHeroicLane(){
-			for(int i = 0; i<heroicSupportLane.size(); i++){
+
+		public void untapHeroicLane() {
+			for (int i = 0; i < heroicSupportLane.size(); i++) {
 				untapHeroicSupportLane(i);
 			}
 			sendMessageToPlayer(this,
@@ -669,6 +668,7 @@ public class Match implements Observer {
 			sendMessageToOtherPlayer(this,
 					new CommandMessage(Commands.MATCH_UNTAP_ALL_IN_LANE, "server", Lanes.ENEMY_HEROIC));
 		}
+
 		/**
 		 * Untaps the units in defensive lane
 		 */
@@ -695,8 +695,8 @@ public class Match implements Observer {
 					new CommandMessage(Commands.MATCH_TAP_ALL_IN_LANE, "server", Lanes.ENEMY_DEFENSIVE));
 
 		}
-		
-		public void untapHeroicSupportLane(int index){
+
+		public void untapHeroicSupportLane(int index) {
 			heroicSupportLane.get(index).untap();
 		}
 
@@ -719,9 +719,10 @@ public class Match implements Observer {
 			((Unit) defensiveLane.get(index)).untap();
 			// TODO : SEND MESSAGE TO CLIENT THAT A CARD SHOULD BE TAPPED
 		}
-		
+
 		/**
-		 * This method should be called to set a player to a correct state for attking.
+		 * This method should be called to set a player to a correct state for
+		 * attking.
 		 */
 		public void setAttackPhase() {
 			attacking = this;
@@ -729,35 +730,34 @@ public class Match implements Observer {
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_ATTACK_MOVE, "Server", this.phase));
 			untapOffensiveLane();
 			untapHeroicLane();
-//			tapDefensiveLane();
+			// tapDefensiveLane();
 			untapDefensiveLane();
-			
+
 			this.hero.resetResources();
 			drawCard();
 			this.updateHeroValues();
-			
-			
+
 		}
-		
+
 		/**
-		 * This methods sets th player object to the correct phase and disables nessasary cards
+		 * This methods sets th player object to the correct phase and disables
+		 * nessasary cards
 		 */
 		public void setDefendPhase() {
 			defensive = this;
 			this.phase = Phase.DEFENDING;
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
-//			untapDefensiveLane();
-//			tapOffensiveLane();
+			// untapDefensiveLane();
+			// tapOffensiveLane();
 		}
-		
+
 		public void setIdlePhase() {
 			idle = this;
 			this.phase = Phase.IDLE;
 			sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_SET_PHASE, "Server", this.phase));
-//			tapOffensiveLane();
-//			tapDefensiveLane();
+			// tapOffensiveLane();
+			// tapDefensiveLane();
 		}
-
 
 		public void updateTarget(Target target) {
 			if (target instanceof HeroicSupport || target instanceof Unit) {
@@ -767,7 +767,7 @@ public class Match implements Observer {
 				if (target.isDead()) {
 					heroicSupportLane.remove(target);
 				}
-			} else if(target instanceof Unit) {
+			} else if (target instanceof Unit) {
 				CommandMessage message = new CommandMessage(Commands.MATCH_UPDATECARD, "Server", target);
 				sendMessageToPlayer(player1, message);
 				sendMessageToPlayer(player2, message);
@@ -776,7 +776,7 @@ public class Match implements Observer {
 						defensiveLane.remove(target);
 					} else if (defensiveLane.contains(target)) {
 						defensiveLane.remove(target);
-					} 
+					}
 				}
 			} else if (target instanceof Hero) {
 				if (target.equals(player1.hero)) {
