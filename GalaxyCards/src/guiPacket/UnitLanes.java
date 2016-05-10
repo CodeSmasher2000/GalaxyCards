@@ -281,10 +281,12 @@ public class UnitLanes extends JPanel {
 				if (card.getId() == cardToUpdate.getId()) {
 					card.setDefense(cardToUpdate.getDefense());
 					card.setAttack(cardToUpdate.getAttack());
+					checkStatus();
 					return true;
 				}
 			}
 		}
+		
 		return false;
 	}
 }
