@@ -111,6 +111,13 @@ public class ServerController {
 		clientHandler.writeMessage(commandMessage);
 	}
 	
+	/**
+	 * Loads a deck which has been saved by the Deckcreator.
+	 * @param filepath
+	 * 			The path where the deck is saved.
+	 * @return
+	 * 			Returns the loaded deck.
+	 */
 	public Deck loadDeck(String filepath){
 		File file = new File(filepath);
 		try(
