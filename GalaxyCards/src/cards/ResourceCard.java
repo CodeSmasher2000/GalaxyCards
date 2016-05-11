@@ -39,10 +39,6 @@ public class ResourceCard extends Card implements Serializable{
 	public int getResource() {
 		return RESOURCE;
 	}
-
-//	public String toString() {
-//		return NAME + " is a resource card. When played adds " + RESOURCE;
-//	}
 	
 	@Override
 	public String toString() {

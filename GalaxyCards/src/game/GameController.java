@@ -36,9 +36,6 @@ public class GameController {
 
 	public GameController(ClientController clientController) {
 		this.clientController=clientController;
-		//TODO ta bort när huvudmeny och hämta hjälte är fixat,
-//		hero = new Hero(this);
-//		startNewGame();
 	}
 	
 	/**
@@ -48,13 +45,11 @@ public class GameController {
 	 * @throws ResourcePlayedException
 	 */
 	public void playResourceCard(ResourceCard card) {
-		// Skicka till server
 		clientController.writeMessage(new CommandMessage(Commands.MATCH_PLAYCARD,
 				null,new PlayResourceCard(card)));
 	}
 	
 	public void playResourceCardOk(ResourceCard resourceCard) {
-//		boardController.addToPlayerScrapYard(resourceCard);
 		boardController.removeCardFromHand(resourceCard);
 	}
 	
@@ -72,6 +67,13 @@ public class GameController {
 			clientController.writeMessage(message);
 	}
 	
+	/**
+	 * Adds a unit card to the game board and removes the card from the hand
+	 * @param card
+	 * 		The card to add to a lane
+	 * @param lane
+	 * 		The Lane to add the card to
+	 */
 	public void playUnitOK(Card card, Lanes lane) {
 		boardController.addUnitCard((Unit)card, lane);
 		boardController.removeCardFromHand(card);
@@ -89,6 +91,11 @@ public class GameController {
 			clientController.writeMessage(message);
 	}
 	
+	/**
+	 * Adds a Heroic Support card to the game board and removes it from the hand
+	 * @param card
+	 * 		The card object to add and remove
+	 */
 	public void playHeroicSupportOk(HeroicSupport card) {
 		boardController.addHeroicSupport(card);
 		boardController.removeCardFromHand(card);
@@ -105,18 +112,6 @@ public class GameController {
 		CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD, null, move);
 		clientController.writeMessage(message);
 	}
-
-
-//	/**
-//	 * Resets the players resources and untaps the cards.
-//	 */
-//	public void newRound() {
-//		hero.resetResources();
-//		updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(), hero.getMaxResource());
-//		untapCards();
-//		// TODO snacka med klient
-//	}
-
 
 	/**
 	 * Updates the players Hero Gui.
@@ -166,6 +161,11 @@ public class GameController {
 		clientController.writeMessage(new CommandMessage(Commands.MATCH_DRAW_CARD, null));
 	}
 	
+	/**
+	 * Adds a card to the hand
+	 * @param card
+	 * 		The card to add to the hand
+	 */
 	public void drawCardOk(Card card) {
 		try {
 			boardController.drawCard(card);
@@ -206,12 +206,12 @@ public class GameController {
 	/**
 	 * Draws 7 cards when the game initializes.
 	 */
+	// TODO : STUDERA HUR DENNA ANROPAS
 	public void initGame() {
 		InfoPanelGUI.append("InitGame()");
 		// Draw 7 Cards
 		for (int i = 0; i < 7; i++) {
 			drawCard();
-			// Skicka till Servern att den har dragit ett kort
 		}
 	}
 
@@ -260,11 +260,15 @@ public class GameController {
 		InfoPanelGUI.append("Phase: " + phase);
 	}
 	
+	/**
+	 * Sets the gameControllers phase to defending and sets the attack object to the attack object recived from the server
+	 * @param attack
+	 * 		The attack object the server sent.
+	 */
 	public void doDefendMove(Attack attack) {
 		this.phase = Phase.DEFENDING;
 		InfoPanelGUI.append("In " + phase);
 		this.attack = attack;
-		//TODO REMOVE
 		InfoPanelGUI.append(this.attack.toString());
 	}
 
@@ -291,13 +295,22 @@ public class GameController {
 		clientController.writeMessage(new CommandMessage(Commands.MATCH_NEW_ROUND, null));
 	}
 	
+	/**
+	 * Appends a error message to the info panel
+	 * @param e
+	 * 		The exception that was thrown on the server
+	 */
 	public void notValidMove(Exception e) {
 		InfoPanelGUI.append(e.getMessage());
 	}
 	
+	/**
+	 * Remove
+	 * @param card
+	 */
+	// TODO : STUDERA HUR DENNA METHOD FUNGERAR
 	public void discardCard(Card card){
 		boardController.removeCardFromHand(card);
-//		boardController.addToPlayerScrapYard(card);
 	}
 
 	public void commitMove() {

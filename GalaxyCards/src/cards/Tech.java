@@ -6,9 +6,6 @@ import guiPacket.Card;
 
 public class Tech extends Card implements PlayCardsInterface, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1803659048435357727L;
 	private final String NAME, RARITY, IMAGE_NAME;
 	private final int PRICE;

@@ -11,10 +11,6 @@ import guiPacket.Card;
  *
  */
 public class Unit extends Card implements PlayCardsInterface, Serializable, Target {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5013183003151976993L;
 	private int attack, defense;
 	private final int PRICE;
@@ -231,13 +227,4 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 		super.setDefense(currentHp);
 	}
 
-	// @Override
-	// public boolean equals(Object obj) {
-	// Unit toCompare = (Unit)obj;
-	// if (toCompare.getId() == getId()) {
-	// return true;
-	// } else {
-	// return false;
-	// }
-	// }
 }

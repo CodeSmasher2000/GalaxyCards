@@ -16,165 +16,160 @@ import move.PlayUnitCard;
 import move.TapUntapCard;
 import move.UpdateHeroValues;
 
-
 /**
  * Contains the logic for a Client.
+ * 
  * @author Jonte
  *
  */
 public class ClientController {
 	private Client client;
 	private String activeUser;
-	private GameController gameController= new GameController(this);
+	private GameController gameController = new GameController(this);
 	private ClientGUI clientGUI;
 	private boolean loginOK = false;
-	
-	public ClientController(ClientGUI clientGUi){
-		this.clientGUI=clientGUi;
+
+	public ClientController(ClientGUI clientGUi) {
+		this.clientGUI = clientGUi;
 	}
-	
+
 	/**
 	 * Invokes the disconnect method in the Client class.
 	 */
-	public void disconnect(){
+	public void disconnect() {
 		client.disconnect();
 	}
-	
 
-	
-	
 	/**
-	 * Metod som låter klienten ansluta till en given server
-	 * Creates a client with a specified ip, port and ClientController.
+	 * Metod som låter klienten ansluta till en given server Creates a client
+	 * with a specified ip, port and ClientController.
+	 * 
 	 * @param ip
-	 * 			The IP to a Server.
+	 *            The IP to a Server.
 	 * @param port
-	 * 			The port to a Server.
-	 */			
+	 *            The port to a Server.
+	 */
 	public void connect(String ip, int port) {
 		client = new Client(ip, port, this);
 
 	}
-	
+
 	/**
 	 * Invokes the initGame method in GameController.
 	 */
 	public void initGame() {
 		gameController.initGame();
 	}
-	
-	
+
 	/**
 	 * Sends the username a Client has typed in to the server and asks to Login.
 	 */
-	public synchronized void login(){
+	public synchronized void login() {
 		activeUser = clientGUI.getUsername();
-		CommandMessage loginMsg = new CommandMessage(Commands.LOGIN,activeUser);
-		client.sendMessage(loginMsg);	
-	
+		CommandMessage loginMsg = new CommandMessage(Commands.LOGIN, activeUser);
+		client.sendMessage(loginMsg);
+
 	}
-	
+
 	/**
-	 *  If the username is valid/available it gives feedback to ClientGUI. 
+	 * If the username is valid/available it gives feedback to ClientGUI.
+	 * 
 	 * @param response
-	 * 				 Response from server if valid username.
+	 *            Response from server if valid username.
 	 */
-	public void loginAnswer(CommandMessage response){
-		if(response.getCommand()==Commands.LOGIN_OK){
+	public void loginAnswer(CommandMessage response) {
+		if (response.getCommand() == Commands.LOGIN_OK) {
 			loginOK = true;
 			clientGUI.appendTextArea("\n Welcome " + activeUser + "!");
 			clientGUI.disableEnterBtn();
-		}else {
+		} else {
 			clientGUI.appendTextArea("\n Username is already in use, enter a new one");
 		}
 	}
-	
-	
+
 	/**
 	 * Invokes the sendMessage method in Client.
+	 * 
 	 * @param message
-	 * 				The message to be sent.
+	 *            The message to be sent.
 	 */
-	public void writeMessage(CommandMessage message){
+	public void writeMessage(CommandMessage message) {
 		client.sendMessage(message);
 	}
-	
-	
+
 	/**
-	 * Sends a message to the server that the client is looking for a game. 
-	*/
+	 * Sends a message to the server that the client is looking for a game.
+	 */
 	public void startMatchMaking() {
 		// Logging Message used for debug purpose
 		System.out.println("Client Controller: " + activeUser + " StartMatchmaking()");
-		CommandMessage message = new CommandMessage(Commands.MATCHMAKING_START,
-				activeUser);
+		CommandMessage message = new CommandMessage(Commands.MATCHMAKING_START, activeUser);
 		client.sendMessage(message);
 	}
-	
+
 	/**
 	 * The method is called when the client receives a message with the command
 	 * MATCH_PLAYCARD and delegates
+	 * 
 	 * @param message
-	 * 		The message to unpack
+	 *            The message to unpack
 	 */
 	public void cardPlayed(CommandMessage message) {
 		Object data = message.getData();
 		if (data instanceof PlayUnitCard) {
-			PlayUnitCard move = (PlayUnitCard)message.getData();
+			PlayUnitCard move = (PlayUnitCard) message.getData();
 			gameController.opponentPlaysUnit((Unit) move.getCard(), move.getLane());
-		} else if( data instanceof PlayHeroicSupportCard) {
-			PlayHeroicSupportCard move  = (PlayHeroicSupportCard)data;
+		} else if (data instanceof PlayHeroicSupportCard) {
+			PlayHeroicSupportCard move = (PlayHeroicSupportCard) data;
 			gameController.opponentPlaysHeroic(move.getCard());
-		}else if (data instanceof PlayResourceCard){
-			PlayResourceCard move = (PlayResourceCard)data;
+		} else if (data instanceof PlayResourceCard) {
+			PlayResourceCard move = (PlayResourceCard) data;
 			gameController.opponentPlaysResourceCard(move);
 			InfoPanelGUI.append("opponent played resource");
-		} else if(data instanceof PlayTechCard) {
-			PlayTechCard move = (PlayTechCard)data;
+		} else if (data instanceof PlayTechCard) {
+			PlayTechCard move = (PlayTechCard) data;
 			gameController.opponeentPlaysTech(move.getCard());
 		}
 	}
+
 	/**
 	 * Recieves a message object and updates the gui with the corresponding move
+	 * 
 	 * @param message
-	 * 		A CommandMessage contating a a move to update the gui with
+	 *            A CommandMessage contating a a move to update the gui with
 	 */
 	public void placeCard(CommandMessage message) {
-		Object obj =  message.getData();
+		Object obj = message.getData();
 		if (obj instanceof PlayHeroicSupportCard) {
-			PlayHeroicSupportCard move = (PlayHeroicSupportCard)obj;
+			PlayHeroicSupportCard move = (PlayHeroicSupportCard) obj;
 			gameController.playHeroicSupportOk(move.getCard());
-		} else if(obj instanceof PlayResourceCard) {
-			PlayResourceCard move = (PlayResourceCard)obj;
+		} else if (obj instanceof PlayResourceCard) {
+			PlayResourceCard move = (PlayResourceCard) obj;
 			UpdateHeroValues value = move.getUpdateHeroValues();
-			gameController.updatePlayerHeroGui(value.getLife(), value.getEnergyShield(),
-					value.getCurrentResource(), value.getMaxResource());
+			gameController.updatePlayerHeroGui(value.getLife(), value.getEnergyShield(), value.getCurrentResource(),
+					value.getMaxResource());
 			gameController.playResourceCardOk(move.getCard());
-		} else if(obj instanceof PlayUnitCard) {
-			PlayUnitCard move = (PlayUnitCard)obj;
+		} else if (obj instanceof PlayUnitCard) {
+			PlayUnitCard move = (PlayUnitCard) obj;
 			gameController.playUnitOK(move.getCard(), move.getLane());
-		} else if(obj instanceof PlayTechCard) {
-			PlayTechCard move = (PlayTechCard)obj;
+		} else if (obj instanceof PlayTechCard) {
+			PlayTechCard move = (PlayTechCard) obj;
 			gameController.playTechOk(move.getCard());
 		}
 	}
-	
+
 	/**
 	 * Calls the GameController to setup a new game when a match is found
 	 */
 	public void matchFound(CommandMessage message) {
-		
 		gameController.startNewGame();
-		// Logging Messaged used for debug purpose
-		System.out.println("Client Controller: " + activeUser + " matchFound()");
-
-		//		controller.initGame(friendly, enemy);
-		//TODO Unpack data in message and send to controller
 	}
+
 	public void opponentValuesChanged(CommandMessage message) {
 		gameController.updateOpponentHero(message);
 		System.out.println("Clientcontroller hero values...");
 	}
+
 	public void opponentDrawCard() {
 		gameController.opponentDrawCard();
 	}
@@ -182,94 +177,131 @@ public class ClientController {
 	public void setPhase(Phase phase) {
 		gameController.setPhase(phase);
 	}
+
 	public void notValidMove(CommandMessage message) {
-		gameController.notValidMove((Exception)message.getData());
+		gameController.notValidMove((Exception) message.getData());
 	}
+
 	public void friendlyDrawCard(CommandMessage message) {
-		gameController.drawCardOk((Card)message.getData());
+		gameController.drawCardOk((Card) message.getData());
 	}
+
 	public void discardCard(CommandMessage message) {
-		gameController.discardCard((Card)message.getData());
-		
+		gameController.discardCard((Card) message.getData());
+
 	}
+
 	public void addToOpponentScrapYard(CommandMessage message) {
-		gameController.updateOpponentScrapYard((Card)message.getData());
-		
+		gameController.updateOpponentScrapYard((Card) message.getData());
+
 	}
+
 	public void playerHeroValuesChanged(CommandMessage message) {
-		UpdateHeroValues values = (UpdateHeroValues)message.getData();
-		gameController.updatePlayerHeroGui(values.getLife(), values.getEnergyShield(), values.getCurrentResource(), values.getMaxResource());
-		
+		UpdateHeroValues values = (UpdateHeroValues) message.getData();
+		gameController.updatePlayerHeroGui(values.getLife(), values.getEnergyShield(), values.getCurrentResource(),
+				values.getMaxResource());
+
 	}
-	
-	public void tapCard(CommandMessage message){
-//		if (message.getData() instanceof TapUntapCard){
-			TapUntapCard temp = (TapUntapCard)message.getData();
-			gameController.tapCard(temp.getId(), temp.getENUM());
-//		}
+
+	public void tapCard(CommandMessage message) {
+		TapUntapCard temp = (TapUntapCard) message.getData();
+		gameController.tapCard(temp.getId(), temp.getENUM());
 	}
+
 	/**
-	 * Is invoked when server sets the client into defensive phase. Unpacks
-	 * the message and sends it to the gameController
+	 * Is invoked when server sets the client into defensive phase. Unpacks the
+	 * message and sends it to the gameController
+	 * 
 	 * @param message
-	 * 		The message to unpack
+	 *            The message to unpack
 	 */
 	public void setDefendingPhase(CommandMessage message) {
 		Attack attack = (Attack) message.getData();
 		gameController.doDefendMove(attack);
 	}
 
-	public void untapCard(CommandMessage message){
-		TapUntapCard temp = (TapUntapCard)message.getData();
+	public void untapCard(CommandMessage message) {
+		TapUntapCard temp = (TapUntapCard) message.getData();
 		gameController.untapCard(temp.getId(), temp.getENUM());
 	}
-	
+
 	/**
 	 * Taps all cards in the specified lane passed in as argument
 	 * 
-	 * @param ENUM : Lanes
+	 * @param ENUM
+	 *            : Lanes
 	 */
-	public void tapAllInLane(CommandMessage message){
-		Lanes temp = (Lanes)message.getData();
+	public void tapAllInLane(CommandMessage message) {
+		Lanes temp = (Lanes) message.getData();
 		gameController.tapAllInLane(temp);
 	}
-	
+
 	/**
 	 * Untaps all cards in the specified lane passed in as argument
 	 * 
-	 * @param ENUM : Lanes
+	 * @param ENUM
+	 *            : Lanes
 	 */
-	public void untapAllInLane(CommandMessage message){
-		Lanes temp = (Lanes)message.getData();
+	public void untapAllInLane(CommandMessage message) {
+		Lanes temp = (Lanes) message.getData();
 		gameController.untapAllInLane(temp);
 	}
 
+	/**
+	 * Is invoked when the client recives a message to add a card to the
+	 * scarpyards
+	 * 
+	 * @param message
+	 *            A CommandMessage that contations the card to add to the scrap
+	 *            yard
+	 */
 	public void addToScrapYard(CommandMessage message) {
-		// unpacks the message
 		Card card = (Card) message.getData();
 		gameController.updateScarpyard(card);
-		
+
 	}
 
+	/**
+	 * Sets the gameController into attack phase
+	 */
 	public void setAttackPhase() {
 		gameController.doAttackMove();
-		
+
 	}
 
+	/**
+	 * Invokes gameController.update card to update a card with the values from
+	 * a card object stored in the CommandMessage
+	 * 
+	 * @param message
+	 *            A CommandMessage with the card to update
+	 */
 	public void updateCard(CommandMessage message) {
-		Card cardUpdate = (Card)message.getData();
+		Card cardUpdate = (Card) message.getData();
 		gameController.updateCard(cardUpdate);
 	}
 
-
+	/**
+	 * Invokes a method in the gameController to set the friendly hero id to the
+	 * id in the CommandMessage
+	 * 
+	 * @param message
+	 * 		A CommanadMessage contating a integer that represents the hero id
+	 */
 	public void setFriendlyHeroId(CommandMessage message) {
-        // Unpack the message
-        int id = (Integer)message.getData();
+		int id = (Integer) message.getData();
 		gameController.setFriendlyHeroId(id);
 	}
-
+	
+	/**
+	 * Invokes a method in the gameController to set the enemy hero id to the
+	 * id in the CommandMessage
+	 * 
+	 * @param message
+	 * 		A CommanadMessage contating a integer that represents the hero id
+	 */
 	public void setEnemyHeroId(CommandMessage message) {
-        int id = (Integer)message.getData();
-        gameController.setEnemyHeroId(id);
+		int id = (Integer) message.getData();
+		gameController.setEnemyHeroId(id);
 	}
 }
