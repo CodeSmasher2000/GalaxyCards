@@ -92,9 +92,6 @@ public class Client {
 			if(message.getCommand()==Commands.LOGIN_OK ||message.getCommand() == Commands.LOGIN_NOTOK){
 				System.out.println("Login");
 				controller.loginAnswer(message);
-			}else if(message.getCommand()==Commands.GETHERO){
-				System.out.println("GetHero");
-				controller.setHero(message);
 			} else if(message.getCommand() == Commands.MATCHMAKING_MATCH_FOUND) {
 				System.out.println("Match Found");
 				controller.matchFound(message);

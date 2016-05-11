@@ -18,7 +18,7 @@ import move.UpdateHeroValues;
 
 
 /**
- * Klass som innehåller logik för klienten.
+ * Contains the logic for a Client.
  * @author Jonte
  *
  */
@@ -33,12 +33,8 @@ public class ClientController {
 		this.clientGUI=clientGUi;
 	}
 	
-	public void setClient(Client client) {
-		this.client = client;
-		
-	}
 	/**
-	 * Anropar klientens disconnect metod.
+	 * Invokes the disconnect method in the Client class.
 	 */
 	public void disconnect(){
 		client.disconnect();
@@ -48,24 +44,28 @@ public class ClientController {
 	
 	
 	/**
-	 * Metod som låter klienten ansluta till en given server.
+	 * Metod som låter klienten ansluta till en given server
+	 * Creates a client with a specified ip, port and ClientController.
 	 * @param ip
-	 * 			Serverns IP
+	 * 			The IP to a Server.
 	 * @param port
-	 * 			Serverns port
+	 * 			The port to a Server.
 	 */			
 	public void connect(String ip, int port) {
 		client = new Client(ip, port, this);
 
 	}
 	
+	/**
+	 * Invokes the initGame method in GameController.
+	 */
 	public void initGame() {
 		gameController.initGame();
 	}
 	
 	
 	/**
-	 * Metod som låter användaren skriva in användarnamn och skickar det till server.
+	 * Sends the username a Client has typed in to the server and asks to Login.
 	 */
 	public synchronized void login(){
 		activeUser = clientGUI.getUsername();
@@ -74,6 +74,11 @@ public class ClientController {
 	
 	}
 	
+	/**
+	 *  If the username is valid/available it gives feedback to ClientGUI. 
+	 * @param response
+	 * 				 Response from server if valid username.
+	 */
 	public void loginAnswer(CommandMessage response){
 		if(response.getCommand()==Commands.LOGIN_OK){
 			loginOK = true;
@@ -84,40 +89,30 @@ public class ClientController {
 		}
 	}
 	
+	
+	/**
+	 * Invokes the sendMessage method in Client.
+	 * @param message
+	 * 				The message to be sent.
+	 */
 	public void writeMessage(CommandMessage message){
 		client.sendMessage(message);
 	}
-	/**
-	 * Hämtar hero från ett CommandMessage
-	 * @param message
-	 */
-	public void setHero(CommandMessage message){
-		System.out.println("Set hero");
-	}
-	/**
-	 * Metod som frågar servern efter ett Hero-objekt.
-	 */
-	public void askForHero(){
-		System.out.println("Ask for hero");
-		CommandMessage message = new CommandMessage(Commands.GETHERO,activeUser);
-		client.sendMessage(message);
-	}
+	
 	
 	/**
-	 * Sends a message to the server that the client is looking for a game. And
+	 * Sends a message to the server that the client is looking for a game. 
 	*/
 	public void startMatchMaking() {
 		// Logging Message used for debug purpose
 		System.out.println("Client Controller: " + activeUser + " StartMatchmaking()");
-		// Creates a message to send to the server
 		CommandMessage message = new CommandMessage(Commands.MATCHMAKING_START,
 				activeUser);
-		// Sends the message to server
 		client.sendMessage(message);
 	}
 	
 	/**
-	 * The method is called when the client reciesves a message with the command
+	 * The method is called when the client receives a message with the command
 	 * MATCH_PLAYCARD and delegates
 	 * @param message
 	 * 		The message to unpack
