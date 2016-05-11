@@ -26,7 +26,7 @@ public class BoardGUI extends JPanel {
 
 	private BoardGuiController boardController;
 	private JPanel playFieldPanel, playerPanel, playerContainer, opponentPanel, scrapyardPanel, scrapyardPanel2,
-			scrapYardContainer, infoPanel, infoPanel2, middlePanel;
+			infoPanel, infoPanel2, middlePanel;
 	private UnitLanes playerDefensiveLane, playerOffensiveLane, enemyDefensiveLane, enemyOffensiveLane;
 	private HandGUI playerHand;
 	private OpponentHandGUI opponentHand;
@@ -94,7 +94,6 @@ public class BoardGUI extends JPanel {
 		playFieldPanel = new JPanel();
 		scrapyardPanel2 = new JPanel();
 		scrapyardPanel = new JPanel();
-		scrapYardContainer = new JPanel();
 		infoPanel = new JPanel();
 		infoPanel2 = new JPanel();
 		middlePanel = new JPanel();

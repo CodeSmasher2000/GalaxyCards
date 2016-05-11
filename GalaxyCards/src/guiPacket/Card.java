@@ -38,8 +38,6 @@ import cards.Unit;
 // TODO Change the font to look more appealing and perhaps smaller.
 // TODO make the abilitybutton toggle enabled/disabled depending if on hand or
 // board.
-// TODO enlarge() does not work.
-// TODO use ability when button is pressed
 
 public abstract class Card extends JPanel implements Comparable<Card> {
 
@@ -66,9 +64,6 @@ public abstract class Card extends JPanel implements Comparable<Card> {
 
 		cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
 
-//		SwingUtilities.invokeLater(new Runnable() {
-//			@Override
-//			public void run() {
 				initiateLabels();
 				initiateButtons();
 				initiatePanels();
@@ -84,8 +79,6 @@ public abstract class Card extends JPanel implements Comparable<Card> {
 				add(Box.createVerticalStrut(2));
 				add(attributesPanel);
 
-//			}
-//		});
 	}
 
 	private void setToolTips() {
@@ -99,7 +92,6 @@ public abstract class Card extends JPanel implements Comparable<Card> {
 		abilityButton.setIcon(new ImageIcon("files/pictures/ability.jpg"));
 		abilityButton.setOpaque(true);
 		abilityButton.setPreferredSize(new Dimension(15, 15));
-		abilityButton.addActionListener(new AbilityButtonListener());
 	}
 
 	private void initiateLabels() {
@@ -244,7 +236,6 @@ public abstract class Card extends JPanel implements Comparable<Card> {
 	 */
 	public void hasAbility(boolean hasAbility) {
 		abilityButton.setVisible(hasAbility);
-		abilityButton.addMouseListener(new MouseOverButtonListener());
 	}
 
 	/**
@@ -338,18 +329,6 @@ public abstract class Card extends JPanel implements Comparable<Card> {
 		g.drawImage(cardBG1.getImage(), 0, 0, this);
 	}
 
-	// Loads a image from a directory and sets it as background for the main
-	// containter Card klass.
-	// private void setBackground() {
-	// File directory = new File(PICTURE_DIRECTORY + "CardFrontBG.jpg");
-	// cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
-	// try {
-	// cardBG1.setImage(ImageIO.read(directory));
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
 
 	/**
 	 * Shows all the card's attributes by setting its various panels visible.
@@ -366,9 +345,6 @@ public abstract class Card extends JPanel implements Comparable<Card> {
 		abilityArea.repaint();
 		validate();
 		repaint();
-
-		// FUKAR EJ n�r objektet ligger i en JFRame, f�r se om det funkar i en
-		// annan container, när mer av brädans gui är klar.
 	}
 
 	/**
@@ -390,52 +366,6 @@ public abstract class Card extends JPanel implements Comparable<Card> {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	private class AbilityButtonListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			if (event.getSource() == abilityButton) {
-				JOptionPane.showMessageDialog(null, "WIP! abilities funktionalitet implementeras vid sprint 2.");
-				// ability.useAbility();
-			}
-
-		}
-
-	}
-
-	private class MouseOverButtonListener implements MouseListener {
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			abilityButton.setBorder(BorderFactory.createLineBorder(new Color(0, 190, 255), 2));
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			abilityButton.setBorder(null);
-		}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
 	}
 
 	@Override

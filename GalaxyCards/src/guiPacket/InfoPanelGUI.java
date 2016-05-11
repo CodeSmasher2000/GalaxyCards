@@ -20,10 +20,12 @@ import javax.swing.border.Border;
 import testClasses.TestPanel;
 
 /**
- * GUI class that contains events for when a card is hovered over. The last card
- * hovered over will be shown in a panel.
+ * GUI class that draws the rightmost panel on the boardGUI. This class is
+ * responsible for showing a unitcard in its full size when the mouse is over
+ * the unitcard on playboard. This class is also responsible for showing
+ * feedback to the user as text in the textarea.
  * 
- * @author emilsundberg, 13120dde
+ * @author 13120dde
  *
  */
 public class InfoPanelGUI extends JPanel {
@@ -48,9 +50,12 @@ public class InfoPanelGUI extends JPanel {
 
 	private TestPanel testPanel;
 
-	// private static JTextArea textArea = new JTextArea();
 	private static JScrollPane scrollPane = new JScrollPane(editorPane);
 
+	/**Contstuctor takes a boardController as argument.
+	 * 
+	 * @param boardController
+	 */
 	public InfoPanelGUI(BoardGuiController boardController) {
 		this.boardController = boardController;
 		boardController.addInfoPanelListener(this);
@@ -60,18 +65,14 @@ public class InfoPanelGUI extends JPanel {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				customizeCardPanel();
 				customizeEditorPanel();
 				customizeEditorPane();
 
-				// FOR DEBUGGING
-				// showPanelBorders();
 				midEmpty.setOpaque(false);
 				midEmpty.add(testPanel);
 
 				setLayout(new GridLayout(3, 1));
-				// this.setOpaque(false);
 				add(cardPanel2);
 				add(midEmpty);
 				add(twPanel2);
@@ -90,23 +91,8 @@ public class InfoPanelGUI extends JPanel {
 		scrollPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 
-	// Just for debugging
-	private void showPanelBorders() {
-		this.setBorder(BorderFactory.createTitledBorder("MAIN PANEL"));
-
-		cardPanel1.setBorder(BorderFactory.createTitledBorder("CARD PANEL 1"));
-		cardPanel2.setBorder(BorderFactory.createTitledBorder("CARD PANEL 2"));
-		cardContainer.setBorder(BorderFactory.createTitledBorder("CARD CONTAINER"));
-
-		twPanel1.setBorder(BorderFactory.createTitledBorder("TW PANEL 1"));
-		twContainer.setBorder(BorderFactory.createTitledBorder("TW Container"));
-		midEmpty.setBorder(BorderFactory.createTitledBorder("MIDEMPTY"));
-		scrollPane.setBorder(BorderFactory.createTitledBorder("SP"));
-	}
-
 	private void customizeEditorPanel() {
 
-		// JScrollBar bar = scrollPane.getVerticalScrollBar();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		twContainer.setLayout(new BorderLayout());
 		twContainer.add(scrollPane, BorderLayout.CENTER);
@@ -185,11 +171,11 @@ public class InfoPanelGUI extends JPanel {
 	}
 
 	/**
-	 * Appends a set text to the editorPane together with the color of the text
-	 * as an argument in UPPERCASE letters
+	 * Appends a string to the editorPane together with the color string of the text
+	 * as an argument in UPPERCASE letters.
 	 * 
-	 * @param txt
-	 * @param color
+	 * @param txt : String
+	 * @param color : String
 	 */
 	public static synchronized void append(final String txt, String color) {
 		if (color == "RED") {
@@ -213,7 +199,7 @@ public class InfoPanelGUI extends JPanel {
 	/**
 	 * Appends text to the editorpane, previous rows are not removed.
 	 * 
-	 * @param txt
+	 * @param txt : String
 	 * 
 	 */
 	public static synchronized void append(final String txt) {

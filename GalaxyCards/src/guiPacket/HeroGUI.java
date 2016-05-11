@@ -22,10 +22,6 @@ import enumMessage.Persons;
  *
  */
 
-// TODO Refactor: Break all comminication with Hero class and add a
-// BoadGuiController to constructor. All communication should be managed with
-// BoardGuiContorller.
-
 public class HeroGUI extends JPanel {
 	private final String PICTURE_DIRECTORY = "files/pictures/";
 	private JLabel imageLabel;
@@ -39,10 +35,15 @@ public class HeroGUI extends JPanel {
 	private Border b1;
 	private Border b2;
 
+	/**
+	 * Constructor that takes a BoardGuiController and Persons enum as arguments. The Persons can either be PLAYER or OPPONENT.
+	 * 
+	 * @param boardController : BoardGuiController
+	 * @param ENUM : Persons
+	 */
 	public HeroGUI(BoardGuiController boardController, Persons ENUM) {
 		this.boardController = boardController;
 		this.ENUM = ENUM;
-
 		this.boardController.addHeroListener(this, ENUM);
 
 		String heroName = boardController.getHeroName();
@@ -163,11 +164,18 @@ public class HeroGUI extends JPanel {
 		shieldBar.setString(newValue + " / " + "10");
 	}
 
+	/**returns a string representation of this object and it's data.
+	 * 
+	 */
 	public String toString() {
 		return (ENUM + " Hero life: " + lifeBar.getValue() + ", energy shield: " + shieldBar.getValue()
 				+ ", resources: " + resourceBar.getValue() + "/" + resourceBar.getMaximum());
 	}
 
+	/**
+	 * 
+	 * @param id
+	 */
 	public void setId(int id) {
         this.id = id;
         InfoPanelGUI.append("Hjälte id satt till: " + this.getId());

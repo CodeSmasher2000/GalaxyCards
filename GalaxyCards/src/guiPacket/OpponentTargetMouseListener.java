@@ -11,16 +11,28 @@ import cards.Unit;
 import enumMessage.Lanes;
 import enumMessage.Phase;
 
+/**
+ * A mouselistener class that is added to the units, heroic support and hero gui
+ * that are placed on board and belong to the opponent.
+ * 
+ * @author 13120dde
+ *
+ */
 public class OpponentTargetMouseListener implements MouseListener {
 
-	// private HeroGUI hero;
 	private Card card;
 	private HeroGUI heroGui;
-	private Border heroDefaultBorder, cardDefaultBorder;
+	private Border cardDefaultBorder;
 	private Border highlightB = BorderFactory.createLineBorder(CustomGui.opponentColor, 3, true);
 
 	private BoardGuiController boardController;
 
+	/**
+	 * The constructor takes a BoardGuiController object as argument.
+	 * 
+	 * @param boardController
+	 *            : BoardGuiController
+	 */
 	public OpponentTargetMouseListener(BoardGuiController boardController) {
 		this.boardController = boardController;
 	}
@@ -39,11 +51,6 @@ public class OpponentTargetMouseListener implements MouseListener {
 				boardController.updateInfoPanelCard((Unit) card);
 			}
 		}
-		if (event.getSource() instanceof HeroGUI) {
-			heroGui = (HeroGUI)event.getSource();
-//			heroDefaultBorder = heroGui.getBorder();
-//			heroGui.setBorder(highlightB);
-		}
 	}
 
 	@Override
@@ -51,13 +58,17 @@ public class OpponentTargetMouseListener implements MouseListener {
 		if(event.getSource() instanceof Card){
 			card.setBorder(cardDefaultBorder);
 		}
-		if(event.getSource() instanceof HeroGUI){
-//			heroGui.setBorder(heroDefaultBorder);
-		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent event) {
+		
+		/*
+		 * Different mouseinteraction avaible depending on which phase the
+		 * client is in. The possible phases are DEFENDING, ATTACKING, IDLE.
+		 * Different mouseinteraction avaible for each object. 
+		 * 
+		 */
 		if(boardController.getPhase()==Phase.DEFENDING){
 			if(boardController.getDefendThreadStarted()){
 				if(event.getSource() instanceof Unit && (((Unit)event.getSource()).getLaneEnum()==Lanes.ENEMY_OFFENSIVE)){

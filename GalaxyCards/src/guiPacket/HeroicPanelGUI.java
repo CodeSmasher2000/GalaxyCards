@@ -28,13 +28,8 @@ import exceptionsPacket.GuiContainerException;
  * @author 13120dde
  *
  */
-
-// TODO for feedback, add a object to the layeredPanes second layer when
-// feedback is done, remove the layer.
-// TODO draw a cool background image for this pane maybe?
 public class HeroicPanelGUI extends JPanel {
 
-	// LayeredPanes hold the objects b/c feedback will be drawn over them
 	private JLayeredPane heroicPane1, heroicPane2;
 	private HeroicSupport[] heroicUnits = new HeroicSupport[2];
 	private BoardGuiController boardController;
@@ -101,7 +96,6 @@ public class HeroicPanelGUI extends JPanel {
 	 * @throws GuiContainerException
 	 */
 	protected void addHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
-//		boolean okToPlace = false;
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
@@ -120,7 +114,6 @@ public class HeroicPanelGUI extends JPanel {
 						if (ENUM == Persons.OPPONENT) {
 							heroicUnits[i].addMouseListener(opponentListener);
 						}
-//						okToPlace = true;
 						if (i == 0) {
 							heroicPane1.add(heroicUnits[i], new Integer(0));
 							heroicPane1.setBorder(null);
@@ -137,13 +130,6 @@ public class HeroicPanelGUI extends JPanel {
 				}
 			}
 		});
-
-		
-
-//		if (!okToPlace) {
-//			throw new GuiContainerException("You can only have 2 Heroic Support cards in play");
-//		}
-//		return okToPlace;
 	}
 
 	/**

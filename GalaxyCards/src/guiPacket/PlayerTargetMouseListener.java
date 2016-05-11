@@ -11,25 +11,32 @@ import cards.Unit;
 import enumMessage.Lanes;
 import enumMessage.Phase;
 
+/**
+ * A mouselistener class that is added to the units, heroic support and hero gui
+ * that are placed on board and belong to the player.
+ * 
+ * @author 13120dde
+ *
+ */
 public class PlayerTargetMouseListener implements MouseListener {
 	private Card card;
 	private HeroGUI heroGui;
-	private Border cardDefaultBorder, heroDefaultBorder;
+	private Border cardDefaultBorder;
 	private Border highlightB = BorderFactory.createLineBorder(CustomGui.playerColor, 3, true);
 	private BoardGuiController boardController;
 
+	/**
+	 * The constructor takes a BoardGuiController object as argument.
+	 * 
+	 * @param boardController
+	 *            : BoardGuiController
+	 */
 	public PlayerTargetMouseListener(BoardGuiController boardController) {
 		this.boardController = boardController;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-
-		// card = (Card) event.getSource();
-		// if(card instanceof Unit) {
-		// boardController.startAttackThreadListner();
-		// boardController.setAttacker(card);
-		// }
 	}
 
 	@Override
@@ -43,12 +50,6 @@ public class PlayerTargetMouseListener implements MouseListener {
 				boardController.updateInfoPanelCard((Unit) card);
 			}
 		}
-		if (event.getSource() instanceof HeroGUI) {
-			heroGui = (HeroGUI) event.getSource();
-			// heroDefaultBorder=heroGui.getBorder();
-			// heroGui.setBorder(highlightB);
-		}
-
 	}
 
 	@Override
@@ -56,15 +57,17 @@ public class PlayerTargetMouseListener implements MouseListener {
 		if (event.getSource() instanceof Card) {
 			card.setBorder(cardDefaultBorder);
 		}
-		if (event.getSource() instanceof HeroGUI) {
-			// heroGui.setBorder(heroDefaultBorder);
-		}
-
 	}
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-
+		/*
+		 * Different mouseinteraction avaible depending on which phase the
+		 * client is in. The possible phases are DEFENDING, ATTACKING, IDLE.
+		 * Different mouseinteraction avaible for each object. Units will
+		 * attack, heroic support use ability etc.
+		 * 
+		 */
 		if (boardController.getPhase() == Phase.DEFENDING) {
 			if (event.getSource() instanceof Unit) {
 				card = (Unit) event.getSource();
@@ -95,13 +98,13 @@ public class PlayerTargetMouseListener implements MouseListener {
 				card = (Card) event.getSource();
 				if (card instanceof Unit) {
 					if (((Unit) card).getLaneEnum() == Lanes.PLAYER_OFFENSIVE) {
-						if (((Unit) card).getTap()==false) {
+						if (((Unit) card).getTap() == false) {
 							boardController.startAttackThreadListner();
 							boardController.setAttacker(card);
 						} else {
 							InfoPanelGUI.append("The card is tapped, can't attack.");
 						}
-					}else{
+					} else {
 						InfoPanelGUI.append("Invalid move: can't attack with units in defensive lane");
 					}
 				}
@@ -113,13 +116,13 @@ public class PlayerTargetMouseListener implements MouseListener {
 					}
 				}
 			}
-			
+
 			if (event.getSource() instanceof HeroGUI) {
 				InfoPanelGUI.append(heroGui.toString());
 			}
 		}
-		
-		if(boardController.getPhase()==Phase.IDLE){
+
+		if (boardController.getPhase() == Phase.IDLE) {
 			InfoPanelGUI.append(event.getSource().toString());
 		}
 	}
