@@ -3,7 +3,6 @@ package guiPacket;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import abilities.Ability;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
@@ -187,7 +186,7 @@ public class BoardGuiController {
 		opponentHandGui.playCard();
 	}
 
-	public void opponentPlaysAbility(Ability ability) {
+	public void opponentPlaysAbility() {
 		// TODO
 	}
 

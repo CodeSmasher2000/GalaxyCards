@@ -21,7 +21,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-import abilities.Ability;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
@@ -56,7 +55,7 @@ public abstract class Card extends JPanel implements Comparable<Card> {
 	private Border border;
 	private JButton abilityButton;
 	private JTextArea abilityArea;
-	private Ability ability = null;
+//	private Ability ability = null;
 	private int id;
 
 	private final String PICTURE_DIRECTORY = "files/pictures/";
@@ -382,8 +381,7 @@ public abstract class Card extends JPanel implements Comparable<Card> {
 		abilityArea.setVisible(false);
 	}
 
-	public void setAbility(Ability ability) {
-		this.ability = ability;
+	public void setAbility() {
 	}
 
 	public int getId() {

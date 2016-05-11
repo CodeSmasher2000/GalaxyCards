@@ -8,7 +8,7 @@ import guiPacket.Card;
 
 /**
  * 
- * @author 13120dde
+ * @author 13120dde, Patrik Larsson
  *
  */
 public class HeroicSupport extends Card implements PlayCardsInterface, Serializable, Target {
@@ -156,17 +156,6 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		super.setDefense(this.defense);
 	}
 
-	// /**
-	// * Returns a String with the description of this card.
-	// *
-	// * @return : String
-	// */
-	// public String toString() {
-	// return NAME + " - [HeroicSupport] Rarity: " + RARITY + ", image name: " +
-	// IMAGE_NAME + ", Defense: " + defense
-	// + ", Price: " + price + ", Has ability:" + hasAbility;
-	// }
-
 	/**
 	 * Returns a String with the description of this card.
 	 * 
@@ -174,15 +163,15 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 */
 	public String toString() {
 		return NAME + " - [Heroic Support]: " + "0/" + defense + " Tapped: "+getTap();
-
 	}
-
+	
+	/**
+	 * Returns the hp that the card had when it was instanciated
+	 * @return
+	 * 		The defense the card had when it was created
+	 */
 	public int getMaxHp() {
 		return maxHp;
-	}
-
-	public void setMaxHp(int maxHp) {
-		this.maxHp = maxHp;
 	}
 
 	/**
@@ -204,11 +193,6 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 */
 	public Lanes getLanesEnum() {
 		return ENUM;
-	}
-	
-	public void updateHp(int currentHp) {
-		this.defense = currentHp;
-		super.setDefense(currentHp);
 	}
 	
 	@Override
