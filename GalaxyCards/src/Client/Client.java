@@ -24,7 +24,17 @@ public class Client {
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	private Listener listener;
+	
 
+	/**
+	 * Constructor which sets the clientController, creates the streams and starts the Listener thread.
+	 * @param ip
+	 * 			The IP to the server.
+	 * @param port
+	 * 			The port to the server.
+	 * @param clientController
+	 * 			The ClientController to control this client.
+	 */
 	public Client(String ip, int port, ClientController clientController) {
 		try {
 			this.controller = clientController;
@@ -41,7 +51,7 @@ public class Client {
 	}
 
 	/**
-	 *Metod som avbryter Listener-tråden och stänger klientens socket.
+	 * Disconnects the client from the server.
 	 */
 	public void disconnect(){
 		try{
@@ -51,22 +61,14 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-
-	public CommandMessage readMessage() {
-		try {
-			CommandMessage respone =  (CommandMessage)ois.readObject();
-			return respone;
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+	
+	
 
 
 	/**
-	 * Skickar CommandMessages
+	 * Sends CommandMessages
 	 * @param cmdMessage
-	 * 			Meddelande som ska skickas
+	 * 			Message to be sent.
 	 */
 	public void sendMessage(CommandMessage cmdMessage){
 		try {
@@ -80,8 +82,8 @@ public class Client {
 	}
 
 	/**
-	 * Metod som lyssnar efter CommandMessage från servern. Beroende på vilket command som finns
-	 *  i meddelandet anropas olika metoder.
+	 *  Listens for CommandMessage from the server.If/else if determines what to do
+	 *   depending on which command has been sent .
 	 */
 	public void listenForMessage(){
 		try {
@@ -151,13 +153,10 @@ public class Client {
 		}
 	}
 
-//	public void setClientController(ClientController controller) {
-//		this.controller = controller;
-//		controller.setClient(this);
-//	}
+
 
 	/**
-	 * Klass som ärver Thread. Låter klienten logga in och lyssnar sedan efter meddelanden från servern.
+	 * Class that extends a thread which is used for listening for messages from the server.
 	 * @author Jonte
 	 *
 	 */
