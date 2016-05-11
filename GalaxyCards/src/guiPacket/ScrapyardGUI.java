@@ -87,7 +87,6 @@ public class ScrapyardGUI extends JPanel {
 		layeredPane.setOpaque(false);
 		layeredPane.setLayout(null);
 		layeredPane.setPreferredSize(new Dimension(160, 450));
-		// layeredPane.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 
 	}
 
@@ -123,9 +122,6 @@ public class ScrapyardGUI extends JPanel {
 	private void removeCard() {
 
 		buffer[0] = null;
-		// for (int i =1; i<buffer.length;i++){
-		// buffer[i-1]=buffer[i];
-		// }
 		Card[] tempCards = new Card[5];
 		tempCards = buffer;
 		buffer = null;

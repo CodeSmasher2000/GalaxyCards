@@ -107,18 +107,6 @@ public class UnitLanes extends JPanel {
 	}
 
 	/**
-	 * Set border for every layeredPane in this container.
-	 * 
-	 * @param border
-	 *            : Border
-	 */
-	public void setElementBorder(Border border) {
-		for (int i = 0; i < nbrOfElements; i++) {
-			layerArray[i].setBorder(border);
-		}
-	}
-
-	/**
 	 * Attempts to place a Unit object passed in as argument in this container.
 	 * If there is no space to place the object a exception is thrown.
 	 * 
@@ -154,8 +142,6 @@ public class UnitLanes extends JPanel {
 						break;
 					}
 				}
-				// TODO Auto-generated method stub
-
 			}
 		});
 	}
