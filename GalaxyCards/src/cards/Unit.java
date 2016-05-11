@@ -2,7 +2,6 @@ package cards;
 
 import java.io.Serializable;
 
-import abilities.Ability;
 import enumMessage.Lanes;
 import guiPacket.Card;
 
