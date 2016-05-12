@@ -165,44 +165,86 @@ public class ClientController {
 		gameController.startNewGame();
 	}
 
+	/**
+	 * Invokes the updateOpponentHero() in gameController. 
+	 * @param message
+	 * 				Message containing data to updateOpponentHero.
+	 */
 	public void opponentValuesChanged(CommandMessage message) {
 		gameController.updateOpponentHero(message);
 		System.out.println("Clientcontroller hero values...");
 	}
-
+	
+	/**
+	 * Invokes method opponentDrawCard() in gameController.
+	 */
 	public void opponentDrawCard() {
 		gameController.opponentDrawCard();
 	}
-
+	
+	/**
+	 * Invokes method setPhase() in gameController.
+	 * @param phase
+	 * 			The phase to set.
+	 */
 	public void setPhase(Phase phase) {
 		gameController.setPhase(phase);
 	}
-
+	
+	/**
+	 * Invokes method notValidMove(Exception) in gameController.
+	 * @param message
+	 * 				Message containing the Exception to be cast.
+	 */
 	public void notValidMove(CommandMessage message) {
 		gameController.notValidMove((Exception) message.getData());
 	}
-
+	
+	/**
+	 * Invokes method drawCardOk(card) in gameController.
+	 * @param message
+	 * 				Message containing a card.
+	 * 
+	 */
 	public void friendlyDrawCard(CommandMessage message) {
 		gameController.drawCardOk((Card) message.getData());
 	}
-
+	
+	/**
+	 * Invokes the method discardCard(Card) in gameController.
+	 * @param message
+	 * 				Message containing a card to be removed.
+	 */
 	public void discardCard(CommandMessage message) {
 		gameController.discardCard((Card) message.getData());
 
 	}
-
+	
+	/**
+	 * Invokes method updateOpponentScrapyard(card)in gameController.
+	 * @param message
+	 */
 	public void addToOpponentScrapYard(CommandMessage message) {
 		gameController.updateOpponentScrapYard((Card) message.getData());
 
 	}
-
+	
+	/**
+	 * Invokes method updatePlayerHeroGui with data from CommandMessage.
+	 * @param message
+	 * 				Conatins data to update the values.
+	 */
 	public void playerHeroValuesChanged(CommandMessage message) {
 		UpdateHeroValues values = (UpdateHeroValues) message.getData();
 		gameController.updatePlayerHeroGui(values.getLife(), values.getEnergyShield(), values.getCurrentResource(),
 				values.getMaxResource());
 
 	}
-
+	/**
+	 * Invokes method tapCard(id,Enum) in gameController.
+	 * @param message
+	 * 				Contains the id and Enum for the card.
+	 */
 	public void tapCard(CommandMessage message) {
 		TapUntapCard temp = (TapUntapCard) message.getData();
 		gameController.tapCard(temp.getId(), temp.getENUM());
@@ -219,7 +261,12 @@ public class ClientController {
 		Attack attack = (Attack) message.getData();
 		gameController.doDefendMove(attack);
 	}
-
+	
+	/**
+	 * Invokes method untapCard(id,ENUM) in gameController.
+	 * @param message
+	 * 				Contains the ID and ENUM for the card to be untapped.
+	 */
 	public void untapCard(CommandMessage message) {
 		TapUntapCard temp = (TapUntapCard) message.getData();
 		gameController.untapCard(temp.getId(), temp.getENUM());
