@@ -155,7 +155,7 @@ public class HandGUI extends JPanel {
 					InfoPanelGUI.append("You can only have 8 cards on hand. A random card was thrown to scrapyard");
 				}
 				cards[cardsOnHand] = card;
-				boardController.addCardToHand(card);
+//				boardController.addCardToHand(card);
 				card.setBounds(horizontalPosition, 10, card.getPreferredSize().width, card.getPreferredSize().height);
 				card.addMouseListener(listener);
 				layeredPane.add(card, new Integer(cardsOnHand));

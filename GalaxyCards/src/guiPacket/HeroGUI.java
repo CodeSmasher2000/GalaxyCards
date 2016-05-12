@@ -46,9 +46,7 @@ public class HeroGUI extends JPanel {
 		this.ENUM = ENUM;
 		this.boardController.addHeroListener(this, ENUM);
 
-		String heroName = boardController.getHeroName();
 		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
-		b2 = BorderFactory.createTitledBorder(null, heroName, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
 
 		SwingUtilities.invokeLater(new Runnable() {
 
