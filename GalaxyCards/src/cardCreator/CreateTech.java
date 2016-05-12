@@ -1,6 +1,7 @@
 package cardCreator;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,44 +23,49 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class CreateTech extends JPanel {
 	private JPanel gridTech = new JPanel();
-
+	private JPanel flowAbility = new JPanel();
 	private JTextField tfCardName = new JTextField();
 	private JTextField tfPrice = new JTextField();
 	private JTextField tfNbrOfCards = new JTextField();
 	private JTextField tfRarity = new JTextField();
-	private JTextArea tfDescription = new JTextArea();
+	
 	private JFileChooser jFileChooser = new JFileChooser();
 	private JButton btnChoosePic = new JButton("Choose Picture");
 	private JLabel lblCardName = new JLabel("Card Name: ");
 	private JLabel lblPrice = new JLabel("Price: ");
 	private JLabel lblRarity = new JLabel("Common/Rare/Legendary");
 	private JLabel lblNbrOfCards = new JLabel("Number of Cards: ");
-	private JLabel lblDescription = new JLabel("Description");
 	
+	private AbilityPanel abilityPanel = new AbilityPanel();
 	private String imageName = null;
 	
 	/**
 	 * adds all the components to the panel and then to the main panel.
 	 */
 	public CreateTech(){
+		setPreferredSize(new Dimension(800,600));
+		setLayout(new FlowLayout());
+		initGrid();
+		add(gridTech);
+		add(abilityPanel);
+	}
+	
+	public void initGrid(){
 		gridTech.setLayout(new GridLayout(6,2));
-		gridTech.setPreferredSize(new Dimension(400,600));
+		gridTech.setPreferredSize(new Dimension(400,300));
 		gridTech.add(lblCardName);
 		gridTech.add(tfCardName);
 		gridTech.add(lblPrice);
 		gridTech.add(tfPrice);
 		gridTech.add(lblRarity);
 		gridTech.add(tfRarity);
-		gridTech.add(lblDescription);
-		gridTech.add(tfDescription);
 		gridTech.add(lblNbrOfCards);
 		gridTech.add(tfNbrOfCards);
+		gridTech.add(abilityPanel);
 		
 		ButtonListener btnListener = new ButtonListener();
 		btnChoosePic.addActionListener(btnListener);
 		gridTech.add(btnChoosePic);
-		
-		add(gridTech);
 	}
 	
 	public int getPrice() {
@@ -73,7 +79,11 @@ public class CreateTech extends JPanel {
 	}
 	
 	public String getDescription() {
-		return tfDescription.getText();
+		return abilityPanel.getDescription();
+	}
+	
+	public String getValue(){
+		return abilityPanel.getValue();
 	}
 
 	public String getRarity() {
@@ -85,6 +95,7 @@ public class CreateTech extends JPanel {
 		// TODO Auto-generated method stub
 		return imageName;
 	}
+	
 	public void setImageName(String name){
 		this.imageName=name;
 	}
@@ -102,7 +113,11 @@ public class CreateTech extends JPanel {
 	}
 	
 	public void setDescription(String description){
-		tfDescription.setText(description);
+		abilityPanel.setDescription(description);
+	}
+	
+	public void setValue(int value){
+		abilityPanel.setValue(value);
 	}
 	
 	private class ButtonListener implements ActionListener{

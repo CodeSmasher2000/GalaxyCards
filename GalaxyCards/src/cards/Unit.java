@@ -17,7 +17,6 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	private final String NAME, RARITY, IMAGE_NAME;
 	private boolean hasAbility;
 	private boolean tapped = true;
-	private String abilityText;
 	private int maxHp;
 	private int id;
 	private Lanes ENUM;
@@ -44,7 +43,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	 * @param price
 	 *            : int
 	 */
-	public Unit(String name, String rarity, String imageName, boolean hasAbility, int attack, int defense, int price) {
+	public Unit(String name, String rarity, String imageName, int attack, int defense, int price) {
 		NAME = name;
 		RARITY = rarity;
 		IMAGE_NAME = imageName;
