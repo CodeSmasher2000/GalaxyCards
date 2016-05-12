@@ -2,8 +2,8 @@ package cards;
 
 import java.io.Serializable;
 
+import abilities.Ability;
 import enumMessage.Lanes;
-import enumMessage.Persons;
 import guiPacket.Card;
 
 /**
@@ -24,6 +24,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	private boolean tapped = true;
 	private int maxHp;
 	private Lanes ENUM;
+	private Ability ability;
 
 	/**
 	 * Constructor instantiates this card with given arguments to configure its
@@ -46,8 +47,9 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 *            : int
 	 * @param PRICE
 	 *            : int
+	 * @param ability : Ability           
 	 */
-	public HeroicSupport(String name, String rarity, String imageName, boolean hasAbility, int price, int defense) {
+	public HeroicSupport(String name, String rarity, String imageName, boolean hasAbility, int price, int defense, Ability ability) {
 		NAME = name;
 		RARITY = rarity;
 		IMAGE_NAME = imageName;
@@ -62,6 +64,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 		setPrice(this.PRICE);
 		super.setDefense(this.defense);
 		this.maxHp = defense;
+		this.ability=ability;
 	}
 
 	/**
@@ -78,6 +81,14 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 */
 	public void untap() {
 		tapped = false;
+	}
+	
+	/**Returns the ability object associated with this card.
+	 * 
+	 * @return ability : Ability
+	 */
+	public Ability getAbility(){
+		return ability;
 	}
 
 	/**
