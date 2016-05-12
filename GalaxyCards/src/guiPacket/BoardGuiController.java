@@ -299,29 +299,6 @@ public class BoardGuiController {
 
 	}
 
-	// ***MESSAGES SENT TO THE SYSTEM**************************************
-	// *** Methods in this section are called upon from the GUI elements***
-	// *** to update various gui elements. ***
-	// ********************************************************************
-
-	protected void addCardToHand(Card card) {
-		// controller.addCardToHand(card);
-	}
-
-	protected void clearHand() {
-		// controller.clearHand();
-	}
-
-	protected void getCardType(Card playCard) {
-		// TODO Auto-generated method stub
-
-	}
-
-	protected String getHeroName() {
-		// TODO Auto-generated method stub
-		// TODO get the hero name from the Hero class.
-		return null;
-	}
 
 	// ***MESSAGES SENT BETWEEN GUIELEMENTS************************************
 	// *** Methods in this section are called upon from the GUI elements ***
@@ -338,7 +315,6 @@ public class BoardGuiController {
 	 * @throws ResourcePlayedException
 	 * @throws InsufficientResourcesException
 	 */
-	// TODO Diskutera visbility
 	public void playCard(Card card) throws GuiContainerException, NoLaneSelectedException, ResourcePlayedException,
 			InsufficientResourcesException {
 		if (card instanceof ResourceCard) {
@@ -427,9 +403,6 @@ public class BoardGuiController {
 		infoPanel.showCard(cardToShow);
 	}
 
-	// protected int getAvaibleResources() {
-	// return gameController.getAvaibleResources();
-	// }
 
 	// ***PRIVATE METHODS******************************************************
 	// *** Methods in this section are called within this class
@@ -465,17 +438,7 @@ public class BoardGuiController {
 	}
 
 	public void playUnitCard(Unit cardToPlay) throws GuiContainerException {
-		// cardToPlay = (Unit) cloneCard(cardToPlay);
-		// System.out.println(Thread.currentThread());
-		// cardToPlay.shrink();
-		// if (tempLane.getLaneType() == Lanes.PLAYER_DEFENSIVE) {
-		// playerDefLane.addUnit(cardToPlay);
-		// }
-		// if (tempLane.getLaneType() == Lanes.PLAYER_OFFENSIVE) {
-		// playerOffLane.addUnit(cardToPlay);
-		// }
 		gameController.playUnit(cardToPlay, tempLane.getLaneType());
-
 	}
 
 	public void addUnitCard(Unit UnitCardToAdd, Lanes lane) {
@@ -508,7 +471,6 @@ public class BoardGuiController {
 	private void setSelectedLane()
 			throws GuiContainerException, InsufficientResourcesException, ResourcePlayedException {
 
-		// playerHandGui.removeCard(tempUnit);
 		laneSelected = true;
 		playUnitCard(tempUnit);
 	}
