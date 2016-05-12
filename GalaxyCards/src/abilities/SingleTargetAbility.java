@@ -1,7 +1,6 @@
 package abilities;
 
 import cards.Target;
-import enumMessage.Lanes;
 
 /**
  * This class represent a single target ability that needs a target. This class
