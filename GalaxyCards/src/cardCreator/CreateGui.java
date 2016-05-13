@@ -23,6 +23,7 @@ public class CreateGui extends JPanel {
 	private CreateResource createResource = new CreateResource();
 	private CreateTech createTech = new CreateTech();
 	private CreateHeroic createHeroic = new CreateHeroic();
+	private AbilityPanel createAbility = new AbilityPanel();
 	private CardPane previewPanel;
 	private DeckPanel deckPanel;
 	
@@ -61,13 +62,14 @@ public class CreateGui extends JPanel {
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Create Heroic");
 			controller.addHeroicSupportCard(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
-					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense(), createHeroic.getDescription());
+					createHeroic.getPrice(), createHeroic.getDefense(),createHeroic.getDescription(),createAbility.createAbility());
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
 			System.out.println("Create Resource");
 			controller.addResoruceCard(createResource.getAmtOfCards());
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Create Tech");
-			controller.addTechCard(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice(),createTech.getDescription());
+			controller.addTechCard(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice(),
+					createTech.getDescription(),createAbility.createAbility());
 		}
 	}
 	
@@ -85,7 +87,7 @@ public class CreateGui extends JPanel {
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Preview Heroic");
 			HeroicSupport card = new HeroicSupport(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName()
-					, createHeroic.getPrice(), createHeroic.getDefense());
+					, createHeroic.getPrice(), createHeroic.getDefense(),createAbility.createAbility());
 			card.setAbilityText(createHeroic.getDescription());
 			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
@@ -94,7 +96,8 @@ public class CreateGui extends JPanel {
 			previewPanel.setCard(card);
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Preview Tech");
-			Tech card = new Tech(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice());
+			Tech card = new Tech(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice(),
+					createAbility.createAbility());
 			card.setAbilityText(createTech.getDescription());
 			previewPanel.setCard(card);
 		}

@@ -4,9 +4,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -16,13 +18,13 @@ import javax.swing.JTextField;
 import abilities.Ability;
 import abilities.DrawCardAbility;
 import abilities.SingleTargetAbility;
+import abilities.TapTargetAbility;
+import abilities.UntapTargetAbility;
 
 public class AbilityPanel extends JPanel{
-	private JRadioButton rbHealDmg = new JRadioButton("Heal/Damage");
-	private JRadioButton rbDrawCard = new JRadioButton("Draw Card");
-	private JRadioButton rbTap = new JRadioButton("Tap/untap");
-	private Dimension rbSize = new Dimension(100,20);
+	private JComboBox<String> cbAbility = new JComboBox<String>();
 	private JLabel lblTf = new JLabel("Value");
+	private JLabel lblAbility = new JLabel("Choose ability: ");
 	private JTextField tfValue = new JTextField();
 	private JTextArea taDescription = new JTextArea();
 	private JLabel lblDescription = new JLabel("Description");
@@ -32,51 +34,63 @@ public class AbilityPanel extends JPanel{
 		setLayout(new FlowLayout());
 		initElems();
 		ButtonListener btnListener = new ButtonListener();
-		rbDrawCard.addActionListener(btnListener);
-		rbHealDmg.addActionListener(btnListener);
-		rbTap.addActionListener(btnListener);
-		tfValue.addActionListener(btnListener);
+		cbAbility.addItemListener(btnListener);
 		
 	}
 	
 	public void initElems(){
 		lblTf.setPreferredSize(new Dimension(320,10));
 		lblDescription.setPreferredSize(new Dimension(320,10));
+		lblAbility.setPreferredSize(new Dimension(320,10));
 		tfValue.setPreferredSize(new Dimension(320,20));
 		taDescription.setPreferredSize(new Dimension(320,120));
-		rbDrawCard.setPreferredSize(rbSize);
-		rbHealDmg.setPreferredSize(rbSize);
-		rbTap.setPreferredSize(rbSize);
-		ButtonGroup group = new ButtonGroup();
-		group.add(rbHealDmg);
-		group.add(rbDrawCard);
-		group.add(rbTap);
-		add(rbHealDmg);
-		add(rbDrawCard);
-		add(rbTap);
+		add(lblAbility);
+		add(cbAbility);
 		add(lblTf);
 		add(tfValue);
 		add(lblDescription);
 		add(taDescription);
 	}
 	
-	public Ability createAbility(){
-		if(rbHealDmg.isSelected()){
-			return createHealdmg();
-		}else if(rbDrawCard.isSelected()){
-			return createDrawCard();
-		}else if(rbTap.isSelected()){
-			return createTap();
-		}
+	public void initComboBox(){
+		String healdmg = "Heal/dmg";
+		String drawCard = "Draw Card";
+		String tapTarget = "Tap Target";
+		String untapTarget = "Untap Target";
+		String buff = "Buff";
+		cbAbility.setPreferredSize(new Dimension(320,20));
+		cbAbility.addItem(healdmg);
+		cbAbility.addItem(drawCard);
+		cbAbility.addItem(tapTarget);
+		cbAbility.addItem(untapTarget);
+		cbAbility.addItem(buff);
 	}
 	
-	private Ability createTap() {
-		
+	public Ability createAbility(){
+		if(cbAbility.getSelectedItem().equals("Heal/dmg")){
+			return createHealdmg();
+		}else if(cbAbility.getSelectedItem().equals("Draw Card")){
+			return createDrawCard();
+		}else if(cbAbility.getSelectedItem().equals("Tap Target")){
+			return createTapTarget();
+		}else if (cbAbility.getSelectedItem().equals("Untap Target")){
+			return createUntapTarget();
+		}
 		return null;
+	}
+	
+	private Ability createUntapTarget() {
+		UntapTargetAbility untap = new UntapTargetAbility(getDescription());
+		return untap;
+	}
+
+	private Ability createTapTarget() {
+		TapTargetAbility tap = new TapTargetAbility(getDescription());
+		return tap;
 	}
 
 	private DrawCardAbility createDrawCard() {
-		DrawCardAbility drawCard = new DrawCardAbility(getDescription());
+		DrawCardAbility drawCard = new DrawCardAbility(getDescription(),getValue());
 		return drawCard;
 	}
 
@@ -106,23 +120,15 @@ public class AbilityPanel extends JPanel{
 		
 	}
 	
-	private class ButtonListener implements ActionListener{
+	private class ButtonListener implements ItemListener{
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			if(e.getSource()==rbHealDmg){
-				tfValue.setEnabled(true);
-				tfValue.setText("Heal= -value, Damage = +value");
-			}else if(e.getSource()==rbDrawCard){
-				tfValue.setEnabled(true);
-				tfValue.setText("Value = amount of cards");
-			}else if(e.getSource()==rbTap){
-				tfValue.setEnabled(false);
-			}else if(e.getSource() == tfValue){
-				tfValue.setText(" ");
-			}
+		public void itemStateChanged(ItemEvent e) {
+			
 			
 		}
+
+		
 		
 	}
 

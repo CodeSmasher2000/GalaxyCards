@@ -20,7 +20,6 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	private int defense;
 	private final int PRICE;
 	private final String NAME, RARITY, IMAGE_NAME;
-	private boolean hasAbility;
 	private boolean tapped = true;
 	private int maxHp;
 	private Lanes ENUM;
@@ -49,18 +48,16 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 *            : int
 	 * @param ability : Ability           
 	 */
-	public HeroicSupport(String name, String rarity, String imageName, boolean hasAbility, int price, int defense, Ability ability) {
+	public HeroicSupport(String name, String rarity, String imageName, int price, int defense, Ability ability) {
 		NAME = name;
 		RARITY = rarity;
 		IMAGE_NAME = imageName;
-		this.hasAbility = hasAbility;
 		this.PRICE = price;
 		this.defense = defense;
 		setType(this);
 		setName(NAME);
 		setRarity(RARITY);
 		setImage(IMAGE_NAME);
-		hasAbility(this.hasAbility);
 		setPrice(this.PRICE);
 		super.setDefense(this.defense);
 		this.maxHp = defense;
@@ -132,9 +129,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 * 
 	 * @return :boolean
 	 */
-	public boolean hasAbility() {
-		return hasAbility;
-	}
+	
 
 	public void setAbilityText(String description) {
 		super.setAbilityText(description);
