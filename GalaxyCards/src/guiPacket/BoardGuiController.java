@@ -798,9 +798,10 @@ public class BoardGuiController {
 
 		public void setDefender(Object defender) {
 			this.defender = defender;
-			attacker.tap();
 			setTargetSelected(true);
 			InfoPanelGUI.append(attacker.toString()+" attacks "+defender.toString());
+			InfoPanelGUI.append("Commit move or choose more units to attack with.");
+			tapCard(attacker.getId(), attacker.getLaneEnum());
 		}
 
 		@Override
@@ -829,19 +830,25 @@ public class BoardGuiController {
 
 	private class DefendThreadListener extends Thread {
 		private Unit defender;
-
+		private Unit attacker;
+		
 		public DefendThreadListener(Unit defender) {
 			this.defender = defender;
 			InfoPanelGUI.append("Defend thread started... waiting for target.");
 		}
 
 		public void changeAttackersTarget(Unit attacker) {
+			this.attacker=attacker;
 
 			int i = gameController.getAttack().getAttacersIndex(attacker.getId());
 			if (i == -1) {
 				InfoPanelGUI.append("Invalid target, this unit is not attacking.");
 			} else {
 				gameController.getAttack().setDefender(defender.getId(), i);
+				InfoPanelGUI.append(defender.toString() +" will block "+attacker.toString());
+				InfoPanelGUI.append("Target changed, commit defense or choose more defenders.");
+				tapCard(defender.getId(),defender.getLaneEnum());
+				
 			}
 			setDefendingTargetSelected(true);
 		}
@@ -855,7 +862,6 @@ public class BoardGuiController {
 					e.printStackTrace();
 				}
 			}
-			InfoPanelGUI.append("Target changed, commit defense or choose more defenders.");
 			defendSelectThread = null;
 		}
 
