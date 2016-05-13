@@ -9,6 +9,9 @@ package abilities;
  */
 public class DrawCardAbility extends Ability {
 
+	
+	private int amount;
+	
 	/**
 	 * Instantiate the object by passing in a String description of the ability
 	 * as argument.
@@ -16,8 +19,21 @@ public class DrawCardAbility extends Ability {
 	 * @param description
 	 *            : String
 	 */
-	public DrawCardAbility(String description) {
+	public DrawCardAbility(String description, int amount) {
 		setDescription(description);
 		setHasTarget(false);
+		setAmount(amount);
+	}
+
+	/**Return the amount of cards to be drawn.
+	 * 
+	 * @return amount : int
+	 */
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 }

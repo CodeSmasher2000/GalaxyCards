@@ -19,6 +19,7 @@ public class TapTargetAbility extends Ability {
 	 */
 	public TapTargetAbility(String description){
 		setDescription(description);
+		setHasTarget(true);
 	}
 
 	/**Returns the target for this ability.

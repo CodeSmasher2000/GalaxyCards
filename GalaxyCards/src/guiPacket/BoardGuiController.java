@@ -368,7 +368,7 @@ public class BoardGuiController {
 			return clonedCard;
 		} else if (card instanceof Unit) {
 			Unit temp = (Unit) card;
-			Unit clonedCard = new Unit(temp.getName(), temp.getRarity(), temp.getImage(), temp.hasAbility(),
+			Unit clonedCard = new Unit(temp.getName(), temp.getRarity(), temp.getImage(),
 					temp.getAttack(), temp.getDefense(), temp.getPrice());
 			clonedCard.setId(card.getId());
 			clonedCard.setLaneEnum(temp.getLaneEnum());
@@ -798,8 +798,9 @@ public class BoardGuiController {
 
 		public void setDefender(Object defender) {
 			this.defender = defender;
+			attacker.tap();
 			setTargetSelected(true);
-			InfoPanelGUI.append("Target is set");
+			InfoPanelGUI.append(attacker.toString()+" attacks "+defender.toString());
 		}
 
 		@Override
@@ -887,5 +888,10 @@ public class BoardGuiController {
 			}
 		}
 		InfoPanelGUI.append("Update Card : Something went wrong");
+	}
+
+	public void useAbility(Card cardWithAbility) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -83,11 +83,26 @@ public class PlayerTargetMouseListener implements MouseListener {
 					InfoPanelGUI.append("This unit is not in defensive lane, can't defend");
 				}
 			}
-			if (card instanceof HeroicSupport) {
-				if (((HeroicSupport) card).getTap()) {
-					InfoPanelGUI.append("The card is tapped, can't use ability.");
-				} else {
-					InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ");
+			if (event.getSource() instanceof HeroicSupport) {
+				card = (HeroicSupport) event.getSource();
+				if(((HeroicSupport)card).getTap()==false){
+					/*kolla om ability behöver target = false
+					 * 	skicka kortobjektet till servern
+					 *annars
+					 *	starta targetthread
+					 *	när target är vald
+					 *		skicka kortobjektet till servern
+					 *tap kortet.
+					 */
+					if(((HeroicSupport)card).getAbility().hasTarget()==false){
+						((HeroicSupport)card).tap();
+						boardController.useAbility(card);
+						
+					}else{
+						
+					}
+				}else{
+					InfoPanelGUI.append("This heroic support is tapped, can't use ability.");
 				}
 			}
 		}
@@ -113,6 +128,12 @@ public class PlayerTargetMouseListener implements MouseListener {
 						InfoPanelGUI.append("The card is tapped, can't use ability.");
 					} else {
 						InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ");
+						if(((HeroicSupport) card).getAbility().hasTarget()){
+							
+						}else{
+							
+						}
+						((HeroicSupport) card).tap();
 					}
 				}
 			}

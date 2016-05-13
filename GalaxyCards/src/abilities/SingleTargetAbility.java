@@ -28,6 +28,7 @@ public class SingleTargetAbility extends Ability {
 	public SingleTargetAbility(int value, String description) {
 		setValue(value);
 		setDescription(description);
+		setHasTarget(true);
 	}
 
 	/**Returns the target of this ability.
