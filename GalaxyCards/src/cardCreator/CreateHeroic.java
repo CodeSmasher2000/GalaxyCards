@@ -16,6 +16,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import abilities.Ability;
+
 /**
  * Creates a panel that lets you customize a Heroic card.
  * @author Jonte
@@ -24,7 +26,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class CreateHeroic extends JPanel {
 	private JPanel gridHeroic = new JPanel();
-	private JPanel flowAbility = new JPanel();
 	
 	private JTextField tfCardName = new JTextField();
 	private JTextField tfPrice = new JTextField();
@@ -32,14 +33,12 @@ public class CreateHeroic extends JPanel {
 	private JTextField tfRarity = new JTextField("Common/Rare/Legendary");
 	private JTextField tfNbrOfCards = new JTextField();
 	
-	private JCheckBox btnAbility = new JCheckBox();
 	
 	private JFileChooser jFileChooser = new JFileChooser();
 	private JButton btnChoosePic = new JButton("Choose Picture");
 
 	private JLabel lblCardName = new JLabel("Card Name: ");
 	private JLabel lblPrice = new JLabel("Price: ");
-	private JLabel lblAbility = new JLabel("Ability: Yes/No");
 	private JLabel lblDefense = new JLabel("Defense: ");
 	private JLabel lblRarity = new JLabel ("Rarity: ");
 	private JLabel lblNbrOfCards = new JLabel("Number of Cards: ");
@@ -69,8 +68,6 @@ public class CreateHeroic extends JPanel {
 		gridHeroic.add(tfPrice);
 		gridHeroic.add(lblRarity);
 		gridHeroic.add(tfRarity);
-		gridHeroic.add(lblAbility);
-		gridHeroic.add(btnAbility);
 		gridHeroic.add(lblNbrOfCards);
 		gridHeroic.add(tfNbrOfCards);
 		
@@ -102,19 +99,16 @@ public class CreateHeroic extends JPanel {
 	public String getDescription() {
 		return abilityPanel.getDescription();
 	}
+	
+	public Ability getAbility(){
+		return abilityPanel.createAbility();
+	}
 
 	public String getImageName() {
 		
 		return imageName;
 	}
 
-	public boolean getAbility() {
-		btnAbility.isSelected();
-		return false;
-	}
-	public int getValue(){
-		return abilityPanel.getValue();
-	}
 	
 	public void setImageName(String name){
 		this.imageName=name;
@@ -136,17 +130,11 @@ public class CreateHeroic extends JPanel {
 		tfPrice.setText(Integer.toString(price));
 	}
 	
-	public void setAbility(boolean ability){
-		btnAbility.setSelected(ability);
-	}
 	
 	public void setDescription(String description){
 		abilityPanel.setDescription(description);
 	}
 	
-	public void setValue(int value){
-		abilityPanel.setValue(value);
-	}
 	
 	private class ButtonListener implements ActionListener{
 		@Override
