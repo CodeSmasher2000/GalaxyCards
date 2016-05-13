@@ -817,7 +817,7 @@ public class Match implements Observer {
 		private void useSingelTargetAbility(SingleTargetAbility ability) {
 			Player friendly;
 			Player enemy;
-			int target = ability.getTarget();
+			Target target = ability.getTarget();
 			// Controlls what player that used the ability
 			if (this.equals(player1)) {
 				friendly = player1;
@@ -827,9 +827,25 @@ public class Match implements Observer {
 				enemy = player1;
 			}
 			
-			Target abTarget = findTargetById(target, ability.getENUM());
-			abTarget.damage(ability.getValue());
+			if (target instanceof Hero) {
+				if (target.equals(player1.hero)) {
+					player1.hero.damage(ability.getValue());
+				} else if(target.equals(player2.hero)) {
+					player2.hero.damage(ability.getValue());
+				}
+				updateHeroValues();
+			} else {
+				Target abTarget = null;
+				if(target instanceof Unit) {
+					abTarget = findTargetById(target.getId(), ((Unit)target).getLaneEnum());
+				} else if(target instanceof HeroicSupport) {
+					abTarget = findTargetById(target.getId(), ((HeroicSupport)target).getLanesEnum());
+				}
+				abTarget.damage(ability.getValue());
+				updateTarget(abTarget);
+			}
 		}
+		
 		private Target findTargetById(int id, Lanes lane) {
 			Player friendly;
 			Player enemy;
