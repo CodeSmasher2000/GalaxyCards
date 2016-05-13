@@ -356,14 +356,14 @@ public class BoardGuiController {
 		} else if (card instanceof HeroicSupport) {
 			HeroicSupport temp = (HeroicSupport) card;
 			HeroicSupport clonedCard = new HeroicSupport(temp.getName(), temp.getRarity(), temp.getImage(),
-					temp.hasAbility(), temp.getPrice(), temp.getDefense());
+					temp.hasAbility(), temp.getPrice(), temp.getDefense(), temp.getAbility());
 			clonedCard.setId(card.getId());
 			clonedCard.setLanesEnum(temp.getLanesEnum());
 			temp = null;
 			return clonedCard;
 		} else if (card instanceof Tech) {
 			Tech temp = (Tech) card;
-			Tech clonedCard = new Tech(temp.getName(), temp.getRarity(), temp.getImage(), temp.getPrice());
+			Tech clonedCard = new Tech(temp.getName(), temp.getRarity(), temp.getImage(), temp.getPrice(), temp.getAbility());
 			clonedCard.setId(card.getId());
 			return clonedCard;
 		} else if (card instanceof Unit) {

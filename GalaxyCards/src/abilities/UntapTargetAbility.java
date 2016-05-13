@@ -19,6 +19,7 @@ public class UntapTargetAbility extends Ability{
 	 */
 	public UntapTargetAbility(String description){
 		setDescription(description);
+		setHasTarget(true);
 	}
 
 	/**Returns the target for this ability.

@@ -13,6 +13,7 @@ package abilities;
 public abstract class Ability {
 
 	private String description;
+	private boolean hasTarget;
 
 	/**
 	 * Returns a String that represent the description of the ability.
@@ -31,5 +32,19 @@ public abstract class Ability {
 	 */
 	public void setDescription(String txt) {
 		description = txt;
+	}
+
+	/**
+	 * Returns true if this ability is a targetedability and false if this
+	 * abiltity doesn't require a target.
+	 * 
+	 * @return hasTarget : boolean
+	 */
+	public boolean hasTarget() {
+		return hasTarget;
+	}
+	
+	public void setHasTarget(boolean hasTarget){
+		this.hasTarget=hasTarget;
 	}
 }
