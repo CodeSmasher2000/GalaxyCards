@@ -897,7 +897,7 @@ public class BoardGuiController {
 	}
 
 	public void useAbility(Card cardWithAbility) {
-		// TODO Auto-generated method stub
+		gameController.useAbility(cardWithAbility);
 		
 	}
 }

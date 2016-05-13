@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.SecondaryLoop;
+
 import Client.ClientController;
 import cards.HeroicSupport;
 import cards.ResourceCard;
@@ -380,4 +382,9 @@ public class GameController {
 	public void setEnemyHeroId(int id) {
         boardController.setEnemyHeroId(id);
     }
+
+	public void useAbility(Card cardWithAbility) {
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_USE_ABILITY, "Klient", cardWithAbility));
+		
+	}
 }
