@@ -57,7 +57,7 @@ public class CreateController {
 	}
 	
 	public void addTechCard(String name, String rarity, String imageName, int price, String description) {
-		Tech cardToAdd = new Tech(name, rarity, imageName, price);
+		Tech cardToAdd = new Tech(name, rarity, imageName, price, );
 		cardToAdd.setAbilityText(description);
 		activeDeck.addTechCard(cardToAdd);
 		gui.addCardToList(cardToAdd);

@@ -13,6 +13,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import abilities.Ability;
+import abilities.DrawCardAbility;
+import abilities.SingleTargetAbility;
+
 public class AbilityPanel extends JPanel{
 	private JRadioButton rbHealDmg = new JRadioButton("Heal/Damage");
 	private JRadioButton rbDrawCard = new JRadioButton("Draw Card");
@@ -56,13 +60,39 @@ public class AbilityPanel extends JPanel{
 		add(taDescription);
 	}
 	
+	public Ability createAbility(){
+		if(rbHealDmg.isSelected()){
+			return createHealdmg();
+		}else if(rbDrawCard.isSelected()){
+			return createDrawCard();
+		}else if(rbTap.isSelected()){
+			return createTap();
+		}
+	}
+	
+	private Ability createTap() {
+		
+		return null;
+	}
+
+	private DrawCardAbility createDrawCard() {
+		DrawCardAbility drawCard = new DrawCardAbility(getDescription());
+		return drawCard;
+	}
+
+	private SingleTargetAbility createHealdmg() {
+		SingleTargetAbility healdmg = new SingleTargetAbility(getValue(), getDescription());
+		 return healdmg;
+		
+	}
+
 	public String getDescription(){
 		String description = taDescription.getText();
 		return description;
 	}
 	
-	public String getValue(){
-		String value = tfValue.getText();
+	public int getValue(){
+		int value = Integer.parseInt(tfValue.getText());
 		return value;
 	}
 

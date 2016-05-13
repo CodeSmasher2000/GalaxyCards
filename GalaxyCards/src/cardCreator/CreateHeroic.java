@@ -112,7 +112,7 @@ public class CreateHeroic extends JPanel {
 		btnAbility.isSelected();
 		return false;
 	}
-	public String getValue(){
+	public int getValue(){
 		return abilityPanel.getValue();
 	}
 	

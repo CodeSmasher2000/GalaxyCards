@@ -84,8 +84,8 @@ public class CreateGui extends JPanel {
 			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Preview Heroic");
-			HeroicSupport card = new HeroicSupport(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
-					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense());
+			HeroicSupport card = new HeroicSupport(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName()
+					, createHeroic.getPrice(), createHeroic.getDefense());
 			card.setAbilityText(createHeroic.getDescription());
 			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createResource)) {

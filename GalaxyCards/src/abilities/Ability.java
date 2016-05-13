@@ -33,6 +33,15 @@ public abstract class Ability {
 	public void setDescription(String txt) {
 		description = txt;
 	}
+	
+	/**
+	 * Returns the description as a String
+	 * @return
+	 * 		String description
+	 */
+	public String getDescription(){
+		return description;
+	}
 
 	/**
 	 * Returns true if this ability is a targetedability and false if this
