@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.SecondaryLoop;
+
 import Client.ClientController;
 import cards.HeroicSupport;
 import cards.ResourceCard;
@@ -382,6 +384,6 @@ public class GameController {
     }
 
 	public void useAbility(Card cardWithAbility) {
-		// TODO Auto-generated method stub
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_USE_ABILITY, "Klient", cardWithAbility));
 	}
 }

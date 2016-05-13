@@ -266,6 +266,15 @@ public class Match implements Observer {
 				commitAttackMove(message);
 			} else if (message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
 				commitDefendMove(message);
+			} else if(message.getCommand() == Commands.MATCH_USE_ABILITY) {
+				Object obj = message.getData();
+				if (obj instanceof HeroicSupport) {
+					HeroicSupport card = (HeroicSupport)obj;
+					player.useAbility(card.getAbility());
+				} else if(obj instanceof Tech) {
+					Tech card = (Tech)obj;
+					player.useAbility(card.getAbility());
+				}
 			}
 		} else if (message.getCommand() == Commands.MATCH_DRAW_CARD) {
 			player.drawCard();

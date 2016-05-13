@@ -15,6 +15,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import abilities.Ability;
+
 /**
  * Creates a panel that lets you customize a Tech card.
  * @author Jonte
@@ -23,7 +25,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class CreateTech extends JPanel {
 	private JPanel gridTech = new JPanel();
-	private JPanel flowAbility = new JPanel();
+
 	private JTextField tfCardName = new JTextField();
 	private JTextField tfPrice = new JTextField();
 	private JTextField tfNbrOfCards = new JTextField();
@@ -82,9 +84,10 @@ public class CreateTech extends JPanel {
 		return abilityPanel.getDescription();
 	}
 	
-	public String getValue(){
-		return abilityPanel.getValue();
+	public Ability getAbility(){
+		return abilityPanel.createAbility();
 	}
+	
 
 	public String getRarity() {
 		// TODO HÃ¤mta frÃ¥n Jonatans kod
@@ -116,9 +119,6 @@ public class CreateTech extends JPanel {
 		abilityPanel.setDescription(description);
 	}
 	
-	public void setValue(int value){
-		abilityPanel.setValue(value);
-	}
 	
 	private class ButtonListener implements ActionListener{
 		@Override
