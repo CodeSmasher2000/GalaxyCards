@@ -25,6 +25,12 @@ import move.UpdateHeroValues;
 
 import java.util.*;
 
+import abilities.Ability;
+import abilities.DrawCardAbility;
+import abilities.SingleTargetAbility;
+import abilities.TapTargetAbility;
+import abilities.UntapTargetAbility;
+
 /**
  * This class contatins nessarsacry data and methods for storing data about a
  * match.
@@ -108,7 +114,8 @@ public class Match implements Observer {
 		}
 
 	}
-
+	
+	// TODO : SKA TAS BORT
 	public void newRound() {
 		// Sets defensive player to attacker
 		Player temp = defensive;
@@ -122,22 +129,14 @@ public class Match implements Observer {
 	 */
 	public void commitAttackMove(CommandMessage message) {
 		Attack attack = (Attack) message.getData();
-		// // SET THE IDLE PLAYER TO DEFENDING
-		// idle.setDefendPhase();;
-		// // SET THE ATTACKING PLAYER TO IDLE
-		// attacking.setIdlePhase();
-		//
-		// // TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
-		// defensive.defend(attack);
 
 		if (attack.hasAttackers()) {
 			// SET THE IDLE PLAYER TO DEFENDING
 			idle.setDefendPhase();
-			;
 			// SET THE ATTACKING PLAYER TO IDLE
 			attacking.setIdlePhase();
 
-			// TODO : SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
+			// SEND ATTACK COMMITED TO THE OTHER DEFENING PLAYER
 			defensive.defend(attack);
 		} else {
 			idle.setDefendPhase();
@@ -802,6 +801,106 @@ public class Match implements Observer {
 				}
 			}
 		}
+		
+		public void useAbility(Ability ability) {
+			if (ability instanceof SingleTargetAbility) {
+				useSingelTargetAbility((SingleTargetAbility) ability);
+			} else if (ability instanceof DrawCardAbility) {
+				// TODO : Dra ett kort
+			} else if(ability instanceof TapTargetAbility) {
+				// TODO : Tappa ett kort
+			} else if(ability instanceof UntapTargetAbility) {
+				// TODO : Untappa ett kort.
+			}
+		}
+		
+		private void useSingelTargetAbility(SingleTargetAbility ability) {
+			Player friendly;
+			Player enemy;
+			int target = ability.getTarget();
+			// Controlls what player that used the ability
+			if (this.equals(player1)) {
+				friendly = player1;
+				enemy = player2;
+			} else if(this.equals(player2)) {
+				friendly = player2;
+				enemy = player1;
+			}
+			
+			Target abTarget = findTargetById(target, ability.getENUM());
+			abTarget.damage(ability.getValue());
+		}
+		private Target findTargetById(int id, Lanes lane) {
+			Player friendly;
+			Player enemy;
+			if (this.equals(player1)) {
+				friendly = player1;
+				enemy = player2;
+			} else {
+				friendly = player2;
+				enemy = player2;
+			}
+			
+			switch (lane) {
+			case ENEMY_DEFENSIVE:
+				for (int i = 0; i < enemy.defensiveLane.size() ; i++) {
+					Target compare = enemy.defensiveLane.get(i);
+					if (id == compare.getId()) {
+						return compare;
+					}
+				}
+				break;
+			case ENEMY_OFFENSIVE:
+				for (int i = 0; i < enemy.offensiveLane.size() ; i++) {
+					Target compare = enemy.offensiveLane.get(i);
+					if (id == compare.getId()) {
+						return compare;
+					}
+				}
+				break;
+			case ENEMY_HERO:
+				return enemy.hero;
+//				break;
+			case ENEMY_HEROIC:
+				for (int i = 0; i < enemy.offensiveLane.size() ; i++) {
+					Target compare = enemy.offensiveLane.get(i);
+					if (id == compare.getId()) {
+						return compare;
+					}
+				}
+				break;
+			case PLAYER_DEFENSIVE:
+				for (int i = 0; i < friendly.defensiveLane.size() ; i++) {
+					Target compare = friendly.defensiveLane.get(i);
+					if (id == compare.getId()) {
+						return compare;
+					}
+				}
+				break;
+			case PLAYER_OFFENSIVE:
+				for (int i = 0; i < friendly.offensiveLane.size() ; i++) {
+					Target compare = friendly.offensiveLane.get(i);
+					if (id == compare.getId()) {
+						return compare;
+					}
+				}
+				break;
+			case PLAYER_HERO:
+				return friendly.hero;
+			case PLAYER_HEROIC:
+				for (int i = 0; i < friendly.heroicSupportLane.size() ; i++) {
+					Target compare = enemy.heroicSupportLane.get(i);
+					if (id == compare.getId()) {
+						return compare;
+					}
+				}
+				break;
+			default:
+				break;
+			}
+			return null;
+		}	
 	}
-
+	
+	
 }
