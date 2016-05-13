@@ -814,6 +814,11 @@ public class Match implements Observer {
 			}
 		}
 		
+		/**
+		 * Heals or damages a target
+		 * @param ability
+		 * 		The ability object that was used.
+		 */
 		private void useSingelTargetAbility(SingleTargetAbility ability) {
 			Player friendly;
 			Player enemy;
@@ -846,6 +851,19 @@ public class Match implements Observer {
 			}
 		}
 		
+		private void useDrawCardAbility(DrawCardAbility ability) {
+
+		}
+
+		/**
+		 * Finds a target from a id
+		 * @param id
+		 * 		The target id to look for
+		 * @param lane
+		 * 		The lane that the target was placed in
+		 * @return
+		 * 		The target reference from the lists in the server
+		 */
 		private Target findTargetById(int id, Lanes lane) {
 			Player friendly;
 			Player enemy;
