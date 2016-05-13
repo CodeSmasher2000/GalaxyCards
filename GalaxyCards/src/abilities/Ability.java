@@ -1,5 +1,7 @@
 package abilities;
 
+import cards.Target;
+
 /**
  * This abstract class is the superclass of all ability classes. One thing in
  * common for all abilities is the description String value. Ability classes
@@ -14,6 +16,7 @@ public abstract class Ability {
 
 	private String description;
 	private boolean hasTarget;
+	private Target target;
 
 	/**
 	 * Returns a String that represent the description of the ability.
@@ -55,5 +58,13 @@ public abstract class Ability {
 	
 	public void setHasTarget(boolean hasTarget){
 		this.hasTarget=hasTarget;
+	}
+
+	public void setTarget(Target target) {
+		this.target = target;
+	}
+	
+	public Target getTarget(){
+		return target;
 	}
 }

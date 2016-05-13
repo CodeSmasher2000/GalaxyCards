@@ -37,10 +37,6 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 		return RARITY;
 	}
 
-	@Override
-	public boolean hasAbility() {
-		return false;
-	}
 
 	@Override
 	public int getPrice() {

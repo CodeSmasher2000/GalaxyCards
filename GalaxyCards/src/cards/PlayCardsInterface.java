@@ -22,12 +22,6 @@ public interface PlayCardsInterface {
 	 * @return RARITY : String
 	 */
 	public String getRarity();
-	/**
-	 * Return true if this card has ability, else false.
-	 * 
-	 * @return :boolean
-	 */
-	public boolean hasAbility();
 
 	/**Display the ability description in the card's abilityPanel. MAX chars == 50!
 	 * 

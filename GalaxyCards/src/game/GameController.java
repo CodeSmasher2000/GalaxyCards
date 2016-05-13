@@ -380,4 +380,8 @@ public class GameController {
 	public void setEnemyHeroId(int id) {
         boardController.setEnemyHeroId(id);
     }
+
+	public void useAbility(Card cardWithAbility) {
+		// TODO Auto-generated method stub
+	}
 }

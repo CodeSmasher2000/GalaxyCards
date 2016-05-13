@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
 import cards.HeroicSupport;
+import cards.Target;
 import cards.Unit;
 import enumMessage.Lanes;
 import enumMessage.Phase;
@@ -69,77 +70,84 @@ public class PlayerTargetMouseListener implements MouseListener {
 		 * 
 		 */
 		if (boardController.getPhase() == Phase.DEFENDING) {
-			if (event.getSource() instanceof Unit) {
-				card = (Unit) event.getSource();
-
-				if (((Unit) card).getLaneEnum() == Lanes.PLAYER_DEFENSIVE) {
-					if (((Unit) card).getTap() == false) {
-						boardController.startDefendThreadListener(card);
-					} else {
-						InfoPanelGUI.append("This unit is tapped, can't defend.");
-					}
-
+			
+			// Interaction when choosing target for ability
+			if (boardController.getAbilityThreadStarted()) {
+				if (event.getSource() instanceof Target) {
+					boardController.setAbilityTarget((Target) event.getSource());
 				} else {
-					InfoPanelGUI.append("This unit is not in defensive lane, can't defend");
+					InfoPanelGUI.append("Invalid target.");
+					boardController.setAbilityTargetSelected(true);
 				}
-			}
-			if (event.getSource() instanceof HeroicSupport) {
-				card = (HeroicSupport) event.getSource();
-				if(((HeroicSupport)card).getTap()==false){
-					/*kolla om ability behöver target = false
-					 * 	skicka kortobjektet till servern
-					 *annars
-					 *	starta targetthread
-					 *	när target är vald
-					 *		skicka kortobjektet till servern
-					 *tap kortet.
-					 */
-					if(((HeroicSupport)card).getAbility().hasTarget()==false){
-						((HeroicSupport)card).tap();
-						boardController.useAbility(card);
-						
-					}else{
-						
+			
+			// Interaction when choosing unit to defend with
+			} else {
+				if (event.getSource() instanceof Unit) {
+					card = (Unit) event.getSource();
+
+					if (((Unit) card).getLaneEnum() == Lanes.PLAYER_DEFENSIVE) {
+						if (((Unit) card).getTap() == false) {
+							boardController.startDefendThreadListener(card);
+						} else {
+							InfoPanelGUI.append("This unit is tapped, can't defend.");
+						}
+
+					} else {
+						InfoPanelGUI.append("This unit is not in defensive lane, can't defend");
 					}
-				}else{
-					InfoPanelGUI.append("This heroic support is tapped, can't use ability.");
+				}
+				if (event.getSource() instanceof HeroicSupport) {
+					card = (HeroicSupport) event.getSource();
+					if (((HeroicSupport) card).getTap() == false) {
+						boardController.useAbility(card);
+					} else {
+						InfoPanelGUI.append("This heroic support is tapped, can't use ability.");
+					}
 				}
 			}
+
 		}
 
 		if (boardController.getPhase() == Phase.ATTACKING) {
 
-			if (event.getSource() instanceof Card) {
-				card = (Card) event.getSource();
-				if (card instanceof Unit) {
-					if (((Unit) card).getLaneEnum() == Lanes.PLAYER_OFFENSIVE) {
-						if (((Unit) card).getTap() == false) {
-							boardController.startAttackThreadListner();
-							boardController.setAttacker(card);
-						} else {
-							InfoPanelGUI.append("The card is tapped, can't attack.");
-						}
-					} else {
-						InfoPanelGUI.append("Invalid move: can't attack with units in defensive lane");
-					}
+			if (boardController.getAbilityThreadStarted()) {
+				if (event.getSource() instanceof Target) {
+					boardController.setAbilityTarget((Target) event.getSource());
+				} else {
+					InfoPanelGUI.append("Invalid target.");
+					boardController.setAbilityTargetSelected(true);
 				}
-				if (card instanceof HeroicSupport) {
-					if (((HeroicSupport) card).getTap()) {
-						InfoPanelGUI.append("The card is tapped, can't use ability.");
-					} else {
-						InfoPanelGUI.append("TODO: use ability: Area of effect / target: world  ");
-						if(((HeroicSupport) card).getAbility().hasTarget()){
-							
-						}else{
-							
-						}
-						((HeroicSupport) card).tap();
-					}
-				}
-			}
+			
+			
+			} else {
 
-			if (event.getSource() instanceof HeroGUI) {
-				InfoPanelGUI.append(heroGui.toString());
+				if (event.getSource() instanceof Card) {
+					card = (Card) event.getSource();
+					if (card instanceof Unit) {
+						if (((Unit) card).getLaneEnum() == Lanes.PLAYER_OFFENSIVE) {
+							if (((Unit) card).getTap() == false) {
+								boardController.startAttackThreadListner();
+								boardController.setAttacker(card);
+							} else {
+								InfoPanelGUI.append("The card is tapped, can't attack.");
+							}
+						} else {
+							InfoPanelGUI.append("Invalid move: can't attack with units in defensive lane");
+						}
+					}
+					if (event.getSource() instanceof HeroicSupport) {
+						card = (HeroicSupport) event.getSource();
+						if (((HeroicSupport) card).getTap() == false) {
+							boardController.useAbility(card);
+						} else {
+							InfoPanelGUI.append("This heroic support is tapped, can't use ability.");
+						}
+					}
+				}
+
+				if (event.getSource() instanceof HeroGUI) {
+					InfoPanelGUI.append(heroGui.toString());
+				}
 			}
 		}
 

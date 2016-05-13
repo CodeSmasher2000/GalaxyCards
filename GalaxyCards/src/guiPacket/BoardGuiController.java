@@ -3,8 +3,10 @@ package guiPacket;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import abilities.Ability;
 import cards.HeroicSupport;
 import cards.ResourceCard;
+import cards.Target;
 import cards.Tech;
 import cards.Unit;
 import enumMessage.Lanes;
@@ -45,10 +47,12 @@ public class BoardGuiController {
 	private LaneSelectThread laneSelectThread;
 	private AttackThreadListener attackSelectThread;
 	private DefendThreadListener defendSelectThread;
+	private AbilityThreadListener abilitySelectThread;
 
 	private boolean targetSelected = false;
 	private boolean defendingTargetSelected = false;
 	private boolean laneSelected = false;
+	private boolean abilityTargetSelected = false;
 
 	private UnitLanes tempLane;
 	private Unit tempUnit;
@@ -299,7 +303,6 @@ public class BoardGuiController {
 
 	}
 
-
 	// ***MESSAGES SENT BETWEEN GUIELEMENTS************************************
 	// *** Methods in this section are called upon from the GUI elements ***
 	// *** to update various gui elements. ***
@@ -356,20 +359,21 @@ public class BoardGuiController {
 		} else if (card instanceof HeroicSupport) {
 			HeroicSupport temp = (HeroicSupport) card;
 			HeroicSupport clonedCard = new HeroicSupport(temp.getName(), temp.getRarity(), temp.getImage(),
-					temp.hasAbility(), temp.getPrice(), temp.getDefense(), temp.getAbility());
+					 temp.getPrice(), temp.getDefense(), temp.getAbility());
 			clonedCard.setId(card.getId());
 			clonedCard.setLanesEnum(temp.getLanesEnum());
 			temp = null;
 			return clonedCard;
 		} else if (card instanceof Tech) {
 			Tech temp = (Tech) card;
-			Tech clonedCard = new Tech(temp.getName(), temp.getRarity(), temp.getImage(), temp.getPrice(), temp.getAbility());
+			Tech clonedCard = new Tech(temp.getName(), temp.getRarity(), temp.getImage(), temp.getPrice(),
+					temp.getAbility());
 			clonedCard.setId(card.getId());
 			return clonedCard;
 		} else if (card instanceof Unit) {
 			Unit temp = (Unit) card;
-			Unit clonedCard = new Unit(temp.getName(), temp.getRarity(), temp.getImage(),
-					temp.getAttack(), temp.getDefense(), temp.getPrice());
+			Unit clonedCard = new Unit(temp.getName(), temp.getRarity(), temp.getImage(), temp.getAttack(),
+					temp.getDefense(), temp.getPrice());
 			clonedCard.setId(card.getId());
 			clonedCard.setLaneEnum(temp.getLaneEnum());
 			card = null;
@@ -402,7 +406,6 @@ public class BoardGuiController {
 		cardToShow = (Card) cloneCard(cardToShow);
 		infoPanel.showCard(cardToShow);
 	}
-
 
 	// ***PRIVATE METHODS******************************************************
 	// *** Methods in this section are called within this class
@@ -508,6 +511,21 @@ public class BoardGuiController {
 			return true;
 		}
 	}
+	
+	public void startAbilityThreadListener(Card cardWithAbility){
+		if(abilitySelectThread == null){
+			abilitySelectThread = new AbilityThreadListener(cardWithAbility);
+			abilitySelectThread.start();
+		}
+	}
+	
+	protected boolean getAbilityThreadStarted(){
+		if(abilitySelectThread == null){
+			return false;
+		}else{
+			return true;
+		}
+	}
 
 	public void startDefendThreadListener(Card card) {
 		setDefendingTargetSelected(false);
@@ -537,11 +555,11 @@ public class BoardGuiController {
 		this.playerHeroGui.setId(id);
 	}
 
-    public void setEnemyHeroId(int id) {
-        this.opponentHeroGui.setId(id);
-    }
+	public void setEnemyHeroId(int id) {
+		this.opponentHeroGui.setId(id);
+	}
 
-    /**
+	/**
 	 * A thread that waits for player input when selecting a lane to play unit
 	 * cards on. Instantiates a mouselistener that gets connected to the
 	 * lanePanels that unit objects can be placed in.
@@ -549,51 +567,7 @@ public class BoardGuiController {
 	 * @author 13120dde
 	 *
 	 */
-	private class LaneSelectThread extends Thread {
 
-		public LaneSelectThread() {
-			InfoPanelGUI.append("Lane select thread started...waiting for unput");
-			laneListener = new LaneSelectListener();
-			playerOffLane.addMouseListener(laneListener);
-			playerDefLane.addMouseListener(laneListener);
-
-			playerOffLane.setBorder(CustomGui.offLaneBorder);
-			playerDefLane.setBorder(CustomGui.deffLaneBorder);
-
-			playerDefLane.setBackground(CustomGui.guiTransparentColor);
-			playerOffLane.setBackground(CustomGui.guiTransparentColor);
-
-		}
-
-		public void run() {
-			while (!laneSelected || Thread.interrupted()) {
-				System.err.println("Waiting for selection of lane");
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			// When the input is done remove interaction from the lane panels.
-			playerOffLane.removeMouseListener(laneListener);
-			playerDefLane.removeMouseListener(laneListener);
-
-			playerOffLane.setBorder(null);
-			playerDefLane.setBorder(null);
-
-			playerOffLane.setOpaque(false);
-			playerDefLane.setOpaque(false);
-
-			laneListener = null;
-			laneSelected = false;
-			laneSelectThread = null;
-			InfoPanelGUI.append("Lane select thread stopped");
-			// TODO Ska den ligga här!?
-
-		}
-	}
 
 	public void setAttacker(Card card) {
 		attackSelectThread.setAttacker(card);
@@ -605,6 +579,11 @@ public class BoardGuiController {
 
 	public void changeAttackersTarget(Unit attacker) {
 		defendSelectThread.changeAttackersTarget(attacker);
+	}
+	
+	public void setAbilityTarget(Target target) {
+		abilitySelectThread.setAbilityTarget(target);
+		
 	}
 
 	public void tapCard(int cardId, Lanes ENUM) {
@@ -697,11 +676,11 @@ public class BoardGuiController {
 			opponentHeroicGui.untapAllInLane();
 		}
 	}
-	
+
 	public int getFriendlyHeroId() {
 		return playerHeroGui.getId();
 	}
-	
+
 	public int getOpponetHeroId() {
 		return opponentHeroGui.getId();
 	}
@@ -713,6 +692,14 @@ public class BoardGuiController {
 	public void setDefendingTargetSelected(boolean defendingTargetSelected) {
 		this.defendingTargetSelected = defendingTargetSelected;
 	}
+	
+	public boolean getAbilityTargetSelected(){
+		return abilityTargetSelected;
+	}
+	
+	public void setAbilityTargetSelected(boolean abilityTarget){
+		abilityTargetSelected=abilityTarget;
+	}
 
 	public Phase getPhase() {
 		return gameController.getPhase();
@@ -720,6 +707,63 @@ public class BoardGuiController {
 
 	public Attack getAttackObject() {
 		return gameController.getAttack();
+	}
+	public void updateCard(Card cardToUpdate) {
+		// TODO : FIX THE UNIT CARD METHOD
+
+		if (cardToUpdate instanceof Unit) {
+			if (playerDefLane.updateCard((Unit) cardToUpdate)) {
+				return;
+			}
+			if (playerOffLane.updateCard((Unit) cardToUpdate)) {
+				return;
+			}
+			if (opponentDefLane.updateCard((Unit) cardToUpdate)) {
+				return;
+			}
+			if (opponentOffLane.updateCard((Unit) cardToUpdate)) {
+				return;
+			}
+		}
+
+		if (cardToUpdate instanceof HeroicSupport) {
+			if (opponentHeroicGui.updateCard((HeroicSupport) cardToUpdate)) {
+				return;
+			}
+			if (playerHeroicGui.updateCard((HeroicSupport) cardToUpdate)) {
+				return;
+			}
+		}
+		InfoPanelGUI.append("Update Card : Something went wrong");
+	}
+
+	/**
+	 * This method checks what kind of card is passed in as argument (Tech or
+	 * heroic support) and checks if the ability needs a target. If the ability
+	 * needs a target then a AbilitThreadListener thread will start which will set a
+	 * target upon mouseinteraction. If the card is HeroicSupport it will get
+	 * tapped when the ability is used. Finnaly the card will be sent to the server.
+	 * 
+	 * @param cardWithAbility
+	 *            : Card
+	 */
+	public void useAbility(Card cardWithAbility) {
+		
+		if(cardWithAbility instanceof HeroicSupport){
+			if(((HeroicSupport)cardWithAbility).getAbility().hasTarget()){
+				startAbilityThreadListener(cardWithAbility);
+			}else{
+				gameController.useAbility(cardWithAbility);
+				tapCard(((HeroicSupport) cardWithAbility).getId(), ((HeroicSupport) cardWithAbility).getLanesEnum());
+			}
+		}
+		if ( cardWithAbility instanceof Tech){
+			if(((Tech)cardWithAbility).getAbility().hasTarget()){
+				startAbilityThreadListener(cardWithAbility);
+			}else{
+				gameController.useAbility(cardWithAbility);
+			}
+		}
 	}
 
 	private class LaneSelectListener implements MouseListener {
@@ -777,6 +821,50 @@ public class BoardGuiController {
 
 	}
 
+	private class AbilityThreadListener extends Thread{
+		
+		private Card cardWithAbility;
+		
+		public AbilityThreadListener(Card cardWithAbility){
+			setAbilityTargetSelected(false);
+			this.cardWithAbility = cardWithAbility;
+			InfoPanelGUI.append("Ability target thread started...waiting for input.");
+		}
+		
+		public void run(){
+			while(!Thread.interrupted() || !getAbilityTargetSelected()){
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			InfoPanelGUI.append("Ability target thread stopped.");
+			abilitySelectThread = null;
+		}
+
+		public void setAbilityTarget(Target target) {
+			Ability ability = null;
+			
+			if(cardWithAbility instanceof Tech){
+				((Tech)cardWithAbility).getAbility().setTarget(target);
+				ability = ((Tech)cardWithAbility).getAbility();
+				gameController.useAbility(cardWithAbility);
+			}
+			if(cardWithAbility instanceof HeroicSupport){
+				((HeroicSupport)cardWithAbility).getAbility().setTarget(target);
+				ability = ((HeroicSupport)cardWithAbility).getAbility();
+				gameController.useAbility(cardWithAbility);
+				tapCard(((HeroicSupport)cardWithAbility).getId(), ((HeroicSupport)cardWithAbility).getLanesEnum());
+			}
+			
+			setAbilityTargetSelected(true);
+			InfoPanelGUI.append(cardWithAbility.toString()+" uses ability"+ability.toString()+" on target: "+target.toString());
+		}
+
+		
+	}
 	/**
 	 * The thread waits for input from a player to get a target to attack
 	 * 
@@ -799,7 +887,7 @@ public class BoardGuiController {
 		public void setDefender(Object defender) {
 			this.defender = defender;
 			setTargetSelected(true);
-			InfoPanelGUI.append(attacker.toString()+" attacks "+defender.toString());
+			InfoPanelGUI.append(attacker.toString() + " attacks " + defender.toString());
 			InfoPanelGUI.append("Commit move or choose more units to attack with.");
 			tapCard(attacker.getId(), attacker.getLaneEnum());
 		}
@@ -831,24 +919,24 @@ public class BoardGuiController {
 	private class DefendThreadListener extends Thread {
 		private Unit defender;
 		private Unit attacker;
-		
+
 		public DefendThreadListener(Unit defender) {
 			this.defender = defender;
 			InfoPanelGUI.append("Defend thread started... waiting for target.");
 		}
 
 		public void changeAttackersTarget(Unit attacker) {
-			this.attacker=attacker;
+			this.attacker = attacker;
 
 			int i = gameController.getAttack().getAttacersIndex(attacker.getId());
 			if (i == -1) {
 				InfoPanelGUI.append("Invalid target, this unit is not attacking.");
 			} else {
 				gameController.getAttack().setDefender(defender.getId(), i);
-				InfoPanelGUI.append(defender.toString() +" will block "+attacker.toString());
+				InfoPanelGUI.append(defender.toString() + " will block " + attacker.toString());
 				InfoPanelGUI.append("Target changed, commit defense or choose more defenders.");
-				tapCard(defender.getId(),defender.getLaneEnum());
-				
+				tapCard(defender.getId(), defender.getLaneEnum());
+
 			}
 			setDefendingTargetSelected(true);
 		}
@@ -866,38 +954,51 @@ public class BoardGuiController {
 		}
 
 	}
+	
+	private class LaneSelectThread extends Thread {
 
-	public void updateCard(Card cardToUpdate) {
-		// TODO : FIX THE UNIT CARD METHOD
+		public LaneSelectThread() {
+			InfoPanelGUI.append("Lane select thread started...waiting for unput");
+			laneListener = new LaneSelectListener();
+			playerOffLane.addMouseListener(laneListener);
+			playerDefLane.addMouseListener(laneListener);
 
-		if (cardToUpdate instanceof Unit) {
-			if (playerDefLane.updateCard((Unit) cardToUpdate)) {
-				return;
-			}
-			if (playerOffLane.updateCard((Unit) cardToUpdate)) {
-				return;
-			}
-			if (opponentDefLane.updateCard((Unit) cardToUpdate)) {
-				return;
-			}
-			if (opponentOffLane.updateCard((Unit) cardToUpdate)) {
-				return;
-			}
+			playerOffLane.setBorder(CustomGui.offLaneBorder);
+			playerDefLane.setBorder(CustomGui.deffLaneBorder);
+
+			playerDefLane.setBackground(CustomGui.guiTransparentColor);
+			playerOffLane.setBackground(CustomGui.guiTransparentColor);
+
 		}
-		
-		if (cardToUpdate instanceof HeroicSupport) {
-			if (opponentHeroicGui.updateCard((HeroicSupport) cardToUpdate)) {
-				return;
+
+		public void run() {
+			while (!laneSelected || Thread.interrupted()) {
+				System.err.println("Waiting for selection of lane");
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			if (playerHeroicGui.updateCard((HeroicSupport) cardToUpdate)) {
-				return;
-			}
+
+			// When the input is done remove interaction from the lane panels.
+			playerOffLane.removeMouseListener(laneListener);
+			playerDefLane.removeMouseListener(laneListener);
+
+			playerOffLane.setBorder(null);
+			playerDefLane.setBorder(null);
+
+			playerOffLane.setOpaque(false);
+			playerDefLane.setOpaque(false);
+
+			laneListener = null;
+			laneSelected = false;
+			laneSelectThread = null;
+			InfoPanelGUI.append("Lane select thread stopped");
+			// TODO Ska den ligga här!?
+
 		}
-		InfoPanelGUI.append("Update Card : Something went wrong");
 	}
 
-	public void useAbility(Card cardWithAbility) {
-		// TODO Auto-generated method stub
-		
-	}
 }

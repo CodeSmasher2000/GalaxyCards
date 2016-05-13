@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
 import cards.HeroicSupport;
+import cards.Target;
 import cards.Unit;
 import enumMessage.Lanes;
 import enumMessage.Phase;
@@ -55,57 +56,71 @@ public class OpponentTargetMouseListener implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent event) {
-		if(event.getSource() instanceof Card){
+		if (event.getSource() instanceof Card) {
 			card.setBorder(cardDefaultBorder);
 		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		
+
 		/*
 		 * Different mouseinteraction avaible depending on which phase the
 		 * client is in. The possible phases are DEFENDING, ATTACKING, IDLE.
-		 * Different mouseinteraction avaible for each object. 
+		 * Different mouseinteraction avaible for each object.
 		 * 
 		 */
-		if(boardController.getPhase()==Phase.DEFENDING){
-			if(boardController.getDefendThreadStarted()){
-				if(event.getSource() instanceof Unit && (((Unit)event.getSource()).getLaneEnum()==Lanes.ENEMY_OFFENSIVE)){
-					boardController.changeAttackersTarget((Unit)event.getSource());
-				}else{
+		if (boardController.getPhase() == Phase.DEFENDING) {
+			if (boardController.getDefendThreadStarted()) {
+				if (event.getSource() instanceof Unit
+						&& (((Unit) event.getSource()).getLaneEnum() == Lanes.ENEMY_OFFENSIVE)) {
+					boardController.changeAttackersTarget((Unit) event.getSource());
+				} else {
 					InfoPanelGUI.append("Invalid target, this unit is not attacking.");
 					boardController.setDefendingTargetSelected(true);
 				}
-			}else{
+			} else if (boardController.getAbilityThreadStarted()) {
+				if (event.getSource() instanceof Target) {
+					boardController.setAbilityTarget((Target) event.getSource());
+				}else{
+					InfoPanelGUI.append("Invalid target.");
+					boardController.setAbilityTargetSelected(true);
+				}
+			} else {
 				InfoPanelGUI.append(event.getSource().toString());
 			}
+
 		}
-		if(boardController.getPhase()==Phase.ATTACKING){
-			if (boardController.getAttackThreadStarted()){
+		if (boardController.getPhase() == Phase.ATTACKING) {
+			if (boardController.getAttackThreadStarted()) {
 				if (event.getSource() instanceof HeroGUI) {
-					HeroGUI hero = (HeroGUI)event.getSource();
+					HeroGUI hero = (HeroGUI) event.getSource();
 					// Kontrollerar om hjälten är firendly
 					if (hero.getId() == boardController.getFriendlyHeroId()) {
 						InfoPanelGUI.append("Invalid taget, you cannot attack your own hero", "RED");
-					} else if(hero.getId() == boardController.getOpponetHeroId()) {
+					} else if (hero.getId() == boardController.getOpponetHeroId()) {
 						boardController.setDefender(hero.getId());
 					}
-					boardController.setDefender(heroGui.getId()); // TODO: This needs to be changed to the hero gui.
-				}else if (event.getSource() instanceof HeroicSupport) {
-					boardController.setDefender((HeroicSupport)event.getSource());
-				}else{
+					boardController.setDefender(heroGui.getId()); // TODO: This
+																	// needs to
+																	// be
+																	// changed
+																	// to the
+																	// hero gui.
+				} else if (event.getSource() instanceof HeroicSupport) {
+					boardController.setDefender((HeroicSupport) event.getSource());
+				} else {
 					InfoPanelGUI.append("Invalid target, you can only attack opponent's hero or heroic supports");
 					boardController.setTargetSelected(true);
 				}
-			}else{
+			} else {
 				InfoPanelGUI.append(event.getSource().toString());
 			}
 		}
-		if(boardController.getPhase()==Phase.IDLE){
+		if (boardController.getPhase() == Phase.IDLE) {
 			InfoPanelGUI.append(event.getSource().toString());
 		}
-		
+
 	}
 
 	@Override
