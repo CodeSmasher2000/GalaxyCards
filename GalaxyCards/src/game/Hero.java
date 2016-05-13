@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
-
-
 import cards.Deck;
 import cards.Target;
 import exceptionsPacket.EmptyDeckException;
@@ -39,6 +37,7 @@ public class Hero implements Serializable, Target {
 	private int life, energyShield, maxResource, currentResource, incrementalDamage = 0;
 	private boolean resourceCardPlayedThisRound = false;
 	private int id;
+
 	public Hero(int id) {
 		life = 20;
 		energyShield = 10;
@@ -57,21 +56,18 @@ public class Hero implements Serializable, Target {
 		currentResource = 0;
 		loadDeck();
 	}
-	
-	public Deck loadDeck(){
+
+	public Deck loadDeck() {
 
 		File file = new File("files/decks/TestDeckVMAY10.dat");
 
-		try(
-			FileInputStream fin = new FileInputStream(file);
-			ObjectInputStream ois = new ObjectInputStream(fin)) {
-			return (Deck)ois.readObject();
-		} catch(ClassNotFoundException | IOException e) {
+		try (FileInputStream fin = new FileInputStream(file); ObjectInputStream ois = new ObjectInputStream(fin)) {
+			return (Deck) ois.readObject();
+		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
-		} return null;
+		}
+		return null;
 	}
-	
-	
 
 	public void setDeck(Deck deck) {
 		this.deck = deck;
@@ -174,12 +170,12 @@ public class Hero implements Serializable, Target {
 	public int getEnergyShield() {
 		return energyShield;
 	}
-	
+
 	public int getCurrentResources() {
 		return currentResource;
 	}
-	
-	public int getMaxResource(){
+
+	public int getMaxResource() {
 		return maxResource;
 	}
 
@@ -200,7 +196,7 @@ public class Hero implements Serializable, Target {
 			throw new ResourcePlayedException("You can only play one resource card each turn");
 		}
 		return addResourceOK;
-		
+
 	}
 
 	/**
@@ -215,10 +211,10 @@ public class Hero implements Serializable, Target {
 		boolean useResourceOK = false;
 		if (amount > currentResource) {
 			throw new InsufficientResourcesException("Not enough resources");
-			
+
 		} else {
-		currentResource -= amount;
-		useResourceOK = true;
+			currentResource -= amount;
+			useResourceOK = true;
 		}
 		return useResourceOK;
 	}
@@ -263,11 +259,11 @@ public class Hero implements Serializable, Target {
 	public int getDamage() {
 		return 0;
 	}
-	
+
 	@Override
 	public int getDefense() {
 		return life;
-		
+
 	}
 
 	@Override

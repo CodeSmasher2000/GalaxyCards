@@ -1,31 +1,40 @@
 package abilities;
 
-import enumMessage.Lanes;
+import cards.Target;
+
+/**This class represent a ability that will tap the target card.
+ * 
+ * @author 13120dde
+ *
+ */
 
 public class TapTargetAbility extends Ability {
 
-	private int target;
-	private Lanes ENUM;
+	private Target target;
 	
+	/**Instantiate this object by passing in a String description as argument.
+	 * 
+	 * 
+	 * @param description : String
+	 */
 	public TapTargetAbility(String description){
 		setDescription(description);
 	}
 
-	public int getTarget() {
+	/**Returns the target for this ability.
+	 * 
+	 * @return target : Target
+	 */
+	public Target getTarget() {
 		return target;
 	}
 
-	public void setTarget(int target) {
+	/**Sets the target for this ability.
+	 * 
+	 * @param target : Target
+	 */
+	public void setTarget(Target target) {
 		this.target = target;
 	}
-
-	public Lanes getENUM() {
-		return ENUM;
-	}
-
-	public void setENUM(Lanes eNUM) {
-		ENUM = eNUM;
-	}
-	
 	
 }

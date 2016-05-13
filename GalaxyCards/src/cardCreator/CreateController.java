@@ -47,9 +47,9 @@ public class CreateController {
 		}
 	}
 	
-	public void addUnitCard(String name, String rarity, String imageName, boolean hasAbility, int attack, int defense, int price, 
+	public void addUnitCard(String name, String rarity, String imageName, int attack, int defense, int price, 
 			String description) {
-		Unit cardToAdd = new Unit(name, rarity, imageName, hasAbility, attack, defense, price);
+		Unit cardToAdd = new Unit(name, rarity, imageName, attack, defense, price);
 		cardToAdd.setAbilityText(description);
 		activeDeck.addUnitCard(cardToAdd);
 		gui.addCardToList(cardToAdd);

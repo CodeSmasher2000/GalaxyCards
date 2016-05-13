@@ -1,5 +1,6 @@
 package cardCreator;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -30,6 +31,7 @@ public class CreateGui extends JPanel {
 	public CreateGui(CreateController controller){
 		this.controller = controller;
 		JFrame frame1 = new JFrame("Card Creator");
+		frame1.setPreferredSize(new Dimension(1300,700));
 		frame1.setLayout(new GridLayout(1,3));
 		frame1.setVisible(true);
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,7 +56,7 @@ public class CreateGui extends JPanel {
 	public void addCard() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Create Unit");
-			controller.addUnitCard(createUnit.getName(), createUnit.getRarity(), createUnit.getImageName(), createUnit.getAbility(),
+			controller.addUnitCard(createUnit.getName(), createUnit.getRarity(), createUnit.getImageName(), 
 					createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice(), createUnit.getDescription());
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Create Heroic");
@@ -76,7 +78,7 @@ public class CreateGui extends JPanel {
 	public void updateCardPreview() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Preview Unit");
-			Unit card = new Unit(createUnit.getName(), createUnit.getRarity(),createUnit.getImageName(),createUnit.getAbility(),
+			Unit card = new Unit(createUnit.getName(), createUnit.getRarity(),createUnit.getImageName(),
 					createUnit.getAttack(), createUnit.getDefense(),createUnit.getPrice());
 			card.setAbilityText(createUnit.getDescription());
 			previewPanel.setCard(card);
@@ -104,7 +106,6 @@ public class CreateGui extends JPanel {
 		createUnit.setPrice(card.getPrice());
 		createUnit.setDefense(card.getDefense());
 		createUnit.setAttack(card.getAttack());
-		createUnit.setAbility(card.hasAbility());
 		createUnit.setRarity(card.getRarity());
 		createUnit.setDescription(card.getAbilityText());
 		createUnit.setImageName(card.getImage());
