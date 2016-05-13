@@ -806,11 +806,11 @@ public class Match implements Observer {
 			if (ability instanceof SingleTargetAbility) {
 				useSingelTargetAbility((SingleTargetAbility) ability);
 			} else if (ability instanceof DrawCardAbility) {
-				// TODO : Dra ett kort
+				useDrawCardAbility((DrawCardAbility)ability);
 			} else if(ability instanceof TapTargetAbility) {
-				// TODO : Tappa ett kort
+				useTapAbility((TapTargetAbility)ability);
 			} else if(ability instanceof UntapTargetAbility) {
-				// TODO : Untappa ett kort.
+				useUnTapAbility((UntapTargetAbility)ability);
 			}
 		}
 		
@@ -833,6 +833,7 @@ public class Match implements Observer {
 			}
 			
 			if (target instanceof Hero) {
+				// TODO : Ändra till compare med id istället
 				if (target.equals(player1.hero)) {
 					player1.hero.damage(ability.getValue());
 				} else if(target.equals(player2.hero)) {
@@ -851,8 +852,50 @@ public class Match implements Observer {
 			}
 		}
 		
+		/**
+		 * Draws a number of cards
+		 * @param ability
+		 * 		The ability object that was used
+		 */
 		private void useDrawCardAbility(DrawCardAbility ability) {
+			int ammount = ability.getAmount();
+			for (int i = 0; i < ammount; i++) {
+				drawCard();
+			}
+		}
 
+		/**
+		 * Recieves a ability object and taps the target of the ability
+		 * @param ability
+		 * 		The ability to use
+		 */
+		private void useTapAbility(TapTargetAbility ability) {
+			Lanes lane = null;
+			if (ability.getTarget() instanceof Unit) {
+				lane = ((Unit)ability.getTarget()).getLaneEnum();
+			} else if(ability.getTarget() instanceof HeroicSupport) {
+				lane  =((HeroicSupport)ability.getTarget()).getLanesEnum();
+			}
+			Target abTarget = findTargetById(ability.getTarget().getId(), lane);
+			// Cannot be a Hero so no ceck if the abTarget instanceof Card
+			tapCard((Card)abTarget);
+		}
+
+		/**
+		 * Recieves a ability object and untaps the target of the ability
+		 * @param ability
+		 * 		The ability to use
+		 */
+		private void useUnTapAbility(UntapTargetAbility ability) {
+			Lanes lane = null;
+			if (ability.getTarget() instanceof Unit) {
+				lane = ((Unit)ability.getTarget()).getLaneEnum();
+			} else if(ability.getTarget() instanceof HeroicSupport) {
+				lane  =((HeroicSupport)ability.getTarget()).getLanesEnum();
+			}
+			Target abTarget = findTargetById(ability.getTarget().getId(), lane);
+			// Cannot be a Hero so no ceck if the abTarget instanceof Card
+			untapCard((Card)abTarget);
 		}
 
 		/**
