@@ -469,8 +469,9 @@ public class Match implements Observer {
 				addCardToScrapYard(card);
 				removeCardFromHand(card);
 				// Send to player who initatied move
-				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, "Server", card));
-				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, "Server", card));
+				PlayTechCard move = new PlayTechCard(card);
+				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, "Server", move));
+				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, "Server", move));
 			} catch (InsufficientResourcesException e) {
 				CommandMessage error = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "Server", e);
 				sendMessageToPlayer(this, error);
@@ -841,6 +842,7 @@ public class Match implements Observer {
 		 * 		A Object extending the ability class.
 		 */
 		public void useAbility(Ability ability) {
+			System.out.println("IN USE ABILITY");
 			if (ability instanceof SingleTargetAbility) {
 				useSingelTargetAbility((SingleTargetAbility) ability);
 			} else if (ability instanceof DrawCardAbility) {

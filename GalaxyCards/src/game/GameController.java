@@ -1,7 +1,5 @@
 package game;
 
-import java.awt.SecondaryLoop;
-
 import Client.ClientController;
 import cards.HeroicSupport;
 import cards.ResourceCard;
