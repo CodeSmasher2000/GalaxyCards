@@ -871,10 +871,9 @@ public class Match implements Observer {
 			}
 			
 			if (target instanceof Hero) {
-				// TODO : Ändra till compare med id istället
-				if (target.equals(player1.hero)) {
+				if (target.getId() == (player1.hero.getId())) {
 					player1.hero.damage(ability.getValue());
-				} else if(target.equals(player2.hero)) {
+				} else if(target.getId()==player2.hero.getId()) {
 					player2.hero.damage(ability.getValue());
 				}
 				updateHeroValues();
