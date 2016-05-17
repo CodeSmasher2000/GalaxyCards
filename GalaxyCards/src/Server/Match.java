@@ -177,7 +177,13 @@ public class Match implements Observer {
 			user2.writeMessage(message);
 		}
 	}
-
+	
+	/**
+	 * Recieves a attack object with the fights to calculate. When the fight is done it invokes the update card method
+	 * to update the values of the cards.
+	 * @param attack
+	 * 		A Attack object.
+	 */
 	public void fight(Attack attack) {
 		for (int i = 0; i < attack.getLength(); i++) {
 			boolean attackingCardFound = false;
@@ -228,7 +234,10 @@ public class Match implements Observer {
 			}
 		}
 	}
-
+	
+	/**
+	 * The method invokes methods depending on the object it receives
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		// Kontrollerar vilken spelare som har gjort draget
@@ -283,6 +292,11 @@ public class Match implements Observer {
 		}
 	}
 
+	/**
+	 * Invokes the fight method and sets the players in to the correct phase
+	 * @param message
+	 * 		The message contating the attack object
+	 */
 	private void commitDefendMove(CommandMessage message) {
 		Attack attack = (Attack) message.getData();
 		fight(attack);
@@ -774,7 +788,11 @@ public class Match implements Observer {
 			// untapDefensiveLane();
 			// tapOffensiveLane();
 		}
-
+		
+		/**
+		 * Sets the player into idle phase and sends a MATCH_SET_PHASE to the clinet to also set the thier controller
+		 * into the correct phase.
+		 */
 		public void setIdlePhase() {
 			idle = this;
 			this.phase = Phase.IDLE;
@@ -782,7 +800,13 @@ public class Match implements Observer {
 			// tapOffensiveLane();
 			// tapDefensiveLane();
 		}
-
+		
+		/**
+		 * Updates the target passed in to the method. Sends a message to both clients with the target.
+		 * If the target is dead it's removed from the correct list.
+		 * @param target
+		 * 		The target to update
+		 */
 		public void updateTarget(Target target) {
 			if (target instanceof HeroicSupport || target instanceof Unit) {
 				CommandMessage message = new CommandMessage(Commands.MATCH_UPDATECARD, "Server", target);
@@ -811,6 +835,11 @@ public class Match implements Observer {
 			}
 		}
 		
+		/**
+		 * Checks what of what type the recived ability object is and invokes another method
+		 * @param ability
+		 * 		A Object extending the ability class.
+		 */
 		public void useAbility(Ability ability) {
 			if (ability instanceof SingleTargetAbility) {
 				useSingelTargetAbility((SingleTargetAbility) ability);

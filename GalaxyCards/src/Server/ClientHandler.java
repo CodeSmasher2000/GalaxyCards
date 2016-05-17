@@ -119,7 +119,7 @@ public class ClientHandler extends Observable implements Runnable {
 					break;
 				case MATCH_USE_ABILITY:
 					setChanged();
-					notifyObservers();
+					notifyObservers(message);
 					break;
 				default:
 					break;

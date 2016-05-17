@@ -332,6 +332,7 @@ public class GameController {
 
 	public void playTechOk(Tech card) {
 		boardController.useAbility(card);
+		boardController.removeCardFromHand(card);
 	}
 
 	public void tapCard(int cardId, Lanes ENUM) {
