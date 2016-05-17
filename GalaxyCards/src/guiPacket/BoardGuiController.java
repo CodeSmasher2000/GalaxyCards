@@ -362,6 +362,7 @@ public class BoardGuiController {
 					 temp.getPrice(), temp.getDefense(), temp.getAbility());
 			clonedCard.setId(card.getId());
 			clonedCard.setLanesEnum(temp.getLanesEnum());
+			clonedCard.setAbilityText(temp.getAbilityText());
 			temp = null;
 			return clonedCard;
 		} else if (card instanceof Tech) {
@@ -369,6 +370,7 @@ public class BoardGuiController {
 			Tech clonedCard = new Tech(temp.getName(), temp.getRarity(), temp.getImage(), temp.getPrice(),
 					temp.getAbility());
 			clonedCard.setId(card.getId());
+			clonedCard.setAbilityText(temp.getAbilityText());
 			return clonedCard;
 		} else if (card instanceof Unit) {
 			Unit temp = (Unit) card;
@@ -376,6 +378,7 @@ public class BoardGuiController {
 					temp.getDefense(), temp.getPrice());
 			clonedCard.setId(card.getId());
 			clonedCard.setLaneEnum(temp.getLaneEnum());
+			clonedCard.setAbilityText(temp.getAbilityText());
 			card = null;
 			temp = null;
 			return clonedCard;
