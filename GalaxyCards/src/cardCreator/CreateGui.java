@@ -13,7 +13,11 @@ import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
 
-
+/**
+ * Sets up the gui components and creates the Controller.
+ * @author Jonte
+ *
+ */
 public class CreateGui extends JPanel {
 	private JTabbedPane tabs = new JTabbedPane();
 	private JPanel mainPanel = new JPanel();
@@ -53,6 +57,9 @@ public class CreateGui extends JPanel {
 		return this.controller;
 	}
 	
+	/**
+	 * Adds the selected card with the specified values.
+	 */
 	public void addCard() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Create Unit");
@@ -71,11 +78,18 @@ public class CreateGui extends JPanel {
 					createTech.getDescription(),createTech.getAbility());
 		}
 	}
-	
+	/**
+	 * Removes a card from the deck.
+	 * @param card
+	 * 			The card to be removed.
+	 */
 	public void removeCardFromList(Card card) {
 		deckPanel.removeFromList(card);
 	}
 	
+	/**
+	 * Updates the preview panel with the selected card.
+	 */
 	public void updateCardPreview() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Preview Unit");
@@ -102,6 +116,11 @@ public class CreateGui extends JPanel {
 		}
 	}
 	
+	/**
+	 * Updates the textfields and textareas with the selected unit card.
+	 * @param card
+	 * 			The card to update the fields with.
+	 */
 	public void updateUnitFields(Unit card){
 		tabs.setSelectedComponent(createUnit);
 		createUnit.setName(card.getName());
@@ -113,6 +132,11 @@ public class CreateGui extends JPanel {
 		createUnit.setImageName(card.getImage());
 	}
 	
+	/**
+	 * Updates the textfields and textareas with the selected Tech card.
+	 * @param card
+	 * 			The card to update the fields with.
+	 */
 	public void updateTechFields(Tech card){
 		tabs.setSelectedComponent(createTech);
 		createTech.setName(card.getName());
@@ -122,9 +146,20 @@ public class CreateGui extends JPanel {
 		createTech.setImageName(card.getImage());
 	}
 	
+	/**
+	 * Updates the textfields and textareas with the selected Reource card.
+	 * @param card
+	 * 			The card to update the fields with.
+	 */
 	public void updateResourceFields(ResourceCard card){
 		tabs.setSelectedComponent(createResource);
 	}
+	
+	/**
+	 * Updates the textfields and textareas with the selected Heroic-support card.
+	 * @param card
+	 * 			The card to update the fields with.
+	 */
 	public void updateHeroicFields(HeroicSupport card){
 		tabs.setSelectedComponent(createHeroic);
 		createHeroic.setName(card.getName());
@@ -135,6 +170,11 @@ public class CreateGui extends JPanel {
 		createHeroic.setImageName(card.getImage());
 	}
 	
+	/**
+	 * Adds selected card to the List model.
+	 * @param cardToAdd
+	 * 			The card to add.
+	 */
 	public void addCardToList(Card cardToAdd) {
 		deckPanel.addToListModel(cardToAdd);
 	}

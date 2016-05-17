@@ -135,6 +135,11 @@ public class CreateUnit extends JPanel {
 		taDescription.setText(description);
 	}
 	
+	/**
+	 * Inner class which contains the logic for the ActionListener.
+	 * @author Jonte
+	 *
+	 */
 	private class ButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {

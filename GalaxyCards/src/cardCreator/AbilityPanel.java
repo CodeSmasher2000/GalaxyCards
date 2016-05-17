@@ -35,10 +35,13 @@ public class AbilityPanel extends JPanel {
 		setLayout(new FlowLayout());
 		initElems();
 		ButtonListener btnListener = new ButtonListener();
-//		cbAbility.addItemListener(btnListener);
+		cbAbility.addItemListener(btnListener);
 
 	}
-
+	
+	/**
+	 * Initializes the Swing componenents and adds them to the main panel. 
+	 */
 	public void initElems() {
 		initComboBox();
 		lblTf.setPreferredSize(new Dimension(320, 10));
@@ -53,7 +56,11 @@ public class AbilityPanel extends JPanel {
 		add(lblDescription);
 		add(taDescription);
 	}
-
+	
+	
+	/**
+	 * Initializes the JComboBoxes and gives them a String.
+	 */
 	public void initComboBox() {
 		String healdmg = "Heal/dmg";
 		String drawCard = "Draw Card";
@@ -67,7 +74,11 @@ public class AbilityPanel extends JPanel {
 		cbAbility.addItem(untapTarget);
 //		cbAbility.addItem(buff);
 	}
-
+	/**
+	 * Creates an ability depending on the chosen String in the JComboBox.
+	 * @return
+	 * 		The ability to create.
+	 */
 	public Ability createAbility() {
 		if (cbAbility.getSelectedItem().equals("Heal/dmg")) {
 			return createHealdmg();
@@ -101,12 +112,18 @@ public class AbilityPanel extends JPanel {
 		return healdmg;
 
 	}
-
+	
+	
 	public String getDescription() {
 		String description = taDescription.getText();
 		return description;
 	}
-
+	
+	/** 
+	 * Converts the String value to an int.
+	 * @return
+	 * 		The value of an ability.
+	 */
 	public int getValue() {
 		String text = tfValue.getText();
 		System.out.println(text);
@@ -119,24 +136,28 @@ public class AbilityPanel extends JPanel {
 
 	}
 
-
+	/**
+	 * Inner class that contains the logic when an itemlistener is called.
+	 * @author Jonte
+	 *
+	 */
 	private class ButtonListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-//			if (((String) e.getItem()).equalsIgnoreCase("Heal/dmg")) {
-//				tfValue.setText("Heal = -value, Dmg = +value");
-//				tfValue.setEnabled(true);
-//			} else if (((String) e.getItem()).equalsIgnoreCase("Draw Card")) {
-//				tfValue.setText("Value = how many cards to draw.");
-//				tfValue.setEnabled(true);
-//			} else if (((String) e.getItem()).equalsIgnoreCase("Tap Target")) {
-//				tfValue.setText("no value");
-//				tfValue.setEnabled(false);
-//			} else if (((String) e.getItem()).equalsIgnoreCase("Untap Target")) {
-//				tfValue.setText("no value");
-//				tfValue.setEnabled(false);
-//			}
+			if (((String) e.getItem()).equalsIgnoreCase("Heal/dmg")) {
+				tfValue.setText("Heal = -value, Dmg = +value");
+				tfValue.setEnabled(true);
+			} else if (((String) e.getItem()).equalsIgnoreCase("Draw Card")) {
+				tfValue.setText("Value = how many cards to draw.");
+				tfValue.setEnabled(true);
+			} else if (((String) e.getItem()).equalsIgnoreCase("Tap Target")) {
+				tfValue.setText("no value");
+				tfValue.setEnabled(false);
+			} else if (((String) e.getItem()).equalsIgnoreCase("Untap Target")) {
+				tfValue.setText("no value");
+				tfValue.setEnabled(false);
+			}
 
 		}
 	}

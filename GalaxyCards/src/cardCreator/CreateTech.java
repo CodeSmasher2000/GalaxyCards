@@ -52,6 +52,9 @@ public class CreateTech extends JPanel {
 		add(abilityPanel);
 	}
 	
+	/**
+	 * Initializes the GridLayout with Swing components.
+	 */
 	public void initGrid(){
 		gridTech.setLayout(new GridLayout(6,2));
 		gridTech.setPreferredSize(new Dimension(400,300));
@@ -119,7 +122,11 @@ public class CreateTech extends JPanel {
 		abilityPanel.setDescription(description);
 	}
 	
-	
+	/**
+	 * Inner class which contains the logic for the ActionListener.
+	 * @author Jonte
+	 *
+	 */
 	private class ButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
