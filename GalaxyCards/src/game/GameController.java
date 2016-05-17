@@ -331,8 +331,7 @@ public class GameController {
 	}
 
 	public void playTechOk(Tech card) {
-		boardController.addToPlayerScrapYard(card);
-		
+		boardController.useAbility(card);
 	}
 
 	public void tapCard(int cardId, Lanes ENUM) {
