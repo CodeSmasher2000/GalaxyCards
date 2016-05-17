@@ -1,5 +1,7 @@
 package abilities;
 
+import java.io.Serializable;
+
 import cards.Target;
 
 /**
@@ -12,8 +14,12 @@ import cards.Target;
  *
  */
 
-public abstract class Ability {
+public abstract class Ability implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String description;
 	private boolean hasTarget;
 	private Target target;
