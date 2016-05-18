@@ -765,6 +765,7 @@ public class BoardGuiController {
 				startAbilityThreadListener(cardWithAbility);
 			}else{
 				gameController.useAbility(cardWithAbility);
+				removeCardFromHand(cardWithAbility);
 			}
 		}
 	}
@@ -854,6 +855,7 @@ public class BoardGuiController {
 				((Tech)cardWithAbility).getAbility().setTarget(targetId, targetLane);
 				ability = ((Tech)cardWithAbility).getAbility();
 				gameController.useAbility(cardWithAbility);
+				removeCardFromHand(cardWithAbility);
 			}
 			if(cardWithAbility instanceof HeroicSupport){
 				((HeroicSupport)cardWithAbility).getAbility().setTarget(targetId, targetLane);

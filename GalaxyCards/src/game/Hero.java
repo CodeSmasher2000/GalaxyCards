@@ -110,13 +110,26 @@ public class Hero implements Serializable, Target {
 //			life -= amount;
 //		}
 		
-		if (amount < 0) {
-			// The maximun shield of the hero should be 10
+//		if (amount < 0) {
+//			// The maximun shield of the hero should be 10
+//			addShield(-amount);
+//		} else if(energyShield < 0) {
+//			energyShield = Math.max(0, energyShield - amount);
+//		} else {
+//			life -= amount;
+//		}
+		
+		if(amount<0){
 			addShield(-amount);
-		} else if(energyShield < 0) {
-			energyShield = Math.max(0, energyShield - amount);
-		} else {
-			life -= amount;
+		}else{
+			if(energyShield>0){
+				energyShield-=amount;
+			}else{
+				if(energyShield<0){
+					energyShield=0;
+				}
+				life-=amount;
+			}
 		}
 
 	}
