@@ -892,6 +892,7 @@ public class Match implements Observer {
 				enemy = player1;
 			}
 			// TODO : IF STATS EJ KORRET
+			
 			// if (target instanceof Hero) {
 			// if (target.getId() == (player1.hero.getId())) {
 			// player1.hero.damage(ability.getValue());
