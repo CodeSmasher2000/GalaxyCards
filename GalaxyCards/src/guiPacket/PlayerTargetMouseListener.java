@@ -70,17 +70,29 @@ public class PlayerTargetMouseListener implements MouseListener {
 		 * 
 		 */
 		if (boardController.getPhase() == Phase.DEFENDING) {
-			
+
 			// Interaction when choosing target for ability
 			if (boardController.getAbilityThreadStarted()) {
-				if (event.getSource() instanceof Target) {
-					boardController.setAbilityTarget((Target) event.getSource());
+//				if (event.getSource() instanceof Target) {
+//					boardController.setAbilityTarget((Target) event.getSource());
+//				} else {
+//					InfoPanelGUI.append("Invalid target.");
+//					boardController.setAbilityTargetSelected(true);
+//				}
+				if (event.getSource() instanceof HeroGUI) {
+					boardController.setAbilityTarget((((HeroGUI)event.getSource()).getId()), (((HeroGUI)event.getSource()).getLaneEnum()));
+
+				} else if (event.getSource() instanceof Unit) {
+					boardController.setAbilityTarget((((Unit)event.getSource()).getId()), (((Unit)event.getSource()).getLaneEnum()));
+				} else if (event.getSource() instanceof HeroicSupport) {
+					boardController.setAbilityTarget((((HeroicSupport)event.getSource()).getId()), (((HeroicSupport)event.getSource()).getLaneEnum()));	
 				} else {
-					InfoPanelGUI.append("Invalid target.");
-					boardController.setAbilityTargetSelected(true);
+					 InfoPanelGUI.append("Invalid target.");
+					 boardController.setAbilityTargetSelected(true);
 				}
-			
-			// Interaction when choosing unit to defend with
+
+
+				// Interaction when choosing unit to defend with
 			} else {
 				if (event.getSource() instanceof Unit) {
 					card = (Unit) event.getSource();
@@ -111,14 +123,18 @@ public class PlayerTargetMouseListener implements MouseListener {
 		if (boardController.getPhase() == Phase.ATTACKING) {
 
 			if (boardController.getAbilityThreadStarted()) {
-				if (event.getSource() instanceof Target) {
-					boardController.setAbilityTarget((Target) event.getSource());
+				if (event.getSource() instanceof HeroGUI) {
+					boardController.setAbilityTarget((((HeroGUI)event.getSource()).getId()), (((HeroGUI)event.getSource()).getLaneEnum()));
+
+				} else if (event.getSource() instanceof Unit) {
+					boardController.setAbilityTarget((((Unit)event.getSource()).getId()), (((Unit)event.getSource()).getLaneEnum()));
+				} else if (event.getSource() instanceof HeroicSupport) {
+					boardController.setAbilityTarget((((HeroicSupport)event.getSource()).getId()), (((HeroicSupport)event.getSource()).getLaneEnum()));	
 				} else {
-					InfoPanelGUI.append("Invalid target.");
-					boardController.setAbilityTargetSelected(true);
+					 InfoPanelGUI.append("Invalid target.");
+					 boardController.setAbilityTargetSelected(true);
 				}
-			
-			
+
 			} else {
 
 				if (event.getSource() instanceof Card) {

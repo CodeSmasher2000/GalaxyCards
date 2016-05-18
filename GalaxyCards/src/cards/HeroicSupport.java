@@ -197,7 +197,7 @@ public class HeroicSupport extends Card implements PlayCardsInterface, Serializa
 	 * 
 	 * @return ENUM : Persons
 	 */
-	public Lanes getLanesEnum() {
+	public Lanes getLaneEnum() {
 		return ENUM;
 	}
 	

@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 
+import enumMessage.Lanes;
 import enumMessage.Persons;
 
 /**
@@ -30,6 +30,7 @@ public class HeroGUI extends JPanel {
 	private ImageIcon heroImage;
 	private transient BoardGuiController boardController;
 	private Persons ENUM;
+	private Lanes laneENUM;
     private int id;
 
 	private Border b1;
@@ -44,6 +45,11 @@ public class HeroGUI extends JPanel {
 	public HeroGUI(BoardGuiController boardController, Persons ENUM) {
 		this.boardController = boardController;
 		this.ENUM = ENUM;
+		if(this.ENUM==Persons.PLAYER){
+			laneENUM=Lanes.PLAYER_HERO;
+		}else{
+			laneENUM=Lanes.ENEMY_HERO;
+		}
 		this.boardController.addHeroListener(this, ENUM);
 
 		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
@@ -177,9 +183,14 @@ public class HeroGUI extends JPanel {
 	public void setId(int id) {
         this.id = id;
         InfoPanelGUI.append("Hjälte id satt till: " + this.getId());
+        
 	}
 
     public int getId() {
         return id;
+    }
+    
+    public Lanes getLaneEnum(){
+    	return laneENUM;
     }
 }

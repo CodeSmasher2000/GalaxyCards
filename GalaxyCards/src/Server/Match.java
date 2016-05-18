@@ -667,7 +667,7 @@ public class Match implements Observer {
 			Lanes ENUM = null, MIRRORED_ENUM = null;
 
 			if (tempCard instanceof HeroicSupport) {
-				ENUM = ((HeroicSupport) tempCard).getLanesEnum();
+				ENUM = ((HeroicSupport) tempCard).getLaneEnum();
 			}
 			if (tempCard instanceof Unit) {
 				ENUM = ((Unit) tempCard).getLaneEnum();
@@ -939,7 +939,7 @@ public class Match implements Observer {
 			if (ability.getTarget() instanceof Unit) {
 				lane = ((Unit) ability.getTarget()).getLaneEnum();
 			} else if (ability.getTarget() instanceof HeroicSupport) {
-				lane = ((HeroicSupport) ability.getTarget()).getLanesEnum();
+				lane = ((HeroicSupport) ability.getTarget()).getLaneEnum();
 			}
 			Target abTarget = findTargetById(ability.getTarget().getId(), lane);
 			// Cannot be a Hero so no ceck if the abTarget instanceof Card
@@ -957,7 +957,7 @@ public class Match implements Observer {
 			if (ability.getTarget() instanceof Unit) {
 				lane = ((Unit) ability.getTarget()).getLaneEnum();
 			} else if (ability.getTarget() instanceof HeroicSupport) {
-				lane = ((HeroicSupport) ability.getTarget()).getLanesEnum();
+				lane = ((HeroicSupport) ability.getTarget()).getLaneEnum();
 			}
 			Target abTarget = findTargetById(ability.getTarget().getId(), lane);
 			// Cannot be a Hero so no ceck if the abTarget instanceof Card
