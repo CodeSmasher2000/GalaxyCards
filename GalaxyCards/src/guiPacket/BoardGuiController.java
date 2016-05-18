@@ -756,8 +756,8 @@ public class BoardGuiController {
 			if(((HeroicSupport)cardWithAbility).getAbility().hasTarget()){
 				startAbilityThreadListener(cardWithAbility);
 			}else{
-				gameController.useAbility(cardWithAbility);
 				tapCard(((HeroicSupport) cardWithAbility).getId(), ((HeroicSupport) cardWithAbility).getLanesEnum());
+				gameController.useAbility(cardWithAbility);
 			}
 		}
 		if ( cardWithAbility instanceof Tech){
@@ -835,7 +835,7 @@ public class BoardGuiController {
 		}
 		
 		public void run(){
-			while(!Thread.interrupted() || !getAbilityTargetSelected()){
+			while(getAbilityTargetSelected()==false){
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
@@ -858,12 +858,12 @@ public class BoardGuiController {
 			if(cardWithAbility instanceof HeroicSupport){
 				((HeroicSupport)cardWithAbility).getAbility().setTarget(target);
 				ability = ((HeroicSupport)cardWithAbility).getAbility();
-				gameController.useAbility(cardWithAbility);
 				tapCard(((HeroicSupport)cardWithAbility).getId(), ((HeroicSupport)cardWithAbility).getLanesEnum());
+				gameController.useAbility(cardWithAbility);
 			}
 			
+			InfoPanelGUI.append(cardWithAbility.toString()+"\n uses ability"+ability.toString()+"\n on target: "+target.toString());
 			setAbilityTargetSelected(true);
-			InfoPanelGUI.append(cardWithAbility.toString()+" uses ability"+ability.toString()+" on target: "+target.toString());
 		}
 
 		
