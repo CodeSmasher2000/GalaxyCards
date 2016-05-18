@@ -41,8 +41,11 @@ public class Client {
 			socket = new Socket(ip, port);
 			oos = new ObjectOutputStream(socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
+			clientController.enableUsernameBtn();
+			clientController.guiMessage("\n Connected to server!");
 		} catch (IOException e) {
 			e.printStackTrace();
+			clientController.guiMessage("\n Can't connect to server, try again!");
 		}
 
 		this.listener = new Listener();

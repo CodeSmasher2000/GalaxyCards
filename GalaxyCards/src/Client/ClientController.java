@@ -41,8 +41,7 @@ public class ClientController {
 	}
 
 	/**
-	 * Metod som låter klienten ansluta till en given server Creates a client
-	 * with a specified ip, port and ClientController.
+	 * Creates a client with a specified ip, port and ClientController.
 	 * 
 	 * @param ip
 	 *            The IP to a Server.
@@ -65,10 +64,18 @@ public class ClientController {
 	 * Sends the username a Client has typed in to the server and asks to Login.
 	 */
 	public synchronized void login() {
+		if(clientGUI.getUsername().length()>16){
+			clientGUI.appendTextArea("\n Your username can't be more than 16 characters long, try again!" );
+		}else if(clientGUI.getUsername().contains(" ")){
+			clientGUI.appendTextArea("\n You can't have spacebar in your username, try again!");
+			
+		}else{
 		activeUser = clientGUI.getUsername();
 		CommandMessage loginMsg = new CommandMessage(Commands.LOGIN, activeUser);
 		client.sendMessage(loginMsg);
-
+		clientGUI.enableSearchBtn();
+	
+		}
 	}
 
 	/**
@@ -85,6 +92,17 @@ public class ClientController {
 		} else {
 			clientGUI.appendTextArea("\n Username is already in use, enter a new one");
 		}
+	}
+	
+	/**
+	 * Invokes the appendText() in clientGUI.
+	 */
+	public void guiMessage(String text){
+		clientGUI.appendTextArea(text);
+	}
+	
+	public void enableUsernameBtn(){
+		clientGUI.enableUsernameBtn();
 	}
 
 	/**

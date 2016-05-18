@@ -38,10 +38,10 @@ public class ClientGUI extends JPanel {
 	private Font txtFont = new Font("Comic Sans MS", Font.BOLD, 22);
 	private JButton btnFindMatch = new JButton("Search Match");
 	private JButton btnConnect = new JButton("Connect to Server");
-	private JButton btnEnter = new JButton("Enter");
+	private JButton btnUsername = new JButton("Enter");
 	private JTextField tfUsername = new JTextField("Enter username");
 	private JTextField tfIp = new JTextField("localhost");
-	public JButton btnDisconnect = new JButton("Disconnect");
+	private JButton btnDisconnect = new JButton("Disconnect");
 
 	private ImageIcon background = new ImageIcon("files/pictures/playfieldBG.jpg");
 	private ClientController clientController;
@@ -63,7 +63,7 @@ public class ClientGUI extends JPanel {
 		tfIp.addMouseListener(ml);
 		btnFindMatch.addActionListener(btnListener);
 		btnConnect.addActionListener(btnListener);
-		btnEnter.addActionListener(btnListener);
+		btnUsername.addActionListener(btnListener);
 		btnDisconnect.addActionListener(btnListener);
 	}
 
@@ -97,8 +97,8 @@ public class ClientGUI extends JPanel {
 		pnlUsername.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 2));
 		tfUsername.setPreferredSize(new Dimension(150, 30));
 		pnlUsername.add(tfUsername);
-		pnlUsername.add(btnEnter);
-		btnEnter.setEnabled(false);
+		pnlUsername.add(btnUsername);
+		btnUsername.setEnabled(false);
 	}
 
 	/**
@@ -127,11 +127,26 @@ public class ClientGUI extends JPanel {
 	public String getUsername() {
 		String username = tfUsername.getText();
 		return username;
+		
+	}
+	
+	/**
+	 * Enables and disables JButtons.
+	 */
+	public void enableSearchBtn(){
+		btnFindMatch.setEnabled(true);
+		btnUsername.setEnabled(false);
+	}
+	
+	/***
+	 * Enable and disables JButtons
+	 */
+	public void enableUsernameBtn(){
+		btnUsername.setEnabled(true);
+		btnConnect.setEnabled(false);
+		btnDisconnect.setEnabled(true);
 	}
 
-	public void exit() {
-		this.exit();
-	}
 
 	/**
 	 * Draws the background with a chosen picture.
@@ -187,7 +202,7 @@ public class ClientGUI extends JPanel {
 	}
 
 	public void disableEnterBtn() {
-		btnEnter.setEnabled(false);
+		btnUsername.setEnabled(false);
 	}
 
 	private class ButtonListener implements ActionListener {
@@ -200,13 +215,8 @@ public class ClientGUI extends JPanel {
 				clientController.startMatchMaking();
 			} else if (e.getSource() == btnConnect) {
 				clientConnect();
-				btnEnter.setEnabled(true);
-				btnConnect.setEnabled(false);
-				btnDisconnect.setEnabled(true);
-				txtArea.append("\n Connected to server");
-			} else if (e.getSource() == btnEnter) {
+			} else if (e.getSource() == btnUsername) {
 				clientController.login();
-				btnFindMatch.setEnabled(true);
 
 			} else if (e.getSource() == btnDisconnect) {
 				clientController.disconnect();
