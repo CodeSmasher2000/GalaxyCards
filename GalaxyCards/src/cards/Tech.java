@@ -32,6 +32,9 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 		return IMAGE_NAME;
 	}
 
+	public String getName(){
+		return NAME;
+	}
 	@Override
 	public String getRarity() {
 		return RARITY;

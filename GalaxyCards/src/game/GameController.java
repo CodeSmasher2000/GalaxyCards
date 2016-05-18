@@ -330,7 +330,6 @@ public class GameController {
 
 	public void playTechOk(Tech card) {
 		boardController.useAbility(card);
-		boardController.removeCardFromHand(card);
 	}
 
 	public void tapCard(int cardId, Lanes ENUM) {
@@ -383,5 +382,6 @@ public class GameController {
 
 	public void useAbility(Card cardWithAbility) {
 		clientController.writeMessage(new CommandMessage(Commands.MATCH_USE_ABILITY, "Klient", cardWithAbility));
+		
 	}
 }
