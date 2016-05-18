@@ -80,12 +80,17 @@ public class OpponentTargetMouseListener implements MouseListener {
 					boardController.setDefendingTargetSelected(true);
 				}
 			} else if (boardController.getAbilityThreadStarted()) {
-				if (event.getSource() instanceof Target) {
-					boardController.setAbilityTarget((Target) event.getSource());
-				}else{
-					InfoPanelGUI.append("Invalid target.");
-					boardController.setAbilityTargetSelected(true);
+				if (event.getSource() instanceof HeroGUI) {
+					boardController.setAbilityTarget((((HeroGUI)event.getSource()).getId()), (((HeroGUI)event.getSource()).getLaneEnum()));
+				} else if (event.getSource() instanceof Unit) {
+					boardController.setAbilityTarget((((Unit)event.getSource()).getId()), (((Unit)event.getSource()).getLaneEnum()));
+				} else if (event.getSource() instanceof HeroicSupport) {
+					boardController.setAbilityTarget((((HeroicSupport)event.getSource()).getId()), (((HeroicSupport)event.getSource()).getLaneEnum()));	
+				} else {
+					 InfoPanelGUI.append("Invalid target.");
+					 boardController.setAbilityTargetSelected(true);
 				}
+
 			} else {
 				InfoPanelGUI.append(event.getSource().toString());
 			}
@@ -114,14 +119,17 @@ public class OpponentTargetMouseListener implements MouseListener {
 					boardController.setTargetSelected(true);
 				}
 			}else if (boardController.getAbilityThreadStarted()) {
-				if (event.getSource() instanceof Target) {
-					boardController.setAbilityTarget((Target) event.getSource());
+				if (event.getSource() instanceof HeroGUI) {
+					boardController.setAbilityTarget((((HeroGUI)event.getSource()).getId()), (((HeroGUI)event.getSource()).getLaneEnum()));
+
+				} else if (event.getSource() instanceof Unit) {
+					boardController.setAbilityTarget((((Unit)event.getSource()).getId()), (((Unit)event.getSource()).getLaneEnum()));
+				} else if (event.getSource() instanceof HeroicSupport) {
+					boardController.setAbilityTarget((((HeroicSupport)event.getSource()).getId()), (((HeroicSupport)event.getSource()).getLaneEnum()));	
 				} else {
-					InfoPanelGUI.append("Invalid target.");
-					boardController.setAbilityTargetSelected(true);
+					 InfoPanelGUI.append("Invalid target.");
+					 boardController.setAbilityTargetSelected(true);
 				}
-			
-			
 			} 
 			else {
 				InfoPanelGUI.append(event.getSource().toString());

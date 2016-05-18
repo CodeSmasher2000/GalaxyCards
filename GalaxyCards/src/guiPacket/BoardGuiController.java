@@ -361,7 +361,7 @@ public class BoardGuiController {
 			HeroicSupport clonedCard = new HeroicSupport(temp.getName(), temp.getRarity(), temp.getImage(),
 					 temp.getPrice(), temp.getDefense(), temp.getAbility());
 			clonedCard.setId(card.getId());
-			clonedCard.setLanesEnum(temp.getLanesEnum());
+			clonedCard.setLanesEnum(temp.getLaneEnum());
 			clonedCard.setAbilityText(temp.getAbilityText());
 			temp = null;
 			return clonedCard;
@@ -584,8 +584,8 @@ public class BoardGuiController {
 		defendSelectThread.changeAttackersTarget(attacker);
 	}
 	
-	public void setAbilityTarget(Target target) {
-		abilitySelectThread.setAbilityTarget(target);
+	public void setAbilityTarget(int targetId, Lanes targetLane) {
+		abilitySelectThread.setAbilityTarget(targetId, targetLane);
 		
 	}
 
@@ -756,7 +756,7 @@ public class BoardGuiController {
 			if(((HeroicSupport)cardWithAbility).getAbility().hasTarget()){
 				startAbilityThreadListener(cardWithAbility);
 			}else{
-				tapCard(((HeroicSupport) cardWithAbility).getId(), ((HeroicSupport) cardWithAbility).getLanesEnum());
+				tapCard(((HeroicSupport) cardWithAbility).getId(), ((HeroicSupport) cardWithAbility).getLaneEnum());
 				gameController.useAbility(cardWithAbility);
 			}
 		}
@@ -847,22 +847,22 @@ public class BoardGuiController {
 			abilitySelectThread = null;
 		}
 
-		public void setAbilityTarget(Target target) {
+		public void setAbilityTarget(int targetId, Lanes targetLane) {
 			Ability ability = null;
 			
 			if(cardWithAbility instanceof Tech){
-				((Tech)cardWithAbility).getAbility().setTarget(target);
+				((Tech)cardWithAbility).getAbility().setTarget(targetId, targetLane);
 				ability = ((Tech)cardWithAbility).getAbility();
 				gameController.useAbility(cardWithAbility);
 			}
 			if(cardWithAbility instanceof HeroicSupport){
-				((HeroicSupport)cardWithAbility).getAbility().setTarget(target);
+				((HeroicSupport)cardWithAbility).getAbility().setTarget(targetId, targetLane);
 				ability = ((HeroicSupport)cardWithAbility).getAbility();
-				tapCard(((HeroicSupport)cardWithAbility).getId(), ((HeroicSupport)cardWithAbility).getLanesEnum());
+				tapCard(((HeroicSupport)cardWithAbility).getId(), ((HeroicSupport)cardWithAbility).getLaneEnum());
 				gameController.useAbility(cardWithAbility);
 			}
 			
-			InfoPanelGUI.append(cardWithAbility.toString()+"\n uses ability"+ability.toString()+"\n on target: "+target.toString());
+			InfoPanelGUI.append(cardWithAbility.toString()+"\n uses ability"+ability.toString());
 			setAbilityTargetSelected(true);
 		}
 

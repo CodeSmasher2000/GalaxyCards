@@ -3,6 +3,7 @@ package abilities;
 import java.io.Serializable;
 
 import cards.Target;
+import enumMessage.Lanes;
 
 /**
  * This abstract class is the superclass of all ability classes. One thing in
@@ -23,6 +24,8 @@ public abstract class Ability implements Serializable {
 	private String description;
 	private boolean hasTarget;
 	private Target target;
+	private int targetId;
+	private Lanes targetLane;
 
 	/**
 	 * Returns a String that represent the description of the ability.
@@ -66,11 +69,17 @@ public abstract class Ability implements Serializable {
 		this.hasTarget=hasTarget;
 	}
 
-	public void setTarget(Target target) {
-		this.target = target;
+	public void setTarget(int targetId, Lanes targetLane) {
+		this.targetId=targetId;
+		this.targetLane=targetLane;
 	}
 	
-	public Target getTarget(){
-		return target;
+	public int getTargetId(){
+		return targetId;
 	}
+	
+	public Lanes getTargetLane(){
+		return targetLane;
+	}
+	
 }
