@@ -113,7 +113,17 @@ public class OpponentTargetMouseListener implements MouseListener {
 					InfoPanelGUI.append("Invalid target, you can only attack opponent's hero or heroic supports");
 					boardController.setTargetSelected(true);
 				}
-			} else {
+			}else if (boardController.getAbilityThreadStarted()) {
+				if (event.getSource() instanceof Target) {
+					boardController.setAbilityTarget((Target) event.getSource());
+				} else {
+					InfoPanelGUI.append("Invalid target.");
+					boardController.setAbilityTargetSelected(true);
+				}
+			
+			
+			} 
+			else {
 				InfoPanelGUI.append(event.getSource().toString());
 			}
 		}
