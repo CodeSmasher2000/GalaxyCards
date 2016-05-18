@@ -114,7 +114,7 @@ public class Match implements Observer {
 		}
 
 	}
-	
+
 	// TODO : SKA TAS BORT
 	public void newRound() {
 		// Sets defensive player to attacker
@@ -177,12 +177,13 @@ public class Match implements Observer {
 			user2.writeMessage(message);
 		}
 	}
-	
+
 	/**
-	 * Recieves a attack object with the fights to calculate. When the fight is done it invokes the update card method
-	 * to update the values of the cards.
+	 * Recieves a attack object with the fights to calculate. When the fight is
+	 * done it invokes the update card method to update the values of the cards.
+	 * 
 	 * @param attack
-	 * 		A Attack object.
+	 *            A Attack object.
 	 */
 	public void fight(Attack attack) {
 		for (int i = 0; i < attack.getLength(); i++) {
@@ -224,17 +225,16 @@ public class Match implements Observer {
 			attackCard.damage(target.getDamage());
 			defensive.updateTarget(target);
 			idle.updateTarget(attackCard);
-			
-			if(target instanceof Hero && ((Hero) target).getLife()<=0){
+
+			if (target instanceof Hero && ((Hero) target).getLife() <= 0) {
 				/*
-				 * Send message to both players Winner / looser
-				 * remove observers in clienthandler
-				 * close clientgui and open the menu.
+				 * Send message to both players Winner / looser remove observers
+				 * in clienthandler close clientgui and open the menu.
 				 */
 			}
 		}
 	}
-	
+
 	/**
 	 * The method invokes methods depending on the object it receives
 	 */
@@ -275,13 +275,13 @@ public class Match implements Observer {
 				commitAttackMove(message);
 			} else if (message.getCommand() == Commands.MATCH_DEFEND_MOVE) {
 				commitDefendMove(message);
-			} else if(message.getCommand() == Commands.MATCH_USE_ABILITY) {
+			} else if (message.getCommand() == Commands.MATCH_USE_ABILITY) {
 				Object obj = message.getData();
 				if (obj instanceof HeroicSupport) {
-					HeroicSupport card = (HeroicSupport)obj;
+					HeroicSupport card = (HeroicSupport) obj;
 					player.useAbility(card.getAbility());
-				} else if(obj instanceof Tech) {
-					Tech card = (Tech)obj;
+				} else if (obj instanceof Tech) {
+					Tech card = (Tech) obj;
 					player.useAbility(card.getAbility());
 				}
 			}
@@ -294,8 +294,9 @@ public class Match implements Observer {
 
 	/**
 	 * Invokes the fight method and sets the players in to the correct phase
+	 * 
 	 * @param message
-	 * 		The message contating the attack object
+	 *            The message contating the attack object
 	 */
 	private void commitDefendMove(CommandMessage message) {
 		Attack attack = (Attack) message.getData();
@@ -366,10 +367,14 @@ public class Match implements Observer {
 				}
 				move.getCard().setLanesEnum(Lanes.PLAYER_HEROIC);
 				heroicSupportLane.add(move.getCard());
-				System.out.println(" Innan, playheroicSupport, handstorlek: " + hand.size()); // för debugg syfte
-//				hand.remove(move.getCard());
+				System.out.println(" Innan, playheroicSupport, handstorlek: " + hand.size()); // för
+																								// debugg
+																								// syfte
+				// hand.remove(move.getCard());
 				removeCardFromHand(move.getCard());
-				System.out.println(" Efter, playheroicSupport, handstorlek: " + hand.size()); // för debugg syfte
+				System.out.println(" Efter, playheroicSupport, handstorlek: " + hand.size()); // för
+																								// debugg
+																								// syfte
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
 				updateHeroValues();
@@ -413,10 +418,14 @@ public class Match implements Observer {
 					this.defensiveLane.add(tempCard);
 					// this.defensiveLane.add((Unit) move.getCard());
 				}
-				System.out.println(" Innan, playUnitCard, handstorlek: " + hand.size()); // för debugg syfte
-//				hand.remove(move.getCard());
+				System.out.println(" Innan, playUnitCard, handstorlek: " + hand.size()); // för
+																							// debugg
+																							// syfte
+				// hand.remove(move.getCard());
 				removeCardFromHand(move.getCard());
-				System.out.println(" Efter, playUnitCard, handstorlek: " + hand.size()); // för debugg syfte
+				System.out.println(" Efter, playUnitCard, handstorlek: " + hand.size()); // för
+																							// debugg
+																							// syfte
 
 				// Send to the client that made the move
 				CommandMessage message = new CommandMessage(Commands.MATCH_PLACE_CARD, "Server", move);
@@ -446,10 +455,14 @@ public class Match implements Observer {
 				move.setUpdateHeroValues(new UpdateHeroValues(hero.getLife(), hero.getEnergyShield(),
 						hero.getCurrentResources(), hero.getMaxResource()));
 				updateHeroValues();
-				System.out.println(" Innan, playResourceCard, handstorlek: " + hand.size()); // för debugg syfte
+				System.out.println(" Innan, playResourceCard, handstorlek: " + hand.size()); // för
+																								// debugg
+																								// syfte
 
 				removeCardFromHand(move.getCard());
-				System.out.println(" Efter, playResourceCard, handstorlek: " + hand.size()); // för debugg syfte
+				System.out.println(" Efter, playResourceCard, handstorlek: " + hand.size()); // för
+																								// debugg
+																								// syfte
 
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, this.name, move));
 				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, this.name, move));
@@ -525,8 +538,10 @@ public class Match implements Observer {
 			// Send messages to the clients
 			CommandMessage message = new CommandMessage(Commands.MATCH_REMOVE_CARD, "server", card);
 			sendMessageToPlayer(this, message);
-//			message = new CommandMessage(Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD, "server", card);
-//			sendMessageToOtherPlayer(this, message);
+			// message = new
+			// CommandMessage(Commands.MATCH_ADD_TO_OPPONET_SCRAPYARD, "server",
+			// card);
+			// sendMessageToOtherPlayer(this, message);
 		}
 
 		/**
@@ -536,7 +551,7 @@ public class Match implements Observer {
 		private Card removeCardFromHand(Card cardToRemove) {
 			for (int i = 0; i < hand.size(); i++) {
 				if (cardToRemove.compareTo(hand.get(i)) == 0) {
-					hand.remove(i);					
+					hand.remove(i);
 					return cardToRemove;
 				}
 			}
@@ -789,10 +804,10 @@ public class Match implements Observer {
 			// untapDefensiveLane();
 			// tapOffensiveLane();
 		}
-		
+
 		/**
-		 * Sets the player into idle phase and sends a MATCH_SET_PHASE to the clinet to also set the thier controller
-		 * into the correct phase.
+		 * Sets the player into idle phase and sends a MATCH_SET_PHASE to the
+		 * clinet to also set the thier controller into the correct phase.
 		 */
 		public void setIdlePhase() {
 			idle = this;
@@ -801,12 +816,14 @@ public class Match implements Observer {
 			// tapOffensiveLane();
 			// tapDefensiveLane();
 		}
-		
+
 		/**
-		 * Updates the target passed in to the method. Sends a message to both clients with the target.
-		 * If the target is dead it's removed from the correct list.
+		 * Updates the target passed in to the method. Sends a message to both
+		 * clients with the target. If the target is dead it's removed from the
+		 * correct list.
+		 * 
 		 * @param target
-		 * 		The target to update
+		 *            The target to update
 		 */
 		public void updateTarget(Target target) {
 			if (target instanceof HeroicSupport || target instanceof Unit) {
@@ -835,29 +852,32 @@ public class Match implements Observer {
 				}
 			}
 		}
-		
+
 		/**
-		 * Checks what of what type the recived ability object is and invokes another method
+		 * Checks what of what type the recived ability object is and invokes
+		 * another method
+		 * 
 		 * @param ability
-		 * 		A Object extending the ability class.
+		 *            A Object extending the ability class.
 		 */
 		public void useAbility(Ability ability) {
 			System.out.println("IN USE ABILITY");
 			if (ability instanceof SingleTargetAbility) {
 				useSingelTargetAbility((SingleTargetAbility) ability);
 			} else if (ability instanceof DrawCardAbility) {
-				useDrawCardAbility((DrawCardAbility)ability);
-			} else if(ability instanceof TapTargetAbility) {
-				useTapAbility((TapTargetAbility)ability);
-			} else if(ability instanceof UntapTargetAbility) {
-				useUnTapAbility((UntapTargetAbility)ability);
+				useDrawCardAbility((DrawCardAbility) ability);
+			} else if (ability instanceof TapTargetAbility) {
+				useTapAbility((TapTargetAbility) ability);
+			} else if (ability instanceof UntapTargetAbility) {
+				useUnTapAbility((UntapTargetAbility) ability);
 			}
 		}
-		
+
 		/**
 		 * Heals or damages a target
+		 * 
 		 * @param ability
-		 * 		The ability object that was used.
+		 *            The ability object that was used.
 		 */
 		private void useSingelTargetAbility(SingleTargetAbility ability) {
 			Player friendly;
@@ -867,34 +887,38 @@ public class Match implements Observer {
 			if (this.equals(player1)) {
 				friendly = player1;
 				enemy = player2;
-			} else if(this.equals(player2)) {
+			} else if (this.equals(player2)) {
 				friendly = player2;
 				enemy = player1;
 			}
-			
-			if (target instanceof Hero) {
-				if (target.getId() == (player1.hero.getId())) {
-					player1.hero.damage(ability.getValue());
-				} else if(target.getId()==player2.hero.getId()) {
-					player2.hero.damage(ability.getValue());
-				}
-				updateHeroValues();
-			} else {
-				Target abTarget = null;
-				if(target instanceof Unit) {
-					abTarget = findTargetById(target.getId(), ((Unit)target).getLaneEnum());
-				} else if(target instanceof HeroicSupport) {
-					abTarget = findTargetById(target.getId(), ((HeroicSupport)target).getLanesEnum());
-				}
-				abTarget.damage(ability.getValue());
-				updateTarget(abTarget);
-			}
+			// TODO : IF STATS EJ KORRET
+			// if (target instanceof Hero) {
+			// if (target.getId() == (player1.hero.getId())) {
+			// player1.hero.damage(ability.getValue());
+			// } else if(target.getId() == player2.hero.getId()) {
+			// player2.hero.damage(ability.getValue());
+			// }
+			// updateHeroValues();
+			// } else {
+			// Target abTarget = null;
+			// if(target instanceof Unit) {
+			// abTarget = findTargetById(target.getId(),
+			// ((Unit)target).getLaneEnum());
+			// } else if(target instanceof HeroicSupport) {
+			// abTarget = findTargetById(target.getId(),
+			// ((HeroicSupport)target).getLanesEnum());
+			// }
+			abTarget = findTargetById(ability.getTargetId(), ability.getTargetLane());
+			abTarget.damage(ability.getValue());
+			updateTarget(abTarget);
+			// }
 		}
-		
+
 		/**
 		 * Draws a number of cards
+		 * 
 		 * @param ability
-		 * 		The ability object that was used
+		 *            The ability object that was used
 		 */
 		private void useDrawCardAbility(DrawCardAbility ability) {
 			int ammount = ability.getAmount();
@@ -905,46 +929,48 @@ public class Match implements Observer {
 
 		/**
 		 * Recieves a ability object and taps the target of the ability
+		 * 
 		 * @param ability
-		 * 		The ability to use
+		 *            The ability to use
 		 */
 		private void useTapAbility(TapTargetAbility ability) {
 			Lanes lane = null;
 			if (ability.getTarget() instanceof Unit) {
-				lane = ((Unit)ability.getTarget()).getLaneEnum();
-			} else if(ability.getTarget() instanceof HeroicSupport) {
-				lane  =((HeroicSupport)ability.getTarget()).getLanesEnum();
+				lane = ((Unit) ability.getTarget()).getLaneEnum();
+			} else if (ability.getTarget() instanceof HeroicSupport) {
+				lane = ((HeroicSupport) ability.getTarget()).getLanesEnum();
 			}
 			Target abTarget = findTargetById(ability.getTarget().getId(), lane);
 			// Cannot be a Hero so no ceck if the abTarget instanceof Card
-			tapCard((Card)abTarget);
+			tapCard((Card) abTarget);
 		}
 
 		/**
 		 * Recieves a ability object and untaps the target of the ability
+		 * 
 		 * @param ability
-		 * 		The ability to use
+		 *            The ability to use
 		 */
 		private void useUnTapAbility(UntapTargetAbility ability) {
 			Lanes lane = null;
 			if (ability.getTarget() instanceof Unit) {
-				lane = ((Unit)ability.getTarget()).getLaneEnum();
-			} else if(ability.getTarget() instanceof HeroicSupport) {
-				lane  =((HeroicSupport)ability.getTarget()).getLanesEnum();
+				lane = ((Unit) ability.getTarget()).getLaneEnum();
+			} else if (ability.getTarget() instanceof HeroicSupport) {
+				lane = ((HeroicSupport) ability.getTarget()).getLanesEnum();
 			}
 			Target abTarget = findTargetById(ability.getTarget().getId(), lane);
 			// Cannot be a Hero so no ceck if the abTarget instanceof Card
-			untapCard((Card)abTarget);
+			untapCard((Card) abTarget);
 		}
 
 		/**
 		 * Finds a target from a id
+		 * 
 		 * @param id
-		 * 		The target id to look for
+		 *            The target id to look for
 		 * @param lane
-		 * 		The lane that the target was placed in
-		 * @return
-		 * 		The target reference from the lists in the server
+		 *            The lane that the target was placed in
+		 * @return The target reference from the lists in the server
 		 */
 		private Target findTargetById(int id, Lanes lane) {
 			Player friendly;
@@ -956,10 +982,10 @@ public class Match implements Observer {
 				friendly = player2;
 				enemy = player2;
 			}
-			
+
 			switch (lane) {
 			case ENEMY_DEFENSIVE:
-				for (int i = 0; i < enemy.defensiveLane.size() ; i++) {
+				for (int i = 0; i < enemy.defensiveLane.size(); i++) {
 					Target compare = enemy.defensiveLane.get(i);
 					if (id == compare.getId()) {
 						return compare;
@@ -967,7 +993,7 @@ public class Match implements Observer {
 				}
 				break;
 			case ENEMY_OFFENSIVE:
-				for (int i = 0; i < enemy.offensiveLane.size() ; i++) {
+				for (int i = 0; i < enemy.offensiveLane.size(); i++) {
 					Target compare = enemy.offensiveLane.get(i);
 					if (id == compare.getId()) {
 						return compare;
@@ -976,9 +1002,9 @@ public class Match implements Observer {
 				break;
 			case ENEMY_HERO:
 				return enemy.hero;
-//				break;
+			// break;
 			case ENEMY_HEROIC:
-				for (int i = 0; i < enemy.offensiveLane.size() ; i++) {
+				for (int i = 0; i < enemy.offensiveLane.size(); i++) {
 					Target compare = enemy.offensiveLane.get(i);
 					if (id == compare.getId()) {
 						return compare;
@@ -986,7 +1012,7 @@ public class Match implements Observer {
 				}
 				break;
 			case PLAYER_DEFENSIVE:
-				for (int i = 0; i < friendly.defensiveLane.size() ; i++) {
+				for (int i = 0; i < friendly.defensiveLane.size(); i++) {
 					Target compare = friendly.defensiveLane.get(i);
 					if (id == compare.getId()) {
 						return compare;
@@ -994,7 +1020,7 @@ public class Match implements Observer {
 				}
 				break;
 			case PLAYER_OFFENSIVE:
-				for (int i = 0; i < friendly.offensiveLane.size() ; i++) {
+				for (int i = 0; i < friendly.offensiveLane.size(); i++) {
 					Target compare = friendly.offensiveLane.get(i);
 					if (id == compare.getId()) {
 						return compare;
@@ -1004,7 +1030,7 @@ public class Match implements Observer {
 			case PLAYER_HERO:
 				return friendly.hero;
 			case PLAYER_HEROIC:
-				for (int i = 0; i < friendly.heroicSupportLane.size() ; i++) {
+				for (int i = 0; i < friendly.heroicSupportLane.size(); i++) {
 					Target compare = enemy.heroicSupportLane.get(i);
 					if (id == compare.getId()) {
 						return compare;
@@ -1015,8 +1041,7 @@ public class Match implements Observer {
 				break;
 			}
 			return null;
-		}	
+		}
 	}
-	
-	
+
 }
