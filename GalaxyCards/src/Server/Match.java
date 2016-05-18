@@ -845,9 +845,14 @@ public class Match implements Observer {
 					}
 				}
 			} else if (target instanceof Hero) {
-				if (target.equals(player1.hero)) {
+//				if (target.equals(player1.hero)) {
+//					player1.updateHeroValues();
+//				} else if (target.equals(player2)) {
+//					player2.updateHeroValues();
+//				}
+				if(target.getId() == player1.hero.getId()) {
 					player1.updateHeroValues();
-				} else if (target.equals(player2)) {
+				} else if (target.getId() == player2.hero.getId()) {
 					player2.updateHeroValues();
 				}
 			}
@@ -882,7 +887,6 @@ public class Match implements Observer {
 		private void useSingelTargetAbility(SingleTargetAbility ability) {
 			Player friendly;
 			Player enemy;
-			Target target = ability.getTarget();
 			// Controlls what player that used the ability
 			if (this.equals(player1)) {
 				friendly = player1;

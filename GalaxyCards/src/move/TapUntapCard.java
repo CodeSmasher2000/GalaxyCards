@@ -1,8 +1,10 @@
 package move;
 
+import java.io.Serializable;
+
 import enumMessage.Lanes;
 
-public class TapUntapCard {
+public class TapUntapCard implements Serializable {
 	private int id;
 	private Lanes ENUM;
 
