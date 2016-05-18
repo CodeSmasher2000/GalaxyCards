@@ -986,7 +986,7 @@ public class Match implements Observer {
 				enemy = player2;
 			} else {
 				friendly = player2;
-				enemy = player2;
+				enemy = player1;
 			}
 
 			switch (lane) {
@@ -1037,7 +1037,7 @@ public class Match implements Observer {
 				return friendly.hero;
 			case PLAYER_HEROIC:
 				for (int i = 0; i < friendly.heroicSupportLane.size(); i++) {
-					Target compare = enemy.heroicSupportLane.get(i);
+					Target compare = friendly.heroicSupportLane.get(i);
 					if (id == compare.getId()) {
 						return compare;
 					}
