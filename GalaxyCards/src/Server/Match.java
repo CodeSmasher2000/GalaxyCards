@@ -1010,8 +1010,8 @@ public class Match implements Observer {
 				return enemy.hero;
 			// break;
 			case ENEMY_HEROIC:
-				for (int i = 0; i < enemy.offensiveLane.size(); i++) {
-					Target compare = enemy.offensiveLane.get(i);
+				for (int i = 0; i < enemy.heroicSupportLane.size(); i++) {
+					Target compare = enemy.heroicSupportLane.get(i);
 					if (id == compare.getId()) {
 						return compare;
 					}
