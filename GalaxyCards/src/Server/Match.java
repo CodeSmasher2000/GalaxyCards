@@ -279,10 +279,10 @@ public class Match implements Observer {
 				Object obj = message.getData();
 				if (obj instanceof HeroicSupport) {
 					HeroicSupport card = (HeroicSupport) obj;
-					player.useAbility(card.getAbility());
+					player.useAbility(card);
 				} else if (obj instanceof Tech) {
 					Tech card = (Tech) obj;
-					player.useAbility(card.getAbility());
+					player.useAbility(card);
 				}
 			}
 		} else if (message.getCommand() == Commands.MATCH_DRAW_CARD) {
@@ -479,12 +479,10 @@ public class Match implements Observer {
 
 			try {
 				hero.useResource(card.getPrice());
-				addCardToScrapYard(card);
-				removeCardFromHand(card);
 				// Send to player who initatied move
 				PlayTechCard move = new PlayTechCard(card);
 				sendMessageToPlayer(this, new CommandMessage(Commands.MATCH_PLACE_CARD, "Server", move));
-				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, "Server", move));
+//				sendMessageToOtherPlayer(this, new CommandMessage(Commands.MATCH_PLAYCARD, "Server", move));
 			} catch (InsufficientResourcesException e) {
 				CommandMessage error = new CommandMessage(Commands.MATCH_NOT_VALID_MOVE, "Server", e);
 				sendMessageToPlayer(this, error);
@@ -865,7 +863,17 @@ public class Match implements Observer {
 		 * @param ability
 		 *            A Object extending the ability class.
 		 */
-		public void useAbility(Ability ability) {
+		public void useAbility(Card card) {
+			Ability ability = null;
+			if (card instanceof HeroicSupport) {
+				ability = ((HeroicSupport) card).getAbility();
+			} else if (card instanceof Tech) {
+				ability = ((Tech) card).getAbility();
+				addCardToScrapYard(card);
+				removeCardFromHand(card);
+			}
+
+
 			System.out.println("IN USE ABILITY");
 			if (ability instanceof SingleTargetAbility) {
 				useSingelTargetAbility((SingleTargetAbility) ability);
