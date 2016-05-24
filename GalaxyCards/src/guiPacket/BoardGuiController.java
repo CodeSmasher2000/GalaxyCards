@@ -912,7 +912,6 @@ public class BoardGuiController {
 			Attack attack = gameController.getAttack();
 			if (defender instanceof Unit || defender instanceof HeroicSupport) {
 				attack.setOpponents(attacker.getId(), ((Card) defender).getId());
-				attack.getDefendersIndex(((Card) defender).getId());
 			} else {
 				attack.setOpponents(attacker.getId(), (int) defender);
 			}
