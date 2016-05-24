@@ -1,6 +1,7 @@
 package cardCreator;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import abilities.Ability;
 
 /**
  * Creates a panel that lets you customize a Heroic card.
@@ -30,28 +33,36 @@ public class CreateHeroic extends JPanel {
 	private JTextField tfRarity = new JTextField("Common/Rare/Legendary");
 	private JTextField tfNbrOfCards = new JTextField();
 	
-	private JCheckBox btnAbility = new JCheckBox();
-	private JTextArea taDescription = new JTextArea();
 	
 	private JFileChooser jFileChooser = new JFileChooser();
 	private JButton btnChoosePic = new JButton("Choose Picture");
 
 	private JLabel lblCardName = new JLabel("Card Name: ");
 	private JLabel lblPrice = new JLabel("Price: ");
-	private JLabel lblAbility = new JLabel("Ability: Yes/No");
 	private JLabel lblDefense = new JLabel("Defense: ");
 	private JLabel lblRarity = new JLabel ("Rarity: ");
 	private JLabel lblNbrOfCards = new JLabel("Number of Cards: ");
-	private JLabel lblDescription = new JLabel("Description");
 	
 	private String imageName = null;
+	private AbilityPanel abilityPanel = new AbilityPanel();
 	
 	/**
 	 * adds all the components to the panel and then to the main panel.
 	 */
 	public CreateHeroic(){
+		setPreferredSize(new Dimension(800,600));
+		setLayout(new FlowLayout());
+		initGrid();
+		add(gridHeroic);
+		add(abilityPanel);
+	}
+	
+	/**
+	 * Initializes the GridLayout with Swing components.
+	 */
+	public void initGrid(){
 		gridHeroic.setLayout(new GridLayout(8,2));
-		gridHeroic.setPreferredSize(new Dimension(400,600));
+		gridHeroic.setPreferredSize(new Dimension(400,300));
 		gridHeroic.add(lblCardName);
 		gridHeroic.add(tfCardName);
 		gridHeroic.add(lblDefense);
@@ -60,18 +71,12 @@ public class CreateHeroic extends JPanel {
 		gridHeroic.add(tfPrice);
 		gridHeroic.add(lblRarity);
 		gridHeroic.add(tfRarity);
-		gridHeroic.add(lblAbility);
-		gridHeroic.add(btnAbility);
-		gridHeroic.add(lblDescription);
-		gridHeroic.add(taDescription);
 		gridHeroic.add(lblNbrOfCards);
 		gridHeroic.add(tfNbrOfCards);
 		
 		ButtonListener btnListener = new ButtonListener();
 		btnChoosePic.addActionListener(btnListener);
 		gridHeroic.add(btnChoosePic);
-		
-		add(gridHeroic);
 	}
 	
 	public int getPrice() {
@@ -95,7 +100,11 @@ public class CreateHeroic extends JPanel {
 	}
 	
 	public String getDescription() {
-		return taDescription.getText();
+		return abilityPanel.getDescription();
+	}
+	
+	public Ability getAbility(){
+		return abilityPanel.createAbility();
 	}
 
 	public String getImageName() {
@@ -103,10 +112,6 @@ public class CreateHeroic extends JPanel {
 		return imageName;
 	}
 
-	public boolean getAbility() {
-		btnAbility.isSelected();
-		return false;
-	}
 	
 	public void setImageName(String name){
 		this.imageName=name;
@@ -128,14 +133,16 @@ public class CreateHeroic extends JPanel {
 		tfPrice.setText(Integer.toString(price));
 	}
 	
-	public void setAbility(boolean ability){
-		btnAbility.setSelected(ability);
-	}
 	
 	public void setDescription(String description){
-		taDescription.setText(description);
+		abilityPanel.setDescription(description);
 	}
 	
+	/**
+	 * Inner class which contains the logic for the ActionListener.
+	 * @author Jonte
+	 *
+	 */
 	private class ButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {

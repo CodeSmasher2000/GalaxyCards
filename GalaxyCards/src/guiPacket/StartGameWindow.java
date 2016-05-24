@@ -1,6 +1,7 @@
 package guiPacket;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import game.GameController;
 
@@ -21,13 +22,19 @@ public class StartGameWindow extends JFrame {
 	}
 
 	private void showUi() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
-		setContentPane(boardGui);
-		dispose();
-		setUndecorated(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				setVisible(true);
+				setContentPane(boardGui);
+				dispose();
+				setUndecorated(true);
 
-		setBounds(0, 0, getToolkit().getScreenSize().width, getToolkit().getScreenSize().height);
-		setVisible(true);
+				setBounds(0, 0, getToolkit().getScreenSize().width, getToolkit().getScreenSize().height);
+				setVisible(true);
+			}
+		});
 	}
 }

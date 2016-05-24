@@ -2,18 +2,17 @@ package cards;
 
 import java.io.Serializable;
 
+import abilities.Ability;
 import guiPacket.Card;
 
 public class Tech extends Card implements PlayCardsInterface, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1803659048435357727L;
 	private final String NAME, RARITY, IMAGE_NAME;
 	private final int PRICE;
+	private Ability ability;
 
-	public Tech(String name, String rarity, String imageName, int price){
+	public Tech(String name, String rarity, String imageName, int price, Ability ability){
 		NAME=name;
 		RARITY=rarity;
 		IMAGE_NAME= imageName;
@@ -24,6 +23,7 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 		setImage(IMAGE_NAME);
 		hasAbility(false);
 		setPrice(PRICE);
+		this.ability=ability;
 		
 	}
 
@@ -32,15 +32,14 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 		return IMAGE_NAME;
 	}
 
+	public String getName(){
+		return NAME;
+	}
 	@Override
 	public String getRarity() {
 		return RARITY;
 	}
 
-	@Override
-	public boolean hasAbility() {
-		return false;
-	}
 
 	@Override
 	public int getPrice() {
@@ -54,6 +53,13 @@ public class Tech extends Card implements PlayCardsInterface, Serializable {
 
 	public void setAbilityText(String description){
 		super.setAbilityText(description);
+	}
+	/**Returns the ability object associated with this card.
+	 * 
+	 * @return ability : Ability
+	 */
+	public Ability getAbility(){
+		return ability;
 	}
 	
 	public String toString(){

@@ -75,7 +75,12 @@ public class CardPane extends JPanel {
 		btnAdd.addActionListener(btnListner);
 		btnPreview.addActionListener(btnListner);
 	}
-
+	
+	/**
+	 * Inner class which contains the logic for the ActionListener.
+	 * @author Jonte
+	 *
+	 */
 	private class ButtonListener implements ActionListener {
 
 		@Override

@@ -11,9 +11,11 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import cards.HeroicSupport;
+import cards.Unit;
 import enumMessage.Persons;
 import exceptionsPacket.GuiContainerException;
 
@@ -26,46 +28,48 @@ import exceptionsPacket.GuiContainerException;
  * @author 13120dde
  *
  */
-
-// TODO for feedback, add a object to the layeredPanes second layer when
-// feedback is done, remove the layer.
-// TODO draw a cool background image for this pane maybe?
 public class HeroicPanelGUI extends JPanel {
 
-	// LayeredPanes hold the objects b/c feedback will be drawn over them
 	private JLayeredPane heroicPane1, heroicPane2;
 	private HeroicSupport[] heroicUnits = new HeroicSupport[2];
 	private BoardGuiController boardController;
 	private Persons ENUM;
-	
+
 	private OpponentTargetMouseListener opponentListener;
 	private PlayerTargetMouseListener playerListener;
-	
+
 	private ImageIcon background;
 
 	public HeroicPanelGUI(BoardGuiController boardController, Persons ENUM) {
-		this.ENUM=ENUM;
-		if(ENUM==Persons.PLAYER){
+		this.ENUM = ENUM;
+		if (ENUM == Persons.PLAYER) {
 			background = new ImageIcon("files/pictures/heroicPanelTexture2.jpg");
-		}else{
+		} else {
 			background = new ImageIcon("files/pictures/heroicPanelTexture.jpg");
 		}
-		
+
 		this.boardController = boardController;
 		playerListener = new PlayerTargetMouseListener(boardController);
 		opponentListener = new OpponentTargetMouseListener(boardController);
 		boardController.addHeroicPanelListener(this, ENUM);
 
-		initiateLayeredPanes();
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.add(Box.createHorizontalStrut(5));
-		this.add(Box.createHorizontalGlue());
-		this.add(heroicPane1);
-		this.add(Box.createHorizontalStrut(5));
-		this.add(Box.createHorizontalGlue());
-		this.add(heroicPane2);
-		this.add(Box.createHorizontalGlue());
-		this.add(Box.createHorizontalStrut(5));
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				initiateLayeredPanes();
+				setLayout(new BoxLayout(HeroicPanelGUI.this, BoxLayout.X_AXIS));
+				add(Box.createHorizontalStrut(5));
+				add(Box.createHorizontalGlue());
+				add(heroicPane1);
+				add(Box.createHorizontalStrut(5));
+				add(Box.createHorizontalGlue());
+				add(heroicPane2);
+				add(Box.createHorizontalGlue());
+				add(Box.createHorizontalStrut(5));
+				
+			}
+		});
 	}
 
 	private void initiateLayeredPanes() {
@@ -91,42 +95,41 @@ public class HeroicPanelGUI extends JPanel {
 	 * @return boolean
 	 * @throws GuiContainerException
 	 */
-	protected boolean addHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
+	protected void addHeroicSupport(HeroicSupport heroicSupport) throws GuiContainerException {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				for (int i = 0; i < heroicUnits.length; i++) {
+					if (heroicUnits[i] == null) {
+//						heroicSupport.setPersonEnum(ENUM);
+						heroicUnits[i] = heroicSupport;
+						heroicUnits[i].setBounds(0, 10, heroicUnits[i].getPreferredSize().width,
+								heroicUnits[i].getPreferredSize().height);
+						// if ENUM is player or opponent add different listener
+						if (ENUM == Persons.PLAYER) {
+							heroicUnits[i].addMouseListener(playerListener);
+						}
+						if (ENUM == Persons.OPPONENT) {
+							heroicUnits[i].addMouseListener(opponentListener);
+						}
+						if (i == 0) {
+							heroicPane1.add(heroicUnits[i], new Integer(0));
+							heroicPane1.setBorder(null);
+							heroicPane1.repaint();
 
-		boolean okToPlace = false;
+						} else {
+							heroicPane2.add(heroicUnits[i], new Integer(0));
+							heroicPane2.setBorder(null);
+							heroicPane2.repaint();
+						}
 
-		for (int i = 0; i < heroicUnits.length; i++) {
-			if (heroicUnits[i] == null) {
-				heroicUnits[i] = heroicSupport;
-				heroicUnits[i].setBounds(0, 10, heroicUnits[i].getPreferredSize().width,
-						heroicUnits[i].getPreferredSize().height);
-				//if ENUM is player or opponent add different listener
-				if(ENUM==Persons.PLAYER){
-					heroicUnits[i].addMouseListener(playerListener);
+						break;
+					}
 				}
-				if(ENUM==Persons.OPPONENT){
-					heroicUnits[i].addMouseListener(opponentListener);
-				}
-				okToPlace = true;
-				if (i == 0) {
-					heroicPane1.add(heroicUnits[i], new Integer(0));
-					heroicPane1.setBorder(null);
-					heroicPane1.repaint();
-
-				} else {
-					heroicPane2.add(heroicUnits[i], new Integer(0));
-					heroicPane2.setBorder(null);
-					heroicPane2.repaint();
-				}
-
-				break;
 			}
-		}
-
-		if (!okToPlace) {
-			throw new GuiContainerException("You can only have 2 Heroic Support cards in play");
-		}
-		return okToPlace;
+		});
 	}
 
 	/**
@@ -138,29 +141,37 @@ public class HeroicPanelGUI extends JPanel {
 	 * @return target : HeroicSupport
 	 */
 	protected HeroicSupport removeHeroicSupport(HeroicSupport target) {
-		for (int i = 0; i < heroicUnits.length; i++) {
-			if (heroicUnits[i] == target) {
-				if (i == 0) {
-					heroicPane1.remove(heroicUnits[i]);
-					heroicPane1.repaint();
-				} else {
-					heroicPane2.remove(heroicUnits[i]);
-					repaint();
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				for (int i = 0; i < heroicUnits.length; i++) {
+					if (heroicUnits[i] == target) {
+						if (i == 0) {
+							heroicPane1.remove(heroicUnits[i]);
+							heroicPane1.repaint();
+						} else {
+							heroicPane2.remove(heroicUnits[i]);
+							repaint();
+						}
+						if (ENUM == Persons.OPPONENT) {
+							boardController.addToOpponentScrapyard(heroicUnits[i]);
+						} else {
+							boardController.addToPlayerScrapyard(heroicUnits[i]);
+						}
+					}
 				}
-				if(ENUM==Persons.OPPONENT){
-					boardController.addToOpponentScrapyard(heroicUnits[i]);
-				}else{
-					boardController.addToPlayerScrapyard(heroicUnits[i]);
-				}
+				
 			}
-		}
+		});
 
 		return target;
 	}
-	
+
 	/**
-	 * Check the defensive value for each Heroic support in this lane. If the defensive
-	 * value is equal to or less than 0 then the unit object will get removed.
+	 * Check the defensive value for each Heroic support in this lane. If the
+	 * defensive value is equal to or less than 0 then the unit object will get
+	 * removed.
 	 */
 	public void checkStatus() {
 		for (int i = 0; i < heroicUnits.length; i++) {
@@ -171,18 +182,88 @@ public class HeroicPanelGUI extends JPanel {
 			}
 		}
 	}
-	
-	public void untap() {
+
+	/**
+	 * Untaps all cards held in this container.
+	 * 
+	 */
+	public void untapAllInLane() {
 		for (int i = 0; i < heroicUnits.length; i++) {
 			if (heroicUnits[i] != null) {
 				heroicUnits[i].untap();
+				String[] unitName = heroicUnits[i].toString().split(" ");
+				InfoPanelGUI.append(unitName[0] + " is tapped: " + heroicUnits[i].getTap());
 			}
 		}
 	}
-	
+
+	/**
+	 * Taps all cards held in this container.
+	 */
+	public void tapAllInLane() {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			if (heroicUnits[i] != null) {
+				heroicUnits[i].tap();
+				String[] unitName = heroicUnits[i].toString().split(" ");
+				InfoPanelGUI.append(unitName[0] + " is tapped: " + heroicUnits[i].getTap());
+			}
+		}
+
+	}
+
+	/**
+	 * Taps the card with the same id as argument.
+	 * 
+	 * @param cardId
+	 *            : int
+	 */
+	public void tapCard(int cardId) {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			if (heroicUnits[i] != null) {
+				if (heroicUnits[i].getId() == cardId) {
+					heroicUnits[i].tap();
+					String[] unitName = heroicUnits[i].toString().split(" ");
+					InfoPanelGUI.append(unitName[0] + " is tapped: " + heroicUnits[i].getTap());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Untaps the card with the same id as argument.
+	 * 
+	 * @param cardId
+	 *            : int
+	 */
+	public void untapCard(int cardId) {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			if (heroicUnits[i] != null) {
+				if (heroicUnits[i].getId() == cardId) {
+					heroicUnits[i].untap();
+					String[] unitName = heroicUnits[i].toString().split(" ");
+					InfoPanelGUI.append(unitName[0] + " is tapped: " + heroicUnits[i].getTap());
+				}
+			}
+		}
+	}
+
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
+	}
+
+	public boolean updateCard(HeroicSupport cardToUpdate) {
+		for (int i = 0; i < heroicUnits.length; i++) {
+			// TODO : Change null check?
+			if (heroicUnits[i] != null) {
+				if (heroicUnits[i].getId() == cardToUpdate.getId()) {
+					heroicUnits[i].setDefense(cardToUpdate.getDefense());
+					checkStatus();
+					return true;
+				} 
+			}
+		}
+		return false;
 	}
 }

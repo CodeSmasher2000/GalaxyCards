@@ -8,9 +8,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 
+import enumMessage.Lanes;
 import enumMessage.Persons;
 
 /**
@@ -21,10 +22,6 @@ import enumMessage.Persons;
  *
  */
 
-// TODO Refactor: Break all comminication with Hero class and add a
-// BoadGuiController to constructor. All communication should be managed with
-// BoardGuiContorller.
-
 public class HeroGUI extends JPanel {
 	private final String PICTURE_DIRECTORY = "files/pictures/";
 	private JLabel imageLabel;
@@ -33,30 +30,47 @@ public class HeroGUI extends JPanel {
 	private ImageIcon heroImage;
 	private transient BoardGuiController boardController;
 	private Persons ENUM;
+	private Lanes laneENUM;
+    private int id;
 
 	private Border b1;
 	private Border b2;
 
+	/**
+	 * Constructor that takes a BoardGuiController and Persons enum as arguments. The Persons can either be PLAYER or OPPONENT.
+	 * 
+	 * @param boardController : BoardGuiController
+	 * @param ENUM : Persons
+	 */
 	public HeroGUI(BoardGuiController boardController, Persons ENUM) {
 		this.boardController = boardController;
 		this.ENUM = ENUM;
-
+		if(this.ENUM==Persons.PLAYER){
+			laneENUM=Lanes.PLAYER_HERO;
+		}else{
+			laneENUM=Lanes.ENEMY_HERO;
+		}
 		this.boardController.addHeroListener(this, ENUM);
 
-		String heroName = boardController.getHeroName();
 		b1 = BorderFactory.createEmptyBorder(2, 2, 2, 2);
-		b2 = BorderFactory.createTitledBorder(null, heroName, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
 
-		initiateBars();
-		initiateImage();
-		setTooltips();
+		SwingUtilities.invokeLater(new Runnable() {
 
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.setOpaque(false);
-		add(imagePanel);
-		add(resourceBar);
-		add(lifeBar);
-		add(shieldBar);
+			@Override
+			public void run() {
+				initiateBars();
+				initiateImage();
+				setTooltips();
+
+				setLayout(new BoxLayout(HeroGUI.this, BoxLayout.Y_AXIS));
+				setOpaque(false);
+				add(imagePanel);
+				add(resourceBar);
+				add(lifeBar);
+				add(shieldBar);
+
+			}
+		});
 
 		if (ENUM == Persons.PLAYER) {
 			addMouseListener(new PlayerTargetMouseListener(boardController));
@@ -154,8 +168,29 @@ public class HeroGUI extends JPanel {
 		shieldBar.setString(newValue + " / " + "10");
 	}
 
+	/**returns a string representation of this object and it's data.
+	 * 
+	 */
 	public String toString() {
-		return (ENUM+" Hero life: " + lifeBar.getValue() + ", energy shield: " + shieldBar.getValue() + ", resources: "
-				+ resourceBar.getValue() + "/" + resourceBar.getMaximum());
+		return (ENUM + " Hero life: " + lifeBar.getValue() + ", energy shield: " + shieldBar.getValue()
+				+ ", resources: " + resourceBar.getValue() + "/" + resourceBar.getMaximum());
 	}
+
+	/**
+	 * 
+	 * @param id
+	 */
+	public void setId(int id) {
+        this.id = id;
+        InfoPanelGUI.append("Hjälte id satt till: " + this.getId());
+        
+	}
+
+    public int getId() {
+        return id;
+    }
+    
+    public Lanes getLaneEnum(){
+    	return laneENUM;
+    }
 }

@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.JOptionPane;
 
+import abilities.Ability;
 import cards.Deck;
 import cards.HeroicSupport;
 import cards.ResourceCard;
@@ -47,25 +48,25 @@ public class CreateController {
 		}
 	}
 	
-	public void addUnitCard(String name, String rarity, String imageName, boolean hasAbility, int attack, int defense, int price, 
+	public void addUnitCard(String name, String rarity, String imageName, int attack, int defense, int price, 
 			String description) {
-		Unit cardToAdd = new Unit(name, rarity, imageName, hasAbility, attack, defense, price);
+		Unit cardToAdd = new Unit(name, rarity, imageName, attack, defense, price);
 		cardToAdd.setAbilityText(description);
 		activeDeck.addUnitCard(cardToAdd);
 		gui.addCardToList(cardToAdd);
 		
 	}
 	
-	public void addTechCard(String name, String rarity, String imageName, int price, String description) {
-		Tech cardToAdd = new Tech(name, rarity, imageName, price);
+	public void addTechCard(String name, String rarity, String imageName, int price, String description, Ability ability) {
+		Tech cardToAdd = new Tech(name, rarity, imageName, price, ability );
 		cardToAdd.setAbilityText(description);
 		activeDeck.addTechCard(cardToAdd);
 		gui.addCardToList(cardToAdd);
 		
 	}
 	
-	public void addHeroicSupportCard(String name, String rarity, String imageName, boolean hasAbility, int price, int defense, String description) {
-		HeroicSupport cardToAdd = new HeroicSupport(name, rarity, imageName, hasAbility, price, defense);
+	public void addHeroicSupportCard(String name, String rarity, String imageName, int price, int defense, String description, Ability ability) {
+		HeroicSupport cardToAdd = new HeroicSupport(name, rarity, imageName, price, defense,ability);
 		cardToAdd.setAbilityText(description);
 		activeDeck.addHeroicSupportCard(cardToAdd);
 		gui.addCardToList(cardToAdd);
@@ -93,7 +94,6 @@ public class CreateController {
 	
 	/**
 	 * Reads a deck from a dat file and sets the activeDeck to the read deck
-	 * @param filename The name of the file with the deck
 	 */
 	public void readDeckFromFile() {
 		// TODO Ersätt denna kod

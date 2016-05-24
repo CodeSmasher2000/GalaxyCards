@@ -1,9 +1,5 @@
 package game;
 
-import java.awt.Color;
-
-import javax.sound.midi.MidiDevice.Info;
-
 import Client.ClientController;
 import cards.HeroicSupport;
 import cards.ResourceCard;
@@ -23,6 +19,7 @@ import guiPacket.StartGameWindow;
 import move.Attack;
 import move.PlayHeroicSupportCard;
 import move.PlayResourceCard;
+import move.PlayTechCard;
 import move.PlayUnitCard;
 import move.UpdateHeroValues;
 
@@ -32,7 +29,6 @@ import move.UpdateHeroValues;
  *
  */
 public class GameController {
-	private Hero hero;
 	private BoardGuiController boardController;
 	private ClientController clientController;
 	private Phase phase;
@@ -40,32 +36,25 @@ public class GameController {
 
 	public GameController(ClientController clientController) {
 		this.clientController=clientController;
-		//TODO ta bort när huvudmeny och hämta hjälte är fixat,
-//		hero = new Hero(this);
-//		startNewGame();
 	}
 	
-	public void setChosenHero(Hero hero){
-		this.hero=hero;
-	}
 	/**
 	 * Sends to the server that the client has played a ResourceCard.
 	 * @param card
 	 * 			The ResourceCard that has been played.
 	 * @throws ResourcePlayedException
 	 */
-	public void playResourceCard(ResourceCard card) throws ResourcePlayedException {
-		boolean addResourceOK = hero.addResource();
 
-		if (addResourceOK == true) {
-			updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
-					hero.getMaxResource());
-			PlayResourceCard move = new PlayResourceCard(card);
-			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
-			clientController.writeMessage(message);
-		}
-		System.out.println("GameController playResourceCard");
+	public void playResourceCard(ResourceCard card) {
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_PLAYCARD,
+				null,new PlayResourceCard(card)));
+
 	}
+	
+	public void playResourceCardOk(ResourceCard resourceCard) {
+		boardController.removeCardFromHand(resourceCard);
+	}
+	
 	/**
 	 * Sends to the server that the client has played a Unit Card.
 	 * @param card
@@ -74,22 +63,24 @@ public class GameController {
 	 * 			The lane the Unit Card has been placed on the board.
 	 * @throws InsufficientResourcesException
 	 */
-	public void playUnit(Unit card, Lanes lane) throws InsufficientResourcesException {
-		if (useResources(card.getPrice())) {
-			// TODO Skicka till klient: card objektet samt Lanes lane.
-			// hero.getCurrentResources(). Klienten ska säga till motståndaren
-			// vilket kort som spelas och uppdatera
-			// opponentHeroGui.setCurrentResources(int newValue)
+	public void playUnit(Unit card, Lanes lane) {
 			PlayUnitCard move = new PlayUnitCard(card,lane);			
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
-			
 			clientController.writeMessage(message);
-			
-			// Amen Tjena
-			//Debugg
-			InfoPanelGUI.append(card.toString() +" was able to be played, send object to server","GREEN");
-		}
 	}
+	
+	/**
+	 * Adds a unit card to the game board and removes the card from the hand
+	 * @param card
+	 * 		The card to add to a lane
+	 * @param lane
+	 * 		The Lane to add the card to
+	 */
+	public void playUnitOK(Card card, Lanes lane) {
+		boardController.addUnitCard((Unit)card, lane);
+		boardController.removeCardFromHand(card);
+	}
+	
 	/**
 	 * Sends to the server that the client has played a HeroicSupport Card.
 	 * @param card
@@ -97,11 +88,20 @@ public class GameController {
 	 * @throws InsufficientResourcesException
 	 */
 	public void playHeroicSupport(HeroicSupport card) throws InsufficientResourcesException{
-		if(useResources(card.getPrice())){
 			PlayHeroicSupportCard move = new PlayHeroicSupportCard(card);
 			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD, null, move);
 			clientController.writeMessage(message);
-		}
+	}
+	
+	/**
+	 * Adds a Heroic Support card to the game board and removes it from the hand
+	 * @param card
+	 * 		The card object to add and remove
+	 */
+	public void playHeroicSupportOk(HeroicSupport card) {
+		boardController.addHeroicSupport(card);
+		boardController.removeCardFromHand(card);
+		InfoPanelGUI.append("In playHeroicSupportOk");
 	}
 	/**
 	 *  Sends to the server that the client has played a Tech Card.
@@ -110,52 +110,9 @@ public class GameController {
 	 * @throws InsufficientResourcesException
 	 */
 	public void playTech(Tech card) throws InsufficientResourcesException{
-		if(useResources(card.getPrice())){
-			//TODO Skicka till klient card objektet
-		}
-	}
-
-	public int getAvaibleResources() {
-		return hero.getCurrentResources();
-	}
-	public int getMaxResources(){
-		return hero.getMaxResource();
-	}
-	/**
-	 * Checks if the player has enough resources to play a card.
-	 * @param amount
-	 * 			Amount of resources that the player want to use.
-	 * @return
-	 * 		returns true if the player has enough resources to use.
-	 * @throws InsufficientResourcesException
-	 */
-	private boolean useResources(int amount) throws InsufficientResourcesException {
-		boolean useResourceOK = hero.useResource(amount);
-
-		if (useResourceOK == true) {
-			updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(),
-					hero.getMaxResource());
-			
-		}
-
-		return useResourceOK;
-	}
-
-	/**
-	 * Resets the players resources and untaps the cards.
-	 */
-	public void newRound() {
-		hero.resetResources();
-		updatePlayerHeroGui(hero.getLife(), hero.getEnergyShield(), hero.getCurrentResources(), hero.getMaxResource());
-		untapCards();
-		// TODO snacka med klient
-	}
-
-	/**
-	 * Asks boardcontroller to untap cards in the GUI.
-	 */
-	private void untapCards() {
-		boardController.untapCards();
+		PlayTechCard move = new PlayTechCard(card);
+		CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD, null, move);
+		clientController.writeMessage(message);
 	}
 
 	/**
@@ -165,12 +122,8 @@ public class GameController {
 	 * @param currentResource
 	 * @param maxResource
 	 */
-	private void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
+	public void updatePlayerHeroGui(int life, int energyShield, int currentResource, int maxResource) {
 		boardController.updatePlayerHeroGui(life, energyShield, currentResource, maxResource);
-		UpdateHeroValues move = new UpdateHeroValues(life, energyShield, currentResource, maxResource);
-		CommandMessage message = new CommandMessage(Commands.MATCH_UPDATE_HERO ,null,move);
-		clientController.writeMessage(message);
-		
 	}
 	/**
 	 * Updates the opponents hero's GUI.
@@ -203,15 +156,23 @@ public class GameController {
 	}
 	
 	/**
-	 * Draws a card to the player. Sends message to the opponent that the player drew a card.
+	 * Draws a card to the player. Sends message to the opponent that the player draw a card.
 	 */
 	public void drawCard() {
-		Card card = hero.DrawCard();
+		// Skicka meddelande till server
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_DRAW_CARD, null));
+	}
+	
+	/**
+	 * Adds a card to the hand
+	 * @param card
+	 * 		The card to add to the hand
+	 */
+	public void drawCardOk(Card card) {
 		try {
 			boardController.drawCard(card);
-			clientController.writeMessage(new CommandMessage(Commands.MATCH_DRAW_CARD,
-					null));
 		} catch (GuiContainerException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -247,12 +208,12 @@ public class GameController {
 	/**
 	 * Draws 7 cards when the game initializes.
 	 */
+	// TODO : STUDERA HUR DENNA ANROPAS
 	public void initGame() {
 		InfoPanelGUI.append("InitGame()");
 		// Draw 7 Cards
 		for (int i = 0; i < 7; i++) {
 			drawCard();
-			// Skicka till Servern att den har dragit ett kort
 		}
 	}
 
@@ -273,20 +234,9 @@ public class GameController {
 	 * @param card
 	 */
 	public void updateOpponentScrapYard(Card card) {
-		if (card instanceof ResourceCard){
-			InfoPanelGUI.append("scrapyard");
-			PlayResourceCard move = new PlayResourceCard((ResourceCard)card);
-			CommandMessage message = new CommandMessage(Commands.MATCH_PLAYCARD,null,move);
-			clientController.writeMessage(message);
-		} 
-		if(card instanceof HeroicSupport){
-			
-		}
-		if(card instanceof Unit){
-			
-		}if (card instanceof Tech){
-			
-		}
+
+		boardController.addToOpponentScrapyard(card);
+
 	}
 	
 	public Phase getPhase() {
@@ -311,7 +261,19 @@ public class GameController {
 		default:
 			break;
 		}
-//		InfoPanelGUI.append("In " + phase, "BLUE");
+		InfoPanelGUI.append("Phase: " + phase);
+	}
+	
+	/**
+	 * Sets the gameControllers phase to defending and sets the attack object to the attack object recived from the server
+	 * @param attack
+	 * 		The attack object the server sent.
+	 */
+	public void doDefendMove(Attack attack) {
+		this.phase = Phase.DEFENDING;
+		InfoPanelGUI.append("In " + phase);
+		this.attack = attack;
+		InfoPanelGUI.append(this.attack.toString());
 	}
 
 	/**
@@ -325,16 +287,105 @@ public class GameController {
 	}
 
 	/**
-	 * Sends an attack or defense move to the other client.
+	 * Sends a attack move object to the server.
 	 */
-	public void commitMove() {
-		clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
-				null,this.attack));
-		InfoPanelGUI.append("Move Commited", "BLUE");
-	}
 
 	public Attack getAttack() {
 		return this.attack;
 	}
+	
+	// DEBUG PURPOSE
+	public void newround() {
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_NEW_ROUND, null));
+	}
+	
+	/**
+	 * Appends a error message to the info panel
+	 * @param e
+	 * 		The exception that was thrown on the server
+	 */
+	public void notValidMove(Exception e) {
+		InfoPanelGUI.append(e.getMessage());
+	}
+	
+	/**
+	 * Remove
+	 * @param card
+	 */
+	// TODO : STUDERA HUR DENNA METHOD FUNGERAR
+	public void discardCard(Card card){
+		boardController.removeCardFromHand(card);
+	}
 
+	public void commitMove() {
+		if(getPhase()==Phase.ATTACKING){
+			clientController.writeMessage(new CommandMessage(Commands.MATCH_ATTACK_MOVE,
+					null,this.attack));
+			InfoPanelGUI.append("Move Commited");
+		}if(getPhase()==Phase.DEFENDING){
+			clientController.writeMessage(new CommandMessage(Commands.MATCH_DEFEND_MOVE, null, this.attack));
+		}
+	}
+
+	public void opponeentPlaysTech(Tech card) {
+		updateOpponentScrapYard(card);
+		
+	}
+
+	public void playTechOk(Tech card) {
+		boardController.useAbility(card);
+	}
+
+	public void tapCard(int cardId, Lanes ENUM) {
+		boardController.tapCard(cardId, ENUM);
+	}
+
+	public void untapCard(int cardId, Lanes ENUM) {
+		boardController.untapCard(cardId, ENUM);
+	}
+
+	/**
+	 * Taps all cards in the specified lane passed in as argument
+	 * 
+	 * @param ENUM : Lanes
+	 */
+	public void tapAllInLane(Lanes ENUM) {
+		boardController.tapAllInLane(ENUM);
+	}
+
+	/**
+	 * Untaps all cards in the specified lane passed in as argument
+	 * 
+	 * @param ENUM : Lanes
+	 */
+	public void untapAllInLane(Lanes ENUM) {
+		boardController.untapAllInLane(ENUM);
+	}
+
+	public void updateScarpyard(Card card) {
+		boardController.addToPlayerScrapYard(card);
+	}
+
+	public void doAttackMove() {
+		this.attack = new Attack();
+		this.phase = Phase.ATTACKING;
+		InfoPanelGUI.append("In Attack phase");
+	}
+
+    public void updateCard(Card cardUpdate) {
+        boardController.updateCard(cardUpdate);
+    }
+
+    public void setFriendlyHeroId(int id) {
+        boardController.setFriendlyHeroId(id);
+    }
+
+	public void setEnemyHeroId(int id) {
+        boardController.setEnemyHeroId(id);
+    }
+
+	public void useAbility(Card cardWithAbility) {
+		clientController.writeMessage(new CommandMessage(Commands.MATCH_USE_ABILITY, "Klient", cardWithAbility));
+		
+	}
 }

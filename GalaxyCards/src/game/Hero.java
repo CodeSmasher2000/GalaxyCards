@@ -1,10 +1,13 @@
 package game;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
-
-
 import cards.Deck;
+import cards.Target;
 import exceptionsPacket.EmptyDeckException;
 import exceptionsPacket.InsufficientShieldException;
 import exceptionsPacket.ResourcePlayedException;
@@ -22,7 +25,7 @@ import guiPacket.InfoPanelGUI;
  *
  */
 
-public class Hero implements Serializable {
+public class Hero implements Serializable, Target {
 
 	/**
 	 * 
@@ -30,26 +33,40 @@ public class Hero implements Serializable {
 	private static final long serialVersionUID = -704227521994333558L;
 
 	private Deck deck;
-	private GameController gameController;
 	private String heroName = "Supreme Commander";
 	private int life, energyShield, maxResource, currentResource, incrementalDamage = 0;
 	private boolean resourceCardPlayedThisRound = false;
+	private int id;
 
-	public Hero(GameController gameController) {
-		this.gameController = gameController;
+	public Hero(int id) {
 		life = 20;
 		energyShield = 10;
 		maxResource = 0;
 		currentResource = 0;
+		this.deck = loadDeck();
+		deck.shuffle();
+		this.id = id;
 	}
 
-	public Hero(String heroName, GameController gameController) {
-		this(gameController);
+	public Hero(String heroName) {
 		this.heroName = heroName;
 		life = 20;
 		energyShield = 10;
 		maxResource = 0;
 		currentResource = 0;
+		loadDeck();
+	}
+
+	public Deck loadDeck() {
+
+		File file = new File("files/decks/Ability.dat");
+
+		try (FileInputStream fin = new FileInputStream(file); ObjectInputStream ois = new ObjectInputStream(fin)) {
+			return (Deck) ois.readObject();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void setDeck(Deck deck) {
@@ -67,7 +84,7 @@ public class Hero implements Serializable {
 			return deck.drawCard();
 		} catch (EmptyDeckException e) {
 			dealDamage(incrementalDamage++);
-			InfoPanelGUI.append("For every round your hero takes incremental damage: " + incrementalDamage,null);
+			InfoPanelGUI.append("For every round your hero takes incremental damage: " + incrementalDamage);
 			return null;
 		}
 	}
@@ -82,12 +99,37 @@ public class Hero implements Serializable {
 	 *            : int
 	 */
 	public void dealDamage(int amount) {
-		if (energyShield > 0) {
-			energyShield -= amount;
-
-		} else {
-			energyShield = 0;
-			life -= amount;
+//		if (energyShield > 0) {
+//			energyShield -= amount;
+//
+//		} else if(amount <= 0) {
+//			energyShield = Math.min(10, (energyShield - amount));
+//		}
+//		else {
+//			energyShield = 0;
+//			life -= amount;
+//		}
+		
+//		if (amount < 0) {
+//			// The maximun shield of the hero should be 10
+//			addShield(-amount);
+//		} else if(energyShield < 0) {
+//			energyShield = Math.max(0, energyShield - amount);
+//		} else {
+//			life -= amount;
+//		}
+		
+		if(amount<0){
+			addShield(-amount);
+		}else{
+			if(energyShield>0){
+				energyShield-=amount;
+			}else{
+				if(energyShield<0){
+					energyShield=0;
+				}
+				life-=amount;
+			}
 		}
 
 	}
@@ -141,12 +183,12 @@ public class Hero implements Serializable {
 	public int getEnergyShield() {
 		return energyShield;
 	}
-	
+
 	public int getCurrentResources() {
 		return currentResource;
 	}
-	
-	public int getMaxResource(){
+
+	public int getMaxResource() {
 		return maxResource;
 	}
 
@@ -167,7 +209,7 @@ public class Hero implements Serializable {
 			throw new ResourcePlayedException("You can only play one resource card each turn");
 		}
 		return addResourceOK;
-		
+
 	}
 
 	/**
@@ -182,10 +224,10 @@ public class Hero implements Serializable {
 		boolean useResourceOK = false;
 		if (amount > currentResource) {
 			throw new InsufficientResourcesException("Not enough resources");
-			
+
 		} else {
-		currentResource -= amount;
-		useResourceOK = true;
+			currentResource -= amount;
+			useResourceOK = true;
 		}
 		return useResourceOK;
 	}
@@ -210,5 +252,38 @@ public class Hero implements Serializable {
 	public String toString() {
 		return "[ " + heroName + " ] Life: " + life + "Energyshield: " + energyShield + " Resources: " + currentResource
 				+ " / " + maxResource;
+	}
+
+	@Override
+	public void damage(int amt) {
+		dealDamage(amt);
+	}
+
+	@Override
+	public int getId() {
+		return this.id;
+	}
+
+	public int setId(int id) {
+		return this.id = id;
+	}
+
+	@Override
+	public int getDamage() {
+		return 0;
+	}
+
+	@Override
+	public int getDefense() {
+		return life;
+
+	}
+
+	@Override
+	public boolean isDead() {
+		if (life <= 0) {
+			return true;
+		}
+		return false;
 	}
 }

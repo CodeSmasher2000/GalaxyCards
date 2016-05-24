@@ -10,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import cards.Unit;
@@ -51,24 +52,32 @@ public class UnitLanes extends JPanel {
 		opponentListener = new OpponentTargetMouseListener(boardController);
 		this.ENUM = ENUM;
 		this.nbrOfElements = nbrOfElements;
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		boardController.addLaneListener(this, ENUM);
 		units = new Unit[nbrOfElements];
-		layerArray = new JLayeredPane[nbrOfElements];
+		SwingUtilities.invokeLater(new Runnable() {
 
-		this.add(Box.createHorizontalStrut(10));
+			@Override
+			public void run() {
+				setLayout(new BoxLayout(UnitLanes.this, BoxLayout.X_AXIS));
+				layerArray = new JLayeredPane[nbrOfElements];
 
-		for (int i = 0; i < nbrOfElements; i++) {
-			layerArray[i] = new JLayeredPane();
-			layerArray[i].setLayout(null);
-			layerArray[i].setPreferredSize(new Dimension(156, 150));
+				add(Box.createHorizontalStrut(10));
 
-			this.add(Box.createHorizontalGlue());
-			this.add(layerArray[i]);
-			this.add(Box.createHorizontalGlue());
-			this.add(Box.createHorizontalStrut(10));
-		}
+				for (int i = 0; i < nbrOfElements; i++) {
+					layerArray[i] = new JLayeredPane();
+					layerArray[i].setLayout(null);
+					layerArray[i].setPreferredSize(new Dimension(156, 150));
+
+					add(Box.createHorizontalGlue());
+					add(layerArray[i]);
+					add(Box.createHorizontalGlue());
+					add(Box.createHorizontalStrut(10));
+				}
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	/**
@@ -98,18 +107,6 @@ public class UnitLanes extends JPanel {
 	}
 
 	/**
-	 * Set border for every layeredPane in this container.
-	 * 
-	 * @param border
-	 *            : Border
-	 */
-	public void setElementBorder(Border border) {
-		for (int i = 0; i < nbrOfElements; i++) {
-			layerArray[i].setBorder(border);
-		}
-	}
-
-	/**
 	 * Attempts to place a Unit object passed in as argument in this container.
 	 * If there is no space to place the object a exception is thrown.
 	 * 
@@ -118,36 +115,35 @@ public class UnitLanes extends JPanel {
 	 * @return : boolean
 	 * @throws GuiContainerException
 	 */
-	public boolean addUnit(Unit unit) throws GuiContainerException {
+	public void addUnit(Unit unit) throws GuiContainerException {
+		SwingUtilities.invokeLater(new Runnable() {
 
-		boolean okToPlace = false;
+			@Override
+			public void run() {
+				int endIndex = units.length - 1;
+				int startIndex = 0;
 
-		int endIndex = units.length - 1;
-		int startIndex = 0;
-
-		int steps = (endIndex + 1 - startIndex);
-		int index = (startIndex + endIndex) >> 1;
-		int stepdir = 1;
-		for (int q = 0; q < steps; q++, index += stepdir * q, stepdir = -stepdir) {
-			if (units[index] == null) {
-				units[index] = unit;
-				units[index].setBounds(0, 0, units[index].getPreferredSize().width,
-						units[index].getPreferredSize().height);
-				if (ENUM == Lanes.ENEMY_DEFENSIVE || ENUM == Lanes.ENEMY_OFFENSIVE) {
-					units[index].addMouseListener(opponentListener);
-				} else {
-					units[index].addMouseListener(playerListener);
+				int steps = (endIndex + 1 - startIndex);
+				int index = (startIndex + endIndex) >> 1;
+				int stepdir = 1;
+				for (int q = 0; q < steps; q++, index += stepdir * q, stepdir = -stepdir) {
+					if (units[index] == null) {
+						unit.setLaneEnum(ENUM);
+						units[index] = unit;
+						units[index].setBounds(0, 0, units[index].getPreferredSize().width,
+								units[index].getPreferredSize().height);
+						if (ENUM == Lanes.ENEMY_DEFENSIVE || ENUM == Lanes.ENEMY_OFFENSIVE) {
+							units[index].addMouseListener(opponentListener);
+						} else {
+							units[index].addMouseListener(playerListener);
+						}
+						layerArray[index].add(units[index], new Integer(0));
+						layerArray[index].setBorder(null);
+						break;
+					}
 				}
-				okToPlace = true;
-				layerArray[index].add(units[index], new Integer(0));
-				layerArray[index].setBorder(null);
-				break;
 			}
-		}
-		if (!okToPlace) {
-			throw new GuiContainerException("You can only have 6 units per lane");
-		}
-		return okToPlace;
+		});
 	}
 
 	/**
@@ -197,11 +193,86 @@ public class UnitLanes extends JPanel {
 	 * Untaps all cards held in this container.
 	 * 
 	 */
-	public void untap() {
+	public void untapAllInLane() {
 		for (int i = 0; i < units.length; i++) {
 			if (units[i] != null) {
 				units[i].untap();
+				String[] unitName = units[i].toString().split(" ");
+				InfoPanelGUI.append(unitName[0] + " is tapped: " + units[i].getTap());
 			}
 		}
+	}
+
+	/**
+	 * Taps all cards held in this container.
+	 */
+	public void tapAllInLane() {
+		for (int i = 0; i < units.length; i++) {
+			if (units[i] != null) {
+				units[i].tap();
+				String[] unitName = units[i].toString().split(" ");
+				InfoPanelGUI.append(unitName[0] + " is tapped: " + units[i].getTap());
+			}
+		}
+
+	}
+
+	/**
+	 * Taps the card with the same id as argument.
+	 * 
+	 * @param cardId
+	 *            : int
+	 */
+	public boolean tapCard(int cardId) {
+		boolean cardFound = false;
+		for (int i = 0; i < units.length; i++) {
+			if (units[i] != null) {
+				if (units[i].getId() == cardId) {
+					units[i].tap();
+					cardFound = true;
+					String[] unitName = units[i].toString().split(" ");
+					InfoPanelGUI.append(unitName[0] + " is tapped: " + units[i].getTap());
+				}
+			}
+		}
+		return cardFound;
+	}
+
+	/**
+	 * Untaps the card with the same id as the argument.
+	 * 
+	 * @param cardId
+	 *            : int
+	 */
+	public boolean untapCard(int cardId) {
+		boolean cardFound = false;
+		for (int i = 0; i < units.length; i++) {
+			if (units[i] != null) {
+				if (units[i].getId() == cardId) {
+					units[i].untap();
+					cardFound = true;
+					String[] unitName = units[i].toString().split(" ");
+					InfoPanelGUI.append(unitName[0] + " is tapped: " + units[i].getTap());
+				}
+			}
+		}
+		return cardFound;
+	}
+
+	public boolean updateCard(Unit cardToUpdate) {
+		for (int i = 0; i < units.length; i++) {
+			// TODO : FIND OTHER WAY THAN NULL CHECK!?
+			if (units[i] != null) {
+				Unit card = units[i];
+				if (card.getId() == cardToUpdate.getId()) {
+					card.setDefense(cardToUpdate.getDefense());
+					card.setAttack(cardToUpdate.getAttack());
+					checkStatus();
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 }

@@ -2,7 +2,7 @@ package cards;
 
 import java.io.Serializable;
 
-import abilities.Ability;
+import enumMessage.Lanes;
 import guiPacket.Card;
 
 /**
@@ -11,18 +11,15 @@ import guiPacket.Card;
  *
  */
 public class Unit extends Card implements PlayCardsInterface, Serializable, Target {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5013183003151976993L;
 	private int attack, defense;
 	private final int PRICE;
 	private final String NAME, RARITY, IMAGE_NAME;
 	private boolean hasAbility;
 	private boolean tapped = true;
-	private String abilityText;
 	private int maxHp;
+	private int id;
+	private Lanes ENUM;
 
 	/**
 	 * Constructor instantiates this card with given arguments to configure its
@@ -46,7 +43,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	 * @param price
 	 *            : int
 	 */
-	public Unit(String name, String rarity, String imageName, boolean hasAbility, int attack, int defense, int price) {
+	public Unit(String name, String rarity, String imageName, int attack, int defense, int price) {
 		NAME = name;
 		RARITY = rarity;
 		IMAGE_NAME = imageName;
@@ -83,6 +80,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 
 	/**
 	 * Returns the tapped state for this object.
+	 * 
 	 * @return : true/false
 	 */
 	public boolean getTap() {
@@ -147,8 +145,7 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	 * negative value is passed in, defense decreases.
 	 */
 	public void setDefense(int amount) {
-		this.defense += amount;
-
+		this.defense = amount;
 		super.setDefense(this.defense);
 	}
 
@@ -182,25 +179,51 @@ public class Unit extends Card implements PlayCardsInterface, Serializable, Targ
 	}
 
 	public String toString() {
-		return NAME + " - [Unit]: " + attack + "/" + defense + ". Rarity: " + RARITY + ". Price: " + PRICE
-				+ ". Has Ability: " + hasAbility;
-	}
-
-	@Override
-	public void heal(int amt) {
-		for (int i = 0; i < amt; i++) {
-			if (getDefense() < maxHp) {
-				setDefense(+1);
-			} else {
-				break;
-			}
-		}
+		return NAME + " - [Unit]: " + attack + "/" + defense + ". Tapped: "+getTap();
 	}
 
 	@Override
 	public void damage(int amt) {
-		setDefense(amt);
+		setDefense(this.defense-amt);
 
+	}
+
+	@Override
+	public int getDamage() {
+		return this.attack;
+	}
+
+	@Override
+	public boolean isDead() {
+		if (defense <= 0) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Sets the enum that represents on which lane this cardobject is placed.
+	 * This method is called upon whenever this card is being played and placed
+	 * on the gameboard.
+	 * 
+	 * @param ENUM
+	 *            : Lane
+	 */
+	public void setLaneEnum(Lanes ENUM) {
+		this.ENUM = ENUM;
+	}
+
+	/**
+	 * Gets the lane enum which represent which lane this cardobject is placed on.
+	 * @return ENUM : Lanes
+	 */
+	public Lanes getLaneEnum() {
+		return ENUM;
+	}
+	
+	public void updateHp(int currentHp) {
+		this.defense = currentHp;
+		super.setDefense(currentHp);
 	}
 
 }

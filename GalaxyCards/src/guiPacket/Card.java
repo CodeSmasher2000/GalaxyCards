@@ -18,9 +18,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-import abilities.Ability;
 import cards.HeroicSupport;
 import cards.ResourceCard;
 import cards.Tech;
@@ -38,25 +38,23 @@ import cards.Unit;
 // TODO Change the font to look more appealing and perhaps smaller.
 // TODO make the abilitybutton toggle enabled/disabled depending if on hand or
 // board.
-// TODO enlarge() does not work.
-// TODO use ability when button is pressed
 
-public abstract class Card extends JPanel {
+public abstract class Card extends JPanel implements Comparable<Card> {
 
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1980215199928750709L;
 	private ImageIcon cardBG1;
-//	private Image cardBG;
+	// private Image cardBG;
 	private JPanel topPanel, imgPanel, typePanel, attributesPanel;
 	private JLabel lbName, lbPrice, lbImage, lbType, lbRarity, lbAttack, lbDefense;
 	private Color frameColor;
 	private Border border;
 	private JButton abilityButton;
 	private JTextArea abilityArea;
-	private Ability ability = null;
+//	private Ability ability = null;
+	private int id;
 
 	private final String PICTURE_DIRECTORY = "files/pictures/";
 
@@ -65,21 +63,22 @@ public abstract class Card extends JPanel {
 		border = BorderFactory.createMatteBorder(1, 1, 3, 1, frameColor);
 
 		cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
-//		setBackground();
-		initiateLabels();
-		initiateButtons();
-		initiatePanels();
-		setToolTips();
 
-		this.setBorder(BorderFactory.createLineBorder(frameColor, 3, false));
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+				initiateLabels();
+				initiateButtons();
+				initiatePanels();
+				setToolTips();
 
-		this.add(topPanel);
-		this.add(imgPanel);
-		this.add(typePanel);
-		this.add(abilityArea);
-		this.add(Box.createVerticalStrut(2));
-		this.add(attributesPanel);
+				setBorder(BorderFactory.createLineBorder(frameColor, 3, false));
+				setLayout(new BoxLayout(Card.this, BoxLayout.Y_AXIS));
+
+				add(topPanel);
+				add(imgPanel);
+				add(typePanel);
+				add(abilityArea);
+				add(Box.createVerticalStrut(2));
+				add(attributesPanel);
+
 	}
 
 	private void setToolTips() {
@@ -93,7 +92,6 @@ public abstract class Card extends JPanel {
 		abilityButton.setIcon(new ImageIcon("files/pictures/ability.jpg"));
 		abilityButton.setOpaque(true);
 		abilityButton.setPreferredSize(new Dimension(15, 15));
-		abilityButton.addActionListener(new AbilityButtonListener());
 	}
 
 	private void initiateLabels() {
@@ -238,7 +236,6 @@ public abstract class Card extends JPanel {
 	 */
 	public void hasAbility(boolean hasAbility) {
 		abilityButton.setVisible(hasAbility);
-		abilityButton.addMouseListener(new MouseOverButtonListener());
 	}
 
 	/**
@@ -250,7 +247,7 @@ public abstract class Card extends JPanel {
 	public void setPrice(int price) {
 		lbPrice.setText("  " + price + "  ");
 	}
-	
+
 	public int getPrice() {
 		return Integer.parseInt(lbPrice.getText());
 	}
@@ -285,8 +282,8 @@ public abstract class Card extends JPanel {
 		abilityArea.setText(text);
 		abilityButton.setToolTipText(abilityArea.getText());
 	}
-	
-	public String getAbilityText(){
+
+	public String getAbilityText() {
 		return abilityArea.getText();
 	}
 
@@ -302,7 +299,7 @@ public abstract class Card extends JPanel {
 	public void setType(Card card) {
 		if (card instanceof ResourceCard) {
 			lbType.setText("Resource");
-//			attributesPanel.setVisible(false);
+			// attributesPanel.setVisible(false);
 			lbDefense.setText("Can play 1 / round");
 			lbAttack.setVisible(false);
 			lbPrice.setVisible(false);
@@ -316,7 +313,7 @@ public abstract class Card extends JPanel {
 		}
 		if (card instanceof Tech) {
 			lbType.setText("Tech");
-//			attributesPanel.setVisible(false);
+			// attributesPanel.setVisible(false);
 			lbAttack.setVisible(false);
 			lbDefense.setText("Target / AOE");
 
@@ -332,18 +329,6 @@ public abstract class Card extends JPanel {
 		g.drawImage(cardBG1.getImage(), 0, 0, this);
 	}
 
-	// Loads a image from a directory and sets it as background for the main
-	// containter Card klass.
-//	private void setBackground() {
-//		File directory = new File(PICTURE_DIRECTORY + "CardFrontBG.jpg");
-//		cardBG1 = new ImageIcon(PICTURE_DIRECTORY + "CardFrontBG.jpg");
-//		try {
-//			cardBG1.setImage(ImageIO.read(directory));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
 
 	/**
 	 * Shows all the card's attributes by setting its various panels visible.
@@ -360,9 +345,6 @@ public abstract class Card extends JPanel {
 		abilityArea.repaint();
 		validate();
 		repaint();
-
-		// FUKAR EJ n�r objektet ligger i en JFRame, f�r se om det funkar i en
-		// annan container, när mer av brädans gui är klar.
 	}
 
 	/**
@@ -375,54 +357,25 @@ public abstract class Card extends JPanel {
 		abilityArea.setVisible(false);
 	}
 
-	public void setAbility(Ability ability) {
-		this.ability = ability;
+	public void setAbility() {
 	}
 
-	private class AbilityButtonListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			if (event.getSource() == abilityButton) {
-				JOptionPane.showMessageDialog(null, "WIP! abilities funktionalitet implementeras vid sprint 2.");
-//				ability.useAbility();
-			}
-
-		}
-
+	public int getId() {
+		return id;
 	}
-	
-	private class MouseOverButtonListener implements MouseListener{
 
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			abilityButton.setBorder(BorderFactory.createLineBorder(new Color(0, 190, 255), 2));
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			abilityButton.setBorder(null);
-		}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		
+	public void setId(int id) {
+		this.id = id;
 	}
+
+	@Override
+	public int compareTo(Card o) {
+		if (o.getId() > this.id) {
+			return -1;
+		} else if (o.getId() < this.id) {
+			return 1;
+		}
+		return 0;
+	}
+
 }

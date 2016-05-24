@@ -31,7 +31,6 @@ public class CreateUnit extends JPanel {
 	private JTextField tfDefense = new JTextField();
 	private JTextField tfRarity = new JTextField("Common/Rare/Legendary");
 	private JTextField tfNbrOfCards = new JTextField();
-	private JCheckBox btnAbility = new JCheckBox();
 	private JTextArea taDescription = new JTextArea();
 	private JFileChooser jFileChooser = new JFileChooser();
 	private JButton btnChoosePic = new JButton("Choose Picture");
@@ -42,7 +41,6 @@ public class CreateUnit extends JPanel {
 	private JLabel lblDefense = new JLabel("Defense: ");
 	private JLabel lblRarity = new JLabel ("Rarity: ");
 	private JLabel lblNbrOfCards = new JLabel("Number of Cards: ");
-	private JLabel lblAbility = new JLabel("Ability: Yes/No");
 	private JLabel lblDescription = new JLabel("Description");
 	
 	private String imageName = null;
@@ -64,8 +62,6 @@ public class CreateUnit extends JPanel {
 		gridUnit.add(tfPrice);
 		gridUnit.add(lblRarity);
 		gridUnit.add(tfRarity);
-		gridUnit.add(lblAbility);
-		gridUnit.add(btnAbility);
 		gridUnit.add(lblDescription);
 		gridUnit.add(taDescription);
 		gridUnit.add(lblNbrOfCards);
@@ -77,9 +73,6 @@ public class CreateUnit extends JPanel {
 		add(gridUnit);
 		
 		
-	}
-	public boolean getAbility() {
-		return btnAbility.isSelected();
 	}
 	
 	public int getPrice() {
@@ -137,14 +130,16 @@ public class CreateUnit extends JPanel {
 		tfPrice.setText(Integer.toString(price));
 	}
 	
-	public void setAbility(boolean ability){
-		btnAbility.setSelected(ability);
-	}
 	
 	public void setDescription(String description){
 		taDescription.setText(description);
 	}
 	
+	/**
+	 * Inner class which contains the logic for the ActionListener.
+	 * @author Jonte
+	 *
+	 */
 	private class ButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {

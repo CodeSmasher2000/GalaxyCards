@@ -1,5 +1,6 @@
 package cardCreator;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -12,7 +13,11 @@ import cards.ResourceCard;
 import cards.Tech;
 import cards.Unit;
 
-
+/**
+ * Sets up the gui components and creates the Controller.
+ * @author Jonte
+ *
+ */
 public class CreateGui extends JPanel {
 	private JTabbedPane tabs = new JTabbedPane();
 	private JPanel mainPanel = new JPanel();
@@ -30,6 +35,7 @@ public class CreateGui extends JPanel {
 	public CreateGui(CreateController controller){
 		this.controller = controller;
 		JFrame frame1 = new JFrame("Card Creator");
+		frame1.setPreferredSize(new Dimension(1300,700));
 		frame1.setLayout(new GridLayout(1,3));
 		frame1.setVisible(true);
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,39 +57,50 @@ public class CreateGui extends JPanel {
 		return this.controller;
 	}
 	
+	/**
+	 * Adds the selected card with the specified values.
+	 */
 	public void addCard() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Create Unit");
-			controller.addUnitCard(createUnit.getName(), createUnit.getRarity(), createUnit.getImageName(), createUnit.getAbility(),
+			controller.addUnitCard(createUnit.getName(), createUnit.getRarity(), createUnit.getImageName(), 
 					createUnit.getAttack(), createUnit.getDefense(), createUnit.getPrice(), createUnit.getDescription());
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Create Heroic");
 			controller.addHeroicSupportCard(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
-					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense(), createHeroic.getDescription());
+					createHeroic.getPrice(), createHeroic.getDefense(),createHeroic.getDescription(),createHeroic.getAbility());
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
 			System.out.println("Create Resource");
 			controller.addResoruceCard(createResource.getAmtOfCards());
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Create Tech");
-			controller.addTechCard(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice(),createTech.getDescription());
+			controller.addTechCard(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice(),
+					createTech.getDescription(),createTech.getAbility());
 		}
 	}
-	
+	/**
+	 * Removes a card from the deck.
+	 * @param card
+	 * 			The card to be removed.
+	 */
 	public void removeCardFromList(Card card) {
 		deckPanel.removeFromList(card);
 	}
 	
+	/**
+	 * Updates the preview panel with the selected card.
+	 */
 	public void updateCardPreview() {
 		if (tabs.getSelectedComponent().equals(createUnit)) {
 			System.out.println("Preview Unit");
-			Unit card = new Unit(createUnit.getName(), createUnit.getRarity(),createUnit.getImageName(),createUnit.getAbility(),
+			Unit card = new Unit(createUnit.getName(), createUnit.getRarity(),createUnit.getImageName(),
 					createUnit.getAttack(), createUnit.getDefense(),createUnit.getPrice());
 			card.setAbilityText(createUnit.getDescription());
 			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createHeroic)) {
 			System.out.println("Preview Heroic");
-			HeroicSupport card = new HeroicSupport(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName(),
-					createHeroic.getAbility(), createHeroic.getPrice(), createHeroic.getDefense());
+			HeroicSupport card = new HeroicSupport(createHeroic.getName(), createHeroic.getRarity(), createHeroic.getImageName()
+					, createHeroic.getPrice(), createHeroic.getDefense(),createHeroic.getAbility());
 			card.setAbilityText(createHeroic.getDescription());
 			previewPanel.setCard(card);
 		} else if (tabs.getSelectedComponent().equals(createResource)) {
@@ -92,24 +109,34 @@ public class CreateGui extends JPanel {
 			previewPanel.setCard(card);
 		} else if(tabs.getSelectedComponent().equals(createTech)) {
 			System.out.println("Preview Tech");
-			Tech card = new Tech(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice());
+			Tech card = new Tech(createTech.getName(), createTech.getRarity(), createTech.getImageName(), createTech.getPrice(),
+					createTech.getAbility());
 			card.setAbilityText(createTech.getDescription());
 			previewPanel.setCard(card);
 		}
 	}
 	
+	/**
+	 * Updates the textfields and textareas with the selected unit card.
+	 * @param card
+	 * 			The card to update the fields with.
+	 */
 	public void updateUnitFields(Unit card){
 		tabs.setSelectedComponent(createUnit);
 		createUnit.setName(card.getName());
 		createUnit.setPrice(card.getPrice());
 		createUnit.setDefense(card.getDefense());
 		createUnit.setAttack(card.getAttack());
-		createUnit.setAbility(card.hasAbility());
 		createUnit.setRarity(card.getRarity());
 		createUnit.setDescription(card.getAbilityText());
 		createUnit.setImageName(card.getImage());
 	}
 	
+	/**
+	 * Updates the textfields and textareas with the selected Tech card.
+	 * @param card
+	 * 			The card to update the fields with.
+	 */
 	public void updateTechFields(Tech card){
 		tabs.setSelectedComponent(createTech);
 		createTech.setName(card.getName());
@@ -119,20 +146,35 @@ public class CreateGui extends JPanel {
 		createTech.setImageName(card.getImage());
 	}
 	
+	/**
+	 * Updates the textfields and textareas with the selected Reource card.
+	 * @param card
+	 * 			The card to update the fields with.
+	 */
 	public void updateResourceFields(ResourceCard card){
 		tabs.setSelectedComponent(createResource);
 	}
+	
+	/**
+	 * Updates the textfields and textareas with the selected Heroic-support card.
+	 * @param card
+	 * 			The card to update the fields with.
+	 */
 	public void updateHeroicFields(HeroicSupport card){
 		tabs.setSelectedComponent(createHeroic);
 		createHeroic.setName(card.getName());
 		createHeroic.setPrice(card.getPrice());
 		createHeroic.setDefense(card.getDefense());
-		createHeroic.setAbility(card.hasAbility());
 		createHeroic.setRarity(card.getRarity());
 		createHeroic.setDescription(card.getAbilityText());
 		createHeroic.setImageName(card.getImage());
 	}
 	
+	/**
+	 * Adds selected card to the List model.
+	 * @param cardToAdd
+	 * 			The card to add.
+	 */
 	public void addCardToList(Card cardToAdd) {
 		deckPanel.addToListModel(cardToAdd);
 	}

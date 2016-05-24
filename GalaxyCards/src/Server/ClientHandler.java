@@ -9,6 +9,7 @@ import java.util.Observer;
 
 import enumMessage.CommandMessage;
 import enumMessage.Commands;
+import guiPacket.Card;
 
 /**
  * Klass som ska ta hand om alla klienter som ansluter
@@ -112,6 +113,14 @@ public class ClientHandler extends Observable implements Runnable {
 					setChanged();
 					notifyObservers(message);
 					break;
+				case MATCH_NEW_ROUND:
+					setChanged();
+					notifyObservers(message);
+					break;
+				case MATCH_USE_ABILITY:
+					setChanged();
+					notifyObservers(message);
+					break;
 				default:
 					break;
 				}
@@ -129,7 +138,11 @@ public class ClientHandler extends Observable implements Runnable {
 		try {
 			System.out.println(message.toString());
 			oos.writeObject(message);
+			if (message.getCommand() == Commands.MATCH_UPDATECARD) {
+				System.out.println((Card)message.getData());
+			}
 			oos.flush();
+			oos.reset();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

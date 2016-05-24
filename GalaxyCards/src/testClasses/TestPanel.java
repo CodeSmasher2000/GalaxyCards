@@ -97,12 +97,12 @@ public class TestPanel extends JPanel {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			InfoPanelGUI.append(e.getMessage(),"RED");
+			InfoPanelGUI.append(e.getMessage());
 		} catch (ClassNotFoundException e) {
-			InfoPanelGUI.append(e.getMessage(),"RED");
+			InfoPanelGUI.append(e.getMessage());
 			e.printStackTrace();
 		} catch (EmptyDeckException e) {
-			InfoPanelGUI.append(e.getMessage(),"RED");
+			InfoPanelGUI.append(e.getMessage());
 			e.printStackTrace();
 		} finally {
 			try {
@@ -124,29 +124,30 @@ public class TestPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource()==newRound){
-				gameController.newRound();
-				try {
-					boardController.drawCard(deck.drawCard());
-				} catch (GuiContainerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (EmptyDeckException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				gameController.newround();
+//				try {
+//					boardController.drawCard(deck.drawCard());
+//				} catch (GuiContainerException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (EmptyDeckException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			}
 			if (event.getSource() == testDraw) {
-				try {
-					System.out.println("Deck size: " + deck.getAmtOfCards());
-					boardController.drawCard(temp);
-					temp = deck.drawCard();
-				} catch (GuiContainerException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage(),"RED");
-				} catch (EmptyDeckException e) {
-					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage(),"RED");
-				}
+//				try {
+////					System.out.println("Deck size: " + deck.getAmtOfCards());
+////					boardController.drawCard(temp);
+////					temp = deck.drawCard();
+//				} catch (GuiContainerException e) {
+//					System.err.println(e.getMessage());
+//					InfoPanelGUI.append(e.getMessage(),"RED");
+//				} catch (EmptyDeckException e) {
+//					System.err.println(e.getMessage());
+//					InfoPanelGUI.append(e.getMessage(),"RED");
+//				}
+				gameController.drawCard();
 			}
 			if (event.getSource() == testOpponentDrawCard) {
 				try {
@@ -154,7 +155,7 @@ public class TestPanel extends JPanel {
 				} catch (GuiContainerException e) {
 					// TODO Auto-generated catch block
 					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage(),"RED");
+					InfoPanelGUI.append(e.getMessage());
 				}
 			}
 			if (event.getSource() == testOpponentPlayCard) {
@@ -180,11 +181,11 @@ public class TestPanel extends JPanel {
 					
 				} catch (GuiContainerException e) {
 					System.err.println(e.getMessage());
-					InfoPanelGUI.append(e.getMessage(),"RED");
+					InfoPanelGUI.append(e.getMessage());
 				} catch (EmptyDeckException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					InfoPanelGUI.append(e.getMessage(),"RED");
+					InfoPanelGUI.append(e.getMessage());
 				}
 			}
 			if(event.getSource() == btnCommit) {
