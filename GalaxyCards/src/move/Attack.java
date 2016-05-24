@@ -42,7 +42,7 @@ public class Attack implements Serializable {
 				return i;
 			}
 		}
-		return -1;
+		return -10;
 	}
 	
 	public boolean hasAttackers(){
@@ -62,6 +62,15 @@ public class Attack implements Serializable {
 	 */
 	public int getDefender(int index) {
 		return defensive[index];
+	}
+	
+	public int getDefendersIndex(int cardId){
+		for(int i = 0 ; i<= index; i++){
+			if(defensive[i]==cardId){
+				return i;
+			}
+		}
+		return -10;
 	}
 
 //	public void fight() {

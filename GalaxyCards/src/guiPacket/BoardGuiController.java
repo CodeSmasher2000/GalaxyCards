@@ -1,5 +1,6 @@
 package guiPacket;
 
+import java.awt.AWTEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -911,6 +912,7 @@ public class BoardGuiController {
 			Attack attack = gameController.getAttack();
 			if (defender instanceof Unit || defender instanceof HeroicSupport) {
 				attack.setOpponents(attacker.getId(), ((Card) defender).getId());
+				attack.getDefendersIndex(((Card) defender).getId());
 			} else {
 				attack.setOpponents(attacker.getId(), (int) defender);
 			}

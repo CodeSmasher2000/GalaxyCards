@@ -213,6 +213,7 @@ public class ClientGUI extends JPanel {
 			if (e.getSource() == btnFindMatch) {
 				txtArea.append("\n Searching for opponent...");
 				clientController.startMatchMaking();
+				btnFindMatch.setEnabled(false);
 			} else if (e.getSource() == btnConnect) {
 				clientConnect();
 			} else if (e.getSource() == btnUsername) {
