@@ -884,6 +884,7 @@ public class Match implements Observer {
 			} else if (ability instanceof UntapTargetAbility) {
 				useUnTapAbility((UntapTargetAbility) ability);
 			}
+			updateHeroValues();
 		}
 
 		/**
