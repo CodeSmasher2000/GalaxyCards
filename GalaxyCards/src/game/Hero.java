@@ -59,7 +59,7 @@ public class Hero implements Serializable, Target {
 
 	public Deck loadDeck() {
 
-		File file = new File("files/decks/Ability.dat");
+		File file = new File("files/decks/Presentation.dat");
 
 		try (FileInputStream fin = new FileInputStream(file); ObjectInputStream ois = new ObjectInputStream(fin)) {
 			return (Deck) ois.readObject();
